@@ -1,0 +1,152 @@
+gui_human.png
+size: 960, 960
+format: RGBA4444
+filter: Nearest,Nearest
+repeat: none
+gui_rotate_human1
+  rotate: false
+  xy: 1, 1
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human2
+  rotate: false
+  xy: 193, 577
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human3
+  rotate: false
+  xy: 577, 193
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human4
+  rotate: false
+  xy: 769, 193
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human5
+  rotate: false
+  xy: 385, 385
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human6
+  rotate: false
+  xy: 385, 577
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human7
+  rotate: false
+  xy: 385, 769
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human8
+  rotate: false
+  xy: 577, 385
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human9
+  rotate: false
+  xy: 769, 385
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human10
+  rotate: false
+  xy: 1, 193
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human11
+  rotate: false
+  xy: 1, 385
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human12
+  rotate: false
+  xy: 1, 577
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human13
+  rotate: false
+  xy: 1, 769
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human14
+  rotate: false
+  xy: 193, 1
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human15
+  rotate: false
+  xy: 385, 1
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human16
+  rotate: false
+  xy: 577, 1
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human17
+  rotate: false
+  xy: 769, 1
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human18
+  rotate: false
+  xy: 193, 193
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human19
+  rotate: false
+  xy: 193, 385
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human20
+  rotate: false
+  xy: 193, 769
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1
+gui_rotate_human21
+  rotate: false
+  xy: 385, 193
+  size: 190, 190
+  orig: 190, 190
+  offset: 0, 0
+  index: -1

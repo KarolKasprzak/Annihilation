@@ -1,0 +1,336 @@
+{
+width: 90
+height: 32
+tileSize: 32
+layers: {
+	layers: [
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.TileMapLayer
+			name: Tiles_layer1
+			height: 32
+			width: 90
+			tiles: [
+				{
+					position: "5,19"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "6,19"
+					texture: "map/map_tiles/lab.atlas,floor_5lab"
+				}
+				{
+					position: "6,22"
+					texture: "map/map_tiles/lab.atlas,ceiling_lab"
+				}
+				{
+					position: "7,19"
+					texture: "map/map_tiles/lab.atlas,floor_4lab"
+				}
+				{
+					position: "7,22"
+					texture: "map/map_tiles/lab.atlas,ceiling_lab"
+				}
+				{
+					position: "8,19"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "9,19"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "10,19"
+					texture: "map/map_tiles/lab.atlas,floor_1lab"
+				}
+				{
+					position: "11,19"
+					texture: "map/map_tiles/lab.atlas,floor_4lab"
+				}
+				{
+					position: "12,19"
+					texture: "map/map_tiles/lab.atlas,floor_5lab"
+				}
+				{
+					position: "13,19"
+					texture: "map/map_tiles/lab.atlas,floor_4lab"
+				}
+				{
+					position: "14,19"
+					texture: "map/map_tiles/lab.atlas,floor_1lab"
+				}
+				{
+					position: "15,19"
+					texture: "map/map_tiles/lab.atlas,floor_4lab"
+				}
+				{
+					position: "16,19"
+					texture: "map/map_tiles/lab.atlas,floor_5lab"
+				}
+				{
+					position: "17,19"
+					texture: "map/map_tiles/lab.atlas,floor_1lab"
+				}
+				{
+					position: "18,19"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "19,19"
+					texture: "map/map_tiles/lab.atlas,floor_4lab"
+				}
+				{
+					position: "21,17"
+					texture: "map/map_tiles/lab.atlas,stairs_1lab"
+				}
+				{
+					position: "22,17"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "23,17"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "24,17"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "25,17"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+				{
+					position: "26,17"
+					texture: "map/map_tiles/lab.atlas,floor_2lab"
+				}
+			]
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer
+			name: Sprite_layer2
+			height: 32
+			width: 90
+			sprites: [
+				{
+					position: "5.0,20.0,0.0"
+					texture: "map/map_sprites/lab.atlas,panel_2lab"
+				}
+				{
+					position: "11.0,20.0,0.0"
+					texture: "map/map_sprites/lab.atlas,panel_lab"
+				}
+				{
+					position: "8.0,20.0,0.0"
+					texture: "map/map_sprites/lab.atlas,panel_2lab"
+				}
+				{
+					position: "9.088276,20.72316,0.0"
+					texture: "map/map_sprites/lab.atlas,lab3_text"
+				}
+				{
+					position: "9.1013775,21.892597,0.0"
+					texture: "map/map_sprites/lab.atlas,lab_lamp"
+				}
+				{
+					position: "14.0,20.0,0.0"
+					texture: "map/map_sprites/lab.atlas,panel_2lab"
+				}
+				{
+					position: "15.050299,21.988392,0.0"
+					texture: "map/map_sprites/lab.atlas,lab_lamp"
+				}
+				{
+					position: "17.0,20.0,0.0"
+					texture: "map/map_sprites/lab.atlas,panel_2lab"
+				}
+				{
+					position: "20.0,18.0,0.0"
+					texture: "map/map_sprites/lab.atlas,stairs_lab"
+				}
+				{
+					position: "22.0,18.0,0.0"
+					texture: "map/map_sprites/lab.atlas,panel_lab"
+				}
+				{
+					position: "21.766834,19.962528,0.0"
+					texture: "map/map_sprites/lab.atlas,lab_lamp"
+				}
+			]
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.ObjectMapLayer
+			name: Objects_layer4
+			objects: {
+				objects: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_1
+						x: 4.264944
+						y: 18.881975
+						width: 15.871487
+						height: 1.0410271
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_2
+						x: 19.301811
+						y: 17.999718
+						width: 4.1282063
+						height: 0.5025635
+						rotation: -46.675625
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_3
+						x: 21.307823
+						y: 17.370378
+						width: 23.134285
+						height: 0.62564087
+						bodyType: StaticBody
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.LightsMapLayer
+			name: Lights_layer5
+			lights: {
+				lights: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_1
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 5
+						x: 9.6399
+						y: 22.476307
+						softLength: 0.30000013
+						maskBit: 4
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_2
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 5
+						x: 15.602974
+						y: 22.443714
+						softLength: 0.20000014
+						maskBit: 4
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_3
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 3.5
+						x: 22.309612
+						y: 20.37256
+						softLength: 0.20000014
+						maskBit: 4
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_4
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 5
+						x: 29.139906
+						y: 21.813543
+						maskBit: 4
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_5
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 5
+						x: 37.654007
+						y: 21.98085
+						maskBit: 4
+					}
+				]
+			}
+		}
+	]
+}
+entityList: [
+	{
+		position: "13.671425,20.93974"
+		hp: 100
+		maxHp: 100
+		entityName: player.json
+		mapName: null
+		id: PLAYER
+		inventoryItem: [
+			{
+				tableIndex: 0
+				itemID: FIRE_AXE
+				itemsAmount: 1
+			}
+		]
+		equippedItem: []
+	}
+	{
+		position: "17.649763,20.937998"
+		hp: 100
+		maxHp: 100
+		entityName: npc_scientist.json
+		id: NPC_SCIENTIST
+		startPosition: "17.649763,21.314405"
+	}
+	{
+		position: "30.355055,19.011015"
+		hp: 100
+		maxHp: 100
+		entityName: hazmat_npc.json
+		id: HAZMAT_NPC
+		startPosition: "30.355055,19.205078"
+	}
+	{
+		position: "11.387545,20.438112"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				tableIndex: 0
+				itemID: MP44
+				itemsAmount: 1
+			}
+			{
+				tableIndex: 1
+				itemID: P38
+				itemsAmount: 1
+			}
+		]
+	}
+]
+mapName: lab.map
+}

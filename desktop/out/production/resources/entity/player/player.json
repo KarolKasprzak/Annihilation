@@ -1,0 +1,93 @@
+{
+  HealthComponent: {
+    hp: 100
+    maxHP: 100
+  }
+  PlayerComponent: {
+  }
+  
+  SerializationComponent: {
+    entityName: player.json
+  }
+  
+  AnimationComponent: {
+	id: PLAYER
+  }
+  
+  PlayerInventoryComponent: {
+  }
+  
+  StateComponent: {
+  }
+  
+  PlayerStatsComponent: {
+  }
+  
+  SkeletonComponent: {
+  atlasPath: gfx/skeletons/player/player.atlas
+  jsonPath: gfx/skeletons/player/player.json
+  }
+  
+  BodyComponent: {
+    bodyType: DynamicBody
+    positionX: 0
+    positionY: 0
+	height: 2
+	width: 1
+	fixedRotation: true
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 1
+        shapeH: 2
+		shapeA: 0
+        sensor: false,
+        destiny: 5
+        friction: 0
+		restitution: 0
+		categoryBits: player
+		maskBits: player
+		UserDate: PLAYER_BODY
+      },
+	  {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 0.5
+        shapeH: 1.95
+		shapeA: 0
+        sensor: true,
+        destiny: 5
+        friction: 0
+		restitution: 0
+		categoryBits: player
+		maskBits: 2
+		UserDate: PLAYER_CENTER
+      },
+      {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: -1
+		shapeW: 0.9
+        shapeH: 0.5
+		shapeA: 0
+        sensor: true,
+        destiny: 5
+        friction: 1
+		restitution: 0
+		categoryBits: player
+		maskBits: -1
+		UserDate: PLAYER_FOOT
+      }
+    ]
+  },
+  TextureComponent: {
+  renderOrder: 10
+  
+  },
+
+}
+

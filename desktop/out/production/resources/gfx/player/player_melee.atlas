@@ -1,0 +1,40 @@
+player_melee.png
+size: 64, 640
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+player_melee1
+  rotate: false
+  xy: 0, 0
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+player_melee2
+  rotate: false
+  xy: 0, 128
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+player_melee3
+  rotate: false
+  xy: 0, 256
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+player_melee4
+  rotate: false
+  xy: 0, 384
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+player_melee5
+  rotate: false
+  xy: 0, 512
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1

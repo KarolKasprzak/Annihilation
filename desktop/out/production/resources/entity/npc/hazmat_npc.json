@@ -1,0 +1,54 @@
+{
+  HealthComponent: {
+    hp: 100
+    maxHP: 100
+  }
+ 
+  AnimationComponent: {
+	id: HAZMAT_NPC
+  }
+  
+   SerializationComponent: {
+    entityName: hazmat_npc.json
+  }
+  
+  StateComponent: {
+  }
+  
+  EnemyComponent: {
+  }
+  
+  AiComponent: {
+  aiType: HUMAN_ENEMY
+  }
+  
+  BodyComponent: {
+    bodyType: DynamicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: true
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 1
+        shapeH: 2
+		shapeA: 0
+        sensor: false,
+        destiny: 15
+        friction: 0.6
+		categoryBits: enemy
+		maskBits: enemy
+		restitution: 0
+		hasUserDate: false
+      }
+    ]
+  },
+  TextureComponent: {
+  
+  },
+
+}
+

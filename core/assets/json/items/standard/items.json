@@ -1,0 +1,22 @@
+[
+    {
+    itemName: skrzynka
+    itemAttributes: 2
+    itemUseType: 1
+    itemValue: 10
+    itemID: BOX
+    textureName: gfx/box.png
+	itemShortDescription: ghdsagjhsadghjga
+	stackable: true
+    },
+	{
+    itemName: Ammunition 9mm
+    itemAttributes: 2
+    itemUseType: 128
+    itemValue: 10
+    itemID: AMMO_BOX9MM
+    textureName: gfx/icon/ammo.png
+	itemShortDescription: ghdsagjhsadghjga
+	stackable: true
+    },
+]

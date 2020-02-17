@@ -1,0 +1,55 @@
+
+lab.png
+size: 256,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ceiling_lab
+  rotate: false
+  xy: 2, 2
+  size: 32, 33
+  orig: 32, 33
+  offset: 0, 0
+  index: -1
+floor_1lab
+  rotate: false
+  xy: 36, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+floor_2lab
+  rotate: false
+  xy: 206, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+floor_4lab
+  rotate: false
+  xy: 172, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+floor_5lab
+  rotate: false
+  xy: 138, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stairs_1lab
+  rotate: false
+  xy: 70, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+stairs_lab
+  rotate: false
+  xy: 104, 3
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

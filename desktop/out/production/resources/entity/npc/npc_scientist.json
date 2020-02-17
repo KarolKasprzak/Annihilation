@@ -1,0 +1,74 @@
+{
+  HealthComponent: {
+    hp: 100
+    maxHP: 100
+  }
+ 
+  AnimationComponent: {
+	id: NPC_SCIENTIST
+  }
+  
+   SerializationComponent: {
+    entityName: npc_scientist.json
+  }
+  
+  StateComponent: {
+  }
+  
+  DialogueComponent: {
+  dialogId: scientist_dialog
+  }
+  
+  EnemyComponent: {
+  }
+  
+  AiComponent: {
+  aiType: HUMAN_NPC
+  }
+  
+  ActionComponent: {
+    action: TALK
+  }
+  
+  BodyComponent: {
+    bodyType: DynamicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: true
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 1
+        shapeH: 2
+		shapeA: 0
+        sensor: false,
+        destiny: 15
+        friction: 0.6
+		categoryBits: npc
+		maskBits: npc
+		restitution: 0
+		hasUserDate: false
+      }
+	  {
+        shapeType: Circle
+        radius: 1.6
+        sensor: true
+        destiny: 5
+        friction: 1
+		categoryBits: scenery_phy
+		maskBits: -1
+		restitution: 0
+		hasUserDate: true
+		UserDate: ACTION_TRIGGER
+      }
+    ]
+  },
+  TextureComponent: {
+  
+  },
+
+}
+

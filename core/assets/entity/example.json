@@ -1,0 +1,59 @@
+{
+  "HealthComponent": {
+    "hp": 67,
+    "maxHP": 100
+  },
+  "BodyComponent": {
+    "bodyType": "DynamicBody",
+    "positionX": 2,
+    "positionY": 2,
+	"fixedRotation": false,
+	"bullet": false
+    "Fixtures": [
+	   {
+        "shapeType": "Polygon",
+        "shapeX": 0,
+        "shapeY": 0,
+		"shapeW": 1,
+        "shapeH": 1,
+		"shapeA": 0,
+        "sensor": false,
+        "destiny": 5,
+        "friction": 1,
+		"restitution": 0
+		
+      },
+      {
+        "shapeType": "Circle",
+        "radius": 2,
+        "sensor": true,
+        "destiny": 5,
+        "friction": 1,
+		"restitution": 0
+		
+      }
+    ]
+  },
+  "TextureComponent": {
+  patch: "gfx/box.png"
+  },
+  "PlayerComponent": {
+  
+  },
+  "TagComponent": {
+    "tag": "box_1"
+  },
+  "ActionComponent": {
+    "action": "OPEN"
+  },
+  "ContainerComponent": {
+	"name": "box"
+    "itemList": [
+	{
+	tableIndex: 0,
+	itemID: MP44,
+	itemsAmount: 1
+	}
+    ]
+  }
+}

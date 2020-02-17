@@ -1,0 +1,63 @@
+{
+  "HealthComponent": {
+    "hp": 67,
+    "maxHP": 100
+  },
+  "BodyComponent": {
+    "bodyType": "DynamicBody",
+    "positionX": 2,
+    "positionY": 2,
+	"fixedRotation": false,
+	"bullet": false
+    "Fixtures": [
+      {
+        "shapeType": "Polygon",
+		polygon: [ -0.25, -1.25, 0.25, -1.25, 0.25, -0.75, -0.25, -0.75 ],
+        "shapeX": 1,
+        "shapeY": 1,
+		"shapeW": 1,
+        "shapeH": 2,
+		"shapeA": 0,
+        "sensor": false,
+        "destiny": 5,
+        "friction": 1,
+		"restitution": 0
+		
+      },
+	   {
+        "shapeType": "Polygon",
+        "shapeX": 0,
+        "shapeY": -3,
+		"shapeW": 1,
+        "shapeH": 2,
+		"shapeA": 0,
+        "sensor": false,
+        "destiny": 5,
+        "friction": 1,
+		"restitution": 0
+		
+      },
+      {
+        "shapeType": "Circle",
+        "radius": 2,
+        "sensor": true,
+        "destiny": 5,
+        "friction": 1,
+		"restitution": 0
+		
+      }
+    ]
+  },
+  "TextureComponent": {
+  },
+  "TagComponent": {
+    "tag": "box_1"
+  },
+  "ActionComponent": {
+    "action": "OPEN"
+  },
+  "ContainerComponent": {
+    "itemList": [
+    ]
+  }
+}

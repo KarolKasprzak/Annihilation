@@ -1,0 +1,21 @@
+{
+position: "11.2919445,1.9299277"
+hp: 100
+maxHp: 100
+entityName: player.json
+id: PLAYER
+mapName: test_map.map
+inventoryItem: [
+	{
+		tableIndex: 0
+		itemID: FIRE_AXE
+		itemsAmount: 1
+	}
+	{
+		tableIndex: 1
+		itemID: MP44
+		itemsAmount: 1
+	}
+]
+equippedItem: []
+}

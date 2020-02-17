@@ -1,0 +1,40 @@
+lab.png
+size: 166, 196
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+lab3_text
+  rotate: false
+  xy: 99, 163
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+lab_lamp
+  rotate: false
+  xy: 133, 163
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+panel_2lab
+  rotate: false
+  xy: 1, 1
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+panel_lab
+  rotate: false
+  xy: 1, 99
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+stairs_lab
+  rotate: false
+  xy: 99, 1
+  size: 64, 160
+  orig: 64, 160
+  offset: 0, 0
+  index: -1

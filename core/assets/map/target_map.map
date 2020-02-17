@@ -1,0 +1,551 @@
+{
+width: 50
+height: 50
+tileSize: 32
+layers: {
+	layers: [
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.ObjectMapLayer
+			name: Objects_layer1
+			objects: {
+				objects: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_1
+						isHighlighted: true
+						x: -9.6771755
+						y: 0.3713386
+						width: 39.020508
+						height: 1.1333327
+						bodyType: StaticBody
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.LightsMapLayer
+			name: Lights_layer2
+			lights: {
+				lights: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_1
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 5
+						x: 14.854605
+						y: 5.45682
+						maskBit: 1
+						categoryBit: 1
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_2
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 11
+						x: 6.4411416
+						y: 5.860667
+						maskBit: 1
+						categoryBit: 1
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.TileMapLayer
+			name: Tiles_layer3
+			height: 50
+			width: 50
+			tiles: [
+				{
+					position: "5,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "5,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "5,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "5,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "5,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "5,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "5,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "6,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "7,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "8,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "9,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "10,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "11,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "12,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "13,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "14,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "15,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "16,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "17,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "18,6"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,0"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,1"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,2"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,3"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,4"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,5"
+					texture: "test.atlas,conc"
+				}
+				{
+					position: "19,6"
+					texture: "test.atlas,conc"
+				}
+			]
+		}
+	]
+}
+entityList: [
+	{
+		position: "12.184535,2.019669"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				tableIndex: 0
+				itemID: MP44
+				itemsAmount: 1
+			}
+		]
+	}
+	{
+		position: "6.918006,2.519671"
+		hp: 100
+		maxHp: 100
+		entityName: test_zombie.json
+		id: TEST_ZOMBIE
+		startPosition: "6.918006,3.7353382"
+	}
+	{
+		position: "25.120518,2.958974"
+		entityName: gate.json
+		targetMapPath: test_map.map
+		targetPosition: "12.184671,4.019785"
+	}
+	{
+		position: "20.55487,2.019785"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				tableIndex: 0
+				itemID: MP44
+				itemsAmount: 1
+			}
+		]
+	}
+	{
+		position: "12.103502,2.0197341"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				tableIndex: 0
+				itemID: MP44
+				itemsAmount: 1
+			}
+		]
+	}
+]
+mapName: test_map.map
+}

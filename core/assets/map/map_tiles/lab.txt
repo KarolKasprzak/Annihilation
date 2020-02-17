@@ -1,0 +1,88 @@
+lab.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+wall_lab
+  rotate: false
+  xy: 36, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 7
+wall_lab
+  rotate: false
+  xy: 36, 70
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+wall_lab
+  rotate: false
+  xy: 70, 36
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+wall_lab
+  rotate: false
+  xy: 2, 37
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+floor_lab
+  rotate: false
+  xy: 2, 105
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+wall_lab
+  rotate: false
+  xy: 36, 36
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+ceiling_lab
+  rotate: false
+  xy: 2, 2
+  size: 32, 33
+  orig: 32, 33
+  offset: 0, 0
+  index: -1
+floor_lab
+  rotate: false
+  xy: 70, 104
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+floor_lab
+  rotate: false
+  xy: 70, 70
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 4
+floor_lab
+  rotate: false
+  xy: 36, 104
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
+wall_lab
+  rotate: false
+  xy: 2, 71
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+wall_lab
+  rotate: false
+  xy: 70, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 6

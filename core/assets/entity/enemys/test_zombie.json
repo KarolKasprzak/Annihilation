@@ -1,0 +1,53 @@
+{
+  HealthComponent: {
+    hp: 100
+    maxHP: 100
+  }
+ 
+  AnimationComponent: {
+	id: TEST_ZOMBIE
+  }
+  
+   SerializationComponent: {
+    entityName: test_zombie.json
+  }
+  
+  StateComponent: {
+  }
+  
+  EnemyComponent: {
+  }
+  
+  AiComponent: {
+  }
+  
+  BodyComponent: {
+    bodyType: DynamicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: true
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 1
+        shapeH: 2
+		shapeA: 0
+        sensor: false,
+        destiny: 5
+        friction: 0
+		categoryBits: 2
+		maskBits: -1
+		restitution: 0
+		hasUserDate: false
+      }
+    ]
+  },
+  TextureComponent: {
+  
+  },
+
+}
+

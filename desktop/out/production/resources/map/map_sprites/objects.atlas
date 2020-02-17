@@ -1,0 +1,19 @@
+objects.png
+size: 346, 239
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+energetic
+  rotate: false
+  xy: 1, 1
+  size: 102, 237
+  orig: 128, 320
+  offset: 13, 0
+  index: -1
+tank
+  rotate: false
+  xy: 105, 1
+  size: 240, 128
+  orig: 320, 160
+  offset: 36, 0
+  index: -1

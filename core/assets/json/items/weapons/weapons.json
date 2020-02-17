@@ -1,0 +1,55 @@
+[
+
+ {
+    itemName: Stg 44
+    itemAttributes: 2
+    itemUseType: 64
+    itemValue: 80
+    itemID: MP44
+	itemShortDescription: Is a German selective-fire rifle  developed during World War II.   
+    textureName: gfx/textures/icon/stg.png
+	stackable: false
+	damage: 25
+	automatic: true
+	ammoInMagazine: 30
+	maxAmmoInMagazine: 30
+	reloadTime: 0.24
+    accuracy: 0.7	
+	ammoID: AMMO_BOX9MM
+    },
+	{
+    itemName: Walther P38
+    itemAttributes: 2
+    itemUseType: 32
+    itemValue: 80
+    itemID: P38
+    textureName: gfx/textures/icon/p38.png
+	itemShortDescription:  Is a 9 mm semi-automatic pistol that was developed by Carl Walther GmbH as the service pistol of the Wehrmacht at the beginning of World War II.
+	stackable: false
+	damage: 15
+	automatic: false
+	ammoInMagazine: 8
+	maxAmmoInMagazine: 8
+	reloadTime: 0.35
+    accuracy: 0.8	
+	ammoID: AMMO_BOX9MM
+    },
+	{
+    itemName: Fire Axe
+    itemAttributes: 2
+    itemUseType: 4
+    itemValue: 80
+    itemID: FIRE_AXE
+    textureName: gfx/textures/icon/fireaxe.png
+	itemShortDescription:  Is a 9 mm semi-automatic pistol that was developed by Carl Walther GmbH as the service pistol of the Wehrmacht at the beginning of World War II.
+	stackable: false
+	damage: 25
+	automatic: false
+	ammoInMagazine: 1
+	maxAmmoInMagazine: 1
+	reloadTime: 0.4
+    accuracy: 0.8	
+	ammoID: AMMO_BOX9MM
+    },
+
+]

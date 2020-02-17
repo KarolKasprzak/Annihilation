@@ -1,0 +1,199 @@
+{
+width: 200
+height: 60
+tileSize: 32
+layers: {
+	layers: [
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.ObjectMapLayer
+			name: Objects_layer1
+			objects: {
+				objects: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_1
+						x: 12.190388
+						y: 10.982693
+						width: 25.897436
+						height: 1.9551287
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_2
+						x: 14.078217
+						y: 15.970999
+						width: 9.914652
+						height: 1.7948704
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_4
+						userDate: stairs
+						x: 20.168594
+						y: 11.854481
+						width: 7.717949
+						height: 1.0512819
+						rotation: 34.650005
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_4
+						x: 26.88507
+						y: 14.022047
+						width: 6.5249977
+						height: 0.9666662
+						bodyType: StaticBody
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.LightsMapLayer
+			name: Lights_layer2
+			lights: {
+				lights: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_2
+						raysNumber: 50
+						color: {
+							r: 1
+							g: 1
+							b: 0.88235295
+							a: 0.8352941
+						}
+						lightDistance: 20.5
+						x: 19.944868
+						y: 14.8473625
+						softLight: false
+						softLength: 1.9
+						maskBit: 4
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_2
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 1
+							a: 1
+						}
+						lightDistance: 5
+						x: 31.365942
+						y: 16.513073
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer
+			name: Sprite_layer4
+			height: 60
+			width: 200
+			sprites: [
+				{
+					position: "18.0,11.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_ground"
+				}
+				{
+					position: "16.0,11.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_ground1"
+				}
+				{
+					position: "14.0,11.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_ground2"
+				}
+				{
+					position: "20.0,11.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_ground2"
+				}
+				{
+					position: "22.0,11.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_ground3"
+				}
+				{
+					position: "16.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "20.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "18.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "14.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "22.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "27.0,15.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "29.0,15.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "31.0,15.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall1"
+				}
+				{
+					position: "24.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall"
+				}
+				{
+					position: "24.0,13.0,0.0"
+					texture: "map/map_sprites/metro.atlas,stairs"
+				}
+			]
+		}
+	]
+}
+entityList: [
+	{
+		position: "18.553753,13.952819"
+		hp: 100
+		maxHp: 100
+		entityName: player.json
+		mapName: null
+		id: PLAYER
+		inventoryItem: [
+			{
+				tableIndex: 0
+				itemID: FIRE_AXE
+				itemsAmount: 1
+			}
+		]
+		equippedItem: []
+	}
+	{
+		position: "21.10138,14.034404"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				tableIndex: 0
+				itemID: P38
+				itemsAmount: 1
+			}
+			{
+				tableIndex: 1
+				itemID: P38
+				itemsAmount: 1
+			}
+		]
+	}
+]
+mapName: forest_test.map
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-up" width="82" height="57" tilewidth="32" tileheight="32" infinite="0" nextobjectid="47">
+ <tileset firstgid="1" source="bunker.tsx"/>
+ <objectgroup name="object">
+  <object id="1" name="ladder" x="768.167" y="1191.63" width="32.6666" height="433.039"/>
+  <object id="3" name="ground" x="2032" y="279.33" width="704.667" height="66"/>
+  <object id="4" name="ground" x="996.66" y="-22.67" width="2875.33" height="29.3333"/>
+  <object id="27" name="ladder" x="1275.76" y="1441.44" width="34" height="183.625"/>
+  <object id="28" name="spawn" x="966.33" y="1543.5">
+   <point/>
+  </object>
+  <object id="31" name="ground" x="177.833" y="1191.33" width="1281.5" height="31.3333"/>
+  <object id="35" name="ground" x="177.333" y="1625" width="1981.33" height="63"/>
+  <object id="45" name="ground" x="1070.17" y="1441.33" width="456.333" height="11.8333"/>
+ </objectgroup>
+ <layer name="backtile" width="82" height="57">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7Al+PeMgAngoFXQBAAAAAAAAAAAAAAAAAB+mOsAAAAAAGUBfiQABA==
+  </data>
+ </layer>
+ <layer name="frontile" width="82" height="57">
+  <data encoding="base64" compression="zlib">
+   eJzt2TEKwCAQBEBj8v83p00jIqwmhhnYVmWxuisFAAAAAAAAAPZ2Lk6ddO4X1J/etZoeM/S4n+PtB2ziGggAAADAkzlWX3rOT5v/mKHHDD1m6DFDjxn2Tn0jO6d0AABmuAGUCwGT
+  </data>
+ </layer>
+</map>

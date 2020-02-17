@@ -1,0 +1,1 @@
+{"skeleton":{"width":128,"height":128,"fps":24,"hash":" ","name":"Armature"},"bones":[{"x":0.2241,"y":-0.2241,"name":"root"}],"slots":[{"name":"player_pistol_takeout1","bone":"root","attachment":"player_pistol_takeout1"}],"skins":{"default":{"player_pistol_takeout1":{"player_pistol_takeout1":{"name":"player_pistol_takeout1","width":128,"height":128,"x":5.34,"y":63.27}}}}}

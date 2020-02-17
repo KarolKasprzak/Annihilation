@@ -1,0 +1,180 @@
+texture.png
+size: 3200, 64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+texture_walk
+  rotate: false
+  xy: 0,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 0
+texture_walk
+  rotate: false
+  xy: 128,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 1
+texture_walk
+  rotate: false
+  xy: 256,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 2
+texture_walk
+  rotate: false
+  xy: 384,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 3
+texture_walk
+  rotate: false
+  xy: 512,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 4
+texture_walk
+  rotate: false
+  xy: 640,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 5
+texture_walk
+  rotate: false
+  xy: 768,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 6
+texture_walk
+  rotate: false
+  xy: 896,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 7
+texture_walk
+  rotate: false
+  xy: 1024,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 8
+texture_Prepare
+  rotate: false
+  xy: 1152,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 0
+texture_Prepare
+  rotate: false
+  xy: 1280,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 1
+texture_Prepare
+  rotate: false
+  xy: 1408,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 2
+texture_Prepare
+  rotate: false
+  xy: 1536,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 3
+texture_shoot
+  rotate: false
+  xy: 1664,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 0
+texture_shoot
+  rotate: false
+  xy: 1792,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 1
+texture_shoot
+  rotate: false
+  xy: 1920,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 2
+texture_shoot
+  rotate: false
+  xy: 2048,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 3
+texture_wpn_stand
+  rotate: false
+  xy: 2176,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 0
+texture_die_fight
+  rotate: false
+  xy: 2304,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 0
+texture_die_fight
+  rotate: false
+  xy: 2432,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 1
+texture_die_fight
+  rotate: false
+  xy: 2560,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 2
+texture_die_fight
+  rotate: false
+  xy: 2688,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 3
+texture_die_fight
+  rotate: false
+  xy: 2816,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 4
+texture_die_fight
+  rotate: false
+  xy: 2944,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 5
+texture_die_fight
+  rotate: false
+  xy: 3072,0
+  size: 128,64
+  orig: 128,64
+  offset: 0,0
+  index: 6

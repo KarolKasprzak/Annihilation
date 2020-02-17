@@ -1,0 +1,252 @@
+{ "frames": [
+   {
+    "filename": "hazamat_suit_gun_smal_walk 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 55, "y": 2, "w": 16, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 1.aseprite",
+    "frame": { "x": 16, "y": 0, "w": 24, "h": 61 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 52, "y": 3, "w": 24, "h": 61 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 2.aseprite",
+    "frame": { "x": 40, "y": 0, "w": 26, "h": 61 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 49, "y": 3, "w": 26, "h": 61 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 3.aseprite",
+    "frame": { "x": 66, "y": 0, "w": 17, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 53, "y": 2, "w": 17, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 4.aseprite",
+    "frame": { "x": 83, "y": 0, "w": 16, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 55, "y": 2, "w": 16, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 5.aseprite",
+    "frame": { "x": 99, "y": 0, "w": 22, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 55, "y": 2, "w": 22, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 6.aseprite",
+    "frame": { "x": 121, "y": 0, "w": 32, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 49, "y": 2, "w": 32, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 7.aseprite",
+    "frame": { "x": 153, "y": 0, "w": 26, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 49, "y": 2, "w": 26, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 8.aseprite",
+    "frame": { "x": 179, "y": 0, "w": 17, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 54, "y": 2, "w": 17, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 9.aseprite",
+    "frame": { "x": 196, "y": 0, "w": 18, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 55, "y": 2, "w": 18, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 10.aseprite",
+    "frame": { "x": 214, "y": 0, "w": 30, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 54, "y": 2, "w": 30, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 11.aseprite",
+    "frame": { "x": 244, "y": 0, "w": 36, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 53, "y": 2, "w": 36, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 12.aseprite",
+    "frame": { "x": 280, "y": 0, "w": 42, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 42, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 13.aseprite",
+    "frame": { "x": 322, "y": 0, "w": 59, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 59, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 14.aseprite",
+    "frame": { "x": 381, "y": 0, "w": 55, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 55, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 15.aseprite",
+    "frame": { "x": 436, "y": 0, "w": 46, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 46, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 16.aseprite",
+    "frame": { "x": 482, "y": 0, "w": 41, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 41, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 17.aseprite",
+    "frame": { "x": 523, "y": 0, "w": 18, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 55, "y": 2, "w": 18, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 18.aseprite",
+    "frame": { "x": 541, "y": 0, "w": 42, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 42, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 19.aseprite",
+    "frame": { "x": 583, "y": 0, "w": 42, "h": 62 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 51, "y": 2, "w": 42, "h": 62 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 20.aseprite",
+    "frame": { "x": 625, "y": 0, "w": 39, "h": 61 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 55, "y": 3, "w": 39, "h": 61 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 21.aseprite",
+    "frame": { "x": 664, "y": 0, "w": 28, "h": 61 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 54, "y": 3, "w": 28, "h": 61 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 22.aseprite",
+    "frame": { "x": 692, "y": 0, "w": 31, "h": 54 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 54, "y": 10, "w": 31, "h": 54 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 23.aseprite",
+    "frame": { "x": 723, "y": 0, "w": 42, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 60, "y": 23, "w": 42, "h": 41 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 24.aseprite",
+    "frame": { "x": 765, "y": 0, "w": 46, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 65, "y": 28, "w": 46, "h": 36 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "hazamat_suit_gun_smal_walk 25.aseprite",
+    "frame": { "x": 811, "y": 0, "w": 61, "h": 9 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 63, "y": 55, "w": 61, "h": 9 },
+    "sourceSize": { "w": 128, "h": 64 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.6-dev",
+  "image": "C:\\Projects\\Annihilation\\android\\assets\\sprite root\\npc1\\hazamat_suit_gun_smal_walk.png",
+  "format": "RGBA8888",
+  "size": { "w": 3328, "h": 64 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "walk", "from": 0, "to": 8, "direction": "forward" },
+   { "name": "Prepare", "from": 9, "to": 12, "direction": "forward" },
+   { "name": "shoot", "from": 13, "to": 16, "direction": "forward" },
+   { "name": "wpn_stand", "from": 18, "to": 18, "direction": "forward" },
+   { "name": "die_fight", "from": 19, "to": 25, "direction": "forward" }
+  ]
+ }
+}

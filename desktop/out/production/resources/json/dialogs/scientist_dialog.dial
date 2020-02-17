@@ -1,0 +1,59 @@
+{
+dialogs:[
+	{
+	id: 1
+	answer: "kim jesteś?"
+		dialogueOptions:[
+			{
+				id:1
+				dialogText:"Czesc"
+				action: null
+				nextDialog: 2
+			},
+			{
+				id:2
+				dialogText:"Witaj"
+				action: null
+				nextDialog: 3
+			}
+		]
+	},
+	{
+	id: 2
+	answer: "chuj ci w ryj"
+		dialogueOptions:[
+			{
+				id:1
+				dialogText:"kim jesteś?"
+				action: null
+				nextDialog: 3
+			},
+			{
+				id:2
+				dialogText:"żegnaj!"
+				hasAction: true
+				action: exitDialog
+				nextDialog: 4
+			}
+		]
+	},
+	{
+	id: 3
+	answer: "chuj ci w ryj x2 "
+		dialogueOptions:[
+			{
+				id:1
+				dialogText:"hi"
+				action: null
+				nextDialog: 3
+			},
+			{
+				id:2
+				dialogText:"bay"
+				action: null
+				nextDialog: 4
+			}
+		]
+	},
+	]
+}

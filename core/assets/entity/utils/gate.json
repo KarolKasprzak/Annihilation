@@ -1,0 +1,32 @@
+{
+  BodyComponent: {
+    bodyType: KinematicBody
+    positionX: 1
+    positionY: 1
+	fixedRotation: false
+	bullet: false
+    Fixtures: [
+      {
+        shapeType: Circle
+        radius: 3
+        sensor: true
+        destiny: 5
+        friction: 1
+		restitution: 0
+		hasUserDate: true
+		UserDate: ACTION_TRIGGER
+		categoryBits: 2
+		maskBits: -1
+      }
+    ]
+  }
+  SerializationComponent: {
+    entityName: gate.json
+  }
+  GateComponent: {
+  }
+   ActionComponent: {
+    action: GO_TO
+  }
+  
+ }
