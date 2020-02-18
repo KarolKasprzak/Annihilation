@@ -23,7 +23,7 @@ import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.esotericsoftware.spine.*;
 
 
-public class EntitySerializer implements Json.Serializer<Entity> {
+public class EntityReader implements Json.Serializer<Entity> {
     private World world;
     private Engine engine;
     private AnimationFactory animationFactory;
@@ -31,7 +31,7 @@ public class EntitySerializer implements Json.Serializer<Entity> {
     /**
      * use in game
      **/
-    EntitySerializer(World world, Engine engine) {
+    EntityReader(World world, Engine engine) {
         this.world = world;
         this.engine = engine;
         animationFactory = new AnimationFactory();
@@ -40,7 +40,7 @@ public class EntitySerializer implements Json.Serializer<Entity> {
     /**
      * use only in map editor
      **/
-    public EntitySerializer(World world) {
+    public EntityReader(World world) {
         this.world = world;
         this.engine = null;
         animationFactory = new AnimationFactory();

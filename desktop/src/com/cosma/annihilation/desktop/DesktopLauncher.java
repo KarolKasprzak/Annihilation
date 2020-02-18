@@ -1,5 +1,7 @@
 package com.cosma.annihilation.desktop;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.cosma.annihilation.Annihilation;
@@ -19,6 +21,6 @@ public class DesktopLauncher {
 		config.height = screenSize.height /2;
 
 		new LwjglApplication (new Annihilation(),config);
-
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 	}
 }

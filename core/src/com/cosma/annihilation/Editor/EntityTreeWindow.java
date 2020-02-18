@@ -20,7 +20,7 @@ import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Editor.CosmaMap.EntityEditOptionsWindow;
 import com.cosma.annihilation.Screens.MapEditor;
-import com.cosma.annihilation.Utils.Serialization.EntitySerializer;
+import com.cosma.annihilation.Utils.Serialization.EntityReader;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
@@ -50,7 +50,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         columnDefaults(0).left();
         jsonList = new HashMap<>();
         json = new Json();
-        json.setSerializer(Entity.class, new EntitySerializer(world));
+        json.setSerializer(Entity.class, new EntityReader(world));
 
         final VisTree tree = new VisTree();
         Node treeRoot = new Node(new VisLabel("Entity"));

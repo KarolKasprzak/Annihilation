@@ -239,7 +239,6 @@ public class PlayerInventoryWindow extends Window implements InventorySlotObserv
             InventorySlot inventorySlot = ((InventorySlot) cells.get(itemLocation.getTableIndex()).getActor());
             for (int index = 0; index < itemLocation.getItemsAmount(); index++) {
                 InventoryItem item = ItemFactory.getInstance().getItem(itemID);
-                item.setName(targetTable.getName());
                 inventorySlot.add(item);
                 dragAndDrop.addSource(new InventorySlotSource(inventorySlot, dragAndDrop));
             }

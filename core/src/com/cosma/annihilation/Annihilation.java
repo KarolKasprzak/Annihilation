@@ -4,7 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.cosma.annihilation.Items.Item;
+import com.cosma.annihilation.Items.ItemLoader;
 import com.cosma.annihilation.Screens.GameScreen;
 import com.cosma.annihilation.Screens.MapEditor;
 import com.cosma.annihilation.Screens.MenuScreen;
@@ -19,6 +24,7 @@ public class Annihilation extends Game {
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
 	private Boolean isGameLoaded;
+	private ItemLoader itemLoader;
 
 	public Annihilation() {
 		super();
@@ -27,12 +33,30 @@ public class Annihilation extends Game {
 
 	@Override
 	public void create() {
+
 		isGameLoaded = false;
 		assetLoader.load();
+		itemLoader = new ItemLoader();
 		FileHandle mapTextures = Gdx.files.local("locale/loc");
 		myBundle = I18NBundle.createBundle(mapTextures,Locale.UK);
 		menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
+
+
+		Item item = Annihilation.getItem("stg");
+
+		Array<Item> items = new Array<>();
+		items.add(Annihilation.getItem("stg"));
+		items.add(Annihilation.getItem("stg"));
+		Json json = new Json();
+		System.out.println(json.prettyPrint(items));
+//		String text = json.prettyPrint(item);
+//		Item item1 = json.fromJson(Item.class,text);
+//		System.out.println(item1.getItemId());
+
+
+
+
 	}
 
 	@Override
@@ -60,6 +84,13 @@ public class Annihilation extends Game {
 
 	public Boolean isGameLoaded() {
 		return isGameLoaded;
+	}
+
+	public static Item getItem(String itemID) {
+		return ((Annihilation) Gdx.app.getApplicationListener()).itemLoader.getItemMap().get(itemID);
+	}
+	public static ObjectMap<String,Item> getItemsList() {
+		return ((Annihilation) Gdx.app.getApplicationListener()).itemLoader.getItemMap();
 	}
 
 	public static AssetManager getAssets() {

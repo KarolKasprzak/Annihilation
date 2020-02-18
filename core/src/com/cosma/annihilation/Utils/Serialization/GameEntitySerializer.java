@@ -25,7 +25,7 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
     public GameEntitySerializer(World world, Engine engine) {
 
         loadJason = new Json();
-        loadJason.setSerializer(Entity.class, new EntitySerializer(world,engine));
+        loadJason.setSerializer(Entity.class, new EntityReader(world,engine));
 
         dialogueManager = new DialogueManager();
 

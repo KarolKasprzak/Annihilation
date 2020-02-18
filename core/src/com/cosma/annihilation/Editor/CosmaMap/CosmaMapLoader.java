@@ -6,24 +6,16 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
-import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
 import com.badlogic.gdx.utils.Json;
-import com.cosma.annihilation.Components.BodyComponent;
-import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapSunLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
 import com.cosma.annihilation.Utils.CollisionID;
-import com.cosma.annihilation.Utils.Serialization.EntitySerializer;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.Util;
 
@@ -34,9 +26,6 @@ public class CosmaMapLoader {
     private Engine engine;
     private RayHandler rayHandler;
 
-//    public CosmaMapLoader(String mapPath) {
-//        loadMap(mapPath);
-//    }
 
     public CosmaMapLoader(World world, RayHandler rayHandler, Engine engine) {
         this.world = world;
