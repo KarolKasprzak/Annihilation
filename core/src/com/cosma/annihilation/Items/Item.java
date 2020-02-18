@@ -5,70 +5,45 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 
-public class InventoryItem extends Image {
-    private int itemAttributes;
-    private int itemUseType;
+public class Item extends Image {
+    private ItemType itemType;
     private int itemValue;
-    private ItemID itemID;
+    private String itemId;
     private float weight;
     private String itemName;
     private String itemShortDescription;
-    private String textureName;
-    private Texture texture;
+    private String itemIcon;
     private boolean stackable;
+    private int damage;
+    private boolean automatic;
+    private int ammoInMagazine;
+    private int maxAmmoInClip;
+    private float reloadTime;
+    private float accuracy;
+    private ItemType ammoID;
 
-    public enum ItemID {
-        MP44,BOX,P38,AMMO_BOX9MM,FIRE_AXE;
+
+
+    public enum ItemType{
+        CONSUMABLE,
+        ARMOUR,
+        WEAPON_LONG,
+        WEAPON_SHORT,
+        WEAPON_MELEE,
+        AMMUNITION_9MM,
+        AMMUNITION_7MM,
+        AMMUNITION_PLASMA,
+        AMMUNITION_ENERGETIC;
     }
 
 
 
-    public enum ItemAttribute{
-        CONSUMABLE(1),
-        EQUIPPABLE(2);
-
-        private int attribute;
-
-        ItemAttribute(int attribute){
-            this.attribute = attribute;
-        }
-
-        public int getValue(){
-            return attribute;
-        }
-
-    }
-
-    public enum ItemType {
-        ARMOUR(1),
-        ITEM_RESTORE_MP(2),
-        WEAPON_MELEE(4),
-        WEAPON_DISTANCE_ENERGETIC(8),
-        WEAPON_DISTANCE_ENERGETIC_LONG(16),
-        WEAPON_DISTANCE(32),
-        WEAPON_DISTANCE_LONG(64),
-        AMMUNIION(128);
-//        ARMOR_SHIELD(128),
-//        ARMOR_HELMET(256),
-//        ARMOR_CHEST(512),
-//        ARMOR_FEET(1024);
-
-        private int itemUseType;
-
-        ItemType(int itemUseType){
-            this.itemUseType = itemUseType;
-        }
-
-        public int getValue(){
-            return itemUseType;
-        }
-    }
 
 
 
-    public InventoryItem(){}
+    public Item(){}
 
-    public InventoryItem(String textureName,ItemID itemID,int itemAttributes, int itemUseType, int itemValue,String itemName,boolean stackable,String itemShortDescription){
+    public Item(String textureName, ItemID itemID, int itemAttributes, int itemUseType, int itemValue, String itemName, boolean stackable, String itemShortDescription){
            this.textureName = textureName;
            this.itemID = itemID;
            this.itemAttributes = itemAttributes;
@@ -79,7 +54,7 @@ public class InventoryItem extends Image {
            this.itemShortDescription = itemShortDescription;
 
     }
-    public InventoryItem(InventoryItem inventoryItem){
+    public Item(Item inventoryItem){
         this.textureName = inventoryItem.getTextureName();
         this.itemID = inventoryItem.getItemID();
         this.itemAttributes = inventoryItem.getItemAttributes();
@@ -119,7 +94,7 @@ public class InventoryItem extends Image {
        return stackable;
     }
 
-    public boolean isSameItemType(InventoryItem inventoryItem){
+    public boolean isSameItemType(Item inventoryItem){
         return itemID == inventoryItem.getItemID();
     }
 
