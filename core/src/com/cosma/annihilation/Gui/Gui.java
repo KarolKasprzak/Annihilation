@@ -230,7 +230,7 @@ public class Gui implements Screen {
 
     public void showLootWindow(Entity entity) {
         containerWindow.setVisible(true);
-        PlayerInventoryWindow.fillInventory(containerWindow.containerSlotsTable, entity.getComponent(ContainerComponent.class).itemLocations, containerWindow.dragAndDrop);
+        PlayerInventoryWindow.fillTable(containerWindow.containerSlotsTable, entity.getComponent(ContainerComponent.class).itemList, containerWindow.dragAndDrop);
     }
 
     private void createHUD() {

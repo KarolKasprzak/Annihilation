@@ -5,11 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 
 public class InventorySlotSource extends DragAndDrop.Source {
 
-    private InventorySlot sourceSlot;
+    private EquipmentSlot sourceSlot;
     private DragAndDrop dragAndDrop;
 
-    public InventorySlotSource(InventorySlot sourceSlot, DragAndDrop dragAndDrop) {
-        super(sourceSlot.getInventoryItem());
+    public InventorySlotSource(EquipmentSlot sourceSlot, DragAndDrop dragAndDrop) {
+        super(sourceSlot.getItem());
         this.sourceSlot = sourceSlot;
         this.dragAndDrop = dragAndDrop;
     }
@@ -19,7 +19,7 @@ public class InventorySlotSource extends DragAndDrop.Source {
 
 
 
-        sourceSlot = (InventorySlot)getActor().getParent();
+        sourceSlot = (EquipmentSlot)getActor().getParent();
         sourceSlot.removeItem();
         payload.setDragActor(getActor());
 //        dragAndDrop.setDragActorPosition(-x, -y + getActor().getHeight());
@@ -33,5 +33,5 @@ public class InventorySlotSource extends DragAndDrop.Source {
             sourceSlot.add(payload.getDragActor());
         }
     }
-    public InventorySlot getSourceSlot() {return sourceSlot;}
+    public EquipmentSlot getSourceSlot() {return sourceSlot;}
 }

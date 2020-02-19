@@ -14,13 +14,13 @@ public class ItemReader implements Json.Serializer<Item> {
         Item item = new Item();
         item.setItemId(jsonData.get("itemID").asString());
         item.setItemName(jsonData.get("itemName").asString());
-        item.setItemType(Item.ItemType.valueOf(jsonData.get("itemType").asString()));
+        item.setItemType(ItemType.valueOf(jsonData.get("itemType").asString()));
         item.setItemShortDescription(jsonData.get("itemShortDescription").asString());
         item.setItemIcon(jsonData.get("iconName").asString());
         item.setItemValue(jsonData.get("itemValue").asInt());
         item.setStackable(jsonData.get("stackable").asBoolean());
         item.setWeight(jsonData.get("weight").asInt());
-        item.setItemStatus(Item.ItemStatus.valueOf(jsonData.get("itemStatus").asString()));
+        item.setItemStatus(ItemStatus.valueOf(jsonData.get("itemStatus").asString()));
         item.setOptionalValues(jsonData);
         return item;
     }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.cosma.annihilation.Components.*;
-import com.cosma.annihilation.Gui.Inventory.InventoryItemLocation;
+import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Dialogs.DialogueManager;
 import com.cosma.annihilation.Utils.Util;
 
@@ -73,25 +73,13 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
              }
 
              if (component instanceof ContainerComponent) {
-                 json.writeArrayStart("itemList");
-                 for (InventoryItemLocation location : ((ContainerComponent) component).itemLocations) {
-                      saveItems(json,location);
-                 }
-                 json.writeArrayEnd();
+                 saveItemArray(json,((ContainerComponent) component).itemList,"itemList");
                  continue;
              }
 
              if (component instanceof PlayerInventoryComponent) {
-                 json.writeArrayStart("inventoryItem");
-                 for (InventoryItemLocation location : ((PlayerInventoryComponent) component).inventoryItem) {
-                  saveItems(json,location);
-                 }
-                 json.writeArrayEnd();
-                 json.writeArrayStart("equippedItem");
-                 for (InventoryItemLocation location : ((PlayerInventoryComponent) component).equippedItem) {
-                     saveItems(json,location);
-                 }
-                 json.writeArrayEnd();
+                 saveItemArray(json,((PlayerInventoryComponent) component).inventoryItem,"inventoryItems");
+                 saveItemArray(json,((PlayerInventoryComponent) component).equippedItem,"equippedItems");
                  continue;
              }
 
@@ -127,13 +115,12 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
             if(component instanceof ContainerComponent){
                 if(jsonData.has("itemList")){
-                    ((ContainerComponent) component).itemLocations = new Array<>();
+
+                    ((ContainerComponent) component).itemList = new Array<>();
+
                     for (JsonValue value : jsonData.get("itemList")){
-                        InventoryItemLocation location = new InventoryItemLocation();
-                        location.setTableIndex(value.get("tableIndex").asInt());
-                        location.setItemID(value.get("itemID").asString());
-                        location.setItemsAmount(value.get("itemsAmount").asInt());
-                        ((ContainerComponent) component).itemLocations.add(location);
+                        Item item = json.fromJson(Item.class,value.asString());
+                        ((ContainerComponent) component).itemList.add(item);
                     }
                 }
             }
@@ -170,11 +157,15 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
         }
         return entity;
     }
-    static void saveItems(Json json,InventoryItemLocation location){
-        json.writeObjectStart();
-        json.writeValue("tableIndex", location.getTableIndex());
-        json.writeValue("itemID", location.getItemID());
-        json.writeValue("itemsAmount", location.getItemsAmount());
-        json.writeObjectEnd();
+    private void saveItemArray(Json json, Array<Item> itemsArray,String arrayName){
+            json.writeArrayStart(arrayName);
+            for(Item item: itemsArray){
+                json.writeObjectStart();
+                json.writeValue("itemID",item.getItemId());
+                json.writeObjectEnd();
+            }
+            json.writeArrayEnd();
+
+
     }
 }

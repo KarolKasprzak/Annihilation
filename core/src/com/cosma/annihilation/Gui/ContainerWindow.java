@@ -14,10 +14,10 @@ import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
-import com.cosma.annihilation.Gui.Inventory.InventoryItemLocation;
-import com.cosma.annihilation.Gui.Inventory.InventorySlot;
+import com.cosma.annihilation.Gui.Inventory.EquipmentSlot;
 import com.cosma.annihilation.Gui.Inventory.InventorySlotTarget;
 import com.badlogic.gdx.utils.Array;
+import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Util;
 
 
@@ -31,6 +31,8 @@ public class ContainerWindow extends Window {
     private ActorGestureListener listener;
     private Engine engine;
     private float guiScale;
+    //todo
+    private PlayerComponent playerComponent;
 
     public ContainerWindow(String title, Skin skin, int itemSlotNumber, final Engine engine) {
         super(title, skin);
@@ -53,8 +55,8 @@ public class ContainerWindow extends Window {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 if(count >= 2){
-                    if(((InventorySlot) event.getListenerActor()).hasItem()){
-                        moveItemToPlayerEquipment(( InventorySlot) event.getListenerActor());
+                    if(((EquipmentSlot) event.getListenerActor()).hasItem()){
+                        moveItemToPlayerEquipment((EquipmentSlot) event.getListenerActor());
                     }
                 }
             }
@@ -63,26 +65,10 @@ public class ContainerWindow extends Window {
         createContainerTable();
     }
 
-    private void moveItemToPlayerEquipment(InventorySlot inventorySlot) {
+    private void moveItemToPlayerEquipment(EquipmentSlot equipmentSlot) {
         if (engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.size <= 24) {
-
-            InventoryItemLocation inventoryItemLocation = new InventoryItemLocation();
-            inventoryItemLocation.setTableIndex(findEmptySlotInEquipment());
-            inventoryItemLocation.setItemsAmount(inventorySlot.getItemsNumber());
-            inventoryItemLocation.setItemID(inventorySlot.getInventoryItem().getItemID().toString());
-
-            engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.add(inventoryItemLocation);
-
-            for (InventoryItemLocation item : engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerComponent.class)
-                    .processedEntity.getComponent(ContainerComponent.class).itemLocations) {
-                if (item.getItemID().equals(inventorySlot.getInventoryItem().getItemID().toString())) {
-                    if (item.getItemsAmount() == inventorySlot.getItemsNumber()) {
-                        engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerComponent.class)
-                                .processedEntity.getComponent(ContainerComponent.class).itemLocations.removeValue(item, true);
-                    }
-                }
-            }
-            inventorySlot.clearAllItems();
+            engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.add(equipmentSlot.getItem());
+            equipmentSlot.clearAllItems();
         }
     }
 
@@ -90,11 +76,11 @@ public class ContainerWindow extends Window {
 
     private int findEmptySlotInEquipment() {
         int n = 0;
-        Array<InventoryItemLocation> inventoryItem = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem;
+        Array<Item> inventoryItem = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem;
 
-        Array<Integer> numbers = new Array<Integer>();
+        Array<Integer> numbers = new Array<>();
 
-        for (InventoryItemLocation item : inventoryItem) {
+        for (Item item : inventoryItem) {
             numbers.add(item.getTableIndex());
         }
 
@@ -113,7 +99,7 @@ public class ContainerWindow extends Window {
         containerSlotsTable.setFillParent(false);
 
         for (int i = 0; i < itemSlotNumber; i++) {
-            InventorySlot inventorySlot = new InventorySlot();
+            EquipmentSlot inventorySlot = new EquipmentSlot();
             inventorySlot.addListener(listener);
             inventorySlot.setImageScale(1f);
             dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));

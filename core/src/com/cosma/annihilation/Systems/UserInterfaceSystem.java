@@ -116,8 +116,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
     void showLootWindow(Entity entity) {
         containerWindow.setVisible(true);
-        PlayerInventoryWindow.fillInventory(containerWindow.containerSlotsTable, entity.getComponent(ContainerComponent.class).itemLocations, containerWindow.dragAndDrop);
-
+        PlayerInventoryWindow.fillTable(containerWindow.containerSlotsTable, entity.getComponent(ContainerComponent.class).itemList, containerWindow.dragAndDrop);
     }
 
     void showDialogWindow(Entity entity) {

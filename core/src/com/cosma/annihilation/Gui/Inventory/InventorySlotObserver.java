@@ -7,5 +7,5 @@ public interface InventorySlotObserver {
     }
 
 
-    public void onNotify(final InventorySlot inventorySlot, InventorySlotEvent event);
+    public void onNotify(final EquipmentSlot inventorySlot, InventorySlotEvent event);
 }

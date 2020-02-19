@@ -21,12 +21,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
 import com.cosma.annihilation.Entities.EntityFactory;
-import com.cosma.annihilation.Items.ItemFactory;
 import com.cosma.annihilation.Systems.*;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
@@ -56,7 +54,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     AnimationState state;
     SpriteBatch batch;
     public WorldBuilder(Boolean isGameLoaded, InputMultiplexer inputMultiplexer) {
-        ItemFactory.getInstance().setAssetLoader(Annihilation.getAssetsLoader());
 
 
 

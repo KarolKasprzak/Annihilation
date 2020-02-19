@@ -51,6 +51,11 @@ public class Item extends Image implements Json.Serializable {
     }
 
     @Override
+    public String toString() {
+        return itemId;
+    }
+
+    @Override
     public void read(Json json, JsonValue jsonData) {
         Item item = Annihilation.getItem(jsonData.get("itemID").asString());
         this.itemId = item.itemId;
@@ -64,27 +69,6 @@ public class Item extends Image implements Json.Serializable {
         this.stackable = item.stackable;
         setOptionalValues(jsonData);
         setDrawable(new TextureRegionDrawable(Annihilation.getAssets().get("gfx/atlas/items_icon.atlas", TextureAtlas.class).findRegion(this.itemIcon)));
-    }
-
-    public enum ItemType {
-        CONSUMABLE,
-        MEDS,
-        ARMOUR,
-        WEAPON_LONG,
-        WEAPON_SHORT,
-        WEAPON_MELEE,
-        AMMUNITION_9MM,
-        AMMUNITION_7MM,
-        AMMUNITION_PLASMA,
-        AMMUNITION_ENERGETIC;
-    }
-
-    public enum ItemStatus {
-        CONTAMINATED,
-        DAMAGED,
-        DIRTY,
-        IRRADIATED,
-        STANDARD
     }
 
     public Item() {
@@ -108,7 +92,7 @@ public class Item extends Image implements Json.Serializable {
             this.setAutomatic(jsonData.get("automatic").asBoolean());
         }
         if (jsonData.has("itemType")) {
-            this.setAmmoType(Item.ItemType.valueOf(jsonData.get("itemType").asString()));
+            this.setAmmoType(ItemType.valueOf(jsonData.get("itemType").asString()));
         }
         if (jsonData.has("ammoInClip")) {
             this.setAmmoInClip(jsonData.get("ammoInClip").asInt());

@@ -11,18 +11,19 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Items.InventoryItem;
+import com.cosma.annihilation.Items.Item;
+import com.cosma.annihilation.Items.ItemType;
 
-public class InventorySlot extends Stack implements InventorySlotObservable{
+public class EquipmentSlot extends Stack implements InventorySlotObservable{
     private int itemsAmount = 0;
-    private int itemTypeFilter;
+    private Array<ItemType> itemTypeFilter = new Array<>();
     private Image backgroundImage;
     private Label itemsAmountLabel;
     private Stack stack;
     private Array<InventorySlotObserver> observers;
     private float itemImageScale;
 
-    public InventorySlot(){
+    public EquipmentSlot(){
 
         stack = new Stack();
         backgroundImage = new Image();
@@ -40,19 +41,25 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
         observers = new Array<InventorySlotObserver>();
 
     }
-    public InventorySlot(int itemTypeFilter,Image backgroundImage) {
+    public EquipmentSlot(Image backgroundImage, ItemType... args) {
         this();
-        this.itemTypeFilter = itemTypeFilter;
+        for(ItemType itemType: args){
+            itemTypeFilter.add(itemType);
+        }
         this.backgroundImage = backgroundImage;
         stack.add(backgroundImage);
     }
 
-    public boolean isAcceptItemUseType(int itemType){
-        if( itemTypeFilter == 0 ){
+    public boolean isSlotAcceptItemType(ItemType itemType){
+        if(itemTypeFilter == null|| itemTypeFilter.size == 0){
             return true;
         }else
             {
-            return (( itemTypeFilter & itemType) == itemType);
+            for(ItemType type: itemTypeFilter){
+                if(itemType.equals(type))
+                    return true;
+            }
+            return false;
         }
     }
 
@@ -92,12 +99,12 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
         notifyObservers(this,InventorySlotObserver.InventorySlotEvent.ADDED_ITEM);
     }
 
-    public InventoryItem getInventoryItem(){
-        InventoryItem actor = null;
+    public Item getItem(){
+        Item actor = null;
         if( this.hasChildren() ){
             SnapshotArray<Actor> items = this.getChildren();
             if( items.size > 2 ){
-                actor = (InventoryItem) items.peek();
+                actor = (Item) items.peek();
             }
         }
         return actor;
@@ -159,7 +166,7 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
     }
 
     @Override
-    public void notifyObservers(InventorySlot inventorySlot, InventorySlotObserver.InventorySlotEvent event) {
+    public void notifyObservers(EquipmentSlot inventorySlot, InventorySlotObserver.InventorySlotEvent event) {
         for (InventorySlotObserver observer: observers){
             observer.onNotify(inventorySlot,event);
         }

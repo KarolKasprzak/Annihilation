@@ -9,30 +9,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
-import com.cosma.annihilation.Items.WeaponItem;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Bone;
-import com.esotericsoftware.spine.attachments.Attachment;
-import com.esotericsoftware.spine.attachments.RegionAttachment;
-import com.esotericsoftware.spine.attachments.SkeletonAttachment;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.util.ArrayList;
 
 public class PlayerControlSystem extends IteratingSystem implements InputProcessor {
@@ -179,9 +167,9 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
             if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
                 float desiredSpeed = playerComponent.velocity * 0.8f;
                 if (animationComponent.spriteDirection) {
-                    setPlayerAnimation(playerComponent, animationComponent);
+//                    setPlayerAnimation(playerComponent, animationComponent);
                 } else {
-                    setPlayerAnimation(playerComponent, animationComponent);
+//                    setPlayerAnimation(playerComponent, animationComponent);
                     desiredSpeed = desiredSpeed * 0.7f;
                 }
                 Vector2 vec = playerBody.body.getLinearVelocity();
@@ -194,10 +182,10 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
             if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
                 float desiredSpeed = -playerComponent.velocity * 0.8f;
                 if (animationComponent.spriteDirection) {
-                    setPlayerAnimation(playerComponent, animationComponent);
+//                    setPlayerAnimation(playerComponent, animationComponent);
                     desiredSpeed = desiredSpeed * 0.7f;
                 } else {
-                    setPlayerAnimation(playerComponent, animationComponent);
+//                    setPlayerAnimation(playerComponent, animationComponent);
                 }
                 Vector2 vec = playerBody.body.getLinearVelocity();
                 float speedX = desiredSpeed - vec.x;
@@ -316,17 +304,6 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
     }
 
 
-    private void setPlayerAnimation(PlayerComponent playerComponent, AnimationComponent animationComponent) {
-        WeaponItem.ItemID weaponID = playerComponent.activeWeapon.getItemID();
-        switch (weaponID) {
-            case P38:
-                animationComponent.animationState = AnimationStates.WALK_WEAPON_SMALL;
-                break;
-            case MP44:
-                animationComponent.animationState = AnimationStates.WALK_WEAPON_MP;
-                break;
-        }
-    }
 
 
     @Override

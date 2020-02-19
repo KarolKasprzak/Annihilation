@@ -7,6 +7,6 @@ public interface InventorySlotObservable {
     public void unregister(InventorySlotObserver inventorySlotObserver);
 
 
-    public void notifyObservers(InventorySlot inventorySlot, InventorySlotObserver.InventorySlotEvent event);
+    public void notifyObservers(EquipmentSlot inventorySlot, InventorySlotObserver.InventorySlotEvent event);
 
 }

@@ -55,8 +55,6 @@ public class Annihilation extends Game {
 //		System.out.println(item1.getItemId());
 
 
-
-
 	}
 
 	@Override

@@ -13,8 +13,6 @@ import com.cosma.annihilation.Ai.HumanAiBasic;
 import com.cosma.annihilation.Ai.NpcAiBasic;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
-import com.cosma.annihilation.Gui.Inventory.InventoryItemLocation;
-import com.cosma.annihilation.Items.InventoryItem;
 import com.cosma.annihilation.Utils.Animation.AnimationFactory;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.AiType;
@@ -238,14 +236,15 @@ public class EntityReader implements Json.Serializer<Entity> {
         if (jsonData.has("ContainerComponent")) {
             ContainerComponent containerComponent = new ContainerComponent();
             containerComponent.name = jsonData.get("ContainerComponent").get("name").asString();
-            containerComponent.itemLocations = new Array<>();
-            for (JsonValue value : jsonData.get("ContainerComponent").get("itemList")) {
-                InventoryItemLocation location = new InventoryItemLocation();
-                location.setTableIndex(value.get("tableIndex").asInt());
-                location.setItemID(value.get("itemID").asString());
-                location.setItemsAmount(value.get("itemsAmount").asInt());
-                containerComponent.itemLocations.add(location);
-            }
+            containerComponent.itemList = new Array<>();
+            //todo
+//            for (JsonValue value : jsonData.get("ContainerComponent").get("itemList")) {
+//                InventoryItemLocation location = new InventoryItemLocation();
+//                location.setTableIndex(value.get("tableIndex").asInt());
+//                location.setItemID(value.get("itemID").asString());
+//                location.setItemsAmount(value.get("itemsAmount").asInt());
+//                containerComponent.itemLocations.add(location);
+//            }
             entity.add(containerComponent);
         }
 
@@ -269,9 +268,6 @@ public class EntityReader implements Json.Serializer<Entity> {
 
         if (jsonData.has("PlayerInventoryComponent")) {
             PlayerInventoryComponent playerInventoryComponent = new PlayerInventoryComponent();
-            InventoryItemLocation item = new InventoryItemLocation(0, InventoryItem.ItemID.FIRE_AXE.name(), 1);
-
-            playerInventoryComponent.inventoryItem.add(item);
             entity.add(playerInventoryComponent);
         }
 

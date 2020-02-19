@@ -2,7 +2,7 @@ package com.cosma.annihilation.Components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.cosma.annihilation.Items.WeaponItem;
+import com.cosma.annihilation.Items.Item;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class PlayerComponent implements Component {
     public String mapName;
 
     public ArrayList<Entity> collisionEntityList = new ArrayList<Entity>();
-    public WeaponItem activeWeapon;
+    public Item activeWeapon;
     public int activeWeaponAmmo;
     public Entity processedEntity;
     public boolean canPerformAction = true;

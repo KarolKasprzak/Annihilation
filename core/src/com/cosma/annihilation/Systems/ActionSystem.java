@@ -114,7 +114,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     }
 
     private void openBoxAction() {
-        if (playerComponent.processedEntity.getComponent(ContainerComponent.class).itemLocations.size > -1) {
+        if (playerComponent.processedEntity.getComponent(ContainerComponent.class).itemList.size > -1) {
             getEngine().getSystem(UserInterfaceSystem.class).showLootWindow(playerComponent.processedEntity);
         }
     }

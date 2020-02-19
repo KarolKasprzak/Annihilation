@@ -167,14 +167,8 @@ entityList: [
 		entityName: player.json
 		mapName: null
 		id: PLAYER
-		inventoryItem: [
-			{
-				tableIndex: 0
-				itemID: FIRE_AXE
-				itemsAmount: 1
-			}
-		]
-		equippedItem: []
+		inventoryItems: []
+		equippedItems: []
 	}
 	{
 		position: "21.10138,14.034404"
@@ -183,14 +177,10 @@ entityList: [
 		entityName: box.json
 		itemList: [
 			{
-				tableIndex: 0
-				itemID: P38
-				itemsAmount: 1
+				itemID: walther
 			}
 			{
-				tableIndex: 1
-				itemID: P38
-				itemsAmount: 1
+				itemID: stg
 			}
 		]
 	}

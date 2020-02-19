@@ -10,7 +10,6 @@ import com.badlogic.ashley.signals.Listener;
 import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -28,8 +27,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Entities.EntityFactory;
-import com.cosma.annihilation.Gui.Inventory.InventoryItemLocation;
-import com.cosma.annihilation.Items.WeaponItem;
+import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.CollisionID;
@@ -73,7 +71,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private Camera camera;
     private OrthographicCamera worldCamera;
 
-    public ShootingSystem(World world, RayHandler rayHandler, Batch batch,OrthographicCamera camera) {
+    public ShootingSystem(World world, RayHandler rayHandler, Batch batch, OrthographicCamera camera) {
         super(Family.all(PlayerComponent.class).get(), Constants.SHOOTING_SYSTEM);
         this.world = world;
         this.batch = batch;
@@ -161,21 +159,19 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         weaponReloadTimer += deltaTime;
 
 
-
-
         if (!animationComponent.spriteDirection) {
             direction = -1;
         } else direction = 1;
 
-        if(!playerComponent.isWeaponHidden){
+        if (!playerComponent.isWeaponHidden) {
             world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
-            if(targetEntity != null){
+            if (targetEntity != null) {
                 BodyComponent targetBody = targetEntity.getComponent(BodyComponent.class);
-                Vector3 worldPosition = worldCamera.project(new Vector3(targetBody.body.getPosition().x,targetBody.body.getPosition().y,0));
+                Vector3 worldPosition = worldCamera.project(new Vector3(targetBody.body.getPosition().x, targetBody.body.getPosition().y, 0));
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 //show accuracy on target
-                font.draw(batch,Math.round(calculateAttackAccuracyFloat() *100)+"%", worldPosition.x+45, worldPosition.y+50);
+                font.draw(batch, Math.round(calculateAttackAccuracyFloat() * 100) + "%", worldPosition.x + 45, worldPosition.y + 50);
                 batch.end();
             }
 
@@ -208,31 +204,26 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private float calculateAttackAccuracyFloat() {
         float weaponAccuracy = playerComponent.activeWeapon.getAccuracy();
         float playerSkill = 0;
-        int weaponType = playerComponent.activeWeapon.getItemUseType();
+        ItemType weaponType = playerComponent.activeWeapon.getItemType();
 
         switch (weaponType) {
-            case 4:
+            case WEAPON_MELEE:
                 playerSkill = statsComponent.meleeWeapons;
                 break;
-            case 8:
+            case WEAPON_ENERGETIC:
                 playerSkill = statsComponent.energeticWeapons;
                 break;
-            case 16:
-                playerSkill = statsComponent.energeticWeapons;
-                break;
-            case 32:
-                playerSkill = statsComponent.smallWeapons;
-                break;
-            case 64:
-                playerSkill = statsComponent.smallWeapons;
+            case WEAPON_SHORT:
+            case WEAPON_LONG:
+                playerSkill = statsComponent.ballisticWeapons;
                 break;
         }
         float playerAccuracy = ((float) playerSkill * 0.005f + weaponAccuracy);
         if (playerAccuracy >= 0.95f) {
             return 0.95f;
         } else {
-            float distance = targetEntity.getComponent(BodyComponent.class ).body.getPosition().x - body.getPosition().x;
-            if(distance>0){
+            float distance = targetEntity.getComponent(BodyComponent.class).body.getPosition().x - body.getPosition().x;
+            if (distance > 0) {
                 distance = distance * -1;
             }
             distance = distance / 100;
@@ -241,20 +232,17 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
 
-
     private void weaponSelect() {
-        if(playerComponent != null){
+        if (playerComponent != null) {
             if (playerComponent.activeWeapon != null && !playerComponent.isWeaponHidden) {
-                int weaponType = playerComponent.activeWeapon.getItemUseType();
+                ItemType weaponType = playerComponent.activeWeapon.getItemType();
 
                 switch (weaponType) {
-                    case 4:
+                    case WEAPON_MELEE:
                         meleeAttack();
                         break;
-                    case 8:
-                    case 16:
-                    case 32:
-                    case 64:
+                    case WEAPON_LONG:
+                    case WEAPON_SHORT:
                         startShooting();
                         break;
                 }
@@ -341,9 +329,9 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
 
     private void createShellAndBullet() {
-        WeaponItem.ItemID weaponID = playerComponent.activeWeapon.getItemID();
 
-        Vector3 worldPosition = worldCamera.unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0));
+
+        Vector3 worldPosition = worldCamera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
         float x = body.getPosition().x;
         float y = body.getPosition().y;
         float targetX = worldPosition.x;
@@ -351,21 +339,9 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
         float muzzleX = skeletonComponent.skeleton.findBone("muzzle").getWorldX();
         float muzzleY = skeletonComponent.skeleton.findBone("muzzle").getWorldY();
-
-        switch (weaponID) {
-            case P38:
-                this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(muzzleX, muzzleY));
-                this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX,muzzleY ,targetX,targetY, 30, animationComponent.spriteDirection));
-                this.getEngine().addEntity(EntityFactory.getInstance().createShootSplashEntity(muzzleX, muzzleY, animationComponent.spriteDirection));
-                break;
-            case MP44:
-                this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(body.getPosition().x + 0.4f * direction, body.getPosition().y + 0.3f));
-                this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(body.getPosition().x + 1.1f * direction, body.getPosition().y + 0.3f,targetX,targetY, 30, animationComponent.spriteDirection));
-                this.getEngine().addEntity(EntityFactory.getInstance().createShootSplashEntity(body.getPosition().x + 1.1f * direction, body.getPosition().y + 0.29f, animationComponent.spriteDirection));
-                break;
-        }
-
-
+        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(muzzleX, muzzleY));
+        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
+        this.getEngine().addEntity(EntityFactory.getInstance().createShootSplashEntity(muzzleX, muzzleY, animationComponent.spriteDirection));
     }
 
     private void automaticWeaponShoot() {
@@ -382,34 +358,31 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
 
-
-
-
     /**
      * true = hit, false = miss
      */
     private boolean calculateAttackAccuracy() {
         float weaponAccuracy = playerComponent.activeWeapon.getAccuracy();
         float playerSkill = 0;
-        int weaponType = playerComponent.activeWeapon.getItemUseType();
-
-        switch (weaponType) {
-            case 4:
-                playerSkill = statsComponent.meleeWeapons;
-                break;
-            case 8:
-                playerSkill = statsComponent.energeticWeapons;
-                break;
-            case 16:
-                playerSkill = statsComponent.energeticWeapons;
-                break;
-            case 32:
-                playerSkill = statsComponent.smallWeapons;
-                break;
-            case 64:
-                playerSkill = statsComponent.smallWeapons;
-                break;
-        }
+//        int weaponType = playerComponent.activeWeapon.getItemUseType();
+//
+//        switch (weaponType) {
+//            case 4:
+//                playerSkill = statsComponent.meleeWeapons;
+//                break;
+//            case 8:
+//                playerSkill = statsComponent.energeticWeapons;
+//                break;
+//            case 16:
+//                playerSkill = statsComponent.energeticWeapons;
+//                break;
+//            case 32:
+//                playerSkill = statsComponent.ballisticWeapons;
+//                break;
+//            case 64:
+//                playerSkill = statsComponent.ballisticWeapons;
+//                break;
+//        }
         float playerAccuracy = ((float) playerSkill * 0.005f + weaponAccuracy);
         if (playerAccuracy >= 0.95f) {
             return true;
@@ -432,39 +405,39 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
     private void weaponTakeOut() {
         if (playerComponent.activeWeapon != null) {
-            weaponMagazine.setAmmoInMagazine(playerComponent.activeWeapon.getAmmoInMagazine());
-            weaponMagazine.setMaxAmmoInMagazine(playerComponent.activeWeapon.getMaxAmmoInMagazine());
+            weaponMagazine.setAmmoInMagazine(playerComponent.activeWeapon.getAmmoInClip());
+            weaponMagazine.setMaxAmmoInMagazine(playerComponent.activeWeapon.getMaxAmmoInClip());
             playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
         }
     }
 
     private int addAmmoFromInventory() {
         int ammoInInventory = 0;
-        for (InventoryItemLocation item : playerInventoryComponent.inventoryItem) {
-            if (item.getItemID().equals(playerComponent.activeWeapon.getAmmoID().toString())) {
-                ammoInInventory = item.getItemsAmount();
-                if (ammoInInventory < playerComponent.activeWeapon.getMaxAmmoInMagazine()) {
-                    playerInventoryComponent.inventoryItem.removeValue(item, false);
-                    return ammoInInventory;
-                } else {
-                    item.setItemsAmount(item.getItemsAmount() - playerComponent.activeWeapon.getMaxAmmoInMagazine());
-                    return playerComponent.activeWeapon.getMaxAmmoInMagazine();
-                }
-            }
-        }
+//        for (InventoryItemLocation item : playerInventoryComponent.inventoryItem) {
+//            if (item.getItemID().equals(playerComponent.activeWeapon.getAmmoID().toString())) {
+//                ammoInInventory = item.getItemsAmount();
+//                if (ammoInInventory < playerComponent.activeWeapon.getMaxAmmoInMagazine()) {
+//                    playerInventoryComponent.inventoryItem.removeValue(item, false);
+//                    return ammoInInventory;
+//                } else {
+//                    item.setItemsAmount(item.getItemsAmount() - playerComponent.activeWeapon.getMaxAmmoInMagazine());
+//                    return playerComponent.activeWeapon.getMaxAmmoInMagazine();
+//                }
+//            }
+//        }
         return ammoInInventory;
     }
 
 
     private void shootingLight() {
-        switch (playerComponent.activeWeapon.getItemID()) {
-            case P38:
-                weaponLight.attachToBody(body, direction - 0.1f, 0.5f);
-                break;
-            case MP44:
-                weaponLight.attachToBody(body, direction - 0.1f, 0.3f);
-                break;
-        }
+//        switch (playerComponent.activeWeapon.getItemID()) {
+//            case P38:
+//                weaponLight.attachToBody(body, direction - 0.1f, 0.5f);
+//                break;
+//            case MP44:
+//                weaponLight.attachToBody(body, direction - 0.1f, 0.3f);
+//                break;
+//        }
 
         weaponLight.setActive(true);
         Timer.schedule(new Timer.Task() {

@@ -5,11 +5,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.SerializationComponent;
-import com.cosma.annihilation.Gui.Inventory.InventoryItemLocation;
-import com.cosma.annihilation.Items.InventoryItem;
+import com.cosma.annihilation.Items.Item;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
@@ -51,23 +51,22 @@ public class EntityEditOptionsWindow extends VisWindow {
     class AddEntityInventoryWindow extends VisWindow {
         AddEntityInventoryWindow(ContainerComponent containerComponent) {
             super(containerComponent.name);
-            VisList<InventoryItemLocation> itemList = new VisList<>();
-            itemList.setItems(containerComponent.itemLocations);
+            VisList<Item> itemList = new VisList<>();
+            itemList.setItems(containerComponent.itemList);
 
             VisTextButton removeButton = new VisTextButton("Remove item");
             removeButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    System.out.println(containerComponent.itemLocations.size);
-                    containerComponent.itemLocations.removeValue(itemList.getSelected(),true);
+                    containerComponent.itemList.removeValue(itemList.getSelected(),true);
                     itemList.clearItems();
-                    itemList.setItems(containerComponent.itemLocations);
+                    itemList.setItems(containerComponent.itemList);
                 }
             });
 
-            VisSelectBox<Enum> itemSelectBox = new VisSelectBox<>();
-            itemSelectBox.setItems(InventoryItem.ItemID.values());
-
+            VisSelectBox<Item> itemSelectBox = new VisSelectBox<>();
+            itemSelectBox.setItems(Annihilation.getItemsList().values().toArray());
+System.out.println(Annihilation.getItemsList().values().toArray().size);
             final IntSpinnerModel intModel = new IntSpinnerModel(1, 1, 100, 1);
             Spinner intSpinner = new Spinner("amount:", intModel);
 
@@ -75,14 +74,12 @@ public class EntityEditOptionsWindow extends VisWindow {
             addItemButton.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    if(containerComponent.itemLocations.size<4){
-                        InventoryItemLocation item = new InventoryItemLocation();
+                    if(containerComponent.itemList.size<4){
+                        Item item = Annihilation.getItem(itemSelectBox.getSelected().getItemId());
                         item.setItemsAmount(intModel.getValue());
-                        item.setItemID(itemSelectBox.getSelected().toString());
-
                         Array<Integer> usedSlots = new Array<>();
-                        for(InventoryItemLocation itemLocation: containerComponent.itemLocations){
-                            usedSlots.add(itemLocation.getTableIndex());
+                        for(Item newItem: containerComponent.itemList){
+                            usedSlots.add(item.getTableIndex());
                         }
                         for(int i =0; i < 4; i++){
                             if(!usedSlots.contains(i,true)){
@@ -90,9 +87,9 @@ public class EntityEditOptionsWindow extends VisWindow {
                                 break;
                             }
                         }
-                        containerComponent.itemLocations.add(item);
+                        containerComponent.itemList.add(item);
                         itemList.clearItems();
-                        itemList.setItems(containerComponent.itemLocations);
+                        itemList.setItems(containerComponent.itemList);
                     }else System.out.println("container is full");
 
                 }
