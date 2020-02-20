@@ -35,6 +35,7 @@ public class Item extends Image implements Json.Serializable {
 
     @Override
     public void write(Json json) {
+        json.writeObjectStart();
         json.writeValue("itemID", itemId);
         if (itemStatus != ItemStatus.STANDARD) {
             json.writeValue("itemStatus", itemStatus.toString());
@@ -45,9 +46,10 @@ public class Item extends Image implements Json.Serializable {
         if (itemsAmount > 1) {
             json.writeValue("itemsAmount", itemsAmount);
         }
-        if (tableIndex > 0) {
+        if (tableIndex >= 0) {
             json.writeValue("tableIndex", tableIndex);
         }
+        json.writeObjectEnd();
     }
 
     @Override

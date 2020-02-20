@@ -118,10 +118,10 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
                     ((ContainerComponent) component).itemList = new Array<>();
 
-                    for (JsonValue value : jsonData.get("itemList")){
-                        Item item = json.fromJson(Item.class,value.asString());
-                        ((ContainerComponent) component).itemList.add(item);
-                    }
+//                    for (JsonValue value : jsonData.get("itemList")){
+//                        Item item = json.fromJson(Item.class,value.get("itemID").asString());
+//                        ((ContainerComponent) component).itemList.add(item);
+//                    }
                 }
             }
 
@@ -160,9 +160,8 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
     private void saveItemArray(Json json, Array<Item> itemsArray,String arrayName){
             json.writeArrayStart(arrayName);
             for(Item item: itemsArray){
-                json.writeObjectStart();
-                json.writeValue("itemID",item.getItemId());
-                json.writeObjectEnd();
+                item.write(json);
+
             }
             json.writeArrayEnd();
 

@@ -49,7 +49,17 @@ public class Annihilation extends Game {
 		items.add(Annihilation.getItem("stg"));
 		items.add(Annihilation.getItem("stg"));
 		Json json = new Json();
-		System.out.println(json.prettyPrint(items));
+
+		for(int i = 0; i < 4; i++ ){
+			System.out.println(i);
+//                                System.out.println("id = " + intArray.get(i));
+//                                if(!intArray.contains(intArray.get(i)+1)){
+//                                    item.setTableIndex(intArray.get(i)+1);
+//                                    System.out.println("index = " + intArray.get(i)+1);
+//                                    break;
+//                                }
+		}
+
 //		String text = json.prettyPrint(item);
 //		Item item1 = json.fromJson(Item.class,text);
 //		System.out.println(item1.getItemId());

@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.ContainerComponent;
@@ -66,7 +68,6 @@ public class EntityEditOptionsWindow extends VisWindow {
 
             VisSelectBox<Item> itemSelectBox = new VisSelectBox<>();
             itemSelectBox.setItems(Annihilation.getItemsList().values().toArray());
-System.out.println(Annihilation.getItemsList().values().toArray().size);
             final IntSpinnerModel intModel = new IntSpinnerModel(1, 1, 100, 1);
             Spinner intSpinner = new Spinner("amount:", intModel);
 
@@ -77,21 +78,33 @@ System.out.println(Annihilation.getItemsList().values().toArray().size);
                     if(containerComponent.itemList.size<4){
                         Item item = Annihilation.getItem(itemSelectBox.getSelected().getItemId());
                         item.setItemsAmount(intModel.getValue());
-                        Array<Integer> usedSlots = new Array<>();
-                        for(Item newItem: containerComponent.itemList){
-                            usedSlots.add(item.getTableIndex());
-                        }
-                        for(int i =0; i < 4; i++){
-                            if(!usedSlots.contains(i,true)){
-                                item.setTableIndex(i);
-                                break;
+
+                        if(containerComponent.itemList.size >0){
+                            IntArray intArray = new IntArray();
+
+                            for(Item _item: containerComponent.itemList){
+                                intArray.add(_item.getTableIndex());
                             }
-                        }
+                            System.out.println("size: "+intArray.size);
+                            for(int i = 0; i < 4; i++ ){
+                                if(intArray.contains(i)){
+
+                                }else{
+                                    System.out.println("set int" + i);
+                                    item.setTableIndex(i);
+                                    break;
+                                }
+
+
+
+                            }
+                        }else
+                            System.out.println("index = 0");
+                            item.setTableIndex(0);
                         containerComponent.itemList.add(item);
                         itemList.clearItems();
                         itemList.setItems(containerComponent.itemList);
-                    }else System.out.println("container is full");
-
+                    }
                 }
             });
 

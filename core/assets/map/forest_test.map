@@ -178,9 +178,23 @@ entityList: [
 		itemList: [
 			{
 				itemID: walther
+				itemsAmount: 2
+				tableIndex: 0
 			}
 			{
 				itemID: stg
+				itemsAmount: 2
+				tableIndex: 0
+			}
+			{
+				itemID: walther
+				itemsAmount: 2
+				tableIndex: 0
+			}
+			{
+				itemID: walther
+				itemsAmount: 2
+				tableIndex: 0
 			}
 		]
 	}

@@ -167,14 +167,31 @@ entityList: [
 		entityName: player.json
 		mapName: null
 		id: PLAYER
-		inventoryItem: []
-		equippedItem: []
+		inventoryItems: []
+		equippedItems: []
 	}
 	{
 		position: "21.10138,14.034404"
 		hp: 100
 		maxHp: 100
 		entityName: box.json
+		itemList: [
+			{
+				itemID: stg
+				itemsAmount: 2
+				tableIndex: 0
+			}
+			{
+				itemID: stg
+				itemsAmount: 2
+				tableIndex: 0
+			}
+			{
+				itemID: stg
+				itemsAmount: 2
+				tableIndex: 0
+			}
+		]
 	}
 ]
 mapName: forest_test.map
