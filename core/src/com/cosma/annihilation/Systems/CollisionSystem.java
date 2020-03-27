@@ -88,12 +88,9 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
         }
         //Player go through wall
         if (playerComponent.climbing) {
-            System.out.println("1");
             if (playerBody.getPosition().y > ladderY - (ladderHeight / 2 - 2)) {
-                System.out.println("2");
                 playerBody.getFixtureList().get(0).setFilterData(goTroughFilter);
                 if (playerBody.getPosition().y < ladderY - (ladderHeight / 2 - 2)) {
-                    System.out.println("3");
                     playerBody.getFixtureList().get(0).setFilterData(normalFilter);
                 }
             } else {

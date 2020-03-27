@@ -38,6 +38,7 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
     private Entity noiseTestEntity;
     private Vector2 temp1 = new Vector2(), temp2 = new Vector2(), temp3 = new Vector2();
     private Viewport viewport;
+    private boolean isPlayerControlAvailable = true;
 
     public PlayerControlSystem(World world, OrthographicCamera camera, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.PLAYER_CONTROL_SYSTEM);
@@ -56,6 +57,13 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
             return 0;
         };
 
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        if(isPlayerControlAvailable){
+            super.update(deltaTime);
+        }
     }
 
     @Override
@@ -246,11 +254,6 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         Vector2 mouse = temp1.set(Gdx.input.getX(), Gdx.input.getY());
         viewport.unproject(mouse);
 
-        float r_arm_angle = skeletonComponent.skeleton.findBone("r_arm").getRotation();
-        float r_hand_angle = skeletonComponent.skeleton.findBone("r_hand").getARotation();
-        float rr_hand_angle = skeletonComponent.skeleton.findBone("r_hand").getRotation();
-        float weapon_angle = skeletonComponent.skeleton.findBone("weapon").getARotation();
-
         rightArm.setRotation(0);
         skeletonComponent.skeleton.updateWorldTransform();
 
@@ -303,12 +306,14 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         }
     }
 
-
-
+    public void setPlayerControlAvailable(boolean playerControlAvailable) {
+        isPlayerControlAvailable = playerControlAvailable;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.I || keycode == Input.Keys.ESCAPE) {
+            setPlayerControlAvailable(false);
             signal.dispatch(GameEvent.OPEN_MENU);
         }
         return false;
@@ -326,12 +331,12 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
+        if (button == Input.Buttons.LEFT && isPlayerControlAvailable) {
             gameEventList.add(GameEvent.ACTION_BUTTON_TOUCH_DOWN);
             gameEventList.add(GameEvent.PERFORM_ACTION);
         }
 
-        if (button == Input.Buttons.RIGHT) {
+        if (button == Input.Buttons.RIGHT && isPlayerControlAvailable) {
             gameEventList.add(GameEvent.WEAPON_TAKE_OUT);
         }
 
@@ -340,7 +345,7 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
+        if (button == Input.Buttons.LEFT && isPlayerControlAvailable) {
             gameEventList.add(GameEvent.ACTION_BUTTON_TOUCH_UP);
         }
         return false;

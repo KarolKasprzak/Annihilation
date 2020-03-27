@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Dialogs.DialogueManager;
@@ -115,13 +116,8 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
             if(component instanceof ContainerComponent){
                 if(jsonData.has("itemList")){
+                    ((ContainerComponent) component).itemList = loadItemArray(jsonData,"itemList");
 
-                    ((ContainerComponent) component).itemList = new Array<>();
-
-//                    for (JsonValue value : jsonData.get("itemList")){
-//                        Item item = json.fromJson(Item.class,value.get("itemID").asString());
-//                        ((ContainerComponent) component).itemList.add(item);
-//                    }
                 }
             }
 
@@ -161,10 +157,20 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
             json.writeArrayStart(arrayName);
             for(Item item: itemsArray){
                 item.write(json);
-
             }
             json.writeArrayEnd();
-
-
+    }
+    private Array<Item> loadItemArray(JsonValue arrayValue,String arrayName){
+        Array<Item> array = new Array<>();
+        for (JsonValue value : arrayValue.get(arrayName)){
+            Item item = Annihilation.getItem(value.get("itemID").asString());
+            System.out.println(value.get("itemID").asString());
+            item.setTableIndex(value.get("tableIndex").asInt());
+            if(value.has("itemAmount")){
+                item.setItemAmount(value.get("itemAmount").asInt());
+            }
+            array.add(item);
+        }
+        return array;
     }
 }

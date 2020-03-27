@@ -20,12 +20,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
+import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Systems.ActionSystem;
 import com.cosma.annihilation.Systems.ShootingSystem;
 import com.cosma.annihilation.Utils.AssetLoader;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.StateManager;
 import com.cosma.annihilation.Utils.Util;
+import com.kotcrab.vis.ui.widget.VisWindow;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 public class Gui implements Screen {
     private Stage stage;
@@ -145,9 +148,6 @@ public class Gui implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 {
                     playerState.goUp = true;
-                    System.out.println("work");
-                    System.out.println(playerState.goUp);
-                    System.out.println(engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerComponent.class).goUp);
                 }
                 return true;
             }
@@ -231,6 +231,8 @@ public class Gui implements Screen {
     public void showLootWindow(Entity entity) {
         containerWindow.setVisible(true);
         PlayerInventoryWindow.fillTable(containerWindow.containerSlotsTable, entity.getComponent(ContainerComponent.class).itemList, containerWindow.dragAndDrop);
+        for(Item item: entity.getComponent(ContainerComponent.class).itemList){
+        }
     }
 
     private void createHUD() {
@@ -256,6 +258,8 @@ public class Gui implements Screen {
                 return true;
             }
         });
+
+
         debugButton = new TextButton("Debug mode ", skin);
         Util.setButtonColor(debugButton);
 
@@ -320,7 +324,6 @@ public class Gui implements Screen {
 
     @Override
     public void show() {
-      System.out.println("gui start");
     }
 
     @Override

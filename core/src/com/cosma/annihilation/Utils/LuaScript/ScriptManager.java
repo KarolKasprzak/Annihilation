@@ -26,7 +26,6 @@ public class ScriptManager {
     }
 
     public void runScript(String key){
-        System.out.println();
         scripts.get(key).executeFunction("script",this);
     }
 

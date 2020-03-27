@@ -53,7 +53,6 @@ public class GameMainMenuWindow extends Window {
 
         createButtons(this);
 
-        System.out.println(Gdx.graphics.getDensity());
         rightTable.add(inventoryButton).size(Util.setButtonWidth(1.3f), Util.setButtonHeight(1.8f)).pad( Math.round(Gdx.graphics.getDensity() * 12) );
         rightTable.row();
         rightTable.add(characterButton).size(Util.setButtonWidth(1.3f), Util.setButtonHeight(1.8f)).pad( Math.round(Gdx.graphics.getDensity() * 12) );
@@ -137,6 +136,10 @@ public class GameMainMenuWindow extends Window {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 clearAndAddWindow(playerInventoryWindow);
                 playerInventoryWindow.loadInventory(engine);
+//                LootWindow lootWindow = new LootWindow(skin, engine);
+//                lootWindow.addCloseButton();
+//                lootWindow.setKeepWithinStage(true);
+//                clearAndAddWindow(lootWindow);
                 return true;
             }
         });

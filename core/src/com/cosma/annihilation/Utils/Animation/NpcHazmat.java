@@ -14,7 +14,6 @@ import java.util.HashMap;
 
         //WALK
         Animation<TextureRegion> walkAnimation = new Animation<>(0.1f,textureAtlas.findRegions("walk"),Animation.PlayMode.LOOP);
-        System.out.println("Key:"+walkAnimation.getKeyFrames().length);
         this.put("WALK",walkAnimation);
         //IDLE
         Animation<TextureRegion> idleAnimation = new Animation<>(0.1f,textureAtlas.findRegions("idle"),Animation.PlayMode.LOOP);

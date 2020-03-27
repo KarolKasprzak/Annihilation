@@ -102,7 +102,6 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
                     break;
                 case CROUCH:
                     break;
-
             }
         }
     }

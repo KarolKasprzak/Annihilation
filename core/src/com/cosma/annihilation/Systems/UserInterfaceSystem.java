@@ -24,14 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.DialogueComponent;
 import com.cosma.annihilation.Components.HealthComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
-import com.cosma.annihilation.Gui.ContainerWindow;
-import com.cosma.annihilation.Gui.DialogueWindow;
-import com.cosma.annihilation.Gui.PlayerInventoryWindow;
-import com.cosma.annihilation.Gui.GameMainMenuWindow;
+import com.cosma.annihilation.Gui.*;
+import com.cosma.annihilation.Gui.MainMenu.PlayerMenuWindow;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.Util;
@@ -48,13 +45,15 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     private ComponentMapper<PlayerComponent> playerMapper;
     private BitmapFont font;
     private DialogueWindow dialogueWindow;
-
+    private Skin skin;
+    private LootWindow lootWindow;
+    private PlayerMenuWindow playerMenuWindow;
     public UserInterfaceSystem(Engine engine, World world, WorldBuilder worldBuilder) {
         super(Family.all(PlayerComponent.class).get(), Constants.USER_INTERFACE);
 
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
 
-        Skin skin = Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class);
+        skin = Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class);
         Camera camera = new OrthographicCamera();
         camera.update();
         Viewport viewport = new ScreenViewport();
@@ -70,26 +69,23 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
         dialogueWindow = new DialogueWindow(skin, engine);
 
-
-        containerWindow = new ContainerWindow("", skin, 4, engine);
-        containerWindow.setSize(Util.setWindowWidth(0.4f), Util.setWindowHeight(0.5f));
-        containerWindow.setVisible(false);
-        containerWindow.setPosition(Gdx.graphics.getWidth() / 2 - (Util.setWindowWidth(0.4f) / 2), Gdx.graphics.getHeight() / 2 - (Util.setWindowHeight(0.5f) / 2));
-        stage.addActor(containerWindow);
+        lootWindow = new LootWindow(skin,engine);
 
         gameMainMenuWindow = new GameMainMenuWindow("", skin, engine, Util.setWindowWidth(0.95f), Util.setWindowHeight(0.95f), world, worldBuilder);
         gameMainMenuWindow.setPosition(Gdx.graphics.getWidth() / 2 - (Util.setWindowWidth(0.95f) / 2), Gdx.graphics.getHeight() / 2 - (Util.setWindowHeight(0.95f) / 2));
         gameMainMenuWindow.setVisible(false);
         gameMainMenuWindow.setFillParent(true);
+
+        playerMenuWindow = new PlayerMenuWindow("",skin);
+
+
         stage.addActor(gameMainMenuWindow);
 
         fpsLabel = new Label("", skin);
         playerHealthStatusIcon = new Image(Annihilation.getAssets().get("gfx/textures/player_health.png", Texture.class));
 
-
         coreTable.add(fpsLabel).left().top().expandX().expandY();
         coreTable.add(playerHealthStatusIcon).top();
-
         font = new BitmapFont();
         font.setColor(Color.RED);
     }
@@ -115,8 +111,12 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
 
     void showLootWindow(Entity entity) {
-        containerWindow.setVisible(true);
-        PlayerInventoryWindow.fillTable(containerWindow.containerSlotsTable, entity.getComponent(ContainerComponent.class).itemList, containerWindow.dragAndDrop);
+        if(!lootWindow.isOpen()){
+            System.out.println("open");
+            stage.addActor(lootWindow);
+            lootWindow.open(entity);
+        }
+
     }
 
     void showDialogWindow(Entity entity) {
@@ -126,7 +126,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
               playerComponent.canPerformAction = false;
               playerComponent.canMoveOnSide = false;
               DialogueComponent dialogueComponent = entity.getComponent(DialogueComponent.class);
-
               stage.addActor(dialogueWindow);
               dialogueWindow.setVisible(true);
               dialogueWindow.displayDialogue(dialogueComponent);
@@ -146,9 +145,17 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     public void receive(Signal<GameEvent> signal, GameEvent event) {
         switch (event) {
             case OPEN_MENU:
-                if (gameMainMenuWindow.isVisible()) {
-                    gameMainMenuWindow.setVisible(false);
-                } else gameMainMenuWindow.setVisible(true);
+                    if(stage.getActors().contains(playerMenuWindow,true)){
+                        playerMenuWindow.close();
+                        getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
+                    }else{
+                        stage.addActor(playerMenuWindow);
+                        playerMenuWindow.moveToCenter();
+                    }
+//                if (gameMainMenuWindow.isVisible()) {
+//                    gameMainMenuWindow.setVisible(false);
+//                    getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
+//                } else gameMainMenuWindow.setVisible(true);
                 break;
         }
     }

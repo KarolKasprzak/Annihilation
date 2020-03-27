@@ -21,7 +21,6 @@ public class DialogueManager {
         FileHandle file = Gdx.files.local("json/dialogs");
         for (FileHandle dialogueFile : file.list(".dial")) {
             Dialogue dialogue = json.fromJson(Dialogue.class,dialogueFile);
-            System.out.println("instant");
             dialogues.put(dialogueFile.nameWithoutExtension(),dialogue);
 
         }

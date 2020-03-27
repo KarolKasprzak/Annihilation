@@ -1,4 +1,4 @@
-package com.cosma.annihilation.Gui.Inventory;
+package com.cosma.annihilation.Items;
 
 public interface InventorySlotObserver {
     public static enum InventorySlotEvent{
@@ -7,5 +7,5 @@ public interface InventorySlotObserver {
     }
 
 
-    public void onNotify(final EquipmentSlot inventorySlot, InventorySlotEvent event);
+    public void onNotify(final InventorySlot inventorySlot, InventorySlotEvent event);
 }

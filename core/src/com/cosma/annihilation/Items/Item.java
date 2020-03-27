@@ -1,14 +1,11 @@
 package com.cosma.annihilation.Items;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.cosma.annihilation.Annihilation;
 
-public class Item extends Image implements Json.Serializable {
+public class Item extends Image implements Json.Serializable, Comparable<Item>{
     //not null
     private String itemId;
     private String itemName;
@@ -21,7 +18,7 @@ public class Item extends Image implements Json.Serializable {
     private boolean stackable;
     //date
     private int tableIndex = 0;
-    private int itemsAmount = 1;
+    private int itemAmount = 1;
     //optional
     private int damage;
     private boolean automatic;
@@ -43,8 +40,8 @@ public class Item extends Image implements Json.Serializable {
         if (ammoInClip > 0) {
             json.writeValue("ammoInClip", ammoInClip);
         }
-        if (itemsAmount > 1) {
-            json.writeValue("itemsAmount", itemsAmount);
+        if (itemAmount > 1) {
+            json.writeValue("itemAmount", itemAmount);
         }
         if (tableIndex >= 0) {
             json.writeValue("tableIndex", tableIndex);
@@ -59,18 +56,6 @@ public class Item extends Image implements Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-        Item item = Annihilation.getItem(jsonData.get("itemID").asString());
-        this.itemId = item.itemId;
-        this.itemName = item.itemName;
-        this.itemType = item.itemType;
-        this.itemStatus = item.itemStatus;
-        this.itemShortDescription = item.itemShortDescription;
-        this.itemIcon = item.itemIcon;
-        this.weight = item.weight;
-        this.itemValue = item.itemValue;
-        this.stackable = item.stackable;
-        setOptionalValues(jsonData);
-        setDrawable(new TextureRegionDrawable(Annihilation.getAssets().get("gfx/atlas/items_icon.atlas", TextureAtlas.class).findRegion(this.itemIcon)));
     }
 
     public Item() {
@@ -109,12 +94,12 @@ public class Item extends Image implements Json.Serializable {
         this.tableIndex = tableIndex;
     }
 
-    public int getItemsAmount() {
-        return itemsAmount;
+    public int getItemAmount() {
+        return itemAmount;
     }
 
-    public void setItemsAmount(int itemsAmount) {
-        this.itemsAmount = itemsAmount;
+    public void setItemAmount(int itemAmount) {
+        this.itemAmount = itemAmount;
     }
 
     public ItemStatus getItemStatus() {
@@ -254,12 +239,15 @@ public class Item extends Image implements Json.Serializable {
     }
 
     public boolean isSameItemType(Item inventoryItem) {
-        return itemType == inventoryItem.getItemType();
+        return itemType.equals(inventoryItem.getItemType());
     }
 
     public int getTradeValue() {
         return MathUtils.floor(itemValue * .33f) + 2;
     }
 
-
+    @Override
+    public int compareTo(Item o) {
+       return this.getTableIndex() - o.getTableIndex();
+    }
 }

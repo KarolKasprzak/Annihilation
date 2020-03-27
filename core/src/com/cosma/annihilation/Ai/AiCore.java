@@ -171,11 +171,8 @@ class AiCore {
             AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
             Body aiBody = entity.getComponent(BodyComponent.class).body;
             World world = aiBody.getWorld();
-            System.out.println(aiBody.getPosition().add(15, 0));
-            System.out.println(aiBody.getPosition());
             world.rayCast(shootRayCallback, aiBody.getPosition(), rayEndVector.set(aiBody.getPosition().x + 10, aiBody.getPosition().y));
             if (targetEntity != null) {
-                System.out.println("hit");
                 targetEntity.getComponent(HealthComponent.class).hp -= 0;
                 targetEntity.getComponent(HealthComponent.class).isHit = true;
                 targetEntity.getComponent(HealthComponent.class).attackerPosition = aiBody.getPosition();

@@ -11,11 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
-import com.cosma.annihilation.Gui.Inventory.EquipmentSlot;
-import com.cosma.annihilation.Gui.Inventory.InventorySlotTarget;
+import com.cosma.annihilation.Items.InventorySlot;
+import com.cosma.annihilation.Items.InventorySlotTarget;
 import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Util;
@@ -39,8 +38,8 @@ public class ContainerWindow extends Window {
         this.itemSlotNumber = itemSlotNumber;
         this.engine = engine;
 
+        this.debugAll();
         containerWindow = this;
-
         this.background(new TextureRegionDrawable(new TextureRegion(Annihilation.getAssets().get("gfx/interface/gui_frame.png",Texture.class))));
 
         guiScale = 1.3f;
@@ -55,8 +54,8 @@ public class ContainerWindow extends Window {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 if(count >= 2){
-                    if(((EquipmentSlot) event.getListenerActor()).hasItem()){
-                        moveItemToPlayerEquipment((EquipmentSlot) event.getListenerActor());
+                    if(((InventorySlot) event.getListenerActor()).hasItem()){
+                        moveItemToPlayerEquipment((InventorySlot) event.getListenerActor());
                     }
                 }
             }
@@ -65,10 +64,10 @@ public class ContainerWindow extends Window {
         createContainerTable();
     }
 
-    private void moveItemToPlayerEquipment(EquipmentSlot equipmentSlot) {
+    private void moveItemToPlayerEquipment(InventorySlot equipmentSlot) {
         if (engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.size <= 24) {
             engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.add(equipmentSlot.getItem());
-            equipmentSlot.clearAllItems();
+            equipmentSlot.clearItems();
         }
     }
 
@@ -99,7 +98,7 @@ public class ContainerWindow extends Window {
         containerSlotsTable.setFillParent(false);
 
         for (int i = 0; i < itemSlotNumber; i++) {
-            EquipmentSlot inventorySlot = new EquipmentSlot();
+            InventorySlot inventorySlot = new InventorySlot();
             inventorySlot.addListener(listener);
             inventorySlot.setImageScale(1f);
             dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));

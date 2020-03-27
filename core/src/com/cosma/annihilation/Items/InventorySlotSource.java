@@ -1,14 +1,14 @@
-package com.cosma.annihilation.Gui.Inventory;
+package com.cosma.annihilation.Items;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 
 public class InventorySlotSource extends DragAndDrop.Source {
 
-    private EquipmentSlot sourceSlot;
+    private InventorySlot sourceSlot;
     private DragAndDrop dragAndDrop;
 
-    public InventorySlotSource(EquipmentSlot sourceSlot, DragAndDrop dragAndDrop) {
+    public InventorySlotSource(InventorySlot sourceSlot, DragAndDrop dragAndDrop) {
         super(sourceSlot.getItem());
         this.sourceSlot = sourceSlot;
         this.dragAndDrop = dragAndDrop;
@@ -16,14 +16,10 @@ public class InventorySlotSource extends DragAndDrop.Source {
     @Override
     public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
         DragAndDrop.Payload payload = new DragAndDrop.Payload();
-
-
-
-        sourceSlot = (EquipmentSlot)getActor().getParent();
-        sourceSlot.removeItem();
+        System.out.println("work" + x);
+        sourceSlot = (InventorySlot)getActor().getParent();
+        sourceSlot.decreaseItemAmount();
         payload.setDragActor(getActor());
-//        dragAndDrop.setDragActorPosition(-x, -y + getActor().getHeight());
-
         return payload;
     }
 
@@ -33,5 +29,8 @@ public class InventorySlotSource extends DragAndDrop.Source {
             sourceSlot.add(payload.getDragActor());
         }
     }
-    public EquipmentSlot getSourceSlot() {return sourceSlot;}
+
+
+
+    public InventorySlot getSourceSlot() {return sourceSlot;}
 }

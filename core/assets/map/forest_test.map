@@ -177,24 +177,17 @@ entityList: [
 		entityName: box.json
 		itemList: [
 			{
-				itemID: walther
-				itemsAmount: 2
+				itemID: stg
 				tableIndex: 0
+				itemAmount: 2
 			}
 			{
 				itemID: stg
-				itemsAmount: 2
-				tableIndex: 0
+				tableIndex: 2
 			}
 			{
 				itemID: walther
-				itemsAmount: 2
-				tableIndex: 0
-			}
-			{
-				itemID: walther
-				itemsAmount: 2
-				tableIndex: 0
+				tableIndex: 3
 			}
 		]
 	}

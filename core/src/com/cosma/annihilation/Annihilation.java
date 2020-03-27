@@ -4,10 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.I18NBundle;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.*;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemLoader;
 import com.cosma.annihilation.Screens.GameScreen;
@@ -15,6 +12,7 @@ import com.cosma.annihilation.Screens.MapEditor;
 import com.cosma.annihilation.Screens.MenuScreen;
 import com.cosma.annihilation.Utils.AssetLoader;
 
+import java.util.BitSet;
 import java.util.Locale;
 
 public class Annihilation extends Game {
@@ -41,30 +39,19 @@ public class Annihilation extends Game {
 		myBundle = I18NBundle.createBundle(mapTextures,Locale.UK);
 		menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
+	}
 
-
-		Item item = Annihilation.getItem("stg");
-
-		Array<Item> items = new Array<>();
-		items.add(Annihilation.getItem("stg"));
-		items.add(Annihilation.getItem("stg"));
-		Json json = new Json();
-
-		for(int i = 0; i < 4; i++ ){
-			System.out.println(i);
-//                                System.out.println("id = " + intArray.get(i));
-//                                if(!intArray.contains(intArray.get(i)+1)){
-//                                    item.setTableIndex(intArray.get(i)+1);
-//                                    System.out.println("index = " + intArray.get(i)+1);
-//                                    break;
-//                                }
+	private int findFreeIndex(Array<Item> itemList, int tableSize) {
+		IntArray intArray = new IntArray();
+		for(Item item: itemList){
+			intArray.add(item.getTableIndex());
 		}
-
-//		String text = json.prettyPrint(item);
-//		Item item1 = json.fromJson(Item.class,text);
-//		System.out.println(item1.getItemId());
-
-
+		intArray.sort();
+		for(int i = 0; i < tableSize; i++){
+			if(!intArray.contains(i)){
+			}
+		}
+		return 0;
 	}
 
 	@Override
@@ -95,10 +82,10 @@ public class Annihilation extends Game {
 	}
 
 	public static Item getItem(String itemID) {
-		return ((Annihilation) Gdx.app.getApplicationListener()).itemLoader.getItemMap().get(itemID);
+		return ((Annihilation) Gdx.app.getApplicationListener()).itemLoader.getItem(itemID);
 	}
-	public static ObjectMap<String,Item> getItemsList() {
-		return ((Annihilation) Gdx.app.getApplicationListener()).itemLoader.getItemMap();
+	public static Array<String> getItemIdList() {
+		return ((Annihilation) Gdx.app.getApplicationListener()).itemLoader.getItemIdList();
 	}
 
 	public static AssetManager getAssets() {

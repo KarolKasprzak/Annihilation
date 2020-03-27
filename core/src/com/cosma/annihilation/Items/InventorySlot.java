@@ -1,4 +1,4 @@
-package com.cosma.annihilation.Gui.Inventory;
+package com.cosma.annihilation.Items;
 
 
 import com.badlogic.gdx.graphics.Texture;
@@ -11,51 +11,51 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Items.Item;
-import com.cosma.annihilation.Items.ItemType;
 
-public class EquipmentSlot extends Stack implements InventorySlotObservable{
-    private int itemsAmount = 0;
+public class InventorySlot extends Stack implements InventorySlotObservable{
+    private int itemAmount = 0;
     private Array<ItemType> itemTypeFilter = new Array<>();
     private Image backgroundImage;
     private Label itemsAmountLabel;
-    private Stack stack;
+    private Stack backgroundStackDefault;
     private Array<InventorySlotObserver> observers;
     private float itemImageScale;
 
-    public EquipmentSlot(){
-
-        stack = new Stack();
+    public InventorySlot(){
+        backgroundStackDefault = new Stack();
         backgroundImage = new Image();
         Image backgroundImageStandard = new Image( Annihilation.getAssets().get("gfx/interface/gui_frame_64x64.png",Texture.class));
 //        Image backgroundImageStandard = new Image( Annihilation.getAssets().get(GfxAssetDescriptors.defaultStack));
-        stack.add(backgroundImageStandard);
-        stack.setName("background");
-        this.add(stack);
-        itemsAmountLabel = new Label(String.valueOf(itemsAmount),Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class));
-        itemsAmountLabel.setFontScale(0.5f);
+        backgroundStackDefault.add(backgroundImageStandard);
+        backgroundStackDefault.setName("background");
+        this.add(backgroundStackDefault);
+        itemsAmountLabel = new Label(String.valueOf(itemAmount),Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class));
+        itemsAmountLabel.setFontScale(1f);
         itemsAmountLabel.setAlignment(Align.bottomRight);
-        itemsAmountLabel.setVisible(false);
+        itemsAmountLabel.setVisible(true);
         this.add(itemsAmountLabel);
         this.itemImageScale = 1;
         observers = new Array<InventorySlotObserver>();
+        checkVisibilityOfItemCount();
 
     }
-    public EquipmentSlot(Image backgroundImage, ItemType... args) {
+    public InventorySlot(Image backgroundImage, ItemType... args) {
         this();
         for(ItemType itemType: args){
             itemTypeFilter.add(itemType);
         }
         this.backgroundImage = backgroundImage;
-        stack.add(backgroundImage);
+        backgroundStackDefault.add(backgroundImage);
     }
 
     public boolean isSlotAcceptItemType(ItemType itemType){
         if(itemTypeFilter == null|| itemTypeFilter.size == 0){
+            System.out.println("accept");
             return true;
         }else
             {
             for(ItemType type: itemTypeFilter){
+
                 if(itemType.equals(type))
                     return true;
             }
@@ -72,16 +72,16 @@ public class EquipmentSlot extends Stack implements InventorySlotObservable{
     }
 
     private void checkVisibilityOfItemCount(){
-        if( itemsAmount < 2){
-            itemsAmountLabel.setVisible(false);
-        }else{
+        if( itemAmount >= 2 ){
             itemsAmountLabel.setVisible(true);
+        }else{
+            itemsAmountLabel.setVisible(false);
         }
     }
 
-    public void removeItem() {
-        itemsAmount--;
-        itemsAmountLabel.setText(String.valueOf(itemsAmount));
+    public void decreaseItemAmount() {
+        itemAmount--;
+        itemsAmountLabel.setText(String.valueOf(itemAmount));
         checkVisibilityOfItemCount();
         notifyObservers(this, InventorySlotObserver.InventorySlotEvent.REMOVED_ITEM);
 
@@ -92,9 +92,9 @@ public class EquipmentSlot extends Stack implements InventorySlotObservable{
     }
 
 
-    private void addItem() {
-        itemsAmount++;
-        itemsAmountLabel.setText(String.valueOf(itemsAmount));
+    private void increaseItemAmount() {
+        itemAmount++;
+        itemsAmountLabel.setText(String.valueOf(itemAmount));
         checkVisibilityOfItemCount();
         notifyObservers(this,InventorySlotObserver.InventorySlotEvent.ADDED_ITEM);
     }
@@ -103,6 +103,8 @@ public class EquipmentSlot extends Stack implements InventorySlotObservable{
         Item actor = null;
         if( this.hasChildren() ){
             SnapshotArray<Actor> items = this.getChildren();
+            for(int i1 = 0; i1 < items.size; i1++  ){
+            }
             if( items.size > 2 ){
                 actor = (Item) items.peek();
             }
@@ -112,11 +114,11 @@ public class EquipmentSlot extends Stack implements InventorySlotObservable{
 
     public Array<Actor> getAllInventoryItems() {
         Array<Actor> items = new Array<Actor>();
-        if( hasItem() ){
+        if(hasItem()){
             SnapshotArray<Actor> arrayChildren = this.getChildren();
-            int numInventoryItems =  arrayChildren.size - 2;
+            int numInventoryItems = arrayChildren.size - 2;
             for(int i = 0; i < numInventoryItems; i++) {
-                removeItem();
+                decreaseItemAmount();
                 items.add(arrayChildren.pop());
             }
         }
@@ -131,26 +133,34 @@ public class EquipmentSlot extends Stack implements InventorySlotObservable{
         return 0;
     }
 
-    public void clearAllItems() {
-        if( hasItem() ){
+    public void clearItems() {
+        if(hasItem()){
             SnapshotArray<Actor> arrayChildren = this.getChildren();
+            System.out.println("childre size: " +  this.getChildren().size);
+            Item item = this.getItem();
             int numInventoryItems =  getItemsNumber();
             for(int i = 0; i < numInventoryItems; i++) {
-                removeItem();
+                decreaseItemAmount();
                 checkVisibilityOfItemCount();
-                arrayChildren.pop();
+                item.remove();
+//                arrayChildren.pop();
+                System.out.println("childre size after: " +  this.getChildren().size);
             }
+            System.out.println("has parent: " + item.hasParent());
+//            Group group = item.getParent();
+
+            System.out.println("has parent: " + item.hasParent());
         }
     }
 
     @Override
     public void add(Actor actor) {
         super.add(actor);
-        if( itemsAmountLabel == null ){
+        if(itemsAmountLabel == null ){
             return;
         }
-        if( !actor.equals(stack) && !actor.equals(itemsAmountLabel) ) {
-            addItem();
+        if(!actor.equals(backgroundStackDefault) && !actor.equals(itemsAmountLabel) ) {
+            increaseItemAmount();
             actor.setScale(itemImageScale);
         }
     }
@@ -166,7 +176,7 @@ public class EquipmentSlot extends Stack implements InventorySlotObservable{
     }
 
     @Override
-    public void notifyObservers(EquipmentSlot inventorySlot, InventorySlotObserver.InventorySlotEvent event) {
+    public void notifyObservers(InventorySlot inventorySlot, InventorySlotObserver.InventorySlotEvent event) {
         for (InventorySlotObserver observer: observers){
             observer.onNotify(inventorySlot,event);
         }

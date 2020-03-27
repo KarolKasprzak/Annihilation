@@ -1,4 +1,4 @@
-package com.cosma.annihilation.Gui.Inventory;
+package com.cosma.annihilation.Items;
 
 public interface InventorySlotObservable {
 
@@ -7,6 +7,6 @@ public interface InventorySlotObservable {
     public void unregister(InventorySlotObserver inventorySlotObserver);
 
 
-    public void notifyObservers(EquipmentSlot inventorySlot, InventorySlotObserver.InventorySlotEvent event);
+    public void notifyObservers(InventorySlot inventorySlot, InventorySlotObserver.InventorySlotEvent event);
 
 }

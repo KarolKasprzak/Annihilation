@@ -1,20 +1,18 @@
-package com.cosma.annihilation.Gui.Inventory;
+package com.cosma.annihilation.Items;
 
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.cosma.annihilation.Items.Item;
 
 public class InventorySlotTarget extends DragAndDrop.Target {
 
-    private EquipmentSlot targetSlot;
+    private InventorySlot targetSlot;
 
-    public InventorySlotTarget(EquipmentSlot actor) {
+    public InventorySlotTarget(InventorySlot actor) {
         super(actor);
         targetSlot = actor;
     }
 
     @Override
     public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-
         return true;
     }
 
@@ -23,18 +21,17 @@ public class InventorySlotTarget extends DragAndDrop.Target {
 
         Item sourceItem = (Item) payload.getDragActor();
         Item targetItem = targetSlot.getItem();
-        EquipmentSlot sourceSlot = ((InventorySlotSource)source).getSourceSlot();
+        InventorySlot sourceSlot = ((InventorySlotSource)source).getSourceSlot();
 
         if( sourceItem == null ) {
             return;
         }
-
-        if( !targetSlot.isSlotAcceptItemType(sourceItem.getItemType()))  {
+        if(!targetSlot.isSlotAcceptItemType(sourceItem.getItemType()))  {
             sourceSlot.add(sourceItem);
             return;
         }
 
-        if( !targetSlot.hasItem()){
+        if(!targetSlot.hasItem()){
             targetSlot.add(sourceItem);
         }else{
             if( sourceItem.isSameItemType(targetItem) && sourceItem.isStackable()){
