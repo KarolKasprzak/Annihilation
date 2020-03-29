@@ -38,7 +38,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
     private Stage stage;
     private Label fpsLabel;
-    private GameMainMenuWindow gameMainMenuWindow;
     private ContainerWindow containerWindow;
     private Image playerHealthStatusIcon;
     private PlayerComponent playerComponent;
@@ -70,17 +69,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
         dialogueWindow = new DialogueWindow(skin, engine);
 
         lootWindow = new LootWindow(skin,engine);
-
-        gameMainMenuWindow = new GameMainMenuWindow("", skin, engine, Util.setWindowWidth(0.95f), Util.setWindowHeight(0.95f), world, worldBuilder);
-        gameMainMenuWindow.setPosition(Gdx.graphics.getWidth() / 2 - (Util.setWindowWidth(0.95f) / 2), Gdx.graphics.getHeight() / 2 - (Util.setWindowHeight(0.95f) / 2));
-        gameMainMenuWindow.setVisible(false);
-        gameMainMenuWindow.setFillParent(true);
-
-        playerMenuWindow = new PlayerMenuWindow("",skin);
-
-
-        stage.addActor(gameMainMenuWindow);
-
+        playerMenuWindow = new PlayerMenuWindow("",skin,engine);
         fpsLabel = new Label("", skin);
         playerHealthStatusIcon = new Image(Annihilation.getAssets().get("gfx/textures/player_health.png", Texture.class));
 
@@ -152,10 +141,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
                         stage.addActor(playerMenuWindow);
                         playerMenuWindow.moveToCenter();
                     }
-//                if (gameMainMenuWindow.isVisible()) {
-//                    gameMainMenuWindow.setVisible(false);
-//                    getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
-//                } else gameMainMenuWindow.setVisible(true);
                 break;
         }
     }

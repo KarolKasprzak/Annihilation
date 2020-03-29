@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -24,7 +23,7 @@ import com.cosma.annihilation.Utils.Util;
 public class LootWindow extends GuiWindow {
 
     private DragAndDrop dragAndDrop;
-    private Table slotTable;
+    private InventoryTable slotTable;
     private ActorGestureListener listener;
     private Engine engine;
     private ContainerComponent containerComponent;
@@ -40,7 +39,7 @@ public class LootWindow extends GuiWindow {
 
         debugAll();
 
-        slotTable = new Table();
+        slotTable = new InventoryTable();
         slotTable.setDebug(false);
 
         listener = new ActorGestureListener() {
@@ -87,7 +86,7 @@ public class LootWindow extends GuiWindow {
     }
 
     private void moveItemToPlayerEquipment(InventorySlot equipmentSlot) {
-        Array<Item> playerInventory = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem;
+        Array<Item> playerInventory = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
         if (playerInventory.size <= 24) {
             equipmentSlot.getItem().setTableIndex(Tools.findFreeIndex(playerInventory,24));
             playerInventory.add(equipmentSlot.getItem());
@@ -99,7 +98,7 @@ public class LootWindow extends GuiWindow {
     public void open(Entity entity) {
         if(entity.getComponent(ContainerComponent.class) != null){
             containerComponent = entity.getComponent(ContainerComponent.class);
-            PlayerInventoryWindow.fillTable(slotTable,containerComponent.itemList,dragAndDrop);
+            slotTable.fillTable(containerComponent.itemList,dragAndDrop);
         }
         moveToCenter();
     }

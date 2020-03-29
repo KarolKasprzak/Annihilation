@@ -32,9 +32,11 @@ public class InventorySlotTarget extends DragAndDrop.Target {
         }
 
         if(!targetSlot.hasItem()){
+            System.out.println("HasItem");
             targetSlot.add(sourceItem);
         }else{
             if( sourceItem.isSameItemType(targetItem) && sourceItem.isStackable()){
+                System.out.println("sameType");
                 targetSlot.add(sourceItem);
             }else
                 sourceSlot.add(sourceItem);

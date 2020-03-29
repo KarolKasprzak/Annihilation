@@ -50,7 +50,6 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
 
     public boolean isSlotAcceptItemType(ItemType itemType){
         if(itemTypeFilter == null|| itemTypeFilter.size == 0){
-            System.out.println("accept");
             return true;
         }else
             {
@@ -136,20 +135,13 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
     public void clearItems() {
         if(hasItem()){
             SnapshotArray<Actor> arrayChildren = this.getChildren();
-            System.out.println("childre size: " +  this.getChildren().size);
             Item item = this.getItem();
             int numInventoryItems =  getItemsNumber();
             for(int i = 0; i < numInventoryItems; i++) {
                 decreaseItemAmount();
                 checkVisibilityOfItemCount();
                 item.remove();
-//                arrayChildren.pop();
-                System.out.println("childre size after: " +  this.getChildren().size);
             }
-            System.out.println("has parent: " + item.hasParent());
-//            Group group = item.getParent();
-
-            System.out.println("has parent: " + item.hasParent());
         }
     }
 

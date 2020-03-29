@@ -5,9 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector3;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Systems.PlayerControlSystem;
 import com.cosma.annihilation.Utils.AssetLoader;
 import com.cosma.annihilation.World.WorldBuilder;
 
@@ -21,7 +19,7 @@ public class GameScreen implements Screen, InputProcessor {
         this.assetLoader = assetLoader;
         im = new InputMultiplexer();
         im.addProcessor(this);
-        worldBuilder = new WorldBuilder(game.isGameLoaded(),im);
+        worldBuilder = new WorldBuilder(game.getStartStatus(),im);
     }
 
     @Override

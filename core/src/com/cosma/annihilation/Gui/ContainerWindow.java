@@ -65,8 +65,8 @@ public class ContainerWindow extends Window {
     }
 
     private void moveItemToPlayerEquipment(InventorySlot equipmentSlot) {
-        if (engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.size <= 24) {
-            engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem.add(equipmentSlot.getItem());
+        if (engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems.size <= 24) {
+            engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems.add(equipmentSlot.getItem());
             equipmentSlot.clearItems();
         }
     }
@@ -75,7 +75,7 @@ public class ContainerWindow extends Window {
 
     private int findEmptySlotInEquipment() {
         int n = 0;
-        Array<Item> inventoryItem = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItem;
+        Array<Item> inventoryItem = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
 
         Array<Integer> numbers = new Array<>();
 

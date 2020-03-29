@@ -7,7 +7,6 @@ import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,20 +15,16 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.cosma.annihilation.Components.BodyComponent;
-import com.cosma.annihilation.Components.PlayerComponent;
-import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
 import com.cosma.annihilation.Entities.EntityFactory;
+import com.cosma.annihilation.Utils.StartStatus;
 import com.cosma.annihilation.Systems.*;
 import com.cosma.annihilation.Utils.Constants;
+import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.LuaScript.ScriptManager;
-import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.StateManager;
 import com.esotericsoftware.spine.*;
 
@@ -37,23 +32,22 @@ import com.esotericsoftware.spine.*;
 public class WorldBuilder implements Disposable, EntityListener, Listener<GameEvent> {
 
 
-    private Engine engine;
+    private EntityEngine engine;
     public World world;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private CosmaMapLoader mapLoader;
     private Signal<GameEvent> signal;
     private boolean isPaused = false;
     private RayHandler rayHandler;
 
-    private Json json;
+
 
     TextureAtlas atlas;
     Skeleton skeleton;
     SkeletonBounds bounds;
     AnimationState state;
     SpriteBatch batch;
-    public WorldBuilder(Boolean isGameLoaded, InputMultiplexer inputMultiplexer) {
+    public WorldBuilder(StartStatus startStatus, InputMultiplexer inputMultiplexer) {
 
 
 
@@ -103,21 +97,17 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
 
         camera.zoom = camera.zoom -0.2f;
-        engine = new PooledEngine();
+        engine = new EntityEngine(world,rayHandler,startStatus);
         engine.addEntityListener(this);
 
         EntityFactory.getInstance().setEngine(engine);
         EntityFactory.getInstance().setWorld(world);
         signal = new Signal<GameEvent>();
 
-        mapLoader = new CosmaMapLoader(world, rayHandler, engine);
+
 //        mapLoader.loadMap("map/lab.map");
 //        mapLoader.loadMap("map/forest_test.map");
-        mapLoader.loadMap("map/forest_test.map");
-        json = new Json();
-        json.setSerializer(Entity.class, new GameEntitySerializer(world, engine));
 
-        Entity playerEntity = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
 
         ScriptManager scriptManager = new ScriptManager(engine,world);
         scriptManager.runScript("script_test");
@@ -137,7 +127,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world,camera,viewport));
         engine.addSystem(new CameraSystem(camera));
-        engine.addSystem(new TileMapRender(camera, mapLoader.getMap()));
+        engine.addSystem(new TileMapRender(camera, engine.getMapLoader().getMap()));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));
@@ -185,7 +175,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) camera.zoom = camera.zoom + 0.1f;
         if (Gdx.input.isKeyPressed(Input.Keys.X)) camera.zoom = camera.zoom - 0.1f;
         if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-            loadMap();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.V)) {
             StateManager.debugMode = !StateManager.debugMode;
@@ -195,98 +184,98 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     }
 
 
-    public void saveMap(boolean isPlayerGoToNewLocation) {
-        FileHandle mapFile = Gdx.files.local("save/" + mapLoader.getMap().getMapName());
-        FileHandle playerFile = Gdx.files.local("save/player.json");
-        Entity playerEntity = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
-        if (!isPlayerGoToNewLocation) {
-            playerEntity.getComponent(PlayerComponent.class).mapName = mapLoader.getMap().getMapName();
-        }
-        playerFile.writeString(json.prettyPrint(playerEntity), false);
-
-
-        json.setIgnoreUnknownFields(false);
-        System.out.println("save entity");
-        for (Entity entity : engine.getEntities()) {
-            if (!mapLoader.getMap().getEntityArrayList().contains(entity)) {
-                mapLoader.getMap().getEntityArrayList().add(entity);
-            }
-        }
-        System.out.println("entity saved");
-        mapLoader.getMap().getEntityArrayList().remove(playerEntity);
-        System.out.println("write file");
-        mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
-    }
-
-    public void loadMap() {
-        isPaused = true;
-        System.out.println("e " + engine.getEntities().size());
-        System.out.println("b " + world.getBodyCount());
-        for (Entity entity : engine.getEntities()) {
-            for (Component component : entity.getComponents()) {
-                if (component instanceof BodyComponent) {
-                    world.destroyBody(((BodyComponent) component).body);
-                    ((BodyComponent) component).body = null;
-                }
-            }
-        }
-        Array<Body> bodies = new Array<>();
-        world.getBodies(bodies);
-        for (Body body : bodies) {
-            world.destroyBody(body);
-        }
-        rayHandler.removeAll();
-        bodies.clear();
-        engine.removeAllEntities();
-        System.out.println("e " + engine.getEntities().size());
-        System.out.println("b " + world.getBodyCount());
-//        mapLoader.loadMap("save/save.json");
+//    public void saveMap(boolean isPlayerGoToNewLocation) {
+//        FileHandle mapFile = Gdx.files.local("save/" + mapLoader.getMap().getMapName());
+//        FileHandle playerFile = Gdx.files.local("save/player.json");
+//        Entity playerEntity = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+//        if (!isPlayerGoToNewLocation) {
+//            playerEntity.getComponent(PlayerComponent.class).mapName = mapLoader.getMap().getMapName();
+//        }
+//        playerFile.writeString(json.prettyPrint(playerEntity), false);
 //
 //
+//        json.setIgnoreUnknownFields(false);
+//        System.out.println("save entity");
+//        for (Entity entity : engine.getEntities()) {
+//            if (!mapLoader.getMap().getEntityArrayList().contains(entity)) {
+//                mapLoader.getMap().getEntityArrayList().add(entity);
+//            }
+//        }
+//        System.out.println("entity saved");
+//        mapLoader.getMap().getEntityArrayList().remove(playerEntity);
+//        System.out.println("write file");
+//        mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
+//    }
+
+//    public void loadMap() {
+//        isPaused = true;
+//        System.out.println("e " + engine.getEntities().size());
+//        System.out.println("b " + world.getBodyCount());
+//        for (Entity entity : engine.getEntities()) {
+//            for (Component component : entity.getComponents()) {
+//                if (component instanceof BodyComponent) {
+//                    world.destroyBody(((BodyComponent) component).body);
+//                    ((BodyComponent) component).body = null;
+//                }
+//            }
+//        }
+//        Array<Body> bodies = new Array<>();
+//        world.getBodies(bodies);
+//        for (Body body : bodies) {
+//            world.destroyBody(body);
+//        }
+//        rayHandler.removeAll();
+//        bodies.clear();
+//        engine.removeAllEntities();
+//        System.out.println("e " + engine.getEntities().size());
+//        System.out.println("b " + world.getBodyCount());
+////        mapLoader.loadMap("save/save.json");
+////
+////
+////
+////        isPaused = false;
 //
+//        FileHandle playerFile = Gdx.files.local("save/player.json");
+//        Entity playerEntity = json.fromJson(Entity.class, playerFile);
+//
+//        mapLoader.loadMap("map/" + playerEntity.getComponent(PlayerComponent.class).mapName);
+//        mapLoader.getMap().getEntityArrayList().add(playerEntity);
 //        isPaused = false;
+//
+//    }
 
-        FileHandle playerFile = Gdx.files.local("save/player.json");
-        Entity playerEntity = json.fromJson(Entity.class, playerFile);
-
-        mapLoader.loadMap("map/" + playerEntity.getComponent(PlayerComponent.class).mapName);
-        mapLoader.getMap().getEntityArrayList().add(playerEntity);
-        isPaused = false;
-
-    }
-
-    public void goToMap() {
-        saveMap(true);
-        isPaused = true;
-        System.out.println("e " + engine.getEntities().size());
-        System.out.println("b " + world.getBodyCount());
-        for (Entity entity : engine.getEntities()) {
-            for (Component component : entity.getComponents()) {
-                if (component instanceof BodyComponent) {
-                    world.destroyBody(((BodyComponent) component).body);
-                    ((BodyComponent) component).body = null;
-                }
-            }
-        }
-        Array<Body> bodies = new Array<>();
-        world.getBodies(bodies);
-        for (Body body : bodies) {
-            world.destroyBody(body);
-        }
-        rayHandler.removeAll();
-        bodies.clear();
-        engine.removeAllEntities();
-        System.out.println("e " + engine.getEntities().size());
-        System.out.println("b " + world.getBodyCount());
-
-        FileHandle playerFile = Gdx.files.local("save/player.json");
-        Entity playerEntity = json.fromJson(Entity.class, playerFile);
-
-        mapLoader.loadMap("map/" + playerEntity.getComponent(PlayerComponent.class).mapName);
-        mapLoader.getMap().getEntityArrayList().add(playerEntity);
-        isPaused = false;
-
-    }
+//    public void goToMap() {
+//        saveMap(true);
+//        isPaused = true;
+//        System.out.println("e " + engine.getEntities().size());
+//        System.out.println("b " + world.getBodyCount());
+//        for (Entity entity : engine.getEntities()) {
+//            for (Component component : entity.getComponents()) {
+//                if (component instanceof BodyComponent) {
+//                    world.destroyBody(((BodyComponent) component).body);
+//                    ((BodyComponent) component).body = null;
+//                }
+//            }
+//        }
+//        Array<Body> bodies = new Array<>();
+//        world.getBodies(bodies);
+//        for (Body body : bodies) {
+//            world.destroyBody(body);
+//        }
+//        rayHandler.removeAll();
+//        bodies.clear();
+//        engine.removeAllEntities();
+//        System.out.println("e " + engine.getEntities().size());
+//        System.out.println("b " + world.getBodyCount());
+//
+//        FileHandle playerFile = Gdx.files.local("save/player.json");
+//        Entity playerEntity = json.fromJson(Entity.class, playerFile);
+//
+//        mapLoader.loadMap("map/" + playerEntity.getComponent(PlayerComponent.class).mapName);
+//        mapLoader.getMap().getEntityArrayList().add(playerEntity);
+//        isPaused = false;
+//
+//    }
 
 
     public Engine getEngine() {
@@ -316,7 +305,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     @Override
     public void receive(Signal<GameEvent> signal, GameEvent object) {
         if (object.equals(GameEvent.PLAYER_GO_TO_NEW_MAP)) {
-            goToMap();
+//            goToMap();
         }
     }
 }

@@ -79,8 +79,8 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
              }
 
              if (component instanceof PlayerInventoryComponent) {
-                 saveItemArray(json,((PlayerInventoryComponent) component).inventoryItem,"inventoryItems");
-                 saveItemArray(json,((PlayerInventoryComponent) component).equippedItem,"equippedItems");
+                 saveItemArray(json,((PlayerInventoryComponent) component).inventoryItems,"inventoryItems");
+                 saveItemArray(json,((PlayerInventoryComponent) component).equippedItems,"equippedItems");
                  continue;
              }
 

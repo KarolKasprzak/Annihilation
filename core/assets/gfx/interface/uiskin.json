@@ -60,7 +60,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: {
-		background: window,
+		
 		titleFont: commodore-64,
 		titleFontColor: { a: 1, b: 0, g: 0.64705884, r: 0 }
 	},

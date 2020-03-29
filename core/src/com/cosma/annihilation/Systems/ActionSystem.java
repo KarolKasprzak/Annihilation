@@ -108,7 +108,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 
     private void goToAnotherMap() {
         playerComponent.mapName = playerComponent.processedEntity.getComponent(GateComponent.class).targetMapPath;
-        worldBuilder.goToMap();
+//        worldBuilder.goToMap();
 //        playerComponent.getComponent(BodyComponent.class).body.setTransform(gateEntity.getComponent(GateComponent.class).playerPositionOnTargetMap,0);
     }
 

@@ -11,8 +11,8 @@ import com.cosma.annihilation.Screens.GameScreen;
 import com.cosma.annihilation.Screens.MapEditor;
 import com.cosma.annihilation.Screens.MenuScreen;
 import com.cosma.annihilation.Utils.AssetLoader;
+import com.cosma.annihilation.Utils.StartStatus;
 
-import java.util.BitSet;
 import java.util.Locale;
 
 public class Annihilation extends Game {
@@ -21,7 +21,7 @@ public class Annihilation extends Game {
 	private I18NBundle myBundle;
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
-	private Boolean isGameLoaded;
+	private StartStatus startStatus;
 	private ItemLoader itemLoader;
 
 	public Annihilation() {
@@ -32,7 +32,7 @@ public class Annihilation extends Game {
 	@Override
 	public void create() {
 
-		isGameLoaded = false;
+		startStatus = new StartStatus(1, true);
 		assetLoader.load();
 		itemLoader = new ItemLoader();
 		FileHandle mapTextures = Gdx.files.local("locale/loc");
@@ -73,12 +73,13 @@ public class Annihilation extends Game {
 		this.setScreen(mapEditor);
 	}
 
-	public void setGameState(Boolean gameLoaded) {
-		isGameLoaded = gameLoaded;
+	public StartStatus getStartStatus() {
+		return startStatus;
 	}
 
-	public Boolean isGameLoaded() {
-		return isGameLoaded;
+	public void setStartStatus(int saveSlot, boolean newGame) {
+		this.startStatus.setNewGame(newGame);
+		this.startStatus.setSaveSlot(saveSlot);
 	}
 
 	public static Item getItem(String itemID) {
@@ -107,5 +108,6 @@ public class Annihilation extends Game {
 	public static String getLocal(String key, Object... args) {
 		return ((Annihilation) Gdx.app.getApplicationListener()).myBundle.format(key,args);
 	}
+
 }
 

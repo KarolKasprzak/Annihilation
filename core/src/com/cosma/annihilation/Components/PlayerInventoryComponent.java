@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Items.Item;
 
 public class PlayerInventoryComponent implements Component {
-    public Array<Item> equippedItem = new Array<>();
-    public Array<Item> inventoryItem = new Array<>();
+    public Array<Item> equippedItems = new Array<>();
+    public Array<Item> inventoryItems = new Array<>();
+
 }

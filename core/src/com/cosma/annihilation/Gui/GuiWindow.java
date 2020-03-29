@@ -25,24 +25,28 @@ public abstract class GuiWindow extends Window {
         this.background(new TextureRegionDrawable(new TextureRegion(Annihilation.getAssets().get(texturePath, Texture.class))));
     }
 
-   public void setWindowSize(){
+    /** use after setting background**/
+   public void setWindowSizeToScreenSize(){
 
-        if(Gdx.graphics.getHeight() > getBackground().getMinWidth()*2.5f){
-            setSize(getBackground().getMinWidth()*2,getBackground().getMinHeight()*2);
-        }
-        else{
-            setSize(getBackground().getMinWidth()*1.5f,getBackground().getMinHeight()*1.5f);
-        }
-
+       if(Gdx.graphics.getHeight() > getBackground().getMinHeight()*2){
+           setSize(getBackground().getMinWidth()*2,getBackground().getMinHeight()*2);
+       }else{
+           float sizeRatio= Gdx.graphics.getHeight()/getBackground().getMinHeight();
+           setSize(getBackground().getMinWidth()*sizeRatio,getBackground().getMinHeight()*sizeRatio);
+       }
    }
 
 
     public void addCloseButton () {
+        addCloseButton(20,20);
+    }
+
+    public void addCloseButton (float height, float width) {
         Label titleLabel = getTitleLabel();
         Table titleTable = getTitleTable();
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(Annihilation.getAssets().get("gfx/atlas/game_icon.atlas", TextureAtlas.class).findRegion("close_icon")));
         closeButton.setSize(closeButton.getImage().getImageWidth(),closeButton.getImage().getImageWidth());
-        titleTable.add(closeButton).size(20, 20).padRight(10).padTop(15);
+        titleTable.add(closeButton).size(height, width).padRight(1).padTop(15);
         closeButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {

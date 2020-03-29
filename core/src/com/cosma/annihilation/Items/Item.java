@@ -16,6 +16,8 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private float weight;
     private int itemValue;
     private boolean stackable;
+    //todo
+    private boolean stackableSeparate;
     //date
     private int tableIndex = 0;
     private int itemAmount = 1;
@@ -49,10 +51,10 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
         json.writeObjectEnd();
     }
 
-    @Override
-    public String toString() {
-        return itemId;
-    }
+//    @Override
+//    public String toString() {
+//        return itemId;
+//    }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
