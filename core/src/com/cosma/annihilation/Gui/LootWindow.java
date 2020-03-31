@@ -32,7 +32,6 @@ public class LootWindow extends GuiWindow {
     public LootWindow(Skin skin, Engine engine) {
         super("", skin);
 
-        setBackgroundTexture("gfx/interface/gui_frame.png");
         this.engine = engine;
         dragAndDrop = new DragAndDrop();
         Array<InventorySlot> slotArray = new Array<>();

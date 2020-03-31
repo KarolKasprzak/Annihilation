@@ -1,43 +1,31 @@
 package com.cosma.annihilation.Systems;
 
-import box2dLight.RayHandler;
-import com.badlogic.ashley.core.Component;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.RenderComparator;
-import com.cosma.annihilation.Utils.Util;
-
 
 public class RenderSystem extends SortedIteratingSystem implements Disposable {
-
 
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private World world;
     private BitmapFont font;
-    private ShapeRenderer shapeRenderer;
-
     private ComponentMapper<TextureComponent> textureMapper;
     private ComponentMapper<BodyComponent> bodyMapper;
-
 
     public RenderSystem(OrthographicCamera camera, World world,SpriteBatch batch, ShapeRenderer shapeRenderer) {
         super(Family.all(TextureComponent.class, BodyComponent.class).get(), new RenderComparator(), Constants.RENDER);
@@ -45,7 +33,7 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
         this.camera = camera;
         this.world = world;
 
-        this.shapeRenderer = shapeRenderer;
+
 
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
@@ -55,13 +43,8 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
 
     @Override
     public void update(float deltaTime) {
-
         batch.setProjectionMatrix(camera.combined);
-
         super.update(deltaTime);
-
-//        rayHandler.setCombinedMatrix(camera);
-//        rayHandler.updateAndRender();
     }
 
     @Override

@@ -25,13 +25,16 @@ public abstract class GuiWindow extends Window {
         this.background(new TextureRegionDrawable(new TextureRegion(Annihilation.getAssets().get(texturePath, Texture.class))));
     }
 
+    public float getSizeRatio(){
+        return  Gdx.graphics.getHeight()/getBackground().getMinHeight();
+    }
+
     /** use after setting background**/
    public void setWindowSizeToScreenSize(){
-
        if(Gdx.graphics.getHeight() > getBackground().getMinHeight()*2){
            setSize(getBackground().getMinWidth()*2,getBackground().getMinHeight()*2);
        }else{
-           float sizeRatio= Gdx.graphics.getHeight()/getBackground().getMinHeight();
+           float sizeRatio = getSizeRatio();
            setSize(getBackground().getMinWidth()*sizeRatio,getBackground().getMinHeight()*sizeRatio);
        }
    }
@@ -46,7 +49,7 @@ public abstract class GuiWindow extends Window {
         Table titleTable = getTitleTable();
         ImageButton closeButton = new ImageButton(new TextureRegionDrawable(Annihilation.getAssets().get("gfx/atlas/game_icon.atlas", TextureAtlas.class).findRegion("close_icon")));
         closeButton.setSize(closeButton.getImage().getImageWidth(),closeButton.getImage().getImageWidth());
-        titleTable.add(closeButton).size(height, width).padRight(1).padTop(15);
+        titleTable.add(closeButton).size(width,height).padRight(1).padTop(15);
         closeButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {

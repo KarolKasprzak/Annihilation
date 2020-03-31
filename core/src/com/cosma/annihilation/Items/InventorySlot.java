@@ -16,6 +16,7 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
     private int itemAmount = 0;
     private Array<ItemType> itemTypeFilter = new Array<>();
     private Image backgroundImage;
+    private Image backgroundImageStandard;
     private Label itemsAmountLabel;
     private Stack backgroundStackDefault;
     private Array<InventorySlotObserver> observers;
@@ -24,12 +25,11 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
     public InventorySlot(){
         backgroundStackDefault = new Stack();
         backgroundImage = new Image();
-        Image backgroundImageStandard = new Image( Annihilation.getAssets().get("gfx/interface/gui_frame_64x64.png",Texture.class));
-//        Image backgroundImageStandard = new Image( Annihilation.getAssets().get(GfxAssetDescriptors.defaultStack));
+        backgroundImageStandard = new Image( Annihilation.getAssets().get("gfx/interface/gui_frame.png",Texture.class));
         backgroundStackDefault.add(backgroundImageStandard);
         backgroundStackDefault.setName("background");
         this.add(backgroundStackDefault);
-        itemsAmountLabel = new Label(String.valueOf(itemAmount),Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class));
+        itemsAmountLabel = new Label(String.valueOf(itemAmount),Annihilation.getAssets().get("gfx/interface/skin/skin.json", Skin.class));
         itemsAmountLabel.setFontScale(1f);
         itemsAmountLabel.setAlignment(Align.bottomRight);
         itemsAmountLabel.setVisible(true);
@@ -37,8 +37,15 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
         this.itemImageScale = 1;
         observers = new Array<InventorySlotObserver>();
         checkVisibilityOfItemCount();
-
     }
+
+    public InventorySlot(ItemType... args) {
+        this();
+        for(ItemType itemType: args){
+            itemTypeFilter.add(itemType);
+        }
+    }
+
     public InventorySlot(Image backgroundImage, ItemType... args) {
         this();
         for(ItemType itemType: args){

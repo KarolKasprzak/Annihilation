@@ -21,21 +21,20 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
 
     private Engine engine;
     private DragAndDrop dragAndDrop;
-
     private InventoryTable inventorySlotsTable;
-    private InventoryTable equipmentSlotsTable;
     private InventorySlot weaponInventorySlot;
     private InventorySlot armourInventorySlot;
     private ClickListener clickListener;
 
-    public InventoryWindow(String title, Skin skin, Engine engine,float parentWidth) {
+    public InventoryWindow(String title, Skin skin, Engine engine, float parentWidth) {
         super(title, skin);
         this.engine = engine;
+
+        float slotSize = parentWidth * 0.120f;
+
+
+
         dragAndDrop = new DragAndDrop();
-        float slotSize = parentWidth * 0.1f;
-
-
-
         clickListener = new ClickListener() {
 
             @Override
@@ -45,52 +44,67 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
             }
         };
         clickListener.setButton(Input.Buttons.RIGHT);
-
-
-
         //inventory table
         inventorySlotsTable = new InventoryTable();
         inventorySlotsTable.center().padTop(parentWidth * 0.05f);
-        for (int i = 1; i <= 25; i++) {
+        for (int i = 1; i <= 20; i++) {
             InventorySlot inventorySlot = new InventorySlot();
             inventorySlot.addListener(clickListener);
             inventorySlot.setImageScale(1f);
             dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
-            inventorySlotsTable.add(inventorySlot).size(slotSize, slotSize).pad(slotSize*0.05f);
-            if (i == 5||i == 10||i == 15||i == 20|| i == 25) inventorySlotsTable.row();
+            inventorySlotsTable.add(inventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
+            if (i == 4 || i == 8 || i == 12 || i == 16 || i == 20) inventorySlotsTable.row();
         }
         add(inventorySlotsTable);
         row();
 
         //equipment table
-        equipmentSlotsTable = new InventoryTable();
-        armourInventorySlot = new InventorySlot(new Image(Annihilation.getAssets().get("gfx/interface/gui_armour_slot.png", Texture.class)));
-        weaponInventorySlot = new InventorySlot(new Image(Annihilation.getAssets().get("gfx/interface/gui_weapon_slot.png",Texture.class)),ItemType.WEAPON_SHORT,ItemType.WEAPON_LONG);
+        InventoryTable equipmentSlotsTable = new InventoryTable();
+        armourInventorySlot = new InventorySlot(ItemType.ARMOUR);
+        weaponInventorySlot = new InventorySlot(ItemType.WEAPON_SHORT, ItemType.WEAPON_LONG);
         weaponInventorySlot.register(this);
 
         dragAndDrop.addTarget(new InventorySlotTarget(armourInventorySlot));
         dragAndDrop.addTarget(new InventorySlotTarget(weaponInventorySlot));
-        equipmentSlotsTable.add(weaponInventorySlot).size(slotSize, slotSize).pad(slotSize*0.05f).colspan(2);
-        equipmentSlotsTable.add(armourInventorySlot).size(slotSize,slotSize).pad(slotSize*0.05f);
-        add(equipmentSlotsTable);
+
+        Table table = new Table();
+        Label weaponLabel = new Label(Annihilation.getLocalText("i_weapon"),skin);
+        Label armourLabel = new Label(Annihilation.getLocalText("i_armour"),skin);
+        table.add(weaponLabel);
+        table.add(weaponInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
+        table.row();
+        table.add(armourLabel);
+        table.add(armourInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
+        add(table);
+
 
     }
 
     void saveInventory() {
         Entity player = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
         player.getComponent(PlayerInventoryComponent.class).inventoryItems = inventorySlotsTable.getItemsTable();
-        player.getComponent(PlayerInventoryComponent.class).equippedItems = equipmentSlotsTable.getItemsTable();
+        player.getComponent(PlayerInventoryComponent.class).equippedArmour = armourInventorySlot.getItem();
+        player.getComponent(PlayerInventoryComponent.class).equippedWeapon = weaponInventorySlot.getItem();
     }
 
     void loadInventory() {
-        Entity player = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
-        if (player.getComponent(PlayerInventoryComponent.class).equippedItems != null) {
-            Array<Item> equipment = player.getComponent(PlayerInventoryComponent.class).equippedItems;
-            equipmentSlotsTable.fillTable(equipment,dragAndDrop);
+        PlayerInventoryComponent playerInventoryComponent = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class);
+        if(playerInventoryComponent.equippedWeapon != null){
+            weaponInventorySlot.clearItems();
+            playerInventoryComponent.equippedWeapon .getCaptureListeners().clear();
+            weaponInventorySlot.add(playerInventoryComponent.equippedWeapon);
+            dragAndDrop.addSource(new InventorySlotSource(weaponInventorySlot, dragAndDrop));
         }
-        if (player.getComponent(PlayerInventoryComponent.class).inventoryItems != null) {
-            Array<Item> inventory = player.getComponent(PlayerInventoryComponent.class).inventoryItems;
-            inventorySlotsTable.fillTable(inventory,dragAndDrop);
+        if(playerInventoryComponent.equippedArmour != null){
+            armourInventorySlot.clearItems();
+            playerInventoryComponent.equippedArmour .getCaptureListeners().clear();
+            armourInventorySlot.add(playerInventoryComponent.equippedWeapon);
+            dragAndDrop.addSource(new InventorySlotSource(armourInventorySlot, dragAndDrop));
+        }
+
+        if (playerInventoryComponent.inventoryItems != null) {
+            Array<Item> inventory = playerInventoryComponent.inventoryItems;
+            inventorySlotsTable.fillTable(inventory, dragAndDrop);
         }
     }
 

@@ -22,6 +22,8 @@ public class PlayerMenuWindow extends GuiWindow {
     private OptionsWindow optionsWindow;
     private Engine engine;
 
+
+
     public PlayerMenuWindow(String title, Skin skin, Engine engine) {
         super(title, skin);
         this.engine = engine;
@@ -31,22 +33,22 @@ public class PlayerMenuWindow extends GuiWindow {
 
         createTable();
         createButtons();
-//        windowTable.debug();
-//        buttonTable.debugAll();
 
-        inventoryWindow = new InventoryWindow("Inventory",skin,engine,getWidth());
-        inventoryWindow.addCloseButton();
+        inventoryWindow = new InventoryWindow("Inventory:",skin,engine,getWidth());
+        optionsWindow = new OptionsWindow("",skin, (EntityEngine) engine);
 
-        optionsWindow = new OptionsWindow("Options",skin, (EntityEngine) engine);
     }
 
     private void createTable(){
+
         windowTable = new Table();
         buttonTable = new Table();
         add(windowTable).center().size(getWidth()*0.8f,getHeight()*0.7f).padTop(getHeight()*0.15f);
         row();
         add(buttonTable).center().size(getWidth()*0.9f,getHeight()*0.1f).padBottom(getHeight()*0.05f).padTop(getHeight()*0.08f);
     }
+
+
     private void createButtons(){
 
         float size = getHeight()*0.0875f;
@@ -62,7 +64,6 @@ public class PlayerMenuWindow extends GuiWindow {
         buttonTable.add(diaryButton).size(size,size).pad(pad);
         buttonTable.add(settingsButton).size(size,size).pad(pad);
         buttonTable.add(offButton).size(size,size).pad(pad);
-
 
         inventoryButton.addListener(new ChangeListener() {
             @Override

@@ -2,35 +2,36 @@ package com.cosma.annihilation.Gui.MainMenu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Gui.GuiWindow;
 import com.cosma.annihilation.Utils.EntityEngine;
 
 
-
 public class OptionsWindow extends GuiWindow {
     EntityEngine engine;
+
     public OptionsWindow(String title, Skin skin, EntityEngine engine) {
         super(title, skin);
         this.engine = engine;
-        TextButton exitButton = new TextButton("exit",skin);
-        TextButton saveButton = new TextButton("save",skin);
-        TextButton loadButton = new TextButton("load",skin);
-        add(exitButton).padTop(50);
+
+        Label label = new Label(Annihilation.getLocalText("g_options"), skin);
+
+        TextButton exitButton = new TextButton(Annihilation.getLocalText("g_exit"), skin);
+        TextButton saveButton = new TextButton(Annihilation.getLocalText("g_save"), skin);
+        TextButton loadButton = new TextButton(Annihilation.getLocalText("g_load"), skin);
+        add(label).pad(5);
         row();
-        add(saveButton);
+        add(exitButton).pad(5);
         row();
-        add(loadButton);
+        add(saveButton).pad(5);
+        row();
+        add(loadButton).pad(5);
         row();
 
-
-        Dialog dialog = new Dialog("", skin, "dialog");
-        dialog.text("game saved");
-        dialog.button("ok", true);
 
         loadButton.addListener(new ChangeListener() {
             @Override
@@ -38,14 +39,13 @@ public class OptionsWindow extends GuiWindow {
                 engine.loadGame();
             }
         });
-
-       saveButton.addListener(new ChangeListener() {
-           @Override
-           public void changed(ChangeEvent event, Actor actor) {
-           dialog.show(getStage());
-           engine.saveGame();
-           }
-       });
+        saveButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+//           dialog.show(getStage());
+                engine.saveGame();
+            }
+        });
 
         exitButton.addListener(new ChangeListener() {
             @Override

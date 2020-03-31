@@ -11,14 +11,13 @@ import com.cosma.annihilation.Screens.GameScreen;
 import com.cosma.annihilation.Screens.MapEditor;
 import com.cosma.annihilation.Screens.MenuScreen;
 import com.cosma.annihilation.Utils.AssetLoader;
+import com.cosma.annihilation.Utils.Localization;
 import com.cosma.annihilation.Utils.StartStatus;
-
-import java.util.Locale;
 
 public class Annihilation extends Game {
 
 	private AssetLoader assetLoader;
-	private I18NBundle myBundle;
+	private Localization localization;
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
 	private StartStatus startStatus;
@@ -31,27 +30,15 @@ public class Annihilation extends Game {
 
 	@Override
 	public void create() {
-
 		startStatus = new StartStatus(1, true);
 		assetLoader.load();
 		itemLoader = new ItemLoader();
-		FileHandle mapTextures = Gdx.files.local("locale/loc");
-		myBundle = I18NBundle.createBundle(mapTextures,Locale.UK);
+		JsonReader jsonReader = new JsonReader();
+		JsonValue jsonValue = jsonReader.parse(Gdx.files.local("settings.json"));
+		localization = new Localization(jsonValue.getString("language"));
+
 		menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
-	}
-
-	private int findFreeIndex(Array<Item> itemList, int tableSize) {
-		IntArray intArray = new IntArray();
-		for(Item item: itemList){
-			intArray.add(item.getTableIndex());
-		}
-		intArray.sort();
-		for(int i = 0; i < tableSize; i++){
-			if(!intArray.contains(i)){
-			}
-		}
-		return 0;
 	}
 
 	@Override
@@ -93,21 +80,8 @@ public class Annihilation extends Game {
 		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.manager;
 	}
 
-	public static AssetLoader getAssetsLoader() {
-		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader;
+	public static String getLocalText(String key) {
+		return ((Annihilation) Gdx.app.getApplicationListener()).localization.getText(key);
 	}
-
-	public static AssetManager getAssets(String patch) {
-		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.manager.get(patch);
-	}
-
-	public static String getLocal(String key) {
-		return ((Annihilation) Gdx.app.getApplicationListener()).myBundle.get(key);
-	}
-
-	public static String getLocal(String key, Object... args) {
-		return ((Annihilation) Gdx.app.getApplicationListener()).myBundle.format(key,args);
-	}
-
 }
 

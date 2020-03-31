@@ -86,7 +86,7 @@ public class AssetLoader {
             manager.load(local.pathWithoutExtension(),I18NBundle.class);
         }
         //Load skin files
-        manager.load("gfx/interface/uiskin.json", Skin.class);
+        manager.load("gfx/interface/skin/skin.json", Skin.class);
 
         manager.finishLoading();
 

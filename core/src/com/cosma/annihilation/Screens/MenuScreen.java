@@ -27,7 +27,8 @@ public class MenuScreen implements Screen {
 
 
     public MenuScreen(final Annihilation game){
-        Skin skin = Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class);
+        Skin skin = Annihilation.getAssets().get("gfx/interface/skin/skin.json", Skin.class);
+
         this.game = game;
         camera = new OrthographicCamera();
         camera.update();
@@ -35,10 +36,12 @@ public class MenuScreen implements Screen {
         stage = new Stage(viewport);
         viewport.apply(true);
 
+
+
+
         Table table = new Table();
         table.setFillParent(true);
         table.center();
-
         stage.addActor(table);
 
         TextButton continueGameButton = new TextButton("Continue", skin);
@@ -47,17 +50,17 @@ public class MenuScreen implements Screen {
         table.add(continueGameButton).size(Util.setButtonWidth(2.2f),Util.setButtonHeight(2.2f));
         table.row();
 
-        TextButton newGameButton = new TextButton(Annihilation.getLocal("newGame"), skin);
+        TextButton newGameButton = new TextButton(Annihilation.getLocalText("newGame"), skin);
         Util.setButtonColor(newGameButton);
         table.add(newGameButton).size(Util.setButtonWidth(2.2f),Util.setButtonHeight(2.2f));
         table.row();
 
-        TextButton optionsButton = new TextButton("Options", skin);
+        TextButton optionsButton = new TextButton(Annihilation.getLocalText("options"), skin);
         Util.setButtonColor(optionsButton);
         table.add(optionsButton).size(Util.setButtonWidth(2.2f),Util.setButtonHeight(2.2f));
         table.row();
 
-        TextButton exitGameButton = new TextButton("Exit", skin);
+        TextButton exitGameButton = new TextButton(Annihilation.getLocalText("exit"), skin);
         Util.setButtonColor(exitGameButton);
         table.add(exitGameButton).size(Util.setButtonWidth(2.2f),Util.setButtonHeight(2.2f));
         table.row();
@@ -143,7 +146,6 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
     }
-
 
 
     private void checkSaveFileExist(Button button){

@@ -51,7 +51,7 @@ public class DialogueWindow extends Window implements DialogueActionI {
         setBackground(textureRegionDrawableBg);
 
         dialogueTable = new Table();
-        add(new Image(new TextureRegion(Annihilation.getAssets().get("gfx/interface/test.png",Texture.class))));
+
 //        dialogueTable.setBackground(new TextureRegionDrawable(new TextureRegion(Annihilation.getAssets().get("gfx/interface/gui_frame.png",Texture.class))));
 
         playerComponent = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerComponent.class);

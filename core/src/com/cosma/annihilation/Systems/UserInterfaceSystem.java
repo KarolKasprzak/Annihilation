@@ -52,7 +52,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
 
-        skin = Annihilation.getAssets().get("gfx/interface/uiskin.json", Skin.class);
+        skin = Annihilation.getAssets().get("gfx/interface/skin/skin.json", Skin.class);
         Camera camera = new OrthographicCamera();
         camera.update();
         Viewport viewport = new ScreenViewport();

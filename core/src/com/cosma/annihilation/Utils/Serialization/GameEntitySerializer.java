@@ -80,7 +80,8 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
              if (component instanceof PlayerInventoryComponent) {
                  saveItemArray(json,((PlayerInventoryComponent) component).inventoryItems,"inventoryItems");
-                 saveItemArray(json,((PlayerInventoryComponent) component).equippedItems,"equippedItems");
+                 savePlayerItem(json,((PlayerInventoryComponent) component).equippedWeapon,"equippedWeapon");
+                 savePlayerItem(json,((PlayerInventoryComponent) component).equippedArmour,"equippedArmour");
                  continue;
              }
 
@@ -121,6 +122,18 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                 }
             }
 
+            if(component instanceof PlayerInventoryComponent){
+                if(jsonData.has("inventoryItems")){
+                    ((PlayerInventoryComponent) component).inventoryItems = loadItemArray(jsonData,"inventoryItems");
+                }
+
+                if(jsonData.has("equippedWeapon")){
+                    ((PlayerInventoryComponent) component).equippedWeapon = loadItemArray(jsonData,"equippedWeapon").first();
+                }
+                if(jsonData.has("equippedArmour")){
+                    ((PlayerInventoryComponent) component).equippedWeapon = loadItemArray(jsonData,"equippedArmour").first();
+                }
+            }
 
             if(component instanceof PlayerComponent){
                 if(jsonData.has("mapName")){
@@ -153,6 +166,13 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
         }
         return entity;
     }
+
+    private void savePlayerItem(Json json, Item item, String valueName){
+        json.writeArrayStart(valueName);
+        item.write(json);
+        json.writeArrayEnd();
+    }
+
     private void saveItemArray(Json json, Array<Item> itemsArray,String arrayName){
             json.writeArrayStart(arrayName);
             for(Item item: itemsArray){
@@ -164,10 +184,12 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
         Array<Item> array = new Array<>();
         for (JsonValue value : arrayValue.get(arrayName)){
             Item item = Annihilation.getItem(value.get("itemID").asString());
-            System.out.println(value.get("itemID").asString());
             item.setTableIndex(value.get("tableIndex").asInt());
             if(value.has("itemAmount")){
                 item.setItemAmount(value.get("itemAmount").asInt());
+            }
+            if(value.has("ammoInClip")){
+                item.setAmmoInClip(value.get("ammoInClip").asInt());
             }
             array.add(item);
         }

@@ -51,10 +51,10 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
         json.writeObjectEnd();
     }
 
-//    @Override
-//    public String toString() {
-//        return itemId;
-//    }
+    @Override
+    public String toString() {
+        return itemId;
+    }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
