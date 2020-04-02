@@ -31,12 +31,11 @@ public class Annihilation extends Game {
 	@Override
 	public void create() {
 		startStatus = new StartStatus(1, true);
-		assetLoader.load();
-		itemLoader = new ItemLoader();
 		JsonReader jsonReader = new JsonReader();
 		JsonValue jsonValue = jsonReader.parse(Gdx.files.local("settings.json"));
 		localization = new Localization(jsonValue.getString("language"));
-
+		assetLoader.load();
+		itemLoader = new ItemLoader();
 		menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
 	}

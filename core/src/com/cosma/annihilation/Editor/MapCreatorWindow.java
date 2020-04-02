@@ -66,7 +66,6 @@ public class MapCreatorWindow extends VisWindow {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
                 mapEditor.createNewMap(Integer.valueOf(mapWidth.getText()),Integer.valueOf(mapHeight.getText()),Integer.valueOf(mapUnit.getText()));
-                System.out.println(mapWidth.getText() + mapHeight.getText() );
                 window.close();
             }
         });

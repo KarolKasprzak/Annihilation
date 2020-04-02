@@ -22,14 +22,12 @@ public class SpriteMapLayer extends MapLayer implements Json.Serializable {
         sprite.setTextureRegion(regionName, texturePath);
         sprite.setSpritePosition(x, y, angle);
         spriteArray.add(sprite);
-        System.out.println("sprite added");
     }
     public void createAnimatedSprite(String regionName, String texturePath, float x, float y, float angle){
         AnimatedSprite sprite = new AnimatedSprite();
         sprite.setTextureRegion(regionName, texturePath);
         sprite.setSpritePosition(x, y, angle);
         spriteArray.add(sprite);
-        System.out.println("animated sprite added");
     }
 
     public Array<Sprite> getSpriteArray() {

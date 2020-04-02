@@ -85,7 +85,6 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                     VisLabel label = ((VisLabel) tree.getSelection().first().getActor());
                     if (label.getName() != null) {
                         selectedEntityName = label.getName();
-                        System.out.println(selectedEntityName);
                         canAddEntity = true;
                         Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Crosshair);
                     }

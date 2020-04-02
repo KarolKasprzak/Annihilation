@@ -111,7 +111,6 @@ public class LayersPanel extends VisWindow {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (selectedLayer != null) {
-                    System.out.println(mapEditor.getMap().getLayers().isEmpty());
                     mapEditor.getMap().getLayers().remove(selectedLayer.getName());
                     view.rebuildView();
                 }

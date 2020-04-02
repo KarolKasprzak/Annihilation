@@ -113,7 +113,6 @@ public class EntityReader implements Json.Serializer<Entity> {
                             fixtureDef.filter.categoryBits = CollisionID.SCENERY_PHYSIC_OBJECT;
                             break;
                         case "enemy":
-                            System.out.println(CollisionID.ENEMY);
                             fixtureDef.filter.categoryBits = CollisionID.ENEMY;
                             break;
                         case "npc":
@@ -185,7 +184,6 @@ public class EntityReader implements Json.Serializer<Entity> {
             skeletonComponent.skeleton = new Skeleton(skeletonData);
             for (Slot slot :
                     skeletonComponent.skeleton.getSlots()) {
-                System.out.println(slot.toString());
 
             }
             AnimationStateData stateData = new AnimationStateData(skeletonData);
@@ -237,14 +235,6 @@ public class EntityReader implements Json.Serializer<Entity> {
             ContainerComponent containerComponent = new ContainerComponent();
             containerComponent.name = jsonData.get("ContainerComponent").get("name").asString();
             containerComponent.itemList = new Array<>();
-            //todo
-//            for (JsonValue value : jsonData.get("ContainerComponent").get("itemList")) {
-//                InventoryItemLocation location = new InventoryItemLocation();
-//                location.setTableIndex(value.get("tableIndex").asInt());
-//                location.setItemID(value.get("itemID").asString());
-//                location.setItemsAmount(value.get("itemsAmount").asInt());
-//                containerComponent.itemLocations.add(location);
-//            }
             entity.add(containerComponent);
         }
 
@@ -283,7 +273,6 @@ public class EntityReader implements Json.Serializer<Entity> {
             switch(aiComponent.aiType){
                 case HUMAN_NPC:
                     aiComponent.ai = new NpcAiBasic();
-                    System.out.println("ai basic");
                     break;
                 case HUMAN_ENEMY:
                     aiComponent.ai = new HumanAiBasic();

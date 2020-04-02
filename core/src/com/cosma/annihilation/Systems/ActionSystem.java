@@ -23,16 +23,14 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     private PlayerComponent playerComponent;
 
 
-    private WorldBuilder worldBuilder;
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
 //    Filter filter;
 //    Filter filter1;
 
-    public ActionSystem(WorldBuilder worldBuilder, OrthographicCamera camera, SpriteBatch batch) {
+    public ActionSystem(OrthographicCamera camera, SpriteBatch batch) {
         super(Family.all(PlayerComponent.class).get(), Constants.ACTION_SYSTEM);
-        this.worldBuilder = worldBuilder;
         stateMapper = ComponentMapper.getFor(PlayerComponent.class);
 
         this.batch = batch;
@@ -114,7 +112,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 
     private void openBoxAction() {
         if (playerComponent.processedEntity.getComponent(ContainerComponent.class).itemList.size > -1) {
-            getEngine().getSystem(UserInterfaceSystem.class).showLootWindow(playerComponent.processedEntity);
+            getEngine().getSystem(UserInterfaceSystem.class).openPlayerMenu(true);
         }
     }
 

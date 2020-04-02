@@ -95,7 +95,6 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
                         canAddSprite = true;
                         if(((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).index > 0){
                             createAnimatedSprite = true;
-                            System.out.println("index:"  + ((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).index);
                         }
                         textureRegionName = ((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).name;
                         texturePath = ((FileTextureData) ((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).getTexture().getTextureData()).getFileHandle().pathWithoutExtension()+".atlas";

@@ -45,8 +45,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     private BitmapFont font;
     private DialogueWindow dialogueWindow;
     private Skin skin;
-    private LootWindow lootWindow;
-    private PlayerMenuWindow playerMenuWindow;
+    private PlayerMenuWindow playerMainMenu;
     public UserInterfaceSystem(Engine engine, World world, WorldBuilder worldBuilder) {
         super(Family.all(PlayerComponent.class).get(), Constants.USER_INTERFACE);
 
@@ -67,9 +66,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
         Signal<GameEvent> signal = new Signal<GameEvent>();
 
         dialogueWindow = new DialogueWindow(skin, engine);
-
-        lootWindow = new LootWindow(skin,engine);
-        playerMenuWindow = new PlayerMenuWindow("",skin,engine);
+        playerMainMenu = new PlayerMenuWindow("",skin,engine);
         fpsLabel = new Label("", skin);
         playerHealthStatusIcon = new Image(Annihilation.getAssets().get("gfx/textures/player_health.png", Texture.class));
 
@@ -98,16 +95,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
     }
 
-
-    void showLootWindow(Entity entity) {
-        if(!lootWindow.isOpen()){
-            System.out.println("open");
-            stage.addActor(lootWindow);
-            lootWindow.open(entity);
-        }
-
-    }
-
     void showDialogWindow(Entity entity) {
 
       if(!stage.getActors().contains(dialogueWindow,true)){
@@ -122,6 +109,20 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
       }
     }
 
+    void openPlayerMenu(boolean openLootMenu){
+        if(stage.getActors().contains(playerMainMenu,true)){
+            playerMainMenu.close();
+            getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
+        }else{
+            getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(false);
+            stage.addActor(playerMainMenu);
+            if(openLootMenu){
+                playerMainMenu.openLootWindow();
+            }
+            playerMainMenu.moveToCenter();
+        }
+    }
+
     public void resizeHUD(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
@@ -134,13 +135,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     public void receive(Signal<GameEvent> signal, GameEvent event) {
         switch (event) {
             case OPEN_MENU:
-                    if(stage.getActors().contains(playerMenuWindow,true)){
-                        playerMenuWindow.close();
-                        getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
-                    }else{
-                        stage.addActor(playerMenuWindow);
-                        playerMenuWindow.moveToCenter();
-                    }
+                  openPlayerMenu(false);
                 break;
         }
     }

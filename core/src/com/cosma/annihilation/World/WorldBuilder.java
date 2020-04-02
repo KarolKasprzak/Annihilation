@@ -116,7 +116,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         engine.addSystem(new UserInterfaceSystem(engine, world, this));
-        engine.addSystem(new ActionSystem(this, camera,batch));
+        engine.addSystem(new ActionSystem(camera,batch));
         engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera));
         engine.addSystem(new SpriteRenderSystem(camera, batch));
         engine.addSystem(new RenderSystem(camera, world, batch,shapeRenderer));

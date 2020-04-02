@@ -20,6 +20,7 @@ public class PlayerMenuWindow extends GuiWindow {
     private TextureAtlas textureAtlas;
     private InventoryWindow inventoryWindow;
     private OptionsWindow optionsWindow;
+    private LootWindow lootWindow;
     private Engine engine;
 
 
@@ -27,6 +28,7 @@ public class PlayerMenuWindow extends GuiWindow {
     public PlayerMenuWindow(String title, Skin skin, Engine engine) {
         super(title, skin);
         this.engine = engine;
+        this.setModal(true);
         textureAtlas = Annihilation.getAssets().get("gfx/atlas/gui_player_menu.atlas", TextureAtlas.class);
         this.background(new TextureRegionDrawable(textureAtlas.findRegion("tablet")));
         this.setWindowSizeToScreenSize();
@@ -34,13 +36,13 @@ public class PlayerMenuWindow extends GuiWindow {
         createTable();
         createButtons();
 
+        lootWindow = new LootWindow(skin,engine,getWidth());
         inventoryWindow = new InventoryWindow("Inventory:",skin,engine,getWidth());
         optionsWindow = new OptionsWindow("",skin, (EntityEngine) engine);
 
     }
 
     private void createTable(){
-
         windowTable = new Table();
         buttonTable = new Table();
         add(windowTable).center().size(getWidth()*0.8f,getHeight()*0.7f).padTop(getHeight()*0.15f);
@@ -48,9 +50,7 @@ public class PlayerMenuWindow extends GuiWindow {
         add(buttonTable).center().size(getWidth()*0.9f,getHeight()*0.1f).padBottom(getHeight()*0.05f).padTop(getHeight()*0.08f);
     }
 
-
     private void createButtons(){
-
         float size = getHeight()*0.0875f;
         float pad = getHeight()*0.02f;
         MenuButton playerStatusButton = new MenuButton(textureAtlas.findRegion("hea_button"),textureAtlas.findRegion("hea_button_press"));
@@ -106,6 +106,11 @@ public class PlayerMenuWindow extends GuiWindow {
             windowTable.clearChildren();
         }
         windowTable.add(windowToDisplay);
+    }
+
+    public void openLootWindow(){
+        clearAndAddWindow(lootWindow);
+        lootWindow.initialize();
     }
 
     @Override

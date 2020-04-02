@@ -16,7 +16,6 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private float weight;
     private int itemValue;
     private boolean stackable;
-    //todo
     private boolean stackableSeparate;
     //date
     private int tableIndex = 0;
@@ -28,6 +27,24 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private int maxAmmoInClip;
     private float reloadTime;
     private float accuracy;
+    private String ammoIdInClip;
+
+    public boolean isStackableSeparate() {
+        return stackableSeparate;
+    }
+
+    public void setStackableSeparate(boolean stackableSeparate) {
+        this.stackableSeparate = stackableSeparate;
+    }
+
+    public String getAmmoIdInClip() {
+        return ammoIdInClip;
+    }
+
+    public void setAmmoIdInClip(String ammoIdInClip) {
+        this.ammoIdInClip = ammoIdInClip;
+    }
+
     private ItemType ammoType;
     private int hpRecovery;
 
@@ -63,30 +80,7 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     public Item() {
     }
 
-    public void setOptionalValues(JsonValue jsonData) {
-        //Optional values
-        if (jsonData.has("damage")) {
-            this.setDamage(jsonData.get("damage").asInt());
-        }
-        if (jsonData.has("maxAmmoInClip")) {
-            this.setMaxAmmoInClip(jsonData.get("maxAmmoInClip").asInt());
-        }
-        if (jsonData.has("reloadTime")) {
-            this.setReloadTime(jsonData.get("reloadTime").asFloat());
-        }
-        if (jsonData.has("accuracy")) {
-            this.setAccuracy(jsonData.get("accuracy").asFloat());
-        }
-        if (jsonData.has("automatic")) {
-            this.setAutomatic(jsonData.get("automatic").asBoolean());
-        }
-        if (jsonData.has("itemType")) {
-            this.setAmmoType(ItemType.valueOf(jsonData.get("itemType").asString()));
-        }
-        if (jsonData.has("ammoInClip")) {
-            this.setAmmoInClip(jsonData.get("ammoInClip").asInt());
-        }
-    }
+
 
     public int getTableIndex() {
         return tableIndex;

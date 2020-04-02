@@ -17,7 +17,6 @@ public class ScriptManager {
         FileHandle scriptsPath = Gdx.files.local("scripts/");
         for(FileHandle script: scriptsPath.list(".lua")){
             scripts.put(script.nameWithoutExtension(),new LuaScript(script.path()));
-            System.out.println(script.nameWithoutExtension());
         }
     }
 
