@@ -8,11 +8,10 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Constants;
@@ -21,6 +20,7 @@ import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Animation;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Bone;
+
 import java.util.ArrayList;
 
 public class PlayerControlSystem extends IteratingSystem implements InputProcessor {
@@ -31,24 +31,23 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
     private Signal<GameEvent> signal;
     private ArrayList<GameEvent> gameEventList = new ArrayList<>();
     private RayCastCallback noiseRayCallback;
-    private OrthographicCamera camera;
     // false = left, true = right
     private boolean mouseCursorPosition = false;
     private World world;
     private Entity noiseTestEntity;
-    private Vector2 temp1 = new Vector2(), temp2 = new Vector2(), temp3 = new Vector2();
+    private Vector2 vector2temp = new Vector2();
     private Viewport viewport;
     private boolean isPlayerControlAvailable = true;
+    private Entity player;
 
-    public PlayerControlSystem(World world, OrthographicCamera camera, Viewport viewport) {
+    public PlayerControlSystem(World world, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.PLAYER_CONTROL_SYSTEM);
         this.world = world;
-        this.camera = camera;
         this.viewport = viewport;
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         animationMapper = ComponentMapper.getFor(AnimationComponent.class);
-        signal = new Signal<GameEvent>();
+        signal = new Signal<>();
 
         noiseRayCallback = (fixture, point, normal, fraction) -> {
             if (fixture.getBody().getUserData() instanceof Entity && ((Entity) fixture.getBody().getUserData()).getComponent(AiComponent.class) != null) {
@@ -60,14 +59,10 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
     }
 
     @Override
-    public void update(float deltaTime) {
-        if(isPlayerControlAvailable){
-            super.update(deltaTime);
-        }
-    }
-
-    @Override
     protected void processEntity(Entity entity, float deltaTime) {
+
+
+
 
         BodyComponent playerBody = bodyMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
@@ -78,35 +73,56 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         skeletonComponent.skeletonDirection = mouseCursorPosition;
         textureComponent.direction = mouseCursorPosition;
 
+        player = entity;
+
+
+
         for (GameEvent gameEvent : gameEventList) {
             signal.dispatch(gameEvent);
         }
         gameEventList.clear();
 
 
-        if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround && animationComponent.isAnimationFinish) {
+        if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround) {
             playerBody.body.setLinearVelocity(0, playerBody.body.getLinearVelocity().y);
             animationComponent.animationState = AnimationStates.IDLE;
             if (!playerComponent.isWeaponHidden) {
                 animationComponent.animationState = AnimationStates.IDLE_WEAPON_SMALL;
             }
         }
-
-        if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround) {
-            playerBody.body.setLinearVelocity(0, playerBody.body.getLinearVelocity().y);
-        }
-
         // Jumping
-        if (playerComponent.onGround && playerComponent.canJump && playerComponent.isWeaponHidden) {
+        if (playerComponent.onGround && playerComponent.canJump && playerComponent.isWeaponHidden && isPlayerControlAvailable && playerComponent.jump) {
 
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || playerComponent.goUp) {
-                float x;
-                if (animationComponent.spriteDirection) {
-                    x = 30;
-                } else x = -30;
-                playerBody.body.applyLinearImpulse(new Vector2(x, 10),
-                        playerBody.body.getWorldCenter(), true);
-            }
+                System.out.println("jump");
+
+                playerComponent.onGround = false;
+                playerComponent.canJump = false;
+
+
+                setSkeletonAnimation(true, "jump", skeletonComponent.animationState, 0, false);
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        float x;
+                        if (animationComponent.spriteDirection) {
+                            x = 0;
+                        } else x = -0;
+                        playerBody.body.applyLinearImpulse(new Vector2(x, 75),
+                                playerBody.body.getWorldCenter(), true);
+
+                    }
+                }, 0.2f);
+
+
+//                float x;
+//                if (animationComponent.spriteDirection) {
+//                    x = 0;
+//                } else x = -0;
+//                playerBody.body.applyLinearImpulse(new Vector2(x, 60),
+//                        playerBody.body.getWorldCenter(), true);
+
+                playerComponent.jump = false;
         }
         //Climbing
         if (playerComponent.climbing) {
@@ -138,7 +154,7 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
 //        }
 
         //Moving on side
-        if (playerComponent.canMoveOnSide && playerComponent.onGround && playerComponent.isWeaponHidden) {
+        if (playerComponent.canMoveOnSide && playerComponent.onGround && playerComponent.isWeaponHidden && isPlayerControlAvailable) {
             if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
                 float desiredSpeed = playerComponent.velocity;
                 playerComponent.climbing = false;
@@ -171,14 +187,11 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
             }
         }
         //Moving on side with weapon
-        if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null) {
+        if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null && isPlayerControlAvailable) {
             if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
                 float desiredSpeed = playerComponent.velocity * 0.8f;
-                if (animationComponent.spriteDirection) {
-//                    setPlayerAnimation(playerComponent, animationComponent);
-                } else {
-//                    setPlayerAnimation(playerComponent, animationComponent);
-                    desiredSpeed = desiredSpeed * 0.7f;
+                if (!skeletonComponent.skeletonDirection) {
+                    desiredSpeed = desiredSpeed * 0.6f;
                 }
                 Vector2 vec = playerBody.body.getLinearVelocity();
                 playerComponent.climbing = false;
@@ -224,70 +237,100 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         }
 
 
-        if (playerBody.body.getLinearVelocity().x != 0) {
-            setSkeletonAnimation(false, "walk", skeletonComponent.animationState, 0);
+        if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump) {
+            setSkeletonAnimation(false, "walk", skeletonComponent.animationState, 0, true);
+            System.out.println("walk");
         }
-        if (playerBody.body.getLinearVelocity().x == 0) {
-            setSkeletonAnimation(true, "idle", skeletonComponent.animationState, 0);
+        if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump) {
+            setSkeletonAnimation(false, "idle", skeletonComponent.animationState, 0, true);
+            System.out.println("idle");
         }
         skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+//        skeletonComponent.animationState.update(deltaTime);
 
-//        if (playerComponent.isWeaponHidden) {
+
+//        else {
+//        setSkeletonAnimation(true, "weapon_pistol_hold", skeletonComponent.animationState, 1);
+//        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+
+
+        Bone root = skeletonComponent.skeleton.getRootBone();
+        vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
+        viewport.unproject(vector2temp);
+
+        Bone bodyTarget = skeletonComponent.skeleton.findBone("armTarget");
+        vector2temp.set(root.worldToLocal(vector2temp));
+        bodyTarget.setPosition(vector2temp.x, vector2temp.y);
+
+
+        if (playerComponent.isWeaponHidden) {
+            skeletonComponent.animationState.clearTrack(1);
+            skeletonComponent.skeleton.findSlot("weapon_pistol").setAttachment(null);
+            skeletonComponent.skeleton.findSlot("weapon_rifle").setAttachment(null);
+        } else {
+            Bone rArmTarget = skeletonComponent.skeleton.findBone("r_arm_target");
+            Bone lArmTarget = skeletonComponent.skeleton.findBone("l_arm_target");
+            Bone muzzle = skeletonComponent.skeleton.findBone("muzzle");
+            rArmTarget.setPosition(vector2temp.x, vector2temp.y);
+            vector2temp.set(muzzle.getWorldX(), muzzle.getWorldY());
+            vector2temp.set(root.worldToLocal(vector2temp));
+            lArmTarget.setPosition(vector2temp.x, vector2temp.y);
+        }
+
+
+        skeletonComponent.skeleton.updateWorldTransform();
+
+
+//        Bone headBone = skeletonComponent.skeleton.findBone("head");
+//        Bone rightArm = skeletonComponent.skeleton.findBone("r_arm");
+//        Bone leftArm = skeletonComponent.skeleton.findBone("l_arm");
+//        Bone leftHand = skeletonComponent.skeleton.findBone("l_hand");
+//        Bone rightHand = skeletonComponent.skeleton.findBone("r_hand");
+//        Bone upperBody = skeletonComponent.skeleton.findBone("u_body");
+//        Bone weaponBone = skeletonComponent.skeleton.findBone("weapon");
 //
-//            skeletonComponent.animationState.clearTrack(1);
-//            skeletonComponent.skeleton.findSlot("weapon").setAttachment(null);
+//        skeletonComponent.skeleton.setAttachment("weapon", "weapon_p38_silent");
+//
+//        //arm aiming
+//        setSkeletonAnimation(true, "weapon_pistol_hold", skeletonComponent.animationState, 1);
+//        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+//        Vector2 mouse = temp1.set(Gdx.input.getX(), Gdx.input.getY());
+//        viewport.unproject(mouse);
+//
+//        rightArm.setRotation(0);
+//        skeletonComponent.skeleton.updateWorldTransform();
+//
+//        Vector2 armPosition = temp2.set(rightArm.getWorldX(), rightArm.getWorldY());
+//
+//        float angle = armPosition.sub(mouse).angle();
+//        if (!skeletonComponent.skeletonDirection) {
+//            angle = -angle;
+//            angle += rightArm.getWorldRotationX() + 180;
 //
 //        } else {
-
-        Bone headBone = skeletonComponent.skeleton.findBone("head");
-        Bone rightArm = skeletonComponent.skeleton.findBone("r_arm");
-        Bone leftArm = skeletonComponent.skeleton.findBone("l_arm");
-        Bone leftHand = skeletonComponent.skeleton.findBone("l_hand");
-        Bone rightHand = skeletonComponent.skeleton.findBone("r_hand");
-        Bone upperBody = skeletonComponent.skeleton.findBone("u_body");
-        Bone weaponBone = skeletonComponent.skeleton.findBone("weapon");
-
-        skeletonComponent.skeleton.setAttachment("weapon", "weapon_p38_silent");
-        //arm aiming
-        setSkeletonAnimation(true, "weapon_pistol_hold", skeletonComponent.animationState, 1);
-        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
-        Vector2 mouse = temp1.set(Gdx.input.getX(), Gdx.input.getY());
-        viewport.unproject(mouse);
-
-        rightArm.setRotation(0);
-        skeletonComponent.skeleton.updateWorldTransform();
-
-        Vector2 armPosition = temp2.set(rightArm.getWorldX(), rightArm.getWorldY());
-
-        float angle = armPosition.sub(mouse).angle();
-        if (!skeletonComponent.skeletonDirection) {
-            angle = -angle;
-            angle += rightArm.getWorldRotationX() + 180;
-
-        } else {
-            angle -= rightArm.getWorldRotationX() + 180;
-        }
-        angle += weaponBone.getARotation();
-        rightArm.setRotation(angle);
-
-        //head rotation
-        float headAngle;
-        if (skeletonComponent.skeletonDirection) {
-            angle += 360;
-            if (angle > 270)
-                headAngle = 15 * Interpolation.pow2In.apply((Math.min(1, (angle - 270) / 50f)));
-            else
-                headAngle = -9 * Interpolation.pow2In.apply((Math.min(1, (angle - 270) / 50f)));
-        } else {
-            if (angle < 0) {
-                angle += 360;
-                headAngle = 15 * Interpolation.pow2In.apply((Math.min(1, (angle - 260) / 50f)));
-            } else {
-                headAngle = -10 * Interpolation.pow2In.apply((Math.min(1, (angle - 260) / 50f)));
-            }
-        }
-        headBone.setRotation(headAngle);
-        skeletonComponent.skeleton.updateWorldTransform();
+//            angle -= rightArm.getWorldRotationX() + 180;
+//        }
+//        angle += weaponBone.getARotation();
+//        rightArm.setRotation(angle);
+//
+//        //head rotation
+//        float headAngle;
+//        if (skeletonComponent.skeletonDirection) {
+//            angle += 360;
+//            if (angle > 270)
+//                headAngle = 15 * Interpolation.pow2In.apply((Math.min(1, (angle - 270) / 50f)));
+//            else
+//                headAngle = -9 * Interpolation.pow2In.apply((Math.min(1, (angle - 270) / 50f)));
+//        } else {
+//            if (angle < 0) {
+//                angle += 360;
+//                headAngle = 15 * Interpolation.pow2In.apply((Math.min(1, (angle - 260) / 50f)));
+//            } else {
+//                headAngle = -10 * Interpolation.pow2In.apply((Math.min(1, (angle - 260) / 50f)));
+//            }
+//        }
+//        headBone.setRotation(headAngle);
+//        skeletonComponent.skeleton.updateWorldTransform();
     }
 //    }
 
@@ -297,12 +340,12 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         signal.add(getEngine().getSystem(UserInterfaceSystem.class));
     }
 
-    private void setSkeletonAnimation(boolean force, String animation, AnimationState animationState, int track) {
+    private void setSkeletonAnimation(boolean force, String animation, AnimationState animationState, int track, boolean loop) {
         Animation newAnimation = animationState.getData().getSkeletonData().findAnimation(animation);
         AnimationState.TrackEntry current = animationState.getCurrent(track);
         Animation currentAnimation = current == null ? null : current.getAnimation();
         if (force || currentAnimation != newAnimation) {
-            animationState.setAnimation(track, animation, true);
+            animationState.setAnimation(track, animation, loop);
         }
     }
 
@@ -310,11 +353,19 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         isPlayerControlAvailable = playerControlAvailable;
     }
 
+
+
     @Override
+
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.I || keycode == Input.Keys.ESCAPE) {
             setPlayerControlAvailable(false);
             signal.dispatch(GameEvent.OPEN_MENU);
+        }
+        PlayerComponent playerComponent =  player.getComponent(PlayerComponent.class);
+        if (keycode == Input.Keys.SPACE) {
+            playerComponent.jump = true;
+
         }
         return false;
     }

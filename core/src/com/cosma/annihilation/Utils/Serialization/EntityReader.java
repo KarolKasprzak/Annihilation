@@ -181,12 +181,17 @@ public class EntityReader implements Json.Serializer<Entity> {
 
             skeletonJson.setScale(skeletonJson.getScale()/64);
             SkeletonData skeletonData = skeletonJson.readSkeletonData(Gdx.files.internal(jsonData.get("SkeletonComponent").get("jsonPath").asString()));
-            skeletonComponent.skeleton = new Skeleton(skeletonData);
-            for (Slot slot :
-                    skeletonComponent.skeleton.getSlots()) {
 
+            for(int i = 0; i < skeletonData.getIkConstraints().size; i++ ){
+                IkConstraintData ikConstraint = skeletonData.getIkConstraints().get(i);
+
+                System.out.println(ikConstraint.getName());
+                ikConstraint.setOrder(i);
             }
+            skeletonComponent.skeleton = new Skeleton(skeletonData);
+
             AnimationStateData stateData = new AnimationStateData(skeletonData);
+            stateData.setDefaultMix(0.25f);
             //todo
             //mixing animation *future
 //                        stateData.setMix("idle", "walk", 0.2f);

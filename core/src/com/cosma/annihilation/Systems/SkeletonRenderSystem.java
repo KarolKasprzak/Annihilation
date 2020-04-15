@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -33,7 +34,7 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
 
 
     private OrthographicCamera camera;
-    private SpriteBatch batch;
+    private PolygonSpriteBatch batch;
     private World world;
     private SkeletonRenderer skeletonRenderer;
     private  SkeletonRendererDebug debugRenderer;
@@ -42,7 +43,7 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
     private ComponentMapper<BodyComponent> bodyMapper;
 
 
-    public SkeletonRenderSystem(OrthographicCamera camera, World world, SpriteBatch batch) {
+    public SkeletonRenderSystem(OrthographicCamera camera, World world, PolygonSpriteBatch batch) {
         super(Family.all(SkeletonComponent.class, BodyComponent.class).get(),Constants.SKELETONS_RENDER);
         this.batch = batch;
         this.camera = camera;

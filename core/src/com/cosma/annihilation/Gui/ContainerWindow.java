@@ -100,7 +100,7 @@ public class ContainerWindow extends Window {
         for (int i = 0; i < itemSlotNumber; i++) {
             InventorySlot inventorySlot = new InventorySlot();
             inventorySlot.addListener(listener);
-            inventorySlot.setImageScale(1f);
+
             dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
             containerSlotsTable.add(inventorySlot).size(Util.setWindowHeight(0.1f)*guiScale, Util.setWindowHeight(0.1f)*guiScale).pad(Util.setWindowHeight(0.005f));
             if (i == 6 || i == 12 || i == 18) containerSlotsTable.row();

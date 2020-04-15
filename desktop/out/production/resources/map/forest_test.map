@@ -179,14 +179,21 @@ entityList: [
 			{
 				itemID: stg
 				tableIndex: 0
-				itemAmount: 2
+				itemAmount: 1
 			}
 			{
-				itemID: stg
+				itemID: antyrad
+				itemAmount: 5
+				tableIndex: 1
+			}
+			{
+				itemID: antyrad
+				itemAmount: 10
 				tableIndex: 2
 			}
 			{
-				itemID: walther
+				itemID: ammo7mm
+				itemAmount: 25
 				tableIndex: 3
 			}
 		]

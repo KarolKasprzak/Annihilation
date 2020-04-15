@@ -80,8 +80,12 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
              if (component instanceof PlayerInventoryComponent) {
                  saveItemArray(json,((PlayerInventoryComponent) component).inventoryItems,"inventoryItems");
-                 savePlayerItem(json,((PlayerInventoryComponent) component).equippedWeapon,"equippedWeapon");
-                 savePlayerItem(json,((PlayerInventoryComponent) component).equippedArmour,"equippedArmour");
+                 if(((PlayerInventoryComponent) component).equippedWeapon != null){
+                     savePlayerItem(json,((PlayerInventoryComponent) component).equippedWeapon,"equippedWeapon");
+                 }
+                 if(((PlayerInventoryComponent) component).equippedArmour != null){
+                     savePlayerItem(json,((PlayerInventoryComponent) component).equippedArmour,"equippedArmour");
+                 }
                  continue;
              }
 
@@ -118,7 +122,6 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
             if(component instanceof ContainerComponent){
                 if(jsonData.has("itemList")){
                     ((ContainerComponent) component).itemList = loadItemArray(jsonData,"itemList");
-
                 }
             }
 

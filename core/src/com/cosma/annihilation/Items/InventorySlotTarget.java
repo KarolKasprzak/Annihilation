@@ -23,6 +23,7 @@ public class InventorySlotTarget extends DragAndDrop.Target {
         Item targetItem = targetSlot.getItem();
         InventorySlot sourceSlot = ((InventorySlotSource)source).getSourceSlot();
 
+
         if( sourceItem == null ) {
             return;
         }
@@ -32,11 +33,16 @@ public class InventorySlotTarget extends DragAndDrop.Target {
         }
 
         if(!targetSlot.hasItem()){
+            sourceSlot.updateItemCounter();
             targetSlot.add(sourceItem);
         }else{
             if( sourceItem.isSameItemType(targetItem) && sourceItem.isStackable()){
+                sourceSlot.updateItemCounter();
                 targetSlot.add(sourceItem);
             }else
+//                if(targetItem.getCategory() == ItemType.GUNS && sourceItem.getCategory() == ItemType.AMMO){
+//                    if(targetItem.get)
+//                }else
                 sourceSlot.add(sourceItem);
         }
     }

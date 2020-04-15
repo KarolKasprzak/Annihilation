@@ -32,7 +32,7 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
     private EntityEventSignal entityEventSignal;
 
     public CollisionSystem(World world) {
-        super(Family.all(PlayerComponent.class).get(), Constants.PHYSIC_SYSTEM);
+        super(Family.all(PlayerComponent.class).get(), Constants.COLLISION_SYSTEM);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         animationMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -305,8 +305,8 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
             Entity playerEntity = (fa.getUserData() == BodyID.PLAYER_BODY) ? (Entity)fa.getBody().getUserData() : (Entity)fb.getBody().getUserData();
             Entity actionEntity = (fa.getUserData() == BodyID.ACTION_TRIGGER) ? (Entity)fa.getBody().getUserData() : (Entity)fb.getBody().getUserData();
             PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
-            if (!playerComponent.collisionEntityList.contains(actionEntity)) {
-                  playerComponent.collisionEntityList.add(actionEntity);
+            if (!playerComponent.collisionEntityArray.contains(actionEntity,true)) {
+                  playerComponent.collisionEntityArray.add(actionEntity);
             }
 
         }
@@ -317,11 +317,9 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
             Entity playerEntity = (fa.getUserData() == BodyID.PLAYER_BODY) ? (Entity)fa.getBody().getUserData() : (Entity)fb.getBody().getUserData();
             Entity actionEntity = (fa.getUserData() == BodyID.ACTION_TRIGGER) ? (Entity)fa.getBody().getUserData() : (Entity)fb.getBody().getUserData();
             PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
-            if (playerComponent.collisionEntityList.contains(actionEntity)) {
-                playerComponent.collisionEntityList.remove(actionEntity);
-                if(Util.hasComponent(actionEntity,TextureComponent.class)){
-                    actionEntity.getComponent(TextureComponent.class).renderWithShader = false;
-                }
+            if (playerComponent.collisionEntityArray.contains(actionEntity,true)) {
+                System.out.println("remove");
+                playerComponent.collisionEntityArray.removeValue(actionEntity,true);
             }
         }
     }

@@ -404,9 +404,15 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
     private void weaponTakeOut() {
+        System.out.println("weapon take out");
         if (playerComponent.activeWeapon != null) {
             weaponMagazine.setAmmoInMagazine(playerComponent.activeWeapon.getAmmoInClip());
             weaponMagazine.setMaxAmmoInMagazine(playerComponent.activeWeapon.getMaxAmmoInClip());
+            playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
+        }
+        else{
+
+
             playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
         }
     }

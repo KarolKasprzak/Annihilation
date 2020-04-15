@@ -2,18 +2,21 @@ package com.cosma.annihilation.Components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Items.Item;
 
 import java.util.ArrayList;
 
 public class PlayerComponent implements Component {
 
-    public float velocity = 2;
+    public float velocity = 1.5f;
     public int numFootContacts = 0;
     public boolean hide = false;
     public String mapName;
 
-    public ArrayList<Entity> collisionEntityList = new ArrayList<Entity>();
+    public boolean jump = false;
+
+    public Array<Entity> collisionEntityArray = new Array<Entity>();
     public Item activeWeapon;
     public int activeWeaponAmmo;
     public Entity processedEntity;

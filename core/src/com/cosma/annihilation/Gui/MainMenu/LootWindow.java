@@ -1,8 +1,6 @@
 package com.cosma.annihilation.Gui.MainMenu;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
@@ -17,15 +15,19 @@ import com.cosma.annihilation.Items.InventorySlot;
 import com.cosma.annihilation.Items.InventorySlotTarget;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.Tools;
+import com.cosma.annihilation.Utils.EntityEngine;
 
 public class LootWindow extends GuiWindow {
     private DragAndDrop dragAndDrop;
     private InventoryTable slotTable;
     private ContainerComponent containerComponent;
     private Entity playerEntity;
+    private boolean isOpen = false;
+    private EntityEngine engine;
 
-    public LootWindow(Skin skin, Engine engine, float parentWidth) {
+    public LootWindow(Skin skin,EntityEngine engine, float parentWidth) {
         super("", skin);
+        this.engine = engine;
         dragAndDrop = new DragAndDrop();
         Array<InventorySlot> slotArray = new Array<>();
         slotTable = new InventoryTable();
@@ -45,7 +47,6 @@ public class LootWindow extends GuiWindow {
         for (int i = 0; i < 8; i++) {
             InventorySlot inventorySlot = new InventorySlot();
             inventorySlot.addListener(listener);
-            inventorySlot.setImageScale(1f);
             dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
             slotTable.add(inventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
             slotArray.add(inventorySlot);
@@ -53,7 +54,7 @@ public class LootWindow extends GuiWindow {
         }
         this.add(slotTable).center().pad(slotSize* 0.12f);
 
-        playerEntity = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+
         pack();
     }
 
@@ -67,19 +68,28 @@ public class LootWindow extends GuiWindow {
         }
     }
 
+    public void saveLootTable(){
+        containerComponent.itemList = slotTable.getItemsFromTable();
+    }
+
     public void initialize() {
+        playerEntity = engine.getPlayerEntity();
         if (playerEntity.getComponent(PlayerComponent.class).processedEntity.getComponent(ContainerComponent.class)!= null) {
             containerComponent = playerEntity.getComponent(PlayerComponent.class).processedEntity.getComponent(ContainerComponent.class);
             this.getTitleTable().clearChildren();
-
             this.getTitleLabel().setText("------- "+containerComponent.name+" -------");
             this.getTitleTable().add(this.getTitleLabel()).center();
             slotTable.fillTable(containerComponent.itemList, dragAndDrop);
+            isOpen = true;
         }
     }
 
     @Override
     public void close() {
+        if(isOpen){
+            saveLootTable();
+        }
+        isOpen = false;
         super.close();
         this.getTitleLabel().setText("");
     }

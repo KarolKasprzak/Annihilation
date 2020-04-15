@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.JsonValue;
 public class Item extends Image implements Json.Serializable, Comparable<Item>{
     //not null
     private String itemId;
+    private ItemType category;
     private String itemName;
     private ItemType itemType;
     private ItemStatus itemStatus;
@@ -16,7 +17,6 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private float weight;
     private int itemValue;
     private boolean stackable;
-    private boolean stackableSeparate;
     //date
     private int tableIndex = 0;
     private int itemAmount = 1;
@@ -27,24 +27,6 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private int maxAmmoInClip;
     private float reloadTime;
     private float accuracy;
-    private String ammoIdInClip;
-
-    public boolean isStackableSeparate() {
-        return stackableSeparate;
-    }
-
-    public void setStackableSeparate(boolean stackableSeparate) {
-        this.stackableSeparate = stackableSeparate;
-    }
-
-    public String getAmmoIdInClip() {
-        return ammoIdInClip;
-    }
-
-    public void setAmmoIdInClip(String ammoIdInClip) {
-        this.ammoIdInClip = ammoIdInClip;
-    }
-
     private ItemType ammoType;
     private int hpRecovery;
 
@@ -67,6 +49,15 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
         }
         json.writeObjectEnd();
     }
+
+    public ItemType getCategory() {
+        return category;
+    }
+
+    public void setCategory(ItemType category) {
+        this.category = category;
+    }
+
 
     @Override
     public String toString() {

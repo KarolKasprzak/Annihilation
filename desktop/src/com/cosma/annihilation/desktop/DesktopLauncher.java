@@ -19,8 +19,6 @@ public class DesktopLauncher {
 		config.width = screenSize.width /2;
 		config.height = screenSize.height /2;
 
-
-
 		new LwjglApplication (new Annihilation(),config);
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 	}

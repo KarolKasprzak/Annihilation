@@ -33,7 +33,7 @@ public class InventoryTable extends Table {
         }
     }
 
-    public Array<Item> getItemsTable() {
+    public Array<Item> getItemsFromTable() {
         updateTableItemIndex();
         Array<Cell> cells =  this.getCells();
         Array<Item> items = new Array<>();

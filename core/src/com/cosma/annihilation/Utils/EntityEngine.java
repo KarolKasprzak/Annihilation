@@ -3,6 +3,7 @@ package com.cosma.annihilation.Utils;
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -11,7 +12,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PlayerComponent;
+import com.cosma.annihilation.Components.PlayerInventoryComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
+import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 
 public class EntityEngine extends PooledEngine {
@@ -57,22 +61,14 @@ public class EntityEngine extends PooledEngine {
         bodies.clear();
         this.removeAllEntities();
 
-//        mapLoader.loadMap("save/save.json");
-//
-//
-//
-//        isPaused = false;
-
-//        FileHandle playerFile = Gdx.files.local("save/player.json");
-//        Entity playerEntity = json.fromJson(Entity.class, playerFile);
 
         mapLoader.loadMap("save/slot"+startStatus.getSaveSlot()+"/forest_test.map");
 //        mapLoader.getMap().getEntityArrayList().add(playerEntity);
     }
 
 
-    public void saveGame(){
-        FileHandle mapFile = Gdx.files.local("save/slot"+startStatus.getSaveSlot()+"/"+mapLoader.getMap().getMapName());
+    public void saveGame() {
+        FileHandle mapFile = Gdx.files.local("save/slot" + startStatus.getSaveSlot() + "/" + mapLoader.getMap().getMapName());
         json.setIgnoreUnknownFields(false);
         for (Entity entity : this.getEntities()) {
             if (!mapLoader.getMap().getEntityArrayList().contains(entity)) {
@@ -81,6 +77,17 @@ public class EntityEngine extends PooledEngine {
         }
 //        mapLoader.getMap().getEntityArrayList().remove(playerEntity);
         mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
+    }
+
+    public Entity getPlayerEntity(){
+       return getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+    }
+
+    public Array<Item> getPlayerInventory(){
+        return getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
+    }
+
+
 
 
 
@@ -109,5 +116,5 @@ public class EntityEngine extends PooledEngine {
 //        System.out.println("write file");
 //        mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
 
-    }
+
 }

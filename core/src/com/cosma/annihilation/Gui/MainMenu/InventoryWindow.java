@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -25,8 +25,8 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
     private InventoryTable inventorySlotsTable;
     private InventorySlot weaponInventorySlot;
     private InventorySlot armourInventorySlot;
-    private ClickListener clickListener;
     private ContextMenu contextMenu;
+
 
     public InventoryWindow(String title, Skin skin, Engine engine, float parentWidth) {
         super(title, skin);
@@ -36,7 +36,8 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         contextMenu = new ContextMenu("",skin);
 
         dragAndDrop = new DragAndDrop();
-        clickListener = new ClickListener() {
+        //                    add(contextMenu);
+        ClickListener clickListener = new ClickListener() {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -44,8 +45,10 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
                 InventorySlot inventorySlot = (InventorySlot) event.getListenerActor();
                 if (inventorySlot.hasItem()) {
                     getStage().addActor(contextMenu);
-                    System.out.println("mouse: " + Gdx.input.getX() +" " +  Gdx.input.getY());
-                    contextMenu.setPosition(Gdx.input.getX(),getStage().getCamera().viewportHeight-Gdx.input.getY());
+
+                    if(contextMenu.getWidth() + Gdx.input.getX() > getParent().getX())
+                    contextMenu.setPosition(Gdx.input.getX(), getStage().getCamera().viewportHeight - Gdx.input.getY());
+
 
 //                    add(contextMenu);
                 }
@@ -60,7 +63,6 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         for (int i = 1; i <= 20; i++) {
             InventorySlot inventorySlot = new InventorySlot();
             inventorySlot.addListener(clickListener);
-            inventorySlot.setImageScale(1f);
             dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
             inventorySlotsTable.add(inventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
             if (i == 5 || i == 10 || i == 15 || i == 20) inventorySlotsTable.row();
@@ -68,8 +70,7 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         add(inventorySlotsTable);
         row();
 
-        //equipment table
-        InventoryTable equipmentSlotsTable = new InventoryTable();
+        //equipment
         armourInventorySlot = new InventorySlot(ItemType.ARMOUR);
         weaponInventorySlot = new InventorySlot(ItemType.WEAPON_SHORT, ItemType.WEAPON_LONG);
         weaponInventorySlot.register(this);
@@ -80,17 +81,17 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         Table table = new Table();
         Label weaponLabel = new Label(Annihilation.getLocalText("i_weapon"),skin);
         Label armourLabel = new Label(Annihilation.getLocalText("i_armour"),skin);
-        table.add(weaponLabel);
-        table.add(weaponInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
+        table.add(weaponLabel).left();
+        table.add(weaponInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f).left();
         table.row();
-        table.add(armourLabel);
-        table.add(armourInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f);
+        table.add(armourLabel).left();
+        table.add(armourInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f).left();
         add(table);
     }
 
     void saveInventory() {
         Entity player = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
-        player.getComponent(PlayerInventoryComponent.class).inventoryItems = inventorySlotsTable.getItemsTable();
+        player.getComponent(PlayerInventoryComponent.class).inventoryItems = inventorySlotsTable.getItemsFromTable();
         player.getComponent(PlayerInventoryComponent.class).equippedArmour = armourInventorySlot.getItem();
         player.getComponent(PlayerInventoryComponent.class).equippedWeapon = weaponInventorySlot.getItem();
     }
@@ -141,6 +142,12 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
     }
 
     @Override
+    public void draw(Batch batch, float parentAlpha) {
+
+        super.draw(batch, parentAlpha);
+    }
+
+    @Override
     public void onNotify(InventorySlot inventorySlot, InventorySlotEvent event) {
         if (event == InventorySlotEvent.ADDED_ITEM) {
             setActivePlayerWeapon();
@@ -148,5 +155,11 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         if (event == InventorySlotEvent.REMOVED_ITEM) {
             removeActivePlayerWeapon();
         }
+    }
+
+    @Override
+    public void close() {
+        saveInventory();
+        super.close();
     }
 }

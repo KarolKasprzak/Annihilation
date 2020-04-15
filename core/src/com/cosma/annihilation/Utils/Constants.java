@@ -23,7 +23,7 @@ public class Constants {
     public static final int USER_INTERFACE                 = 15;
     public static final int PHYSIC_SYSTEM                  = 14;
     public static final int DEBUG_RENDER                   = 13;
-    public static final int SHOOTING_SYSTEM                = 12;
+
     public static final int ACTION_SYSTEM                  = 11;
     public static final int SKELETONS_RENDER               = 10;
     public static final int SPRITE_RENDER                  = 9;
@@ -34,7 +34,8 @@ public class Constants {
     public static final int COLLISION_SYSTEM               = 4;
     public static final int HEALTH_SYSTEM                  = 3;
     public static final int ANIMATION                      = 2;
-    public static final int PLAYER_CONTROL_SYSTEM          = 1;
+    public static final int PLAYER_CONTROL_SYSTEM          = 2;
+    public static final int SHOOTING_SYSTEM                = 1;
 
 
 

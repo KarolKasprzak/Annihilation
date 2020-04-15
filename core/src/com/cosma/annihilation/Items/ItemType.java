@@ -1,6 +1,12 @@
 package com.cosma.annihilation.Items;
 
 public enum ItemType {
+    //main category
+    MELEE,
+    GUNS,
+    AMMO,
+    USABLE,
+    //other
     CONSUMABLE,
     MEDS,
     ARMOUR,
@@ -12,4 +18,5 @@ public enum ItemType {
     AMMUNITION_7MM,
     AMMUNITION_PLASMA,
     AMMUNITION_ENERGETIC;
+
 }

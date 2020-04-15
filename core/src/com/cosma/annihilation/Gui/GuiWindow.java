@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Utils.Util;
 
 public abstract class GuiWindow extends Window {
 
@@ -35,7 +36,7 @@ public abstract class GuiWindow extends Window {
            setSize(getBackground().getMinWidth()*2,getBackground().getMinHeight()*2);
        }else{
            float sizeRatio = getSizeRatio();
-           setSize(getBackground().getMinWidth()*sizeRatio,getBackground().getMinHeight()*sizeRatio);
+           setSize(Util.roundFloat(getBackground().getMinWidth()*sizeRatio,0),Util.roundFloat(getBackground().getMinHeight()*sizeRatio,0));
        }
    }
 

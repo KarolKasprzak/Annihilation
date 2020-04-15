@@ -15,8 +15,6 @@ import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
-import com.cosma.annihilation.Utils.Util;
-import com.cosma.annihilation.World.WorldBuilder;
 
 public class ActionSystem extends IteratingSystem implements Listener<GameEvent> {
     private ComponentMapper<PlayerComponent> stateMapper;
@@ -45,16 +43,13 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         playerComponent = stateMapper.get(entity);
-
-        if (!playerComponent.collisionEntityList.isEmpty()) {
-            playerComponent.processedEntity = playerComponent.collisionEntityList.listIterator().next();
-            if (Util.hasComponent(playerComponent.processedEntity, TextureComponent.class)) {
-                playerComponent.processedEntity.getComponent(TextureComponent.class).renderWithShader = true;
-            }
+        if (playerComponent.collisionEntityArray.size>0) {
+            playerComponent.processedEntity = playerComponent.collisionEntityArray.first();
             ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
+
+
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-
             Texture texture;
             Body entityBody = playerComponent.processedEntity.getComponent(BodyComponent.class).body;
 
@@ -71,8 +66,10 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
             }
             batch.end();
 
-        } else
-            playerComponent.processedEntity = null;
+        }else{
+          playerComponent.processedEntity = null;
+        }
+
     }
 
     @Override
@@ -87,7 +84,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 //                            doorAction();
                                 break;
                             case OPEN:
-                                openBoxAction();
+                                openLootWindow();
                                 break;
                             case GO_TO:
                                 goToAnotherMap();
@@ -110,15 +107,15 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 //        playerComponent.getComponent(BodyComponent.class).body.setTransform(gateEntity.getComponent(GateComponent.class).playerPositionOnTargetMap,0);
     }
 
-    private void openBoxAction() {
-        if (playerComponent.processedEntity.getComponent(ContainerComponent.class).itemList.size > -1) {
+    private void openLootWindow() {
+        if (playerComponent.processedEntity.getComponent(ContainerComponent.class).itemList.size > 0) {
             getEngine().getSystem(UserInterfaceSystem.class).openPlayerMenu(true);
         }
     }
 
     private void startDialogAction() {
         {
-            getEngine().getSystem(UserInterfaceSystem.class).showDialogWindow(playerComponent.processedEntity);
+//          d
         }
     }
 

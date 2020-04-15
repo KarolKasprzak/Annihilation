@@ -5,113 +5,78 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.cosma.annihilation.Annihilation;
 
-public class InventorySlot extends Stack implements InventorySlotObservable{
-    private int itemAmount = 0;
+public class InventorySlot extends Stack implements InventorySlotObservable {
     private Array<ItemType> itemTypeFilter = new Array<>();
-    private Image backgroundImage;
-    private Image backgroundImageStandard;
     private Label itemsAmountLabel;
-    private Stack backgroundStackDefault;
     private Array<InventorySlotObserver> observers;
-    private float itemImageScale;
 
-    public InventorySlot(){
-        backgroundStackDefault = new Stack();
-        backgroundImage = new Image();
-        backgroundImageStandard = new Image( Annihilation.getAssets().get("gfx/interface/gui_frame.png",Texture.class));
+    public InventorySlot() {
+
+        Stack backgroundStackDefault = new Stack();
+        Image backgroundImageStandard = new Image(Annihilation.getAssets().get("gfx/interface/gui_frame.png", Texture.class));
         backgroundStackDefault.add(backgroundImageStandard);
         backgroundStackDefault.setName("background");
         this.add(backgroundStackDefault);
-        itemsAmountLabel = new Label(String.valueOf(itemAmount),Annihilation.getAssets().get("gfx/interface/skin/skin.json", Skin.class));
-        itemsAmountLabel.setFontScale(1f);
-        itemsAmountLabel.setAlignment(Align.bottomRight);
+        itemsAmountLabel = new Label("", Annihilation.getLabelStyle());
+        itemsAmountLabel.setAlignment(Align.topRight);
         itemsAmountLabel.setVisible(true);
         this.add(itemsAmountLabel);
-        this.itemImageScale = 1;
-        observers = new Array<InventorySlotObserver>();
-        checkVisibilityOfItemCount();
+        observers = new Array<>();
+
     }
 
     public InventorySlot(ItemType... args) {
         this();
-        for(ItemType itemType: args){
+        for (ItemType itemType : args) {
             itemTypeFilter.add(itemType);
         }
     }
 
-    public InventorySlot(Image backgroundImage, ItemType... args) {
-        this();
-        for(ItemType itemType: args){
-            itemTypeFilter.add(itemType);
-        }
-        this.backgroundImage = backgroundImage;
-        backgroundStackDefault.add(backgroundImage);
-    }
-
-    public boolean isSlotAcceptItemType(ItemType itemType){
-        if(itemTypeFilter == null|| itemTypeFilter.size == 0){
+    public boolean isSlotAcceptItemType(ItemType itemType) {
+        if (itemTypeFilter == null || itemTypeFilter.size == 0) {
             return true;
-        }else
-            {
-            for(ItemType type: itemTypeFilter){
+        } else {
+            for (ItemType type : itemTypeFilter) {
 
-                if(itemType.equals(type))
+                if (itemType.equals(type))
                     return true;
             }
             return false;
         }
     }
 
-    public boolean hasItem(){
-        if( hasChildren() ){
+    public boolean hasItem() {
+        if (hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
             return items.size > 2;
         }
         return false;
     }
 
-    private void checkVisibilityOfItemCount(){
-        if( itemAmount >= 2 ){
-            itemsAmountLabel.setVisible(true);
-        }else{
+    public void updateItemCounter() {
+        if (hasItem()) {
+            if (getItem().getItemAmount() >= 2) {
+                itemsAmountLabel.setText(String.valueOf(getItem().getItemAmount()));
+                itemsAmountLabel.setVisible(true);
+            } else {
+                itemsAmountLabel.setVisible(false);
+            }
+        } else {
             itemsAmountLabel.setVisible(false);
         }
     }
 
-    public void decreaseItemAmount() {
-        itemAmount--;
-        itemsAmountLabel.setText(String.valueOf(itemAmount));
-        checkVisibilityOfItemCount();
-        notifyObservers(this, InventorySlotObserver.InventorySlotEvent.REMOVED_ITEM);
-
-    }
-
-    public void setImageScale(float scale){
-        this.itemImageScale = scale;
-    }
-
-
-    private void increaseItemAmount() {
-        itemAmount++;
-        itemsAmountLabel.setText(String.valueOf(itemAmount));
-        checkVisibilityOfItemCount();
-        notifyObservers(this,InventorySlotObserver.InventorySlotEvent.ADDED_ITEM);
-    }
-
-    public Item getItem(){
+    public Item getItem() {
         Item actor = null;
-        if( this.hasChildren() ){
+        if (this.hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
-            for(int i1 = 0; i1 < items.size; i1++  ){
-            }
-            if( items.size > 2 ){
+            if (items.size > 2) {
                 actor = (Item) items.peek();
             }
         }
@@ -120,64 +85,77 @@ public class InventorySlot extends Stack implements InventorySlotObservable{
 
     public Array<Actor> getAllInventoryItems() {
         Array<Actor> items = new Array<Actor>();
-        if(hasItem()){
+        if (hasItem()) {
             SnapshotArray<Actor> arrayChildren = this.getChildren();
             int numInventoryItems = arrayChildren.size - 2;
-            for(int i = 0; i < numInventoryItems; i++) {
-                decreaseItemAmount();
+            for (int i = 0; i < numInventoryItems; i++) {
                 items.add(arrayChildren.pop());
             }
         }
         return items;
     }
 
-    public int getItemsNumber(){
-        if( hasChildren() ){
-            SnapshotArray<Actor> items = this.getChildren();
-            return items.size - 2;
+    public int getItemsNumber() {
+        if (getChildren().size > 2) {
+            return getItem().getItemAmount();
         }
         return 0;
     }
 
     public void clearItems() {
-        if(hasItem()){
-            SnapshotArray<Actor> arrayChildren = this.getChildren();
-            Item item = this.getItem();
-            int numInventoryItems =  getItemsNumber();
-            for(int i = 0; i < numInventoryItems; i++) {
-                decreaseItemAmount();
-                checkVisibilityOfItemCount();
-                item.remove();
-            }
+        if (hasItem()) {
+            getItem().remove();
+            updateItemCounter();
         }
+    }
+    public void hideItemCounter(){
+        itemsAmountLabel.setVisible(false);
     }
 
     @Override
     public void add(Actor actor) {
-        super.add(actor);
-        if(itemsAmountLabel == null ){
-            return;
+        if (actor instanceof Item) {
+            if (hasItem() && getItem().isSameItemType((Item) actor)) {
+                Item item = getItem();
+                item.setItemAmount(item.getItemAmount() + ((Item) actor).getItemAmount());
+
+            } else {
+                super.add(actor);
+
+            }
+            updateItemCounter();
+        } else {
+            super.add(actor);
         }
-        if(!actor.equals(backgroundStackDefault) && !actor.equals(itemsAmountLabel) ) {
-            increaseItemAmount();
-            actor.setScale(itemImageScale);
-        }
+
+//        if(!actor.equals(backgroundStackDefault) && !actor.equals(itemsAmountLabel) ) {
+//            if(actor instanceof Item && ((Item) actor).isStackable()){
+//
+//
+//
+//            }
+//            actor.setScale(itemImageScale);
+//            itemsAmountLabel.setText(String.valueOf((Item)actor));
+//            checkVisibilityOfItemCount();
+//            notifyObservers(this,InventorySlotObserver.InventorySlotEvent.ADDED_ITEM);
+//
+//        }
     }
 
     @Override
     public void register(InventorySlotObserver inventorySlotObserver) {
-         observers.add(inventorySlotObserver);
+        observers.add(inventorySlotObserver);
     }
 
     @Override
     public void unregister(InventorySlotObserver inventorySlotObserver) {
-         observers.removeValue(inventorySlotObserver, true);
+        observers.removeValue(inventorySlotObserver, true);
     }
 
     @Override
     public void notifyObservers(InventorySlot inventorySlot, InventorySlotObserver.InventorySlotEvent event) {
-        for (InventorySlotObserver observer: observers){
-            observer.onNotify(inventorySlot,event);
+        for (InventorySlotObserver observer : observers) {
+            observer.onNotify(inventorySlot, event);
         }
     }
 }

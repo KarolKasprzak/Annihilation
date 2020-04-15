@@ -9,6 +9,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -47,6 +48,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     SkeletonBounds bounds;
     AnimationState state;
     SpriteBatch batch;
+    PolygonSpriteBatch polygonSpriteBatch;
     public WorldBuilder(StartStatus startStatus, InputMultiplexer inputMultiplexer) {
 
 
@@ -56,7 +58,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         viewport = new ExtendViewport(16, 9, camera);
 
         viewport.apply(true);
+//        batch = new SpriteBatch();
         batch = new SpriteBatch();
+        polygonSpriteBatch = new PolygonSpriteBatch();
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         rayHandler = new RayHandler(world);
@@ -115,17 +119,17 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
 
-        engine.addSystem(new UserInterfaceSystem(engine, world, this));
+        engine.addSystem(new UserInterfaceSystem(engine));
         engine.addSystem(new ActionSystem(camera,batch));
         engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera));
         engine.addSystem(new SpriteRenderSystem(camera, batch));
         engine.addSystem(new RenderSystem(camera, world, batch,shapeRenderer));
         engine.addSystem(new LightRenderSystem(camera, rayHandler));
-        engine.addSystem(new SkeletonRenderSystem(camera,world,batch));
+        engine.addSystem(new SkeletonRenderSystem(camera,world,polygonSpriteBatch));
         engine.addSystem(new HealthSystem(camera));
         engine.addSystem(new CollisionSystem(world));
         engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new PlayerControlSystem(world,camera,viewport));
+        engine.addSystem(new PlayerControlSystem(world,viewport));
         engine.addSystem(new CameraSystem(camera));
         engine.addSystem(new TileMapRender(camera, engine.getMapLoader().getMap()));
         engine.addSystem(new AnimationSystem());

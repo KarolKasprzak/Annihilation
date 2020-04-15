@@ -2,6 +2,7 @@ package com.cosma.annihilation.Gui.MainMenu;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,10 +23,9 @@ public class PlayerMenuWindow extends GuiWindow {
     private OptionsWindow optionsWindow;
     private LootWindow lootWindow;
     private Engine engine;
+    private boolean isOpen = false;
 
-
-
-    public PlayerMenuWindow(String title, Skin skin, Engine engine) {
+    public PlayerMenuWindow(String title, Skin skin, EntityEngine engine) {
         super(title, skin);
         this.engine = engine;
         this.setModal(true);
@@ -39,7 +39,10 @@ public class PlayerMenuWindow extends GuiWindow {
         lootWindow = new LootWindow(skin,engine,getWidth());
         inventoryWindow = new InventoryWindow("Inventory:",skin,engine,getWidth());
         optionsWindow = new OptionsWindow("",skin, (EntityEngine) engine);
+    }
 
+    public Table getWindowTable() {
+        return windowTable;
     }
 
     private void createTable(){
@@ -68,7 +71,8 @@ public class PlayerMenuWindow extends GuiWindow {
         inventoryButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clearAndAddWindow(inventoryWindow);
+                clearWindow();
+                addWindow(inventoryWindow);
                 inventoryWindow.loadInventory();
             }
         });
@@ -83,7 +87,8 @@ public class PlayerMenuWindow extends GuiWindow {
         settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                clearAndAddWindow(optionsWindow);
+                clearWindow();
+                addWindow(optionsWindow);
             }
         });
 
@@ -98,25 +103,41 @@ public class PlayerMenuWindow extends GuiWindow {
         });
     }
 
-    private void clearAndAddWindow(GuiWindow windowToDisplay){
+    private void clearWindow(){
         if(windowTable.hasChildren()){
-            if(windowTable.getChildren().first() instanceof InventoryWindow){
-                inventoryWindow.saveInventory();
+            if(windowTable.getChildren().size >1){
+                System.out.println("error");
+            }
+            Actor window = windowTable.getChildren().first();
+            if(window instanceof GuiWindow){
+                ((GuiWindow) window).close();
             }
             windowTable.clearChildren();
         }
+    }
+    private void addWindow(GuiWindow windowToDisplay){
         windowTable.add(windowToDisplay);
     }
 
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
+    @Override
+    public boolean isOpen() {
+        return isOpen;
+    }
+
     public void openLootWindow(){
-        clearAndAddWindow(lootWindow);
+        clearWindow();
+        addWindow(lootWindow);
         lootWindow.initialize();
     }
 
     @Override
     public void close() {
+        clearWindow();
         super.close();
-        windowTable.clearChildren();
-        inventoryWindow.saveInventory();
+        isOpen = false;
     }
 }

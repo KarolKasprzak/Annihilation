@@ -14,6 +14,7 @@ public class ItemReader implements Json.Serializer<Item> {
     public Item read(Json json, JsonValue jsonData, Class type) {
         Item item = new Item();
         item.setItemId(jsonData.get("itemID").asString());
+        item.setCategory(ItemType.valueOf(jsonData.get("category").asString()));
         item.setItemName(Annihilation.getLocalText(jsonData.get("itemID").asString()));
         item.setItemType(ItemType.valueOf(jsonData.get("itemType").asString()));
         item.setItemShortDescription(Annihilation.getLocalText(jsonData.get("itemShortDescription").asString()));

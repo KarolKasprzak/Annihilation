@@ -4,6 +4,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.*;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemLoader;
@@ -22,10 +26,15 @@ public class Annihilation extends Game {
 	private GameScreen gameScreen;
 	private StartStatus startStatus;
 	private ItemLoader itemLoader;
+	static Label.LabelStyle labelStyle;
 
 	public Annihilation() {
 		super();
 		assetLoader = new AssetLoader();
+	}
+
+	public static Label.LabelStyle getLabelStyle() {
+		return labelStyle;
 	}
 
 	@Override
@@ -37,6 +46,15 @@ public class Annihilation extends Game {
 		assetLoader.load();
 		itemLoader = new ItemLoader();
 		menuScreen = new MenuScreen(this);
+
+		FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("gfx/fonts/digital.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 12;
+		parameter.color = Color.GREEN;
+		BitmapFont uiFont = freeTypeFontGenerator.generateFont(parameter);
+		labelStyle = new Label.LabelStyle();
+		labelStyle.font = uiFont;
+
 		this.setScreen(menuScreen);
 	}
 
