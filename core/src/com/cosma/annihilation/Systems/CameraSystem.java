@@ -16,12 +16,14 @@ public class CameraSystem extends IteratingSystem {
 
     public CameraSystem(OrthographicCamera camera) {
 
+
         super(Family.all(PlayerComponent.class).get(),Constants.CAMERA_SYSTEM);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         this.camera = camera;
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+
         BodyComponent body = bodyMapper.get(entity);
         camera.position.set(body.body.getPosition().x,body.body.getPosition().y + 1,0);
         camera.update();

@@ -121,7 +121,7 @@ public class InventorySlot extends Stack implements InventorySlotObservable {
 
             } else {
                 super.add(actor);
-
+                notifyObservers(this, InventorySlotObserver.InventorySlotEvent.ADDED_ITEM);
             }
             updateItemCounter();
         } else {

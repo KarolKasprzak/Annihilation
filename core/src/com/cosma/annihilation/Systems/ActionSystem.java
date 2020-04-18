@@ -29,6 +29,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 
     public ActionSystem(OrthographicCamera camera, SpriteBatch batch) {
         super(Family.all(PlayerComponent.class).get(), Constants.ACTION_SYSTEM);
+
         stateMapper = ComponentMapper.getFor(PlayerComponent.class);
 
         this.batch = batch;

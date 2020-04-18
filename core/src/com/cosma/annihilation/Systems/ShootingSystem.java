@@ -17,21 +17,23 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.graphics.ParticleEmitterBox2D;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Entities.EntityFactory;
+import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.CollisionID;
+import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
+import com.esotericsoftware.spine.Bone;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,11 +42,10 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<PlayerInventoryComponent> playerDateMapper;
     private ComponentMapper<PlayerStatsComponent> playerStatsMapper;
-    private ComponentMapper<AnimationComponent> playerAnimMapper;
     private ComponentMapper<SkeletonComponent> skeletonMapper;
 
     private World world;
-    private AnimationComponent animationComponent;
+    private SkeletonComponent skeletonComponent;
     private PlayerComponent playerComponent;
     private BodyComponent bodyComponent;
     private PlayerInventoryComponent playerInventoryComponent;
@@ -63,39 +64,24 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private Signal<GameEvent> signal;
     private Vector2 raycastEnd;
     private Array<Entity> noiseTestEntityList;
-
+    private Vector2 vector2temp = new Vector2();
     private BitmapFont font;
-    private SkeletonComponent skeletonComponent;
-
-    ParticleEffect pe;
     private Camera camera;
     private OrthographicCamera worldCamera;
+    private Viewport viewport;
 
-    public ShootingSystem(World world, RayHandler rayHandler, Batch batch, OrthographicCamera camera) {
+    public ShootingSystem(World world, RayHandler rayHandler, Batch batch, OrthographicCamera camera, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.SHOOTING_SYSTEM);
         this.world = world;
         this.batch = batch;
         this.worldCamera = camera;
-
-        pe = new ParticleEffect();
-
-
-        pe.load(Gdx.files.internal("particle/gun.p"), Gdx.files.internal("particle/"));
-        pe.getEmitters().first().setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        pe.getEmitters().add(new ParticleEmitterBox2D(world, pe.getEmitters().first()));
-        pe.getEmitters().removeIndex(0);
-        pe.scaleEffect(0.1f);
-
-        font = new BitmapFont();
-        font.setColor(Color.WHITE);
-        font.getData().setScale(2, 2);
+        this.viewport = viewport;
 
         weaponMagazine = new WeaponMagazine();
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         playerDateMapper = ComponentMapper.getFor(PlayerInventoryComponent.class);
         playerStatsMapper = ComponentMapper.getFor(PlayerStatsComponent.class);
-        playerAnimMapper = ComponentMapper.getFor(AnimationComponent.class);
         skeletonMapper = ComponentMapper.getFor(SkeletonComponent.class);
         raycastEnd = new Vector2();
 
@@ -134,72 +120,169 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
     @Override
-    public void update(float deltaTime) {
-
-        super.update(deltaTime);
-
-        pe.setPosition(body.getPosition().x, body.getPosition().y);
-
-        batch.begin();
-        pe.update(deltaTime);
-        pe.draw(batch);
-        batch.end();
-
-    }
-
-    @Override
     protected void processEntity(Entity entity, float deltaTime) {
         playerComponent = playerMapper.get(entity);
         playerInventoryComponent = playerDateMapper.get(entity);
         statsComponent = playerStatsMapper.get(entity);
-        animationComponent = playerAnimMapper.get(entity);
         bodyComponent = bodyMapper.get(entity);
         body = bodyMapper.get(entity).body;
         skeletonComponent = skeletonMapper.get(entity);
         weaponReloadTimer += deltaTime;
 
+        Bone root = skeletonComponent.skeleton.getRootBone();
+        vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
+        viewport.unproject(vector2temp);
 
-        if (!animationComponent.spriteDirection) {
-            direction = -1;
-        } else direction = 1;
+        Bone bodyTarget = skeletonComponent.skeleton.findBone("armTarget");
+        vector2temp.set(root.worldToLocal(vector2temp));
+        bodyTarget.setPosition(vector2temp.x, vector2temp.y);
 
-        if (!playerComponent.isWeaponHidden) {
-            world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
-            if (targetEntity != null) {
-                BodyComponent targetBody = targetEntity.getComponent(BodyComponent.class);
-                Vector3 worldPosition = worldCamera.project(new Vector3(targetBody.body.getPosition().x, targetBody.body.getPosition().y, 0));
-                batch.setProjectionMatrix(camera.combined);
-                batch.begin();
-                //show accuracy on target
-                font.draw(batch, Math.round(calculateAttackAccuracyFloat() * 100) + "%", worldPosition.x + 45, worldPosition.y + 50);
-                batch.end();
+        if (playerComponent.isWeaponHidden) {
+            Annihilation.setArrowCursor();
+            skeletonComponent.skeleton.findSlot("weapon_pistol").setAttachment(null);
+            skeletonComponent.skeleton.findSlot("weapon_rifle").setAttachment(null);
+        } else {
+            Annihilation.setWeaponCursor();
+            if(playerComponent.activeWeapon.getItemId().equals("stg")){
+               skeletonComponent.setSkeletonAnimation(false,"weapon_stg_hold",1,false);
             }
-
-
+            Bone rArmTarget = skeletonComponent.skeleton.findBone("r_hand_target");
+            Bone lArmTarget = skeletonComponent.skeleton.findBone("l_hand_target");
+            Bone muzzle = skeletonComponent.skeleton.findBone("muzzle");
+            Bone grip = skeletonComponent.skeleton.findBone("grip");
+            rArmTarget.setPosition(vector2temp.x, vector2temp.y);
+            vector2temp.set(grip.getWorldX(), grip.getWorldY());
+            vector2temp.set(root.worldToLocal(vector2temp));
+            lArmTarget.setPosition(vector2temp.x, vector2temp.y);
         }
 
+        skeletonComponent.skeleton.updateWorldTransform();
+
+
+//        if (!playerComponent.isWeaponHidden) {
+//            world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
+//            if (targetEntity != null) {
+//                BodyComponent targetBody = targetEntity.getComponent(BodyComponent.class);
+//                Vector3 worldPosition = worldCamera.project(new Vector3(targetBody.body.getPosition().x, targetBody.body.getPosition().y, 0));
+//                batch.setProjectionMatrix(camera.combined);
+//                batch.begin();
+//                //show accuracy on target
+//                font.draw(batch, Math.round(calculateAttackAccuracyFloat() * 100) + "%", worldPosition.x + 45, worldPosition.y + 50);
+//                batch.end();
+//            }
+//        }
     }
 
     @Override
     public void receive(Signal<GameEvent> signal, GameEvent event) {
         switch (event) {
             case ACTION_BUTTON_TOUCH_DOWN:
-                weaponSelect();
+                if (!playerComponent.isWeaponHidden) {
+                    if(playerComponent.activeWeapon.getCategory() == ItemType.MELEE){
+                        meleeAttack();
+                    }
+                    if(playerComponent.activeWeapon.getCategory() == ItemType.GUNS){
+                        startShooting();
+                    }
+                }
                 break;
             case ACTION_BUTTON_TOUCH_UP:
-                isWeaponShooting = false;
+                stopShooting();
                 break;
             case WEAPON_TAKE_OUT:
-                weaponTakeOut();
+                playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
+                skeletonComponent.animationState.clearTracks();
+                skeletonComponent.skeleton.setToSetupPose();
                 break;
-            case WEAPON_SHOOT:
-//                startShooting();
-                break;
-            case WEAPON_STOP_SHOOT:
-//                isWeaponShooting = false;
+            case WEAPON_RELOAD:
                 break;
         }
     }
+
+    private void weaponReload(){
+        Item weapon = playerComponent.activeWeapon;
+        Array<Item> playerInventory = ((EntityEngine) getEngine()).getPlayerInventory();
+        for(Item item: playerInventory){
+            if(item.getItemType() == weapon.getAmmoType()){
+                //to do 
+            }
+        }
+
+    }
+
+
+    private void startShooting() {
+        if (playerComponent.activeWeapon.isAutomatic()) {
+            isWeaponShooting = true;
+            automaticWeaponShoot();
+        } else if (weaponReloadTimer > playerComponent.activeWeapon.getReloadTime()) {
+            weaponShoot();
+            weaponReloadTimer = 0;
+        }
+    }
+
+    private void stopShooting(){
+        isWeaponShooting = false;
+    }
+
+    private void automaticWeaponShoot() {
+        com.badlogic.gdx.utils.Timer.schedule(new com.badlogic.gdx.utils.Timer.Task() {
+            @Override
+            public void run() {
+                if (isWeaponShooting) {
+                    weaponShoot();
+                } else {
+                    this.cancel();
+                }
+            }
+        }, 0, playerComponent.activeWeapon.getReloadTime());
+    }
+
+    private void weaponShoot() {
+        Item weapon = playerComponent.activeWeapon;
+        if (weapon.getAmmoInClip() > 0) {
+            world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
+            if (calculateAttackAccuracy() && targetEntity != null) {
+                System.out.println("hit");
+                targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
+                targetEntity.getComponent(HealthComponent.class).isHit = true;
+                targetEntity.getComponent(HealthComponent.class).attackerPosition = bodyComponent.body.getPosition();
+            }
+            targetEntity = null;
+            shootingLight();
+            simulatingGunShootNoise();
+            createShellAndBullet();
+            Sound sound = Annihilation.getAssets().get("sfx/weapons/cg1.wav");
+            sound.play();
+            weapon.setAmmoInClip(weapon.getAmmoInClip()-1);
+        } else {
+            Sound sound = Annihilation.getAssets().get("sfx/weapons/no_ammo.wav");
+            sound.play();
+            stopShooting();
+        }
+    }
+
+//    private void weaponShoot() {
+//        if (weaponMagazine.hasAmmo()) {
+//            world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
+//            if (calculateAttackAccuracy() && targetEntity != null) {
+//                System.out.println("hit");
+//                targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
+//                targetEntity.getComponent(HealthComponent.class).isHit = true;
+//                targetEntity.getComponent(HealthComponent.class).attackerPosition = bodyComponent.body.getPosition();
+//            }
+//            targetEntity = null;
+//            shootingLight();
+//            simulatingGunShootNoise();
+//            createShellAndBullet();
+//            Sound sound = Annihilation.getAssets().get("sfx/cg1.wav");
+//            sound.play();
+//            weaponMagazine.removeAmmoFromMagazine();
+//        } else {
+//            weaponMagazine.reload();
+//        }
+//    }
+
 
     private float calculateAttackAccuracyFloat() {
         float weaponAccuracy = playerComponent.activeWeapon.getAccuracy();
@@ -231,57 +314,32 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         }
     }
 
-
-    private void weaponSelect() {
-        if (playerComponent != null) {
-            if (playerComponent.activeWeapon != null && !playerComponent.isWeaponHidden) {
-                ItemType weaponType = playerComponent.activeWeapon.getItemType();
-
-                switch (weaponType) {
-                    case WEAPON_MELEE:
-                        meleeAttack();
-                        break;
-                    case WEAPON_LONG:
-                    case WEAPON_SHORT:
-                        startShooting();
-                        break;
-                }
-            }
-        }
-    }
-
     private void meleeAttack() {
         if (!playerComponent.isWeaponHidden & isMeleeAttackFinish) {
-            isMeleeAttackFinish = false;
-            animationComponent.isAnimationFinish = false;
-            animationComponent.time = 0;
-            world.rayCast(callback, body.getPosition(), new Vector2(body.getPosition().x + direction, body.getPosition().y));
-            animationComponent.animationState = AnimationStates.MELEE;
-            float animationTimer = animationComponent.animationMap.get(AnimationStates.MELEE.toString()).getAnimationDuration();
-            playerComponent.canMoveOnSide = false;
-
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    world.rayCast(callback, body.getPosition(), new Vector2(body.getPosition().x + direction, body.getPosition().y));
-                    if (calculateAttackAccuracy() && targetEntity != null) {
-                        targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
-                    }
-                    animationComponent.isAnimationFinish = true;
-                    playerComponent.canMoveOnSide = true;
-                    isMeleeAttackFinish = true;
-                }
-            }, animationTimer);
+//            isMeleeAttackFinish = false;
+//            animationComponent.isAnimationFinish = false;
+//            animationComponent.time = 0;
+//            world.rayCast(callback, body.getPosition(), new Vector2(body.getPosition().x + direction, body.getPosition().y));
+//            animationComponent.animationState = AnimationStates.MELEE;
+//            float animationTimer = animationComponent.animationMap.get(AnimationStates.MELEE.toString()).getAnimationDuration();
+//            playerComponent.canMoveOnSide = false;
+//
+//            Timer.schedule(new Timer.Task() {
+//                @Override
+//                public void run() {
+//                    world.rayCast(callback, body.getPosition(), new Vector2(body.getPosition().x + direction, body.getPosition().y));
+//                    if (calculateAttackAccuracy() && targetEntity != null) {
+//                        targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
+//                    }
+//                    animationComponent.isAnimationFinish = true;
+//                    playerComponent.canMoveOnSide = true;
+//                    isMeleeAttackFinish = true;
+//                }
+//            }, animationTimer);
         }
     }
 
-    private void startShooting() {
-        if (playerComponent.activeWeapon.isAutomatic()) {
-            isWeaponShooting = true;
-            automaticWeaponShoot();
-        } else
-            semiAutomaticShoot();
-    }
+
 
     private void semiAutomaticShoot() {
         if (weaponReloadTimer > playerComponent.activeWeapon.getReloadTime()) {
@@ -290,27 +348,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         }
     }
 
-    private void weaponShoot() {
 
-        if (weaponMagazine.hasAmmo()) {
-            world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
-            if (calculateAttackAccuracy() && targetEntity != null) {
-                System.out.println("hit");
-                targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
-                targetEntity.getComponent(HealthComponent.class).isHit = true;
-                targetEntity.getComponent(HealthComponent.class).attackerPosition = bodyComponent.body.getPosition();
-            }
-            targetEntity = null;
-            shootingLight();
-            simulatingGunShootNoise();
-            createShellAndBullet();
-            Sound sound = Annihilation.getAssets().get("sfx/cg1.wav");
-            sound.play();
-            weaponMagazine.removeAmmoFromMagazine();
-        } else {
-            weaponMagazine.reload();
-        }
-    }
 
     private void simulatingGunShootNoise() {
         world.rayCast(noiseRayCallback, body.getPosition().x, body.getPosition().y,
@@ -330,32 +368,21 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
     private void createShellAndBullet() {
 
-
-        Vector3 worldPosition = worldCamera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-        float x = body.getPosition().x;
-        float y = body.getPosition().y;
-        float targetX = worldPosition.x;
-        float targetY = worldPosition.y;
-
-        float muzzleX = skeletonComponent.skeleton.findBone("muzzle").getWorldX();
-        float muzzleY = skeletonComponent.skeleton.findBone("muzzle").getWorldY();
-        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(muzzleX, muzzleY));
-        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
-        this.getEngine().addEntity(EntityFactory.getInstance().createShootSplashEntity(muzzleX, muzzleY, animationComponent.spriteDirection));
+//
+//        Vector3 worldPosition = worldCamera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+//        float x = body.getPosition().x;
+//        float y = body.getPosition().y;
+//        float targetX = worldPosition.x;
+//        float targetY = worldPosition.y;
+//
+//        float muzzleX = skeletonComponent.skeleton.findBone("muzzle").getWorldX();
+//        float muzzleY = skeletonComponent.skeleton.findBone("muzzle").getWorldY();
+//        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(muzzleX, muzzleY));
+//        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
+//        this.getEngine().addEntity(EntityFactory.getInstance().createShootSplashEntity(muzzleX, muzzleY, animationComponent.spriteDirection));
     }
 
-    private void automaticWeaponShoot() {
-        com.badlogic.gdx.utils.Timer.schedule(new com.badlogic.gdx.utils.Timer.Task() {
-            @Override
-            public void run() {
-                if (isWeaponShooting) {
-                    weaponShoot();
-                } else {
-                    this.cancel();
-                }
-            }
-        }, 0, playerComponent.activeWeapon.getReloadTime());
-    }
+
 
 
     /**
@@ -403,19 +430,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         return 0;
     }
 
-    private void weaponTakeOut() {
-        System.out.println("weapon take out");
-        if (playerComponent.activeWeapon != null) {
-            weaponMagazine.setAmmoInMagazine(playerComponent.activeWeapon.getAmmoInClip());
-            weaponMagazine.setMaxAmmoInMagazine(playerComponent.activeWeapon.getMaxAmmoInClip());
-            playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
-        }
-        else{
-
-
-            playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
-        }
-    }
 
     private int addAmmoFromInventory() {
         int ammoInInventory = 0;

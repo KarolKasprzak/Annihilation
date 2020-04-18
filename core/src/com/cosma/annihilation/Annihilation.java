@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,6 +28,8 @@ public class Annihilation extends Game {
 	private GameScreen gameScreen;
 	private StartStatus startStatus;
 	private ItemLoader itemLoader;
+	private Cursor crosshairCursor;
+	private Cursor arrowCursor;
 	static Label.LabelStyle labelStyle;
 
 	public Annihilation() {
@@ -55,6 +59,10 @@ public class Annihilation extends Game {
 		labelStyle = new Label.LabelStyle();
 		labelStyle.font = uiFont;
 
+		crosshairCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local("gfx/interface/crossCursor.png")), 32, 32);
+		arrowCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local("gfx/interface/arrowCursor.png")), 32, 32);
+		Gdx.graphics.setCursor(arrowCursor);
+
 		this.setScreen(menuScreen);
 	}
 
@@ -66,6 +74,8 @@ public class Annihilation extends Game {
 			gameScreen.dispose();
 		}
 	}
+
+
 
 	public void setGameScreen() {
 		gameScreen = new GameScreen(this, assetLoader);
@@ -84,6 +94,14 @@ public class Annihilation extends Game {
 	public void setStartStatus(int saveSlot, boolean newGame) {
 		this.startStatus.setNewGame(newGame);
 		this.startStatus.setSaveSlot(saveSlot);
+	}
+
+	public static void setArrowCursor() {
+		Gdx.graphics.setCursor(((Annihilation) Gdx.app.getApplicationListener()).arrowCursor);
+	}
+
+	public static void setWeaponCursor() {
+		Gdx.graphics.setCursor(((Annihilation) Gdx.app.getApplicationListener()).crosshairCursor);
 	}
 
 	public static Item getItem(String itemID) {

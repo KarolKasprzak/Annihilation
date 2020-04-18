@@ -22,7 +22,7 @@ public class PlayerMenuWindow extends GuiWindow {
     private InventoryWindow inventoryWindow;
     private OptionsWindow optionsWindow;
     private LootWindow lootWindow;
-    private Engine engine;
+    private EntityEngine engine;
     private boolean isOpen = false;
 
     public PlayerMenuWindow(String title, Skin skin, EntityEngine engine) {
@@ -38,7 +38,7 @@ public class PlayerMenuWindow extends GuiWindow {
 
         lootWindow = new LootWindow(skin,engine,getWidth());
         inventoryWindow = new InventoryWindow("Inventory:",skin,engine,getWidth());
-        optionsWindow = new OptionsWindow("",skin, (EntityEngine) engine);
+        optionsWindow = new OptionsWindow("",skin,engine);
     }
 
     public Table getWindowTable() {
@@ -97,7 +97,7 @@ public class PlayerMenuWindow extends GuiWindow {
             public void changed(ChangeEvent event, Actor actor) {
                 if(actor.getParent().getParent() instanceof PlayerMenuWindow){
                     ((PlayerMenuWindow) actor.getParent().getParent()).close();
-                    engine.getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
+                    engine.getPlayerComponent().isPlayerControlEnable = true;
                 }
             }
         });

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
@@ -25,25 +26,26 @@ public class EntityEngine extends PooledEngine {
     private World world;
     private RayHandler rayHandler;
     StartStatus startStatus;
+
     public CosmaMapLoader getMapLoader() {
         return mapLoader;
     }
 
-    public EntityEngine(World world, RayHandler rayHandler,StartStatus startStatus) {
+    public EntityEngine(World world, RayHandler rayHandler, StartStatus startStatus) {
         this.rayHandler = rayHandler;
         this.world = world;
         this.startStatus = startStatus;
         mapLoader = new CosmaMapLoader(world, rayHandler, this);
         json = new Json();
-        json.setSerializer(Entity.class, new GameEntitySerializer(world,this));
-        if(startStatus.isNewGame()){
+        json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
+        if (startStatus.isNewGame()) {
             mapLoader.loadMap("map/forest_test.map");
-        }else{
+        } else {
             loadGame();
         }
     }
 
-    public void loadGame(){
+    public void loadGame() {
         for (Entity entity : this.getEntities()) {
             for (Component component : entity.getComponents()) {
                 if (component instanceof BodyComponent) {
@@ -62,7 +64,9 @@ public class EntityEngine extends PooledEngine {
         this.removeAllEntities();
 
 
-        mapLoader.loadMap("save/slot"+startStatus.getSaveSlot()+"/forest_test.map");
+        mapLoader.loadMap("save/slot" + startStatus.getSaveSlot() + "/forest_test.map");
+
+        getPlayerComponent().activeWeapon = getPlayerActiveWeapon();
 //        mapLoader.getMap().getEntityArrayList().add(playerEntity);
     }
 
@@ -79,17 +83,29 @@ public class EntityEngine extends PooledEngine {
         mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
     }
 
-    public Entity getPlayerEntity(){
-       return getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
+    public Entity getPlayerEntity() {
+        return getEntitiesFor(Family.all(PlayerComponent.class).get()).first();
     }
 
-    public Array<Item> getPlayerInventory(){
+    public PlayerComponent getPlayerComponent() {
+        return getPlayerEntity().getComponent(PlayerComponent.class);
+    }
+
+    /** return active weapon based on player inventory
+     * if null return default "fist" weapon **/
+
+    public Item getPlayerActiveWeapon(){
+        PlayerInventoryComponent playerInventory = getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class);
+        if(playerInventory.equippedWeapon == null){
+            return Annihilation.getItem("fist");
+        }else{
+            return playerInventory.equippedWeapon;
+        }
+    }
+
+    public Array<Item> getPlayerInventory() {
         return getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
     }
-
-
-
-
 
 
 //

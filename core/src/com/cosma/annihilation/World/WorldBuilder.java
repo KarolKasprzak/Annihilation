@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -27,8 +26,6 @@ import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.LuaScript.ScriptManager;
 import com.cosma.annihilation.Utils.StateManager;
-import com.esotericsoftware.spine.*;
-
 
 public class WorldBuilder implements Disposable, EntityListener, Listener<GameEvent> {
 
@@ -37,20 +34,13 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     public World world;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private Signal<GameEvent> signal;
-    private boolean isPaused = false;
     private RayHandler rayHandler;
+    private InputManager inputManager;
 
-
-
-    TextureAtlas atlas;
-    Skeleton skeleton;
-    SkeletonBounds bounds;
-    AnimationState state;
     SpriteBatch batch;
     PolygonSpriteBatch polygonSpriteBatch;
-    public WorldBuilder(StartStatus startStatus, InputMultiplexer inputMultiplexer) {
 
+    public WorldBuilder(StartStatus startStatus, InputMultiplexer inputMultiplexer) {
 
 
         //Game camera
@@ -65,71 +55,37 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         rayHandler = new RayHandler(world);
         RayHandler.useDiffuseLight(true);
-        rayHandler.resizeFBO(Gdx.graphics.getWidth()/7,Gdx.graphics.getHeight()/7);
+        rayHandler.resizeFBO(Gdx.graphics.getWidth() / 7, Gdx.graphics.getHeight() / 7);
         rayHandler.setBlur(true);
-
-
-        final String vertexShader =
-                "attribute vec4 vertex_positions;\n" //
-                        + "attribute vec4 quad_colors;\n" //
-                        + "attribute float s;\n"
-                        + "uniform mat4 u_projTrans;\n" //
-                        + "varying vec4 v_color;\n" //
-                        + "void main()\n" //
-                        + "{\n" //
-                        + "   v_color = s *0.8* quad_colors;\n" //
-                        + "   gl_Position =  u_projTrans * vertex_positions;\n" //
-                        + "}\n";
-        final String fragmentShader = "#ifdef GL_ES\n" //
-                + "precision lowp float;\n" //
-                + "#define MED mediump\n"
-                + "#else\n"
-                + "#define MED \n"
-                + "#endif\n" //
-                + "varying vec4 v_color;\n" //
-                + "void main()\n"//
-                + "{\n" //
-                + "  gl_FragColor = "+"sqrt"+"(v_color);\n" //
-                + "}";
-
-        ShaderProgram.pedantic = false;
-        ShaderProgram lightShader = new ShaderProgram(vertexShader,
-                fragmentShader);
-//        rayHandler.setLightShader(lightShader);
-
         rayHandler.setShadows(true);
 
-
-        camera.zoom = camera.zoom -0.2f;
-        engine = new EntityEngine(world,rayHandler,startStatus);
+        camera.zoom = camera.zoom - 0.2f;
+        engine = new EntityEngine(world, rayHandler, startStatus);
         engine.addEntityListener(this);
 
         EntityFactory.getInstance().setEngine(engine);
         EntityFactory.getInstance().setWorld(world);
-        signal = new Signal<GameEvent>();
+        Signal<GameEvent> signal = new Signal<GameEvent>();
 
 
-//        mapLoader.loadMap("map/lab.map");
-//        mapLoader.loadMap("map/forest_test.map");
 
-
-        ScriptManager scriptManager = new ScriptManager(engine,world);
+        ScriptManager scriptManager = new ScriptManager(engine, world);
         scriptManager.runScript("script_test");
 
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         engine.addSystem(new UserInterfaceSystem(engine));
-        engine.addSystem(new ActionSystem(camera,batch));
-        engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera));
+        engine.addSystem(new ActionSystem(camera, batch));
+        engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera,viewport));
         engine.addSystem(new SpriteRenderSystem(camera, batch));
-        engine.addSystem(new RenderSystem(camera, world, batch,shapeRenderer));
+        engine.addSystem(new RenderSystem(camera, world, batch, shapeRenderer));
         engine.addSystem(new LightRenderSystem(camera, rayHandler));
-        engine.addSystem(new SkeletonRenderSystem(camera,world,polygonSpriteBatch));
+        engine.addSystem(new SkeletonRenderSystem(camera, world, polygonSpriteBatch));
         engine.addSystem(new HealthSystem(camera));
         engine.addSystem(new CollisionSystem(world));
         engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new PlayerControlSystem(world,viewport));
+        engine.addSystem(new PlayerControlSystem(world, viewport));
         engine.addSystem(new CameraSystem(camera));
         engine.addSystem(new TileMapRender(camera, engine.getMapLoader().getMap()));
         engine.addSystem(new AnimationSystem());
@@ -137,27 +93,25 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new AiSystem(world, batch, camera));
 
         engine.addEntityListener(this);
-
-
-
-        engine.getSystem(PlayerControlSystem.class).addListenerSystems();
         engine.getSystem(CollisionSystem.class).addListenerSystems(this);
+
 
         signal.add(getEngine().getSystem(ActionSystem.class));
         signal.add(getEngine().getSystem(ShootingSystem.class));
         signal.add(getEngine().getSystem(UserInterfaceSystem.class));
 
+        inputManager = new InputManager(engine);
         inputMultiplexer.addProcessor(engine.getSystem(UserInterfaceSystem.class).getStage());
-        inputMultiplexer.addProcessor(engine.getSystem(PlayerControlSystem.class));
+        inputMultiplexer.addProcessor(inputManager);
 
     }
 
     public void update(float delta) {
         debugInput();
-        if (!isPaused) {
-            engine.update(delta);
-            camera.update();
-        }
+        engine.update(delta);
+        inputManager.update(engine);
+        camera.update();
+
     }
 
     public void resize(int w, int h) {

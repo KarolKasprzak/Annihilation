@@ -24,7 +24,7 @@ public class AssetLoader {
 
         loadFonts();
 
-        //Load map textures
+        //Load map tile textures
         FileHandle mapTextures = Gdx.files.local("map/map_tiles/");
         for(FileHandle texture: mapTextures.list(".atlas")){
             manager.load(texture.path(),TextureAtlas.class);
@@ -53,7 +53,6 @@ public class AssetLoader {
         }
         //Load texture atlas
         FileHandle gfxAtlas = Gdx.files.local("gfx/atlas/");
-
         for(FileHandle file:  gfxAtlas.list()){
             if(file.isDirectory()){
                 for(FileHandle texture: file.list(".atlas")){
@@ -73,9 +72,14 @@ public class AssetLoader {
 
         //Load sfx
         FileHandle sounds = Gdx.files.local("sfx/");
-        for(FileHandle sound: sounds.list(".wav")){
-            manager.load(sound.path(),Sound.class);
+        for(FileHandle file:  sounds.list()){
+            if(file.isDirectory()){
+                for(FileHandle sound: file.list(".wav")){
+                    manager.load(sound.path(),Sound.class);
+                }
+            }
         }
+
 
         for(FileHandle texture: playerAtlas.list(".png")){
             manager.load(texture.path(),Texture.class);

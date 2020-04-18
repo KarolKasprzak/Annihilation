@@ -1,6 +1,6 @@
 
 player.png
-size: 128,200
+size: 128,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,7 +13,7 @@ l_foot
   index: -1
 l_shin
   rotate: false
-  xy: 1, 167
+  xy: 1, 202
   size: 12, 31
   orig: 12, 31
   offset: 0, 0
@@ -25,9 +25,16 @@ r_foot
   orig: 17, 8
   offset: 0, 0
   index: -1
+l_hand_on_grip
+  rotate: false
+  xy: 107, 39
+  size: 17, 33
+  orig: 17, 33
+  offset: 0, 0
+  index: -1
 l_hand
   rotate: false
-  xy: 87, 73
+  xy: 106, 74
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
@@ -48,7 +55,7 @@ l_thigh
   index: -1
 r_shin
   rotate: false
-  xy: 106, 74
+  xy: 1, 167
   size: 16, 33
   orig: 16, 33
   offset: 0, 0
@@ -81,16 +88,16 @@ u_body
   orig: 26, 48
   offset: 0, 0
   index: -1
-weapon_p38
+weapon_p38_silent
   rotate: false
-  xy: 1, 1
+  xy: 1, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-weapon_p38_silent
+weapon_p38
   rotate: false
-  xy: 1, 67
+  xy: 1, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -104,7 +111,7 @@ weapon_stg
   index: -1
 r_hand
   rotate: false
-  xy: 107, 39
+  xy: 87, 73
   size: 17, 33
   orig: 17, 33
   offset: 0, 0

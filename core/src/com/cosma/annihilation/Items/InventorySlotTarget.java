@@ -34,9 +34,11 @@ public class InventorySlotTarget extends DragAndDrop.Target {
 
         if(!targetSlot.hasItem()){
             sourceSlot.updateItemCounter();
+            sourceSlot.notifyObservers(sourceSlot, InventorySlotObserver.InventorySlotEvent.REMOVED_ITEM);
             targetSlot.add(sourceItem);
         }else{
             if( sourceItem.isSameItemType(targetItem) && sourceItem.isStackable()){
+                sourceSlot.notifyObservers(sourceSlot, InventorySlotObserver.InventorySlotEvent.REMOVED_ITEM);
                 sourceSlot.updateItemCounter();
                 targetSlot.add(sourceItem);
             }else

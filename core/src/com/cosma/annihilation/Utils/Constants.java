@@ -34,8 +34,9 @@ public class Constants {
     public static final int COLLISION_SYSTEM               = 4;
     public static final int HEALTH_SYSTEM                  = 3;
     public static final int ANIMATION                      = 2;
-    public static final int PLAYER_CONTROL_SYSTEM          = 2;
-    public static final int SHOOTING_SYSTEM                = 1;
+    public static final int SHOOTING_SYSTEM                = 2;
+    public static final int PLAYER_CONTROL_SYSTEM          = 1;
+
 
 
 

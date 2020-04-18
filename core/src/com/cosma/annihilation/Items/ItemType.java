@@ -7,6 +7,7 @@ public enum ItemType {
     AMMO,
     USABLE,
     //other
+    FIST,
     CONSUMABLE,
     MEDS,
     ARMOUR,

@@ -1,6 +1,5 @@
 package com.cosma.annihilation.Systems;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.signals.Listener;
@@ -29,7 +28,7 @@ import com.cosma.annihilation.Utils.Enums.GameEvent;
 public class UserInterfaceSystem extends IteratingSystem implements Listener<GameEvent> {
 
     private Stage stage;
-    private Label fpsLabel,onGround,isWeaponHidden,canJump;
+    private Label fpsLabel,onGround,canJump;
     private PlayerMenuWindow playerMainMenu;
     private ShaderProgram shader;
     private FrameBuffer fbo;
@@ -37,8 +36,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
 
     public UserInterfaceSystem(EntityEngine engine) {
         super(Family.all(PlayerComponent.class).get(), Constants.USER_INTERFACE);
-
-
         //shader
         String vertexShader = Gdx.files.internal("shaders/scan_ver.glsl").readString();
         String fragmentShader = Gdx.files.internal("shaders/scan_frag.glsl").readString();
@@ -62,7 +59,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
         playerMainMenu = new PlayerMenuWindow("", skin, engine);
         fpsLabel = new Label("", skin);
         onGround = new Label("", skin);
-        isWeaponHidden = new Label("", skin);
         canJump = new Label("", skin);
 
         coreTable.add(fpsLabel).left().top().expandX();
@@ -118,16 +114,16 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     }
 
     void openPlayerMenu(boolean openLootMenu) {
+        PlayerComponent playerComponent =  ((EntityEngine) getEngine()).getPlayerEntity().getComponent(PlayerComponent.class);
         if (stage.getActors().contains(playerMainMenu, true)) {
             playerMainMenu.close();
             playerMainMenu.setOpen(false);
-            getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(true);
+            playerComponent.isPlayerControlEnable = true;
         } else {
-            getEngine().getSystem(PlayerControlSystem.class).setPlayerControlAvailable(false);
+            playerComponent.isPlayerControlEnable = false;
             stage.addActor(playerMainMenu);
             playerMainMenu.setOpen(true);
             if (openLootMenu) {
-
                 playerMainMenu.openLootWindow();
             }
             playerMainMenu.moveToCenter();

@@ -7,7 +7,6 @@ import com.badlogic.ashley.signals.Signal;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,13 +16,10 @@ import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
-import com.esotericsoftware.spine.Animation;
-import com.esotericsoftware.spine.AnimationState;
-import com.esotericsoftware.spine.Bone;
 
 import java.util.ArrayList;
 
-public class PlayerControlSystem extends IteratingSystem implements InputProcessor {
+public class PlayerControlSystem extends IteratingSystem {
 
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<BodyComponent> bodyMapper;
@@ -35,15 +31,12 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
     private boolean mouseCursorPosition = false;
     private World world;
     private Entity noiseTestEntity;
-    private Vector2 vector2temp = new Vector2();
-    private Viewport viewport;
-    private boolean isPlayerControlAvailable = true;
-    private Entity player;
+
+
 
     public PlayerControlSystem(World world, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.PLAYER_CONTROL_SYSTEM);
         this.world = world;
-        this.viewport = viewport;
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         animationMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -60,10 +53,6 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-
-
-
-
         BodyComponent playerBody = bodyMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
         AnimationComponent animationComponent = animationMapper.get(entity);
@@ -73,15 +62,11 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         skeletonComponent.skeletonDirection = mouseCursorPosition;
         textureComponent.direction = mouseCursorPosition;
 
-        player = entity;
 
 
-
-        for (GameEvent gameEvent : gameEventList) {
-            signal.dispatch(gameEvent);
-        }
-        gameEventList.clear();
-
+        boolean isPlayerControlAvailable = playerComponent.isPlayerControlEnable;
+        int x = Gdx.graphics.getWidth();
+        mouseCursorPosition = Gdx.input.getX() >= x / 2;
 
         if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround) {
             playerBody.body.setLinearVelocity(0, playerBody.body.getLinearVelocity().y);
@@ -93,36 +78,23 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
         // Jumping
         if (playerComponent.onGround && playerComponent.canJump && playerComponent.isWeaponHidden && isPlayerControlAvailable && playerComponent.jump) {
 
-                System.out.println("jump");
+            playerComponent.onGround = false;
+            playerComponent.canJump = false;
+            skeletonComponent.setSkeletonAnimation(true, "jump",0, false);
 
-                playerComponent.onGround = false;
-                playerComponent.canJump = false;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    float x;
+                    if (animationComponent.spriteDirection) {
+                        x = 0;
+                    } else x = -0;
+                    playerBody.body.applyLinearImpulse(new Vector2(x, 75),
+                            playerBody.body.getWorldCenter(), true);
 
-
-                setSkeletonAnimation(true, "jump", skeletonComponent.animationState, 0, false);
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        float x;
-                        if (animationComponent.spriteDirection) {
-                            x = 0;
-                        } else x = -0;
-                        playerBody.body.applyLinearImpulse(new Vector2(x, 75),
-                                playerBody.body.getWorldCenter(), true);
-
-                    }
-                }, 0.2f);
-
-
-//                float x;
-//                if (animationComponent.spriteDirection) {
-//                    x = 0;
-//                } else x = -0;
-//                playerBody.body.applyLinearImpulse(new Vector2(x, 60),
-//                        playerBody.body.getWorldCenter(), true);
-
-                playerComponent.jump = false;
+                }
+            }, 0.2f);
+            playerComponent.jump = false;
         }
         //Climbing
         if (playerComponent.climbing) {
@@ -238,47 +210,16 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
 
 
         if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump) {
-            setSkeletonAnimation(false, "walk", skeletonComponent.animationState, 0, true);
-            System.out.println("walk");
+            skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
         }
         if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump) {
-            setSkeletonAnimation(false, "idle", skeletonComponent.animationState, 0, true);
-            System.out.println("idle");
+            skeletonComponent.setSkeletonAnimation(false, "idle",0, true);
         }
         skeletonComponent.animationState.apply(skeletonComponent.skeleton);
-//        skeletonComponent.animationState.update(deltaTime);
 
 
-//        else {
-//        setSkeletonAnimation(true, "weapon_pistol_hold", skeletonComponent.animationState, 1);
-//        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
 
 
-        Bone root = skeletonComponent.skeleton.getRootBone();
-        vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
-        viewport.unproject(vector2temp);
-
-        Bone bodyTarget = skeletonComponent.skeleton.findBone("armTarget");
-        vector2temp.set(root.worldToLocal(vector2temp));
-        bodyTarget.setPosition(vector2temp.x, vector2temp.y);
-
-
-        if (playerComponent.isWeaponHidden) {
-            skeletonComponent.animationState.clearTrack(1);
-            skeletonComponent.skeleton.findSlot("weapon_pistol").setAttachment(null);
-            skeletonComponent.skeleton.findSlot("weapon_rifle").setAttachment(null);
-        } else {
-            Bone rArmTarget = skeletonComponent.skeleton.findBone("r_arm_target");
-            Bone lArmTarget = skeletonComponent.skeleton.findBone("l_arm_target");
-            Bone muzzle = skeletonComponent.skeleton.findBone("muzzle");
-            rArmTarget.setPosition(vector2temp.x, vector2temp.y);
-            vector2temp.set(muzzle.getWorldX(), muzzle.getWorldY());
-            vector2temp.set(root.worldToLocal(vector2temp));
-            lArmTarget.setPosition(vector2temp.x, vector2temp.y);
-        }
-
-
-        skeletonComponent.skeleton.updateWorldTransform();
 
 
 //        Bone headBone = skeletonComponent.skeleton.findBone("head");
@@ -331,91 +272,5 @@ public class PlayerControlSystem extends IteratingSystem implements InputProcess
 //        }
 //        headBone.setRotation(headAngle);
 //        skeletonComponent.skeleton.updateWorldTransform();
-    }
-//    }
-
-    public void addListenerSystems() {
-        signal.add(getEngine().getSystem(ActionSystem.class));
-        signal.add(getEngine().getSystem(ShootingSystem.class));
-        signal.add(getEngine().getSystem(UserInterfaceSystem.class));
-    }
-
-    private void setSkeletonAnimation(boolean force, String animation, AnimationState animationState, int track, boolean loop) {
-        Animation newAnimation = animationState.getData().getSkeletonData().findAnimation(animation);
-        AnimationState.TrackEntry current = animationState.getCurrent(track);
-        Animation currentAnimation = current == null ? null : current.getAnimation();
-        if (force || currentAnimation != newAnimation) {
-            animationState.setAnimation(track, animation, loop);
-        }
-    }
-
-    public void setPlayerControlAvailable(boolean playerControlAvailable) {
-        isPlayerControlAvailable = playerControlAvailable;
-    }
-
-
-
-    @Override
-
-    public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.I || keycode == Input.Keys.ESCAPE) {
-            setPlayerControlAvailable(false);
-            signal.dispatch(GameEvent.OPEN_MENU);
-        }
-        PlayerComponent playerComponent =  player.getComponent(PlayerComponent.class);
-        if (keycode == Input.Keys.SPACE) {
-            playerComponent.jump = true;
-
-        }
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && isPlayerControlAvailable) {
-            gameEventList.add(GameEvent.ACTION_BUTTON_TOUCH_DOWN);
-            gameEventList.add(GameEvent.PERFORM_ACTION);
-        }
-
-        if (button == Input.Buttons.RIGHT && isPlayerControlAvailable) {
-            gameEventList.add(GameEvent.WEAPON_TAKE_OUT);
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && isPlayerControlAvailable) {
-            gameEventList.add(GameEvent.ACTION_BUTTON_TOUCH_UP);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        int x = Gdx.graphics.getWidth();
-        mouseCursorPosition = screenX >= x / 2;
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
     }
 }

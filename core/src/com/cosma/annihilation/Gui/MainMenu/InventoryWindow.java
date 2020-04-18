@@ -17,10 +17,11 @@ import com.cosma.annihilation.Components.PlayerInventoryComponent;
 import com.cosma.annihilation.Gui.GuiWindow;
 import com.cosma.annihilation.Gui.InventoryTable;
 import com.cosma.annihilation.Items.*;
+import com.cosma.annihilation.Utils.EntityEngine;
 
 public class InventoryWindow extends GuiWindow implements InventorySlotObserver {
 
-    private Engine engine;
+    private EntityEngine engine;
     private DragAndDrop dragAndDrop;
     private InventoryTable inventorySlotsTable;
     private InventorySlot weaponInventorySlot;
@@ -28,7 +29,7 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
     private ContextMenu contextMenu;
 
 
-    public InventoryWindow(String title, Skin skin, Engine engine, float parentWidth) {
+    public InventoryWindow(String title, Skin skin, EntityEngine engine, float parentWidth) {
         super(title, skin);
         this.engine = engine;
         float slotSize = parentWidth * 0.120f;
@@ -125,19 +126,16 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
     }
 
     private void setActivePlayerWeapon() {
-        engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first()
-                .getComponent(PlayerComponent.class).activeWeapon = getActiveWeapon();
+        engine.getPlayerComponent().activeWeapon = getActiveWeapon();
         if (!weaponInventorySlot.hasItem()) {
-            engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first()
-                    .getComponent(PlayerComponent.class).activeWeapon = null;
-
+            engine.getPlayerComponent().activeWeapon = Annihilation.getItem("fist");
         }
     }
 
     private void removeActivePlayerWeapon() {
         if (weaponInventorySlot.hasItem()) {
             engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first()
-                    .getComponent(PlayerComponent.class).activeWeapon = null;
+                    .getComponent(PlayerComponent.class).activeWeapon = Annihilation.getItem("fist");
         }
     }
 
@@ -150,9 +148,11 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
     @Override
     public void onNotify(InventorySlot inventorySlot, InventorySlotEvent event) {
         if (event == InventorySlotEvent.ADDED_ITEM) {
+            System.out.println("added");
             setActivePlayerWeapon();
         }
         if (event == InventorySlotEvent.REMOVED_ITEM) {
+            System.out.println("removed");
             removeActivePlayerWeapon();
         }
     }
