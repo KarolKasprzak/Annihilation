@@ -40,10 +40,22 @@ public class ItemReader implements Json.Serializer<Item> {
             item.setAutomatic(jsonData.get("automatic").asBoolean());
         }
         if (jsonData.has("ammoType")) {
-            item.setAmmoType(ItemType.valueOf(jsonData.get("itemType").asString()));
+            item.setAmmoType(ItemType.valueOf(jsonData.get("ammoType").asString()));
         }
         if (jsonData.has("ammoInClip")) {
             item.setAmmoInClip(jsonData.get("ammoInClip").asInt());
+        }
+        if (jsonData.has("weaponRecoil")) {
+            item.setWeaponRecoil(jsonData.get("weaponRecoil").asFloat());
+        }
+        if (jsonData.has("holdAnimation")) {
+            item.setHoldAnimation(jsonData.get("holdAnimation").asString());
+        }
+        if (jsonData.has("reloadAnimation")) {
+            item.setReloadAnimation(jsonData.get("reloadAnimation").asString());
+        }
+        if (jsonData.has("shootAnimation")) {
+            item.setShootAnimation(jsonData.get("shootAnimation").asString());
         }
 
         return item;

@@ -1,11 +1,11 @@
 package com.cosma.annihilation.Gui.MainMenu;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -39,6 +39,12 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         dragAndDrop = new DragAndDrop();
         //                    add(contextMenu);
         ClickListener clickListener = new ClickListener() {
+
+            @Override
+            public boolean isOver(Actor actor, float x, float y) {
+                return super.isOver(actor, x, y);
+
+            }
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -118,25 +124,12 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         }
     }
 
-    private Item getActiveWeapon() {
-        if (weaponInventorySlot.getItem() == null) {
-            return null;
-        }
-        return weaponInventorySlot.getItem();
-    }
-
     private void setActivePlayerWeapon() {
-        engine.getPlayerComponent().activeWeapon = getActiveWeapon();
-        if (!weaponInventorySlot.hasItem()) {
-            engine.getPlayerComponent().activeWeapon = Annihilation.getItem("fist");
-        }
+        engine.getPlayerComponent().activeWeapon = weaponInventorySlot.getItem();
     }
 
     private void removeActivePlayerWeapon() {
-        if (weaponInventorySlot.hasItem()) {
-            engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first()
-                    .getComponent(PlayerComponent.class).activeWeapon = Annihilation.getItem("fist");
-        }
+        engine.getPlayerComponent().activeWeapon = Annihilation.getItem("fist");
     }
 
     @Override

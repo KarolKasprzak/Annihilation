@@ -87,7 +87,7 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
         batch.begin();
         skeletonRenderer.draw(batch, skeletonComponent.skeleton);
         batch.end();
-//        debugRenderer.draw(skeletonComponent.skeleton);
+//       debugRenderer.draw(skeletonComponent.skeleton);
     }
 
     @Override

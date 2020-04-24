@@ -29,6 +29,12 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private float accuracy;
     private ItemType ammoType;
     private int hpRecovery;
+    private float weaponRecoil;
+    //weapon animation
+    private String holdAnimation;
+    private String reloadAnimation;
+    private String shootAnimation;
+
 
 
     @Override
@@ -50,15 +56,6 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
         json.writeObjectEnd();
     }
 
-    public ItemType getCategory() {
-        return category;
-    }
-
-    public void setCategory(ItemType category) {
-        this.category = category;
-    }
-
-
     @Override
     public String toString() {
         return itemId;
@@ -71,8 +68,20 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     public Item() {
     }
 
+    public ItemType getCategory() {
+        return category;
+    }
 
+    public void setCategory(ItemType category) {
+        this.category = category;
+    }
 
+    public String getShootAnimation() {
+        return shootAnimation;
+    }
+    public void setShootAnimation(String shootAnimation) {
+        this.shootAnimation = shootAnimation;
+    }
     public int getTableIndex() {
         return tableIndex;
     }
@@ -232,6 +241,32 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     public int getTradeValue() {
         return MathUtils.floor(itemValue * .33f) + 2;
     }
+
+
+    public float getWeaponRecoil() {
+        return weaponRecoil;
+    }
+
+    public void setWeaponRecoil(float weaponRecoil) {
+        this.weaponRecoil = weaponRecoil;
+    }
+
+    public String getHoldAnimation() {
+        return holdAnimation;
+    }
+
+    public void setHoldAnimation(String holdAnimation) {
+        this.holdAnimation = holdAnimation;
+    }
+
+    public String getReloadAnimation() {
+        return reloadAnimation;
+    }
+
+    public void setReloadAnimation(String reloadAnimation) {
+        this.reloadAnimation = reloadAnimation;
+    }
+
 
     @Override
     public int compareTo(Item o) {

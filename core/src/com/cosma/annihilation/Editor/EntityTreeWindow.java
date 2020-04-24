@@ -40,7 +40,8 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     private String selectedEntityName;
     private Body selectedBody;
     private boolean canMove = false;
-    private  Json json;
+    private Json json;
+
     public EntityTreeWindow(World world, MapEditor mapEditor) {
         super("Entity:");
         this.world = world;
@@ -96,13 +97,13 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     private void createEntity(String key, float x, float y) {
 
         Entity entity = json.fromJson(Entity.class, jsonList.get(key));
-        for(Component component: entity.getComponents()){
-            if(component instanceof BodyComponent){
-                ((BodyComponent) component).body.setTransform(x,y, 0);
+        for (Component component : entity.getComponents()) {
+            if (component instanceof BodyComponent) {
+                ((BodyComponent) component).body.setTransform(x, y, 0);
                 continue;
             }
-            if(component instanceof AiComponent){
-                ((AiComponent) component).startPosition.set(x,y);
+            if (component instanceof AiComponent) {
+                ((AiComponent) component).startPosition.set(x, y);
             }
         }
         mapEditor.getMap().addEntity(entity);
@@ -144,11 +145,11 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         }
 
         if (canMove && button == Input.Buttons.LEFT) {
-            selectedBody.setTransform(vec.x,vec.y,0);
-            if(selectedBody.getUserData() instanceof Entity){
+            selectedBody.setTransform(vec.x, vec.y, 0);
+            if (selectedBody.getUserData() instanceof Entity) {
                 Entity entity = (Entity) selectedBody.getUserData();
-                if(entity.getComponent(AiComponent.class) != null){
-                    entity.getComponent(AiComponent.class).startPosition.set(vec.x,vec.y);
+                if (entity.getComponent(AiComponent.class) != null) {
+                    entity.getComponent(AiComponent.class).startPosition.set(vec.x, vec.y);
                 }
             }
             selectedBody.setActive(true);
@@ -169,7 +170,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                             final int options = 3;
                             final int cancel = 4;
                             Dialogs.showConfirmDialog(getStage(), entity.getComponent(SerializationComponent.class).entityName, "what do you want?",
-                                    new String[]{"delete", "move", "options","cancel"}, new Integer[]{delete, move, options, cancel},
+                                    new String[]{"delete", "move", "options", "cancel"}, new Integer[]{delete, move, options, cancel},
                                     new ConfirmDialogListener<Integer>() {
                                         @Override
                                         public void result(Integer result) {
@@ -178,22 +179,22 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                                                 world.destroyBody(fixture.getBody());
                                             }
 
-                                            if (result == move){
+                                            if (result == move) {
                                                 Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Crosshair);
                                                 selectedBody = fixture.getBody();
                                                 canMove = true;
                                             }
 
-                                            if (result == options){
+                                            if (result == options) {
                                                 EntityEditOptionsWindow window = new EntityEditOptionsWindow(entity);
                                                 getStage().addActor(window);
                                             }
 
-                                            if (result == cancel){
+                                            if (result == cancel) {
 //
                                             }
                                         }
-                                    }).setPosition(Gdx.input.getX(),Gdx.input.getY());
+                                    }).setPosition(Gdx.input.getX(), Gdx.input.getY());
                         }
                     }
                     return false;

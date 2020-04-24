@@ -7,13 +7,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.cosma.annihilation.Components.*;
-import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.EntityEventSignal;
+import com.cosma.annihilation.Utils.*;
 import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.Enums.BodyID;
-import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
-import com.cosma.annihilation.Utils.Util;
 import com.cosma.annihilation.World.WorldBuilder;
 
 
@@ -104,8 +101,8 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        bulletCollision(fa,fb);
-        bulletCollision(fb,fa);
+        bulletCollision(fa);
+        bulletCollision(fb);
 
         addEntityToActionList(fa, fb);
 
@@ -268,7 +265,7 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
                     fixture.getBody().setUserData(null);
                 }
             }
-        }, 3);
+        }, 8);
 
     }
 
@@ -281,11 +278,13 @@ public class CollisionSystem extends IteratingSystem implements ContactListener 
         }, delay);
     }
 
-    private void bulletCollision(Fixture fa, Fixture fb) {
-        if (fa.getUserData() == BodyID.BULLET) {
-            if (!bodiesToRemove.contains(fa.getBody(), true)) {
-                bodiesToRemove.add(fa.getBody());
-                getEngine().removeEntity((Entity) fa.getBody().getUserData());
+    private void bulletCollision(Fixture fixture) {
+        if (fixture.getUserData() == BodyID.BULLET) {
+            if (!bodiesToRemove.contains(fixture.getBody(), true)) {
+                System.out.println("spawn");
+                ((EntityEngine) getEngine()).spawnParticleEffect("test.p",fixture.getBody().getPosition().x,fixture.getBody().getPosition().y);
+                bodiesToRemove.add(fixture.getBody());
+                getEngine().removeEntity((Entity) fixture.getBody().getUserData());
             }
         }
     }

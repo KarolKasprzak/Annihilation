@@ -208,11 +208,15 @@ public class PlayerControlSystem extends IteratingSystem {
             }
         }
 
-
         if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump) {
-            skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
+            if(playerComponent.isWeaponHidden){
+                skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
+            }else{
+                skeletonComponent.setSkeletonAnimation(false, "weapon_walk", 3, true);
+            }
         }
         if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump) {
+            skeletonComponent.animationState.setEmptyAnimation(3,0.1f);
             skeletonComponent.setSkeletonAnimation(false, "idle",0, true);
         }
         skeletonComponent.animationState.apply(skeletonComponent.skeleton);

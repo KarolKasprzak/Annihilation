@@ -28,10 +28,10 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.SPACE && playerComponent.canJump && playerComponent.isPlayerControlEnable) {
+        if (keycode == Input.Keys.SPACE && playerComponent.canJump && playerComponent.isPlayerControlEnable && playerComponent.isWeaponHidden) {
             playerComponent.jump = true;
         }
-        if (keycode == Input.Keys.R && playerComponent.isPlayerControlEnable) {
+        if (keycode == Input.Keys.R && playerComponent.isPlayerControlEnable && !playerComponent.isWeaponHidden) {
             signal.dispatch(GameEvent.WEAPON_RELOAD);
         }
         if (keycode == Input.Keys.I || keycode == Input.Keys.ESCAPE) {

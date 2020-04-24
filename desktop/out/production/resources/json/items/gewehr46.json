@@ -1,0 +1,27 @@
+
+{
+itemID: gewehr46
+category: GUNS
+itemType: WEAPON_LONG
+itemShortDescription: gewehr46_desc   
+iconName: gewehr46
+itemValue: 80
+stackable: false
+weight: 6
+itemStatus: STANDARD
+//optional
+damage: 30
+maxAmmoInClip: 10
+ammoInClip: 0
+reloadTime: 0.4
+accuracy: 0.8	
+automatic: false
+ammoType: AMMUNITION_7MM
+weaponRecoil: 0.09
+//animation
+holdAnimation: weapon_gewehr46_hold
+reloadAnimation: weapon_gewehr46_reload
+shootAnimation: weapon_gewehr46_shoot
+
+}
+	

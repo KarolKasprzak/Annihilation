@@ -7,16 +7,17 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Components.BodyComponent;
-import com.cosma.annihilation.Components.PlayerComponent;
-import com.cosma.annihilation.Components.PlayerInventoryComponent;
+import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
 import com.cosma.annihilation.Items.Item;
+import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 
 public class EntityEngine extends PooledEngine {
@@ -91,20 +92,76 @@ public class EntityEngine extends PooledEngine {
         return getPlayerEntity().getComponent(PlayerComponent.class);
     }
 
-    /** return active weapon based on player inventory
-     * if null return default "fist" weapon **/
+    /**
+     * return active weapon based on player inventory
+     * if null return default "fist" weapon
+     **/
 
-    public Item getPlayerActiveWeapon(){
+    public Item getPlayerActiveWeapon() {
         PlayerInventoryComponent playerInventory = getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class);
-        if(playerInventory.equippedWeapon == null){
+        if (playerInventory.equippedWeapon == null) {
             return Annihilation.getItem("fist");
-        }else{
+        } else {
             return playerInventory.equippedWeapon;
         }
     }
 
     public Array<Item> getPlayerInventory() {
         return getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
+    }
+
+    public void spawnParticleEffect(String name,float x, float y){
+        Entity entity = this.createEntity();
+        ParticleComponent particleComponent = new ParticleComponent();
+        particleComponent.loadDate(name);
+        particleComponent.particleEffect.setPosition(x,y);
+        particleComponent.particleEffect.start();
+        entity.add(particleComponent);
+        this.addEntity(entity);
+    }
+
+
+    public void spawnBulletEntity(float x, float y,float angle, float speed, boolean flip) {
+        Entity entity = this.createEntity();
+        BodyComponent bodyComponent = this.createComponent(BodyComponent.class);
+        BulletComponent bulletComponent = this.createComponent(BulletComponent.class);
+        TextureComponent textureComponent = this.createComponent(TextureComponent.class);
+
+        textureComponent.texture = Annihilation.getAssets().get("gfx/textures/bullet_trace.png");
+        textureComponent.renderAfterLight = false;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x, y);
+        bodyComponent.body = world.createBody(bodyDef);
+        bodyComponent.body.setUserData(entity);
+        bodyComponent.body.setBullet(true);
+        //Physic fixture
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(0.05f, 0.01f);
+        FixtureDef fixtureDef = new FixtureDef();
+//        fixtureDef.isSensor = true;
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.2f;
+        fixtureDef.friction = 0.2f;
+        fixtureDef.restitution = 0.2f;
+        fixtureDef.filter.categoryBits = CollisionID.BULLET;
+        fixtureDef.filter.maskBits = CollisionID.MASK_BULLET;
+        bodyComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
+
+
+        float cos = MathUtils.cosDeg(angle), sin = MathUtils.sinDeg(angle);
+        float vx = cos * speed;
+        float vy = sin * speed;
+        bodyComponent.body.setLinearVelocity(vx, vy);
+        if (flip) {
+            textureComponent.flipTexture = true;
+        }
+        bodyComponent.body.setTransform(bodyComponent.body.getPosition(), MathUtils.atan2(bodyComponent.body.getLinearVelocity().y, bodyComponent.body.getLinearVelocity().x));
+
+        entity.add(textureComponent);
+        entity.add(bodyComponent);
+        entity.add(bulletComponent);
+        this.addEntity(entity);
     }
 
 

@@ -20,9 +20,11 @@ public class PlayerComponent implements Component {
     public Array<Entity> collisionEntityArray = new Array<Entity>();
     public Item activeWeapon = Annihilation.getItem("fist");
     public Entity processedEntity;
-    public boolean canPerformAction = true;
 
+    public boolean canPerformAction = true;
     public boolean isWeaponHidden = true;
+    public boolean canShoot = true;
+
     public boolean canJump = true;
     public boolean onGround = false;
     public boolean climbing = false;

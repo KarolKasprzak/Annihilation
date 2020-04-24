@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -67,8 +66,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         EntityFactory.getInstance().setWorld(world);
         Signal<GameEvent> signal = new Signal<GameEvent>();
 
-
-
         ScriptManager scriptManager = new ScriptManager(engine, world);
         scriptManager.runScript("script_test");
 
@@ -91,6 +88,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));
+        engine.addSystem(new ParticleRenderSystem(world,batch));
 
         engine.addEntityListener(this);
         engine.getSystem(CollisionSystem.class).addListenerSystems(this);
@@ -103,7 +101,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         inputManager = new InputManager(engine);
         inputMultiplexer.addProcessor(engine.getSystem(UserInterfaceSystem.class).getStage());
         inputMultiplexer.addProcessor(inputManager);
-
     }
 
     public void update(float delta) {

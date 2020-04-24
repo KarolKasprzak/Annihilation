@@ -18,7 +18,7 @@ import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.RenderComparator;
 
-public class RenderSystem extends SortedIteratingSystem implements Disposable {
+public class RenderSystem extends SortedIteratingSystem{
 
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -32,8 +32,6 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
         this.batch = batch;
         this.camera = camera;
         this.world = world;
-
-
 
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
@@ -49,6 +47,7 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
+        System.out.println(camera.zoom);
         TextureComponent textureComponent = textureMapper.get(entity);
         Body body = bodyMapper.get(entity).body;
 
@@ -81,10 +80,4 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
         }
 
     }
-
-    @Override
-    public void dispose() {
-        batch.dispose();
-    }
-
 }

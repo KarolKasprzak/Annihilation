@@ -26,6 +26,7 @@ public class Constants {
 
     public static final int ACTION_SYSTEM                  = 11;
     public static final int SKELETONS_RENDER               = 10;
+    public static final int Particle_RENDER                         = 15;
     public static final int SPRITE_RENDER                  = 9;
     public static final int RENDER                         = 8;
     public static final int AI_SYSTEM                      = 7;

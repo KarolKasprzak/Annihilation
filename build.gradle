@@ -20,11 +20,11 @@ allprojects {
     version = '1.0'
     ext {
         appName = "Annihilation"
-        gdxVersion = '1.9.8'
+        gdxVersion = '1.9.7'
         roboVMVersion = '2.3.8'
-        box2DLightsVersion = '1.4'
+        box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.3'
-        aiVersion = '1.8.0'
+        aiVersion = '1.8.2'
     }
 
     repositories {

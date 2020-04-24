@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.physics.box2d.*;
@@ -29,12 +28,10 @@ import com.cosma.annihilation.Entities.EntityFactory;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Bone;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ShootingSystem extends IteratingSystem implements Listener<GameEvent> {
@@ -53,7 +50,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private RayCastCallback noiseRayCallback;
     private Batch batch;
     private Body body;
-    private WeaponMagazine weaponMagazine;
     private RayCastCallback callback;
     private boolean isWeaponShooting;
     private Entity targetEntity;
@@ -77,7 +73,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         this.worldCamera = camera;
         this.viewport = viewport;
 
-        weaponMagazine = new WeaponMagazine();
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         playerDateMapper = ComponentMapper.getFor(PlayerInventoryComponent.class);
@@ -85,13 +80,13 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         skeletonMapper = ComponentMapper.getFor(SkeletonComponent.class);
         raycastEnd = new Vector2();
 
-        weaponLight = new PointLight(rayHandler, 45, new Color(1, 0.8f, 0, 1), 0.8f, 0, 0);
+        weaponLight = new PointLight(rayHandler, 45, new Color(1, 1f, 0.7f, 1), 1f, 0, 0);
         weaponLight.setStaticLight(false);
         Filter filter = new Filter();
         filter.categoryBits = CollisionID.LIGHT;
         filter.maskBits = CollisionID.MASK_LIGHT;
         weaponLight.setContactFilter(filter);
-        weaponLight.setSoftnessLength(0.3f);
+        weaponLight.setSoftnessLength(1f);
         weaponLight.setSoft(true);
         weaponLight.setActive(false);
 
@@ -141,14 +136,15 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             Annihilation.setArrowCursor();
             skeletonComponent.skeleton.findSlot("weapon_pistol").setAttachment(null);
             skeletonComponent.skeleton.findSlot("weapon_rifle").setAttachment(null);
-        } else {
+        } else if(playerComponent.canShoot){
             Annihilation.setWeaponCursor();
-            if(playerComponent.activeWeapon.getItemId().equals("stg")){
-               skeletonComponent.setSkeletonAnimation(false,"weapon_stg_hold",1,false);
-            }
+            skeletonComponent.setSkeletonAnimation(false, playerComponent.activeWeapon.getHoldAnimation(), 2, false);
             Bone rArmTarget = skeletonComponent.skeleton.findBone("r_hand_target");
             Bone lArmTarget = skeletonComponent.skeleton.findBone("l_hand_target");
-            Bone muzzle = skeletonComponent.skeleton.findBone("muzzle");
+            Bone flash = skeletonComponent.skeleton.findBone("flash");
+            if(weaponLight.isActive()){
+                weaponLight.setPosition(flash.getWorldX(),flash.getWorldY());
+            }
             Bone grip = skeletonComponent.skeleton.findBone("grip");
             rArmTarget.setPosition(vector2temp.x, vector2temp.y);
             vector2temp.set(grip.getWorldX(), grip.getWorldY());
@@ -178,10 +174,10 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         switch (event) {
             case ACTION_BUTTON_TOUCH_DOWN:
                 if (!playerComponent.isWeaponHidden) {
-                    if(playerComponent.activeWeapon.getCategory() == ItemType.MELEE){
+                    if (playerComponent.activeWeapon.getCategory() == ItemType.MELEE) {
                         meleeAttack();
                     }
-                    if(playerComponent.activeWeapon.getCategory() == ItemType.GUNS){
+                    if (playerComponent.activeWeapon.getCategory() == ItemType.GUNS && playerComponent.canShoot) {
                         startShooting();
                     }
                 }
@@ -191,22 +187,50 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                 break;
             case WEAPON_TAKE_OUT:
                 playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
-                skeletonComponent.animationState.clearTracks();
+                skeletonComponent.animationState.addEmptyAnimation(2,0.3f,0);
                 skeletonComponent.skeleton.setToSetupPose();
                 break;
             case WEAPON_RELOAD:
+                weaponReload();
                 break;
         }
     }
 
-    private void weaponReload(){
+    private void weaponReload() {
         Item weapon = playerComponent.activeWeapon;
+        boolean removeItem = false;
+        Item itemToRemove = null;
         Array<Item> playerInventory = ((EntityEngine) getEngine()).getPlayerInventory();
-        for(Item item: playerInventory){
-            if(item.getItemType() == weapon.getAmmoType()){
-                //to do 
+        for (Item item : playerInventory) {
+            if (item.getItemType() == weapon.getAmmoType() && playerComponent.canShoot) {
+                if (item.getItemAmount() - weapon.getMaxAmmoInClip() > 0) {
+                    item.setItemAmount(item.getItemAmount() - weapon.getMaxAmmoInClip());
+                    weapon.setAmmoInClip(weapon.getMaxAmmoInClip());
+                } else {
+                    int count = item.getItemAmount() - weapon.getMaxAmmoInClip();
+                    count = weapon.getMaxAmmoInClip() + count;
+                    weapon.setAmmoInClip(count);
+                    itemToRemove = item;
+                    removeItem = true;
+                }
+                playerComponent.canShoot = false;
+                weaponReloadAnimationPlay();
+                if (removeItem) {
+                    playerInventory.removeValue(itemToRemove, true);
+                }
             }
         }
+    }
+
+    private void weaponReloadAnimationPlay() {
+        skeletonComponent.setSkeletonAnimation(false, playerComponent.activeWeapon.getReloadAnimation(), 4, false);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                playerComponent.canShoot = true;
+                skeletonComponent.animationState.setEmptyAnimation(4,0.2f);
+            }
+        },skeletonComponent.animationState.getCurrent(4).getAnimation().getDuration());
 
     }
 
@@ -221,7 +245,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         }
     }
 
-    private void stopShooting(){
+    private void stopShooting() {
         isWeaponShooting = false;
     }
 
@@ -238,28 +262,51 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         }, 0, playerComponent.activeWeapon.getReloadTime());
     }
 
+
+
+
     private void weaponShoot() {
         Item weapon = playerComponent.activeWeapon;
         if (weapon.getAmmoInClip() > 0) {
+//            Gdx.input.setCursorPosition(Gdx.input.getX(), MathUtils.round(Gdx.input.getY()-(Gdx.graphics.getHeight()*weapon.getWeaponRecoil())));
+            skeletonComponent.setSkeletonAnimation(false,playerComponent.activeWeapon.getShootAnimation(), 4, false);
+            skeletonComponent.animationState.addEmptyAnimation(4,0.2f,skeletonComponent.animationState.getCurrent(4).getAnimation().getDuration());
             world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
             if (calculateAttackAccuracy() && targetEntity != null) {
-                System.out.println("hit");
                 targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
                 targetEntity.getComponent(HealthComponent.class).isHit = true;
                 targetEntity.getComponent(HealthComponent.class).attackerPosition = bodyComponent.body.getPosition();
             }
             targetEntity = null;
-            shootingLight();
+            createBulletAndLightEffect();
             simulatingGunShootNoise();
             createShellAndBullet();
             Sound sound = Annihilation.getAssets().get("sfx/weapons/cg1.wav");
             sound.play();
-            weapon.setAmmoInClip(weapon.getAmmoInClip()-1);
+            weapon.setAmmoInClip(weapon.getAmmoInClip() - 1);
         } else {
             Sound sound = Annihilation.getAssets().get("sfx/weapons/no_ammo.wav");
             sound.play();
             stopShooting();
         }
+    }
+
+    private void createBulletAndLightEffect() {
+        Bone muzzle = skeletonComponent.skeleton.findBone("muzzle");
+        Bone target = skeletonComponent.skeleton.findBone("target");
+        Bone shellEjector = skeletonComponent.skeleton.findBone("shell_ejector");
+        EntityEngine engine = (EntityEngine) this.getEngine();
+        float angle = vector2temp.set(target.getWorldX(),target.getWorldY()).sub(muzzle.getWorldX(), muzzle.getWorldY()).angle();
+        engine.spawnBulletEntity(muzzle.getWorldX(),muzzle.getWorldY(),angle,25,skeletonComponent.skeletonDirection);
+        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(shellEjector.getWorldX(),shellEjector.getWorldY()));
+//        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
+        weaponLight.setActive(true);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                weaponLight.setActive(false);
+            }
+        }, 0.1f);
     }
 
 //    private void weaponShoot() {
@@ -282,7 +329,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 //            weaponMagazine.reload();
 //        }
 //    }
-
 
     private float calculateAttackAccuracyFloat() {
         float weaponAccuracy = playerComponent.activeWeapon.getAccuracy();
@@ -340,14 +386,12 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
 
-
     private void semiAutomaticShoot() {
         if (weaponReloadTimer > playerComponent.activeWeapon.getReloadTime()) {
             weaponShoot();
             weaponReloadTimer = 0;
         }
     }
-
 
 
     private void simulatingGunShootNoise() {
@@ -377,12 +421,10 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 //
 //        float muzzleX = skeletonComponent.skeleton.findBone("muzzle").getWorldX();
 //        float muzzleY = skeletonComponent.skeleton.findBone("muzzle").getWorldY();
-//        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(muzzleX, muzzleY));
+//     this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(muzzleX, muzzleY));
 //        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
 //        this.getEngine().addEntity(EntityFactory.getInstance().createShootSplashEntity(muzzleX, muzzleY, animationComponent.spriteDirection));
     }
-
-
 
 
     /**
@@ -431,42 +473,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
 
-    private int addAmmoFromInventory() {
-        int ammoInInventory = 0;
-//        for (InventoryItemLocation item : playerInventoryComponent.inventoryItem) {
-//            if (item.getItemID().equals(playerComponent.activeWeapon.getAmmoID().toString())) {
-//                ammoInInventory = item.getItemsAmount();
-//                if (ammoInInventory < playerComponent.activeWeapon.getMaxAmmoInMagazine()) {
-//                    playerInventoryComponent.inventoryItem.removeValue(item, false);
-//                    return ammoInInventory;
-//                } else {
-//                    item.setItemsAmount(item.getItemsAmount() - playerComponent.activeWeapon.getMaxAmmoInMagazine());
-//                    return playerComponent.activeWeapon.getMaxAmmoInMagazine();
-//                }
-//            }
-//        }
-        return ammoInInventory;
-    }
-
-
-    private void shootingLight() {
-//        switch (playerComponent.activeWeapon.getItemID()) {
-//            case P38:
-//                weaponLight.attachToBody(body, direction - 0.1f, 0.5f);
-//                break;
-//            case MP44:
-//                weaponLight.attachToBody(body, direction - 0.1f, 0.3f);
-//                break;
-//        }
-
-        weaponLight.setActive(true);
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                weaponLight.setActive(false);
-            }
-        }, 0.1f);
-    }
 
     void playAnimation(Animation animation, float animationTime) {
         Timer.schedule(new Timer.Task() {
@@ -475,46 +481,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                 weaponLight.setActive(false);
             }
         }, animationTime);
-    }
-
-
-    private class WeaponMagazine {
-
-        private int ammoInMagazine;
-        private int maxAmmoInMagazine;
-
-        private WeaponMagazine() {
-
-        }
-
-        void reload() {
-            setAmmoInMagazine(addAmmoFromInventory());
-        }
-
-        boolean hasAmmo() {
-            if (ammoInMagazine > 0) {
-                return true;
-            }
-            return false;
-        }
-
-        int getAmmoInMagazine() {
-
-            return ammoInMagazine;
-        }
-
-        void setAmmoInMagazine(int ammoInMagazine) {
-            this.ammoInMagazine = ammoInMagazine;
-        }
-
-        void removeAmmoFromMagazine() {
-            ammoInMagazine--;
-        }
-
-        void setMaxAmmoInMagazine(int maxAmmoInMagazine) {
-            this.maxAmmoInMagazine = maxAmmoInMagazine;
-        }
-
     }
 }
 

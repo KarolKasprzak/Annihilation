@@ -33,8 +33,8 @@ public class PhysicsSystem extends IteratingSystem {
             accumulator -= MAX_STEP_TIME;
             if(getEngine().getSystem(CollisionSystem.class).bodiesToRemove.size > 0 && !world.isLocked()){
                 for(Body body: getEngine().getSystem(CollisionSystem.class).bodiesToRemove){
-                    world.destroyBody(body);
-                    getEngine().getSystem(CollisionSystem.class).bodiesToRemove.removeValue(body,true);
+//                    world.destroyBody(body);
+//                    getEngine().getSystem(CollisionSystem.class).bodiesToRemove.removeValue(body,true);
                 }
             }
         }

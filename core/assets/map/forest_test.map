@@ -182,8 +182,8 @@ entityList: [
 				itemAmount: 1
 			}
 			{
-				itemID: antyrad
-				itemAmount: 5
+				itemID: gewehr46
+				itemAmount: 1
 				tableIndex: 1
 			}
 			{
@@ -193,7 +193,7 @@ entityList: [
 			}
 			{
 				itemID: ammo7mm
-				itemAmount: 25
+				itemAmount: 70
 				tableIndex: 3
 			}
 		]

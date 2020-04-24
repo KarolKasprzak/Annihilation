@@ -1,108 +1,115 @@
 
 player.png
-size: 128,256
+size: 256,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 l_foot
   rotate: false
-  xy: 111, 109
-  size: 15, 7
-  orig: 15, 7
+  xy: 67, 119
+  size: 19, 9
+  orig: 19, 9
   offset: 0, 0
   index: -1
 l_shin
   rotate: false
-  xy: 1, 202
+  xy: 232, 111
   size: 12, 31
   orig: 12, 31
   offset: 0, 0
   index: -1
 r_foot
   rotate: false
-  xy: 92, 109
+  xy: 88, 119
   size: 17, 8
   orig: 17, 8
   offset: 0, 0
   index: -1
 l_hand_on_grip
   rotate: false
-  xy: 107, 39
+  xy: 194, 85
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 l_hand
   rotate: false
-  xy: 106, 74
+  xy: 175, 85
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 l_arm
   rotate: false
-  xy: 87, 39
+  xy: 135, 85
   size: 18, 32
   orig: 18, 32
   offset: 0, 0
   index: -1
 l_thigh
   rotate: false
-  xy: 67, 34
+  xy: 231, 72
   size: 18, 37
   orig: 18, 37
   offset: 0, 0
   index: -1
 r_shin
   rotate: false
-  xy: 1, 167
+  xy: 213, 146
   size: 16, 33
   orig: 16, 33
   offset: 0, 0
   index: -1
 r_thigh
   rotate: false
-  xy: 99, 1
+  xy: 231, 34
   size: 19, 36
   orig: 19, 36
   offset: 0, 0
   index: -1
 d_body
   rotate: false
-  xy: 67, 1
+  xy: 225, 1
   size: 30, 31
   orig: 30, 31
   offset: 0, 0
   index: -1
 head
   rotate: false
-  xy: 67, 108
+  xy: 231, 146
   size: 23, 21
   orig: 23, 21
   offset: 0, 0
   index: -1
 u_body
   rotate: false
-  xy: 99, 133
+  xy: 197, 1
   size: 26, 48
   orig: 26, 48
   offset: 0, 0
   index: -1
 weapon_p38_silent
   rotate: false
-  xy: 1, 67
+  xy: 1, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 weapon_p38
   rotate: false
-  xy: 1, 1
+  xy: 1, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 weapon_stg
+  rotate: false
+  xy: 99, 133
+  size: 96, 32
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+gewehr46
   rotate: false
   xy: 1, 133
   size: 96, 32
@@ -111,15 +118,36 @@ weapon_stg
   index: -1
 r_hand
   rotate: false
-  xy: 87, 73
+  xy: 213, 111
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 r_arm
   rotate: false
-  xy: 67, 73
+  xy: 155, 85
   size: 18, 32
   orig: 18, 32
+  offset: 0, 0
+  index: -1
+weapon_flash_med
+  rotate: false
+  xy: 197, 51
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon_flash_dark
+  rotate: false
+  xy: 101, 85
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon_flash
+  rotate: false
+  xy: 67, 85
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
