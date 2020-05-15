@@ -1,0 +1,51 @@
+{
+  HealthComponent: {
+    hp: 100
+    maxHP: 100
+  }
+ 
+   SerializationComponent: {
+    entityName: mutant.json
+  }
+  
+  StateComponent: {
+  }
+  
+  SkeletonComponent: {
+  atlasPath: gfx/skeletons/mutant/mutant.atlas
+  jsonPath: gfx/skeletons/mutant/mutant.json
+  }
+  
+  EnemyComponent: {
+  }
+  
+  AiComponent: {
+  }
+  
+  BodyComponent: {
+    bodyType: DynamicBody
+    positionX: 0
+    positionY: 0
+	height: 2
+	width: 1
+	fixedRotation: true
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 1
+        shapeH: 2
+		shapeA: 0
+        sensor: false,
+        destiny: 15
+        friction: 0.6
+		categoryBits: enemy
+		maskBits: enemy
+		restitution: 0
+      }
+    ]
+  }
+}
+

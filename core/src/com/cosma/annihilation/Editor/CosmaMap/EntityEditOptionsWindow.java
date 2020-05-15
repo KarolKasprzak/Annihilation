@@ -4,15 +4,20 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Components.ActionComponent;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.Tools;
+import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
+
+import java.util.Arrays;
 
 public class EntityEditOptionsWindow extends VisWindow {
     public EntityEditOptionsWindow(Entity entity) {
@@ -44,10 +49,62 @@ public class EntityEditOptionsWindow extends VisWindow {
                 add(textButton);
                 row();
             }
+            if (component instanceof ActionComponent) {
+                VisTextButton textButton = new VisTextButton("Edit action");
+                textButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        AddEntityActionComponentEdit addWindow = new AddEntityActionComponentEdit((ActionComponent) component);
+                        getStage().addActor(addWindow);
+                        close();
+                    }
+                });
+                add(textButton);
+                row();
+            }
         }
         pack();
         setCenterOnAdd(true);
     }
+
+    class AddEntityActionComponentEdit extends VisWindow
+    {
+        public AddEntityActionComponentEdit(ActionComponent actionComponent) {
+            super("");
+
+            VisLabel targetLabel = new VisLabel("Target: ");
+            VisTextField targetTextField = new VisTextField();
+            VisTextButton saveButton = new VisTextButton("save");
+            Array<String> actionList = new Array<>();
+            for(EntityAction action: EntityAction.values()){
+                actionList.add(action.toString());
+            }
+            VisSelectBox<String> actionSelectBox = new VisSelectBox<>();
+            actionSelectBox.setItems(actionList);
+
+            saveButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    actionComponent.actionTargetName = targetTextField.getText();
+                    if(!actionSelectBox.getSelected().equals("NOTHING")){
+                        actionComponent.action = EntityAction.valueOf(actionSelectBox.getSelected());
+                    }
+                    close();
+                }
+            });
+            add(targetLabel);
+            add(targetTextField).width(150);
+            row();
+            add(actionSelectBox);
+            row();
+            add(saveButton);
+            pack();
+            addCloseButton();
+            setSize(getWidth(), getHeight() * 2);
+            setCenterOnAdd(true);
+        }
+    }
+
 
     class AddEntityInventoryWindow extends VisWindow {
         AddEntityInventoryWindow(ContainerComponent containerComponent) {

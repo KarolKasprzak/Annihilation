@@ -9,8 +9,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.cosma.annihilation.Ai.HumanAiBasic;
-import com.cosma.annihilation.Ai.NpcAiBasic;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Animation.AnimationFactory;
@@ -112,6 +110,9 @@ public class EntityReader implements Json.Serializer<Entity> {
                         case "scenery_phy":
                             fixtureDef.filter.categoryBits = CollisionID.SCENERY_PHYSIC_OBJECT;
                             break;
+                        case "scenery_bullet":
+                            fixtureDef.filter.categoryBits = CollisionID.SCENERY_BACKGROUND_BULLET;
+                            break;
                         case "enemy":
                             fixtureDef.filter.categoryBits = CollisionID.ENEMY;
                             break;
@@ -140,6 +141,9 @@ public class EntityReader implements Json.Serializer<Entity> {
                             break;
                         case "scenery_phy":
                             fixtureDef.filter.maskBits = CollisionID.MASK_SCENERY_PHYSIC_OBJECT;
+                            break;
+                        case "scenery_bullet":
+                            fixtureDef.filter.maskBits = CollisionID.MASK_SCENERY_BULLET;
                             break;
                         case "enemy":
                             fixtureDef.filter.maskBits = CollisionID.MASK_ENEMY;
@@ -239,6 +243,13 @@ public class EntityReader implements Json.Serializer<Entity> {
         if (jsonData.has("ActionComponent")) {
             ActionComponent actionComponent = new ActionComponent();
             actionComponent.action = EntityAction.valueOf(jsonData.get("ActionComponent").get("action").asString());
+            if(jsonData.get("ActionComponent").has("offsetX")){
+                actionComponent.offsetX = jsonData.get("ActionComponent").get("offsetX").asFloat();
+                actionComponent.offsetY = jsonData.get("ActionComponent").get("offsetY").asFloat();
+            }
+            if(jsonData.get("ActionComponent").has("targetName")){
+               actionComponent.actionTargetName = jsonData.get("ActionComponent").get("targetName").asString();
+            }
             entity.add(actionComponent);
         }
 
@@ -267,15 +278,15 @@ public class EntityReader implements Json.Serializer<Entity> {
 
         if (jsonData.has("AiComponent")) {
             AiComponent aiComponent = new AiComponent();
-            aiComponent.aiType = AiType.valueOf(jsonData.get("AiComponent").getString("aiType"));
-            switch(aiComponent.aiType){
-                case HUMAN_NPC:
-                    aiComponent.ai = new NpcAiBasic();
-                    break;
-                case HUMAN_ENEMY:
-                    aiComponent.ai = new HumanAiBasic();
-                    break;
-            }
+//            aiComponent.aiType = AiType.valueOf(jsonData.get("AiComponent").getString("aiType"));
+//            switch(aiComponent.aiType){
+//                case HUMAN_NPC:
+//                    aiComponent.ai = new NpcAiBasic();
+//                    break;
+//                case HUMAN_ENEMY:
+//                    aiComponent.ai = new HumanAiBasic();
+//                    break;
+//            }
             entity.add(aiComponent);
         }
 

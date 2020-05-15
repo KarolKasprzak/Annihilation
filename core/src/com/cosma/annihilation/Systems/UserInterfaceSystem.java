@@ -72,13 +72,12 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
         float pad = getStage().getHeight()*0.01f;
         coreTable.add(weaponIcon).left().bottom().expandY().prefSize(64).maxSize(100).minSize(32).padBottom(pad).padLeft(pad);
         coreTable.add(ammoIndicatorWidget).left().bottom().expandX().padBottom(pad);
-        System.out.println(ammoIndicatorWidget.getHeight());
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
+        stage.getViewport().apply(true);
         Batch batch = stage.getBatch();
         stage.act(deltaTime);
         fbo.begin();
@@ -125,8 +124,6 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
             }
             playerMainMenu.moveToCenter();
         }
-        System.out.println(playerComponent.activeWeapon.getItemName());
-
     }
 
     public void resizeHUD(int width, int height) {

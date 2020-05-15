@@ -1,0 +1,27 @@
+
+{
+itemID: colt
+category: GUNS
+itemType: WEAPON_SHORT
+itemShortDescription: stg_desc   
+iconName: colt
+itemValue: 80
+stackable: false
+weight: 2
+itemStatus: STANDARD
+//optional
+damage: 25
+maxAmmoInClip: 8
+ammoInClip: 0
+reloadTime: 0.2
+accuracy: 0.7	
+automatic: false
+ammoType: AMMUNITION_9MM
+weaponRecoil: 0.04
+range: 15
+//animation
+holdAnimation: weapon_pistol_hold
+reloadAnimation: weapon_pistol_reload
+shootAnimation: weapon_pistol_shoot
+}
+	

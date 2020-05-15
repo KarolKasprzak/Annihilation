@@ -82,7 +82,6 @@ public class MapEditor implements Screen, InputProcessor {
         stage = new Stage(viewportUi);
         VisUI.load(VisUI.SkinScale.X1);
         rayHandler = new RayHandler(world);
-        RayHandler.useDiffuseLight(true);
         isLightsRendered = false;
 
         mapCreatorWindow = new MapCreatorWindow(this);

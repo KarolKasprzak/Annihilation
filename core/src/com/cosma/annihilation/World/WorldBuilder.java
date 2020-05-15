@@ -44,7 +44,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
         //Game camera
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(16, 9, camera);
+        viewport = new ExtendViewport(20, 10, camera);
 
         viewport.apply(true);
 //        batch = new SpriteBatch();
@@ -53,9 +53,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         rayHandler = new RayHandler(world);
-        RayHandler.useDiffuseLight(true);
-        rayHandler.resizeFBO(Gdx.graphics.getWidth() / 7, Gdx.graphics.getHeight() / 7);
+//        RayHandler.useDiffuseLight(true);
         rayHandler.setBlur(true);
+        rayHandler.setAmbientLight(0.1f);
         rayHandler.setShadows(true);
 
         camera.zoom = camera.zoom - 0.2f;
@@ -80,7 +80,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new LightRenderSystem(camera, rayHandler));
         engine.addSystem(new SkeletonRenderSystem(camera, world, polygonSpriteBatch));
         engine.addSystem(new HealthSystem(camera));
-        engine.addSystem(new CollisionSystem(world));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world, viewport));
         engine.addSystem(new CameraSystem(camera));
@@ -89,15 +88,14 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));
         engine.addSystem(new ParticleRenderSystem(world,batch));
-
         engine.addEntityListener(this);
-        engine.getSystem(CollisionSystem.class).addListenerSystems(this);
-
 
         signal.add(getEngine().getSystem(ActionSystem.class));
         signal.add(getEngine().getSystem(ShootingSystem.class));
         signal.add(getEngine().getSystem(UserInterfaceSystem.class));
 
+        CollisionManager collisionManager = new CollisionManager(engine);
+        world.setContactListener(collisionManager);
         inputManager = new InputManager(engine);
         inputMultiplexer.addProcessor(engine.getSystem(UserInterfaceSystem.class).getStage());
         inputMultiplexer.addProcessor(inputManager);
@@ -105,6 +103,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
     public void update(float delta) {
         debugInput();
+        engine.removeAllBodies();
         engine.update(delta);
         inputManager.update(engine);
         camera.update();
@@ -113,6 +112,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
     public void resize(int w, int h) {
         viewport.update(w, h, false);
+
         engine.getSystem(UserInterfaceSystem.class).resizeHUD(w, h);
         rayHandler.getLightMapTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
@@ -243,7 +243,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
     @Override
     public void entityRemoved(Entity entity) {
-
     }
 
     @Override

@@ -1,0 +1,31 @@
+{
+  BodyComponent: {
+    bodyType: KinematicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: false
+	bullet: false
+    Fixtures: [
+      {
+        shapeType: Circle
+        radius: 0.4
+        sensor: true
+        destiny: 5
+        friction: 1
+		categoryBits: action
+		maskBits: action
+		restitution: 0
+		userDate: ACTION_TRIGGER
+      }
+    ]
+  },
+  SerializationComponent: {
+    entityName: light_switch.json
+  },
+  ActionComponent: {
+    action: SWITCH_LIGHT
+	offsetX: 0
+	offsetY: 0.2
+	
+  },
+}

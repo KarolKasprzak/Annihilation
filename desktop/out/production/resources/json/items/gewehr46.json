@@ -18,6 +18,7 @@ accuracy: 0.8
 automatic: false
 ammoType: AMMUNITION_7MM
 weaponRecoil: 0.09
+range: 15
 //animation
 holdAnimation: weapon_gewehr46_hold
 reloadAnimation: weapon_gewehr46_reload

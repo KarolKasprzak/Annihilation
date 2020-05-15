@@ -12,6 +12,7 @@ layers: {
 					{
 						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 						name: Rectangle_1
+						userDate: ground
 						x: 12.190388
 						y: 10.982693
 						width: 25.897436
@@ -57,7 +58,7 @@ layers: {
 				lights: [
 					{
 						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
-						name: PointLight_2
+						name: PointLight_1
 						raysNumber: 50
 						color: {
 							r: 1
@@ -85,6 +86,20 @@ layers: {
 						lightDistance: 5
 						x: 31.365942
 						y: 16.513073
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_3
+						raysNumber: 25
+						color: {
+							r: 0.13333334
+							g: 0.4509804
+							b: 0.11372549
+							a: 1
+						}
+						lightDistance: 1
+						x: 15.557104
+						y: 14.06405
 					}
 				]
 			}
@@ -155,6 +170,14 @@ layers: {
 					position: "24.0,13.0,0.0"
 					texture: "map/map_sprites/metro.atlas,stairs"
 				}
+				{
+					position: "15.0,13.0,0.06410599"
+					texture: "map/map_sprites/furniture.atlas,wood_desk"
+				}
+				{
+					position: "15.213075,13.854487,0.0"
+					texture: "map/map_sprites/electronics.atlas,pc_retro"
+				}
 			]
 		}
 	]
@@ -168,7 +191,6 @@ entityList: [
 		mapName: null
 		id: PLAYER
 		inventoryItems: []
-		equippedItems: []
 	}
 	{
 		position: "21.10138,14.034404"
@@ -179,11 +201,9 @@ entityList: [
 			{
 				itemID: stg
 				tableIndex: 0
-				itemAmount: 1
 			}
 			{
 				itemID: gewehr46
-				itemAmount: 1
 				tableIndex: 1
 			}
 			{
@@ -196,7 +216,22 @@ entityList: [
 				itemAmount: 70
 				tableIndex: 3
 			}
+			{
+				itemID: colt
+				tableIndex: 4
+			}
+			{
+				itemID: ammo9mm
+				itemAmount: 46
+				tableIndex: 5
+			}
 		]
+	}
+	{
+		position: "23.436409,14.076411"
+		hp: 100
+		maxHp: 100
+		entityName: target_practice.json
 	}
 ]
 mapName: forest_test.map

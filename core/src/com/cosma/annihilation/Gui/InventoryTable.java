@@ -55,7 +55,7 @@ public class InventoryTable extends Table {
             item.getCaptureListeners().clear();
             InventorySlot inventorySlot = ((InventorySlot) cells.get(item.getTableIndex()).getActor());
             inventorySlot.add(item);
-            dragAndDrop.addSource(new InventorySlotSource(inventorySlot, dragAndDrop));
+            dragAndDrop.addSource(new InventorySlotSource(inventorySlot));
         }
     }
 }

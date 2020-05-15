@@ -2,6 +2,8 @@ package com.cosma.annihilation.Editor.CosmaMap;
 
 import box2dLight.Light;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import java.util.ArrayList;
 
@@ -18,7 +20,7 @@ public class GameMap{
 
     transient private OrderedMap<String, Light> lightMap;
 
-    public Light getLight(String name) {
+    public Light findLight(String name) {
         return lightMap.get(name);
     }
 

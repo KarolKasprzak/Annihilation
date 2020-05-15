@@ -57,6 +57,9 @@ public class ItemReader implements Json.Serializer<Item> {
         if (jsonData.has("shootAnimation")) {
             item.setShootAnimation(jsonData.get("shootAnimation").asString());
         }
+        if (jsonData.has("range")) {
+            item.setRange(jsonData.get("range").asFloat());
+        }
 
         return item;
     }

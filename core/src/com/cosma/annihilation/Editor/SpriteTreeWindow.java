@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Editor.CosmaMap.Sprite;
 import com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer;
@@ -50,7 +51,9 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
         FileHandle file = Gdx.files.local("map/map_sprites");
         for (FileHandle atlasFile : file.list("atlas")) {
             Node node = new Node(new VisLabel(atlasFile.nameWithoutExtension()));
+
             node.setObject(atlasFile);
+
             treeRoot.add(node);
             TextureAtlas atlas = Annihilation.getAssets().get(atlasFile.path(),TextureAtlas.class);
             for(TextureAtlas.AtlasRegion textureRegion : atlas.getRegions()){
@@ -59,6 +62,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
                     label.setName(textureRegion.name);
                     Node childrenNode = new Node(label);
                     childrenNode.setObject(textureRegion);
+                    childrenNode.setIcon(new TextureRegionDrawable(textureRegion));
                     node.add(childrenNode);
                 }
                 if(textureRegion.index == 1){

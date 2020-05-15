@@ -7,15 +7,14 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
+import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
@@ -26,6 +25,7 @@ public class EntityEngine extends PooledEngine {
     private Json json;
     private World world;
     private RayHandler rayHandler;
+    private Array<Body> bodiesToRemove;
     StartStatus startStatus;
 
     public CosmaMapLoader getMapLoader() {
@@ -36,11 +36,12 @@ public class EntityEngine extends PooledEngine {
         this.rayHandler = rayHandler;
         this.world = world;
         this.startStatus = startStatus;
+        bodiesToRemove = new Array<>();
         mapLoader = new CosmaMapLoader(world, rayHandler, this);
         json = new Json();
         json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
         if (startStatus.isNewGame()) {
-            mapLoader.loadMap("map/forest_test.map");
+            mapLoader.loadMap("map/metro_test.map");
         } else {
             loadGame();
         }
@@ -71,7 +72,6 @@ public class EntityEngine extends PooledEngine {
 //        mapLoader.getMap().getEntityArrayList().add(playerEntity);
     }
 
-
     public void saveGame() {
         FileHandle mapFile = Gdx.files.local("save/slot" + startStatus.getSaveSlot() + "/" + mapLoader.getMap().getMapName());
         json.setIgnoreUnknownFields(false);
@@ -82,6 +82,23 @@ public class EntityEngine extends PooledEngine {
         }
 //        mapLoader.getMap().getEntityArrayList().remove(playerEntity);
         mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
+    }
+
+    public GameMap getCurrentMap(){
+        return mapLoader.getMap();
+    }
+
+    public void removePhysicBody(Body body){
+        if(!bodiesToRemove.contains(body, true)){
+            bodiesToRemove.add(body);
+        }
+    }
+
+    public void removeAllBodies(){
+        for(Body body: bodiesToRemove){
+            world.destroyBody(body);
+        }
+        bodiesToRemove.clear();
     }
 
     public Entity getPlayerEntity() {
@@ -109,17 +126,6 @@ public class EntityEngine extends PooledEngine {
     public Array<Item> getPlayerInventory() {
         return getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
     }
-
-    public void spawnParticleEffect(String name,float x, float y){
-        Entity entity = this.createEntity();
-        ParticleComponent particleComponent = new ParticleComponent();
-        particleComponent.loadDate(name);
-        particleComponent.particleEffect.setPosition(x,y);
-        particleComponent.particleEffect.start();
-        entity.add(particleComponent);
-        this.addEntity(entity);
-    }
-
 
     public void spawnBulletEntity(float x, float y,float angle, float speed, boolean flip) {
         Entity entity = this.createEntity();

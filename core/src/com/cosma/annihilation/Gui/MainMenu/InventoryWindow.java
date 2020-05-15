@@ -33,17 +33,24 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         super(title, skin);
         this.engine = engine;
         float slotSize = parentWidth * 0.120f;
-
-        contextMenu = new ContextMenu("",skin);
-
+        contextMenu = new ContextMenu("", skin);
         dragAndDrop = new DragAndDrop();
-        //                    add(contextMenu);
+        Label infoLabel = new Label("", skin);
+
         ClickListener clickListener = new ClickListener() {
-
             @Override
-            public boolean isOver(Actor actor, float x, float y) {
-                return super.isOver(actor, x, y);
-
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if (event.getListenerActor() instanceof InventorySlot) {
+                    if (((InventorySlot) event.getListenerActor()).hasItem()){
+                        infoLabel.setText(((InventorySlot) event.getListenerActor()).getItem().getItemName());
+                    }
+                    else{
+                        infoLabel.setText("");
+                    }
+                } else {
+                    infoLabel.setText("");
+                }
+                super.enter(event, x, y, pointer, fromActor);
             }
 
             @Override
@@ -52,18 +59,13 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
                 InventorySlot inventorySlot = (InventorySlot) event.getListenerActor();
                 if (inventorySlot.hasItem()) {
                     getStage().addActor(contextMenu);
-
-                    if(contextMenu.getWidth() + Gdx.input.getX() > getParent().getX())
-                    contextMenu.setPosition(Gdx.input.getX(), getStage().getCamera().viewportHeight - Gdx.input.getY());
-
-
-//                    add(contextMenu);
+                    if (contextMenu.getWidth() + Gdx.input.getX() > getParent().getX())
+                        contextMenu.setPosition(Gdx.input.getX(), getStage().getCamera().viewportHeight - Gdx.input.getY());
                 }
             }
         };
-
-
         clickListener.setButton(Input.Buttons.RIGHT);
+
         //inventory table
         inventorySlotsTable = new InventoryTable();
         inventorySlotsTable.center().padTop(parentWidth * 0.05f);
@@ -86,14 +88,17 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         dragAndDrop.addTarget(new InventorySlotTarget(weaponInventorySlot));
 
         Table table = new Table();
-        Label weaponLabel = new Label(Annihilation.getLocalText("i_weapon"),skin);
-        Label armourLabel = new Label(Annihilation.getLocalText("i_armour"),skin);
+        Label weaponLabel = new Label(Annihilation.getLocalText("i_weapon"), skin);
+        Label armourLabel = new Label(Annihilation.getLocalText("i_armour"), skin);
         table.add(weaponLabel).left();
         table.add(weaponInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f).left();
         table.row();
         table.add(armourLabel).left();
         table.add(armourInventorySlot).size(slotSize, slotSize).pad(slotSize * 0.05f).left();
-        add(table);
+        table.row();
+        table.add(infoLabel).left().colspan(2).expandX().fillX();
+        add(table).expandX().fillX();
+//        table.debugAll();
     }
 
     void saveInventory() {
@@ -105,17 +110,17 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
 
     void loadInventory() {
         PlayerInventoryComponent playerInventoryComponent = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class);
-        if(playerInventoryComponent.equippedWeapon != null){
+        if (playerInventoryComponent.equippedWeapon != null) {
             weaponInventorySlot.clearItems();
-            playerInventoryComponent.equippedWeapon .getCaptureListeners().clear();
+            playerInventoryComponent.equippedWeapon.getCaptureListeners().clear();
             weaponInventorySlot.add(playerInventoryComponent.equippedWeapon);
-            dragAndDrop.addSource(new InventorySlotSource(weaponInventorySlot, dragAndDrop));
+            dragAndDrop.addSource(new InventorySlotSource(weaponInventorySlot));
         }
-        if(playerInventoryComponent.equippedArmour != null){
+        if (playerInventoryComponent.equippedArmour != null) {
             armourInventorySlot.clearItems();
-            playerInventoryComponent.equippedArmour .getCaptureListeners().clear();
+            playerInventoryComponent.equippedArmour.getCaptureListeners().clear();
             armourInventorySlot.add(playerInventoryComponent.equippedWeapon);
-            dragAndDrop.addSource(new InventorySlotSource(armourInventorySlot, dragAndDrop));
+            dragAndDrop.addSource(new InventorySlotSource(armourInventorySlot));
         }
 
         if (playerInventoryComponent.inventoryItems != null) {

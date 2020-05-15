@@ -17,7 +17,12 @@ import com.cosma.annihilation.Utils.Util;
  * Core class to build npc ai
  */
 
-class AiCore {
+public abstract class AiCore {
+
+    private float viewRange;
+    private float speed;
+
+
 
     private RayCastCallback sightRayCallback, shootRayCallback;
     private Vector2 rayEndVector = new Vector2();
@@ -28,6 +33,8 @@ class AiCore {
     private Body playerBody;
     private Entity targetEntity;
 
+
+    public abstract void update(Entity entity, float deltaTime);
 
     AiCore() {
 

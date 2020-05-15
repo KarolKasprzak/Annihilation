@@ -2,38 +2,28 @@ package com.cosma.annihilation.Ai;
 
 import com.badlogic.ashley.core.Entity;
 
-public class HumanAiBasic extends AiCore implements ArtificialIntelligence {
+public class HumanAiBasic extends AiCore{
 
-    private String aiStatus = "";
+    @Override
+    public void update(Entity entity, float deltaTime) {
+        if (isEnemyInSight(entity)) {
+            if (isEnemyInWeaponRange(entity, 8)) {
+                shoot(entity);
+            } else {
+                followEnemy(entity);
+            }
+        } else {
+            if (isHearEnemy(entity)) {
+                searchEnemy(entity);
+
+            }else{
+                patrol(entity);
+            }
+        }
+    }
 
     public HumanAiBasic() {
 
     }
 
-    @Override
-    public void update(Entity entity) {
-        if (isEnemyInSight(entity)) {
-            aiStatus = "enemy!!!";
-            if (isEnemyInWeaponRange(entity, 8)) {
-                shoot(entity);
-            } else {
-                followEnemy(entity);
-                aiStatus = "follow enemy";
-            }
-        } else {
-            if (isHearEnemy(entity)) {
-                searchEnemy(entity);
-                aiStatus = "hear enemy";
-            }else{
-                patrol(entity);
-                aiStatus = "patrol";
-            }
-        }
-    }
-
-
-    @Override
-    public String getStatus() {
-        return aiStatus;
-    }
 }

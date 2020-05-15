@@ -5,8 +5,8 @@
   },
   BodyComponent: {
     bodyType: DynamicBody
-    positionX: 2
-    positionY: 2
+    positionX: 0
+    positionY: 0
 	fixedRotation: false
 	bullet: false
     Fixtures: [
@@ -23,7 +23,6 @@
 		restitution: 0
 		categoryBits: scenery_bg
 		maskBits: scenery_bg
-		hasUserDate: false
 		
       },
       {
@@ -35,20 +34,21 @@
 		categoryBits: action
 		maskBits: action
 		restitution: 0
-		hasUserDate: true
-		UserDate: ACTION_TRIGGER
+		userDate: ACTION_TRIGGER
       }
     ]
   },
   TextureComponent: {
-  patch: gfx/textures/box.png
+  patch: gfx/textures/wood_box.png
   },
  
   SerializationComponent: {
     entityName: box.json
   },
   ActionComponent: {
-    action: OPEN
+    action: OPEN_CRATE
+	offsetX: 0
+	offsetY: 0.7
   },
   ContainerComponent: {
 	name: box

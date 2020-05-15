@@ -47,7 +47,6 @@ public class RenderSystem extends SortedIteratingSystem{
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-        System.out.println(camera.zoom);
         TextureComponent textureComponent = textureMapper.get(entity);
         Body body = bodyMapper.get(entity).body;
 

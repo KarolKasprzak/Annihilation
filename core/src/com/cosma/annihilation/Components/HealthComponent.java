@@ -11,4 +11,17 @@ public class HealthComponent implements Component {
     public boolean isHit = false;
     public Vector2 attackerPosition;
 
+    public void decreaseHp(int value){
+        hp = hp - value;
+    }
+
+    public void increaseHp(int value){
+        hp = hp + value;
+    }
+
+    public void hit(Vector2 attackerPosition){
+        isHit = true;
+        this.attackerPosition = attackerPosition;
+    }
+
 }

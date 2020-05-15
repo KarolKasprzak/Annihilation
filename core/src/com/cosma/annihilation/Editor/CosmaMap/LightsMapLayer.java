@@ -23,18 +23,30 @@ public class LightsMapLayer extends MapLayer {
         return lights;
     }
 
-    public void createPointLight(float x, float y, Color color, int raysNumber, float maxDistance) {
-        String name = "PointLight_" + (lights.getCount() + 1);
+    public String createPointLight(float x, float y, Color color, int raysNumber, float maxDistance) {
+        String name = "";
+        if(isNameAvailable( "PointLight_" + (lights.getCount() + 1))){
+            name = "PointLight_" + (lights.getCount() + 1);
+        }else{
+            int counter = 0;
+            while(!isNameAvailable( "PointLight_" +counter)){
+                counter++;
+            }
+            name = "PointLight_" + counter;
+        }
+
         MapPointLight light = new MapPointLight(x,y,color,raysNumber,maxDistance);
         light.setName(name);
         lights.add(light);
+        return  name;
     }
 
-    public void createConeLight(float x, float y, Color color, int raysNumber, float maxDistance,float direction,float coneDegree) {
+    public String createConeLight(float x, float y, Color color, int raysNumber, float maxDistance,float direction,float coneDegree) {
         String name = "ConeLight_" + (lights.getCount() + 1);
         MapConeLight light = new MapConeLight(x,y,color,raysNumber,maxDistance,direction,coneDegree);
         light.setName(name);
         lights.add(light);
+        return name;
     }
 
     public void createSunLight(float x, float y, Color color, int raysNumber,float direction) {
@@ -47,5 +59,9 @@ public class LightsMapLayer extends MapLayer {
     public String getLastLightName(){
         if(lights.getCount() == 0){return  null;}
         return  lights.getLight(lights.getCount()-1).getName();
+    }
+
+    public boolean isNameAvailable(String name){
+        return lights.getLight(name) == null;
     }
 }

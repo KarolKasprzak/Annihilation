@@ -98,6 +98,12 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  json.writeValue("targetMapPath", ((GateComponent) component).targetMapPath);
                  json.writeValue("targetPosition", ((GateComponent) component).playerPositionOnTargetMap.x+","+((GateComponent) component).playerPositionOnTargetMap.y);
              }
+
+             if (component instanceof ActionComponent) {
+                 if(((ActionComponent) component).actionTargetName != null){
+                     json.writeValue("targetName", ((ActionComponent) component).actionTargetName);
+                 }
+             }
          }
          json.writeObjectEnd();
     }
@@ -164,6 +170,11 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                 }
                 if(jsonData.has("maxHp")){
                     ((HealthComponent) component).maxHP = jsonData.get("maxHp").asInt();
+                }
+            }
+            if(component instanceof ActionComponent){
+                if(jsonData.has("targetName")){
+                    ((ActionComponent) component).actionTargetName = jsonData.get("targetName").asString();
                 }
             }
         }

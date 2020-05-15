@@ -6,12 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 public class InventorySlotSource extends DragAndDrop.Source {
 
     private InventorySlot sourceSlot;
-    private DragAndDrop dragAndDrop;
 
-    public InventorySlotSource(InventorySlot sourceSlot, DragAndDrop dragAndDrop) {
+    public InventorySlotSource(InventorySlot sourceSlot) {
         super(sourceSlot.getItem());
         this.sourceSlot = sourceSlot;
-        this.dragAndDrop = dragAndDrop;
     }
     @Override
     public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {

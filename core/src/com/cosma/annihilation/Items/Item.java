@@ -30,6 +30,8 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private ItemType ammoType;
     private int hpRecovery;
     private float weaponRecoil;
+    private float range;
+
     //weapon animation
     private String holdAnimation;
     private String reloadAnimation;
@@ -266,6 +268,10 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     public void setReloadAnimation(String reloadAnimation) {
         this.reloadAnimation = reloadAnimation;
     }
+
+    public float getRange() {return range;}
+
+    public void setRange(float range) {this.range = range;}
 
 
     @Override

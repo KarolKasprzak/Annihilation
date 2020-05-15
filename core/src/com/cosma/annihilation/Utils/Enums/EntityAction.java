@@ -2,12 +2,12 @@ package com.cosma.annihilation.Utils.Enums;
 
 public enum EntityAction {
     NOTHING,
-    OPEN,
+    SWITCH_LIGHT,
+    OPEN_CRATE,
     PICK_UP,
     OPEN_DOOR,
     CROUCH,
     EXPLORE,
     GO_TO,
     TALK
-
 }

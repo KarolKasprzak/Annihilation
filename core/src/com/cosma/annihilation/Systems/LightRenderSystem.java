@@ -19,7 +19,7 @@ public class LightRenderSystem extends IteratingSystem {
 
 
     public LightRenderSystem(OrthographicCamera camera, RayHandler rayHandler) {
-        super(Family.all(SkeletonComponent.class, BodyComponent.class).get(), Constants.DEBUG_RENDER);
+        super(Family.all(SkeletonComponent.class, BodyComponent.class).get(), Constants.LIGHT_RENDER);
         this.rayHandler = rayHandler;
         this.camera = camera;
 

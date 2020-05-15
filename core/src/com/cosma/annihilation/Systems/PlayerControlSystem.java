@@ -62,7 +62,8 @@ public class PlayerControlSystem extends IteratingSystem {
         skeletonComponent.skeletonDirection = mouseCursorPosition;
         textureComponent.direction = mouseCursorPosition;
 
-
+        if (entity.getComponent(PlayerComponent.class).numFootContacts >= 1) {
+            playerComponent.onGround = true;}
 
         boolean isPlayerControlAvailable = playerComponent.isPlayerControlEnable;
         int x = Gdx.graphics.getWidth();
@@ -189,24 +190,24 @@ public class PlayerControlSystem extends IteratingSystem {
             }
         }
 
-        //simulatingPlayerNoise
-        if (playerBody.body.getLinearVelocity().x != 0 && !playerComponent.isPlayerCrouch) {
-
-            world.rayCast(noiseRayCallback, playerBody.body.getPosition().x, playerBody.body.getPosition().y,
-                    playerBody.body.getPosition().x + 3, playerBody.body.getPosition().y);
-
-            world.rayCast(noiseRayCallback, playerBody.body.getPosition().x, playerBody.body.getPosition().y,
-                    playerBody.body.getPosition().x - 3, playerBody.body.getPosition().y);
-            if (noiseTestEntity != null) {
-                AnimationComponent animationComponentAi = noiseTestEntity.getComponent(AnimationComponent.class);
-                AiComponent aiComponent = noiseTestEntity.getComponent(AiComponent.class);
-                if (animationComponentAi.spriteDirection == animationComponent.spriteDirection) {
-                    aiComponent.isHearEnemy = true;
-                    aiComponent.enemyPosition = playerBody.body.getPosition();
-                    noiseTestEntity = null;
-                }
-            }
-        }
+//        //simulatingPlayerNoise
+//        if (playerBody.body.getLinearVelocity().x != 0 && !playerComponent.isPlayerCrouch) {
+//
+//            world.rayCast(noiseRayCallback, playerBody.body.getPosition().x, playerBody.body.getPosition().y,
+//                    playerBody.body.getPosition().x + 3, playerBody.body.getPosition().y);
+//
+//            world.rayCast(noiseRayCallback, playerBody.body.getPosition().x, playerBody.body.getPosition().y,
+//                    playerBody.body.getPosition().x - 3, playerBody.body.getPosition().y);
+//            if (noiseTestEntity != null) {
+//                AnimationComponent animationComponentAi = noiseTestEntity.getComponent(AnimationComponent.class);
+//                AiComponent aiComponent = noiseTestEntity.getComponent(AiComponent.class);
+//                if (animationComponentAi.spriteDirection == animationComponent.spriteDirection) {
+//                    aiComponent.isHearEnemy = true;
+//                    aiComponent.enemyPosition = playerBody.body.getPosition();
+//                    noiseTestEntity = null;
+//                }
+//            }
+//        }
 
         if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump) {
             if(playerComponent.isWeaponHidden){
@@ -220,61 +221,5 @@ public class PlayerControlSystem extends IteratingSystem {
             skeletonComponent.setSkeletonAnimation(false, "idle",0, true);
         }
         skeletonComponent.animationState.apply(skeletonComponent.skeleton);
-
-
-
-
-
-
-//        Bone headBone = skeletonComponent.skeleton.findBone("head");
-//        Bone rightArm = skeletonComponent.skeleton.findBone("r_arm");
-//        Bone leftArm = skeletonComponent.skeleton.findBone("l_arm");
-//        Bone leftHand = skeletonComponent.skeleton.findBone("l_hand");
-//        Bone rightHand = skeletonComponent.skeleton.findBone("r_hand");
-//        Bone upperBody = skeletonComponent.skeleton.findBone("u_body");
-//        Bone weaponBone = skeletonComponent.skeleton.findBone("weapon");
-//
-//        skeletonComponent.skeleton.setAttachment("weapon", "weapon_p38_silent");
-//
-//        //arm aiming
-//        setSkeletonAnimation(true, "weapon_pistol_hold", skeletonComponent.animationState, 1);
-//        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
-//        Vector2 mouse = temp1.set(Gdx.input.getX(), Gdx.input.getY());
-//        viewport.unproject(mouse);
-//
-//        rightArm.setRotation(0);
-//        skeletonComponent.skeleton.updateWorldTransform();
-//
-//        Vector2 armPosition = temp2.set(rightArm.getWorldX(), rightArm.getWorldY());
-//
-//        float angle = armPosition.sub(mouse).angle();
-//        if (!skeletonComponent.skeletonDirection) {
-//            angle = -angle;
-//            angle += rightArm.getWorldRotationX() + 180;
-//
-//        } else {
-//            angle -= rightArm.getWorldRotationX() + 180;
-//        }
-//        angle += weaponBone.getARotation();
-//        rightArm.setRotation(angle);
-//
-//        //head rotation
-//        float headAngle;
-//        if (skeletonComponent.skeletonDirection) {
-//            angle += 360;
-//            if (angle > 270)
-//                headAngle = 15 * Interpolation.pow2In.apply((Math.min(1, (angle - 270) / 50f)));
-//            else
-//                headAngle = -9 * Interpolation.pow2In.apply((Math.min(1, (angle - 270) / 50f)));
-//        } else {
-//            if (angle < 0) {
-//                angle += 360;
-//                headAngle = 15 * Interpolation.pow2In.apply((Math.min(1, (angle - 260) / 50f)));
-//            } else {
-//                headAngle = -10 * Interpolation.pow2In.apply((Math.min(1, (angle - 260) / 50f)));
-//            }
-//        }
-//        headBone.setRotation(headAngle);
-//        skeletonComponent.skeleton.updateWorldTransform();
     }
 }

@@ -6,42 +6,42 @@ filter: Nearest,Nearest
 repeat: none
 l_foot
   rotate: false
-  xy: 67, 119
+  xy: 211, 237
   size: 19, 9
   orig: 19, 9
   offset: 0, 0
   index: -1
 l_shin
   rotate: false
-  xy: 232, 111
+  xy: 197, 223
   size: 12, 31
   orig: 12, 31
   offset: 0, 0
   index: -1
 r_foot
   rotate: false
-  xy: 88, 119
+  xy: 232, 237
   size: 17, 8
   orig: 17, 8
   offset: 0, 0
   index: -1
 l_hand_on_grip
   rotate: false
-  xy: 194, 85
+  xy: 197, 153
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 l_hand
   rotate: false
-  xy: 175, 85
+  xy: 197, 188
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 l_arm
   rotate: false
-  xy: 135, 85
+  xy: 231, 111
   size: 18, 32
   orig: 18, 32
   offset: 0, 0
@@ -55,7 +55,7 @@ l_thigh
   index: -1
 r_shin
   rotate: false
-  xy: 213, 146
+  xy: 235, 179
   size: 16, 33
   orig: 16, 33
   offset: 0, 0
@@ -76,7 +76,7 @@ d_body
   index: -1
 head
   rotate: false
-  xy: 231, 146
+  xy: 216, 214
   size: 23, 21
   orig: 23, 21
   offset: 0, 0
@@ -88,14 +88,21 @@ u_body
   orig: 26, 48
   offset: 0, 0
   index: -1
-weapon_p38_silent
+weapon_p38
   rotate: false
   xy: 1, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-weapon_p38
+weapon_colt
+  rotate: false
+  xy: 1, 133
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+weapon_p38_silent
   rotate: false
   xy: 1, 67
   size: 64, 64
@@ -104,49 +111,49 @@ weapon_p38
   index: -1
 weapon_stg
   rotate: false
-  xy: 99, 133
+  xy: 1, 199
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 gewehr46
   rotate: false
-  xy: 1, 133
+  xy: 99, 199
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 r_hand
   rotate: false
-  xy: 213, 111
+  xy: 216, 179
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 r_arm
   rotate: false
-  xy: 155, 85
+  xy: 231, 145
   size: 18, 32
   orig: 18, 32
   offset: 0, 0
   index: -1
 weapon_flash_med
   rotate: false
-  xy: 197, 51
+  xy: 197, 85
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 weapon_flash_dark
   rotate: false
-  xy: 101, 85
+  xy: 197, 119
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 weapon_flash
   rotate: false
-  xy: 67, 85
+  xy: 197, 51
   size: 32, 32
   orig: 32, 32
   offset: 0, 0

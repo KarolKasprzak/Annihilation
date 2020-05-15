@@ -81,7 +81,6 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
         skeletonComponent.skeleton.updateWorldTransform();
         skeletonComponent.animationState.update(deltaTime);
 
-
         debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
 
         batch.begin();

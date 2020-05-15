@@ -1,0 +1,42 @@
+{
+  HealthComponent: {
+    hp: 100
+    maxHP: 100
+  }
+ 
+  SerializationComponent: {
+    entityName: target_practice.json
+  }
+  
+  BodyComponent: {
+    bodyType: DynamicBody
+    positionX: 0
+    positionY: 0
+	height: 2
+	width: 1
+	fixedRotation: true
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 0.8
+        shapeH: 1.6
+		shapeA: 0
+        sensor: false,
+        destiny: 5
+        friction: 1
+		restitution: 0
+		categoryBits: scenery_bullet
+		maskBits: scenery_bullet
+      }
+    ]
+  },
+  TextureComponent: {
+  patch: gfx/textures/target.png
+  renderOrder: 4
+  },
+
+}
+

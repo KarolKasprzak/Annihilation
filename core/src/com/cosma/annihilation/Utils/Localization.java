@@ -25,7 +25,7 @@ public class Localization {
 
     public String getText(String key){
         if(!stringMap.containsKey(key)){
-            return key + " is not defined ";
+            return key + " undefined!";
         }
         return stringMap.get(key);
     }

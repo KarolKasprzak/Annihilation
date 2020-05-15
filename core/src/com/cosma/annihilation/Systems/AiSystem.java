@@ -52,18 +52,24 @@ public class AiSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         AiComponent aiComponent = aiMapper.get(entity);
-        AnimationComponent animationComponent = animationMapper.get(entity);
-        HealthComponent healthComponent = healthMapper.get(entity);
         BodyComponent bodyComponent = bodyMapper.get(entity);
-        if(!healthComponent.isDead){
-            aiComponent.ai.update(entity);
-        }else bodyComponent.body.setLinearVelocity(new Vector2(0, bodyComponent.body.getLinearVelocity().y));
+        if(!aiComponent.isPaused){
+            aiComponent.task.update(entity,deltaTime);
+        }
 
-        Vector3 worldPosition = worldCamera.project(new Vector3(bodyComponent.body.getPosition().x,bodyComponent.body.getPosition().y+1,0));
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        font.draw(batch, aiComponent.ai.getStatus(), worldPosition.x, worldPosition.y);
-        batch.end();
+
+//        AnimationComponent animationComponent = animationMapper.get(entity);
+//        HealthComponent healthComponent = healthMapper.get(entity);
+//
+//        if(!healthComponent.isDead){
+//            aiComponent.ai.update(entity);
+//        }else bodyComponent.body.setLinearVelocity(new Vector2(0, bodyComponent.body.getLinearVelocity().y));
+//
+//        Vector3 worldPosition = worldCamera.project(new Vector3(bodyComponent.body.getPosition().x,bodyComponent.body.getPosition().y+1,0));
+//        batch.setProjectionMatrix(camera.combined);
+//        batch.begin();
+//        font.draw(batch, aiComponent.ai.getStatus(), worldPosition.x, worldPosition.y);
+//        batch.end();
 
 
     }

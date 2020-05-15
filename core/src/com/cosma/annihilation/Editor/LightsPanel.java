@@ -15,7 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
 import com.cosma.annihilation.Editor.CosmaMap.LightsMapLayer;
 import com.cosma.annihilation.Screens.MapEditor;
 import com.cosma.annihilation.Utils.CollisionID;
@@ -189,15 +191,35 @@ public class LightsPanel extends VisWindow implements InputProcessor {
         if (button == Input.Buttons.RIGHT && selectedLight != null) {
             final int delete = 1;
             final int options = 2;
-            final int cancel = 3;
-            Dialogs.showConfirmDialog(getStage(), "Light:", "what do you want?",
-                    new String[]{"delete", "options","cancel"}, new Integer[]{delete, options,cancel},
+            final int clone = 3;
+            final int cancel = 4;
+            Dialogs.showConfirmDialog(getStage(),selectedLight.getName(), "what do you want?",
+                    new String[]{"delete", "options","clone","cancel"}, new Integer[]{delete, options,clone,cancel},
                     result -> {
                         if (result == delete) {
                             mapEditor.layersPanel.getSelectedLayer(LightsMapLayer.class).getLights().remove(selectedLight.getName());
-                            mapEditor.getMap().getLight(selectedLight.getName()).remove(true);
+                            mapEditor.getMap().findLight(selectedLight.getName()).remove(true);
                             selectedBox2dLight = null;
                             selectedLight = null;
+                        }
+
+                        if (result == clone) {
+                           if(selectedLight instanceof MapConeLight){
+                               String lightName = mapEditor.getMap().getLayers().getByType(LightsMapLayer.class).first().createConeLight(selectedLight.getX()+2, selectedLight.getY(), selectedLight.getColor(),
+                                       25, selectedLight.getLightDistance(), ((MapConeLight) selectedLight).getDirection(), ((MapConeLight) selectedLight).getConeDegree());
+                               ConeLight light = new ConeLight(rayHandler, 25, selectedBox2dLight.getColor(), selectedBox2dLight.getDistance(), selectedBox2dLight.getX()+2, selectedBox2dLight.getY(),
+                                       ((MapConeLight) selectedLight).getDirection() , ((MapConeLight) selectedLight).getConeDegree());
+                               light.setSoftnessLength(selectedLight.getSoftLength());
+                               light.setContactFilter(filter);
+                               mapEditor.getMap().putLight(lightName, light);
+                           }
+                            if(selectedLight instanceof MapPointLight){
+                                String lightName = mapEditor.getMap().getLayers().getByType(LightsMapLayer.class).first().createPointLight(selectedLight.getX()+2, selectedLight.getY(), selectedLight.getColor()
+                                        , 25, selectedLight.getLightDistance());
+                                PointLight light = new PointLight(rayHandler, 25, selectedLight.getColor(), selectedBox2dLight.getDistance(), selectedBox2dLight.getX()+2, selectedBox2dLight.getY());
+                                light.setContactFilter(filter);
+                                mapEditor.getMap().putLight(lightName, light);
+                            }
                         }
 
                         if (result == options){
@@ -288,7 +310,7 @@ public class LightsPanel extends VisWindow implements InputProcessor {
 
             if(lightFound){
                 selectedLight = mapLightFound;
-                selectedBox2dLight = mapEditor.getMap().getLight(mapLightFound.getName());
+                selectedBox2dLight = mapEditor.getMap().findLight(mapLightFound.getName());
                 mapLightFound.setHighlighted(true);
                 canDragObject = true;
             }else {

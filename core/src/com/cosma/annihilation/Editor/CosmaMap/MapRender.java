@@ -91,7 +91,7 @@ public class MapRender {
                             if (light.isHighlighted()) {
                                 texture = iconPack.findRegion("point_light_h");
                             }
-                            batch.draw(texture, light.getX() - (texture.getRegionWidth() / gameMap.getTileSize()) / 4, light.getY() - (texture.getRegionHeight() / gameMap.getTileSize()) / 4, texture.getRegionWidth() / gameMap.getTileSize() / 2, texture.getRegionHeight() / gameMap.getTileSize() / 2);
+                            batch.draw(texture, light.getX() - (texture.getRegionWidth() / gameMap.getTileSize()) / 2, light.getY() - (texture.getRegionHeight() / gameMap.getTileSize()) / 2, texture.getRegionWidth() / gameMap.getTileSize() / 2, texture.getRegionHeight() / gameMap.getTileSize() / 2);
                         }
 
                         if (light instanceof MapConeLight || light instanceof MapSunLight) {

@@ -1,5 +1,6 @@
 package com.cosma.annihilation.Systems;
 
+import box2dLight.Light;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -13,25 +14,23 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Utils.Constants;
+import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
+
+import javax.jnlp.ClipboardService;
 
 public class ActionSystem extends IteratingSystem implements Listener<GameEvent> {
     private ComponentMapper<PlayerComponent> stateMapper;
     private PlayerComponent playerComponent;
-
-
     private OrthographicCamera camera;
     private SpriteBatch batch;
-
 //    Filter filter;
 //    Filter filter1;
 
     public ActionSystem(OrthographicCamera camera, SpriteBatch batch) {
         super(Family.all(PlayerComponent.class).get(), Constants.ACTION_SYSTEM);
-
         stateMapper = ComponentMapper.getFor(PlayerComponent.class);
-
         this.batch = batch;
         this.camera = camera;
 //        filter = new Filter();
@@ -39,36 +38,40 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 //
 //        filter1 = new Filter();
 //        filter1.categoryBits = CollisionID.CAST_SHADOW;
+
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         playerComponent = stateMapper.get(entity);
-        if (playerComponent.collisionEntityArray.size>0) {
+        if (playerComponent.collisionEntityArray.size > 0) {
             playerComponent.processedEntity = playerComponent.collisionEntityArray.first();
             ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
 
 
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-            Texture texture;
+            Texture icon;
             Body entityBody = playerComponent.processedEntity.getComponent(BodyComponent.class).body;
 
             switch (actionComponent.action) {
                 case TALK:
-                    texture = Annihilation.getAssets().get("gfx/textures/talk_icon.png", Texture.class);
-                    batch.draw(texture, entityBody.getPosition().x, entityBody.getPosition().y + 0.8f, texture.getWidth()/Constants.PPM, texture.getHeight()/Constants.PPM);
+                    icon = Annihilation.getAssets().get("gfx/textures/talk_icon.png", Texture.class);
+                    batch.draw(icon, entityBody.getPosition().x, entityBody.getPosition().y + 0.8f, icon.getWidth() / Constants.PPM, icon.getHeight() / Constants.PPM);
                     break;
-                case OPEN:
-                    texture = Annihilation.getAssets().get("gfx/textures/search_icon.png", Texture.class);
-                    batch.draw(texture, entityBody.getPosition().x-0.5f, entityBody.getPosition().y-0.5f , texture.getWidth()/Constants.PPM, texture.getHeight()/Constants.PPM);
+                case OPEN_CRATE:
+                case SWITCH_LIGHT:
+                    icon = Annihilation.getAssets().get("gfx/textures/action_icon.png", Texture.class);
+                    float width = icon.getWidth() / Constants.PPM;
+                    float height = icon.getHeight() / Constants.PPM;
+                    float x = entityBody.getPosition().x + actionComponent.offsetX - width / 2;
+                    float y = entityBody.getPosition().y + actionComponent.offsetY - height / 2;
+                    batch.draw(icon, x, y, width, height);
                     break;
-
             }
             batch.end();
-
-        }else{
-          playerComponent.processedEntity = null;
+        } else {
+            playerComponent.processedEntity = null;
         }
 
     }
@@ -79,12 +82,13 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
             switch (event) {
                 case PERFORM_ACTION:
                     if (playerComponent.processedEntity != null && playerComponent.isWeaponHidden && playerComponent.canPerformAction) {
-                        EntityAction action = playerComponent.processedEntity.getComponent(ActionComponent.class).action;
-                        switch (action) {
+                        ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
+
+                        switch (actionComponent.action) {
                             case OPEN_DOOR:
 //                            doorAction();
                                 break;
-                            case OPEN:
+                            case OPEN_CRATE:
                                 openLootWindow();
                                 break;
                             case GO_TO:
@@ -92,6 +96,14 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
                                 break;
                             case TALK:
                                 startDialogAction();
+                                break;
+                            case SWITCH_LIGHT:
+                                Light light = ((EntityEngine) this.getEngine()).getCurrentMap().findLight(actionComponent.actionTargetName);
+                                if (light.isActive()) {
+                                    light.setActive(false);
+                                } else {
+                                    light.setActive(true);
+                                }
                                 break;
                         }
                     }
