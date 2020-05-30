@@ -1,18 +1,22 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Components.ActionComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapSunLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Constants;
+import org.omg.CORBA.AnyHolder;
 
 public class MapRender {
 
@@ -79,6 +83,17 @@ public class MapRender {
                                     1, 1, sprite.getAngle());
 
                         }
+                    }
+                }
+            }
+
+            for(Entity entity: gameMap.getEntityArrayList()){
+                if(entity.getComponent(ActionComponent.class) != null){
+                    if(entity.getComponent(ActionComponent.class).actionTargetPosition != null){
+                        ActionComponent actionComponent = entity.getComponent(ActionComponent.class);
+                        Texture texture = Annihilation.getAssets().get("gfx/interface/target.png",Texture.class);
+                        batch.draw(texture,actionComponent.actionTargetPosition.x-(texture.getWidth()/2/Constants.PPM),actionComponent.actionTargetPosition.y-(texture.getHeight()/2/Constants.PPM),
+                                texture.getHeight()/Constants.PPM,texture.getWidth()/Constants.PPM);
                     }
                 }
             }

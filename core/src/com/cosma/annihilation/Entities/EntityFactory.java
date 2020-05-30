@@ -1,11 +1,11 @@
 package com.cosma.annihilation.Entities;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.Engine;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.CollisionID;
 
@@ -38,7 +38,7 @@ public class EntityFactory {
     }
 
 
-    public Entity createBulletEntity(float x, float y,float targetX, float targetY, float speed,boolean flip){
+    public Entity createBulletEntity(float x, float y, float targetX, float targetY, float speed, boolean flip){
         Entity entity = engine.createEntity();
         BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
         BulletComponent bulletComponent = engine.createComponent(BulletComponent.class);

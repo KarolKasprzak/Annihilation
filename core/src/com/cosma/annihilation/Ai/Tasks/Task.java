@@ -1,7 +1,7 @@
 package com.cosma.annihilation.Ai.Tasks;
 
-import com.badlogic.ashley.core.Entity;
 
+import com.cosma.annihilation.EntityEngine.core.Entity;
 
 public abstract class Task {
     private TaskState state;

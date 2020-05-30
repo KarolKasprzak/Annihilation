@@ -25,16 +25,16 @@ leg_r
   orig: 42, 69
   offset: 0, 0
   index: -1
-body_scratched
+body_wounded
   rotate: false
-  xy: 1, 1
+  xy: 49, 1
   size: 46, 102
   orig: 46, 102
   offset: 0, 0
   index: -1
-body_wounded
+body_scratched
   rotate: false
-  xy: 49, 1
+  xy: 1, 1
   size: 46, 102
   orig: 46, 102
   offset: 0, 0
@@ -48,15 +48,8 @@ body
   index: -1
 arm_r
   rotate: false
-  xy: 93, 187
-  size: 25, 39
-  orig: 25, 39
-  offset: 0, 0
-  index: -1
-hand_r
-  rotate: false
-  xy: 1, 209
-  size: 31, 44
-  orig: 31, 44
+  xy: 131, 179
+  size: 37, 73
+  orig: 37, 73
   offset: 0, 0
   index: -1

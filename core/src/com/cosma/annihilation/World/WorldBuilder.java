@@ -1,14 +1,10 @@
 package com.cosma.annihilation.World;
 
 import box2dLight.RayHandler;
-import com.badlogic.ashley.core.*;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,6 +14,12 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Entities.EntityFactory;
+import com.cosma.annihilation.EntityEngine.core.Engine;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.EntityListener;
+import com.cosma.annihilation.EntityEngine.core.EntitySystem;
+import com.cosma.annihilation.EntityEngine.signals.Listener;
+import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.Utils.StartStatus;
 import com.cosma.annihilation.Systems.*;
 import com.cosma.annihilation.Utils.Constants;
@@ -53,12 +55,11 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         rayHandler = new RayHandler(world);
-//        RayHandler.useDiffuseLight(true);
         rayHandler.setBlur(true);
         rayHandler.setAmbientLight(0.1f);
         rayHandler.setShadows(true);
 
-        camera.zoom = camera.zoom - 0.2f;
+//        camera.zoom = camera.zoom - 0.2f;
         engine = new EntityEngine(world, rayHandler, startStatus);
         engine.addEntityListener(this);
 
@@ -114,7 +115,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         viewport.update(w, h, false);
 
         engine.getSystem(UserInterfaceSystem.class).resizeHUD(w, h);
-        rayHandler.getLightMapTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+//        rayHandler.getLightMapTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
 
     public OrthographicCamera getCamera() {

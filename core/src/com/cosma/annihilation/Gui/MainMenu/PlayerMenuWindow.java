@@ -1,8 +1,7 @@
 package com.cosma.annihilation.Gui.MainMenu;
 
-import com.badlogic.ashley.core.Engine;
+
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Gui.GuiWindow;
-import com.cosma.annihilation.Systems.PlayerControlSystem;
 import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.MenuButton;
 

@@ -1,10 +1,6 @@
 package com.cosma.annihilation.Utils;
 
 import box2dLight.RayHandler;
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
@@ -15,6 +11,10 @@ import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
+import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.core.PooledEngine;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;

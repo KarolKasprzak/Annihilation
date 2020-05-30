@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Components;
 
-import com.badlogic.ashley.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Component;
 
 public class PlayerStatsComponent implements Component {
     public int strength = 5;

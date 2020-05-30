@@ -1,9 +1,9 @@
 package com.cosma.annihilation.World;
 
-import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.cosma.annihilation.Components.PlayerComponent;
+import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.Systems.ActionSystem;
 import com.cosma.annihilation.Systems.ShootingSystem;
 import com.cosma.annihilation.Systems.UserInterfaceSystem;

@@ -1,18 +1,15 @@
 package com.cosma.annihilation.Systems;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.cosma.annihilation.Editor.CosmaMap.*;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
 
 public class TileMapRender extends IteratingSystem {

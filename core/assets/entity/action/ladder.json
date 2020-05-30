@@ -1,0 +1,30 @@
+{
+  BodyComponent: {
+    bodyType: KinematicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: false
+	bullet: false
+    Fixtures: [
+      {
+        shapeType: Circle
+        radius: 0.5
+        sensor: true
+        destiny: 5
+        friction: 1
+		categoryBits: action
+		maskBits: action
+		restitution: 0
+		userDate: ACTION_TRIGGER
+      }
+    ]
+  },
+  SerializationComponent: {
+    entityName: ladder.json
+  },
+  ActionComponent: {
+    action: CLIMB_UP
+	offsetX: 0
+	offsetY: 0.2
+  },
+}

@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Ai;
 
-import com.badlogic.ashley.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 
 public class HumanAiBasic extends AiCore{
 

@@ -1,10 +1,6 @@
 package com.cosma.annihilation.Systems;
 
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,12 +9,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Disposable;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.systems.SortedIteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.RenderComparator;
 
-public class RenderSystem extends SortedIteratingSystem{
+public class RenderSystem extends SortedIteratingSystem {
 
     private OrthographicCamera camera;
     private SpriteBatch batch;

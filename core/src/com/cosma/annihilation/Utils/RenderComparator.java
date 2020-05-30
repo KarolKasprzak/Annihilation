@@ -1,8 +1,9 @@
 package com.cosma.annihilation.Utils;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+
 import com.cosma.annihilation.Components.TextureComponent;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 
 import java.util.Comparator;
 

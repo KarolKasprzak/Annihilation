@@ -1,16 +1,18 @@
 package com.cosma.annihilation.Utils.Serialization;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Engine;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Dialogs.DialogueManager;
 import com.cosma.annihilation.Utils.Util;
@@ -103,6 +105,10 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  if(((ActionComponent) component).actionTargetName != null){
                      json.writeValue("targetName", ((ActionComponent) component).actionTargetName);
                  }
+                 if(((ActionComponent) component).actionTargetPosition != null){
+                     json.writeValue("actionTargetX", ((ActionComponent) component).actionTargetPosition.x);
+                     json.writeValue("actionTargetY", ((ActionComponent) component).actionTargetPosition.y);
+                 }
              }
          }
          json.writeObjectEnd();
@@ -175,6 +181,11 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
             if(component instanceof ActionComponent){
                 if(jsonData.has("targetName")){
                     ((ActionComponent) component).actionTargetName = jsonData.get("targetName").asString();
+                }
+                if(jsonData.has("actionTargetX")){
+                    ((ActionComponent) component).actionTargetPosition = new Vector2(
+                            jsonData.get("actionTargetX").asFloat(),jsonData.get("actionTargetY").asFloat()
+                    );
                 }
             }
         }

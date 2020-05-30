@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Ai.Tasks;
 
-import com.badlogic.ashley.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.cosma.annihilation.Components.AiComponent;
 import com.cosma.annihilation.Components.BodyComponent;

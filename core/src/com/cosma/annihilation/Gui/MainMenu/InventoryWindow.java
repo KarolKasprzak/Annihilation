@@ -1,7 +1,6 @@
 package com.cosma.annihilation.Gui.MainMenu;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,6 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.Gui.GuiWindow;
 import com.cosma.annihilation.Gui.InventoryTable;
 import com.cosma.annihilation.Items.*;

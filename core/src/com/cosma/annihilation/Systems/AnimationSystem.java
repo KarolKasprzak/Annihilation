@@ -1,10 +1,10 @@
 package com.cosma.annihilation.Systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.*;
 
 public class AnimationSystem extends IteratingSystem {

@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Utils;
 
-import com.badlogic.ashley.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 
 

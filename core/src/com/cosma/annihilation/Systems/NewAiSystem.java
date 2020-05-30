@@ -1,12 +1,9 @@
 package com.cosma.annihilation.Systems;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
-import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.ai.msg.Telegraph;
-import com.badlogic.gdx.ai.steer.behaviors.Wander;
+
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 
 public class NewAiSystem extends IteratingSystem {
     public NewAiSystem(Family family) {

@@ -1,9 +1,6 @@
 package com.cosma.annihilation.Screens;
 
 import box2dLight.RayHandler;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -29,6 +26,9 @@ import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.TextureComponent;
 import com.cosma.annihilation.Editor.*;
 import com.cosma.annihilation.Editor.CosmaMap.*;
+import com.cosma.annihilation.EntityEngine.core.Engine;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.PooledEngine;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.Util;
@@ -62,8 +62,6 @@ public class MapEditor implements Screen, InputProcessor {
     private MapRender mapRender;
     public LightsPanel lightsPanel;
     private String currentMapPatch;
-    private EntityTreeWindow entityTreeWindow;
-    private SpriteTreeWindow spriteTreeWindow;
 
     private boolean isSpriteLayerSelected,isTileLayerSelected, isObjectLayerSelected, isLightsLayerSelected, isEntityLayerSelected, isLightsRendered, drawGrid = true,isDebugRenderEnabled = true;
     private VisLabel editorModeLabel;
@@ -526,8 +524,8 @@ public class MapEditor implements Screen, InputProcessor {
         rightTable.add(lightsPanel).fillX().top().minHeight(lightsPanel.getParent().getHeight() * 0.25f).maxHeight(lightsPanel.getParent().getHeight() * 0.25f);
         rightTable.row();
 
-        entityTreeWindow = new EntityTreeWindow(world, this);
-        spriteTreeWindow = new SpriteTreeWindow(this);
+        EntityTreeWindow entityTreeWindow = new EntityTreeWindow(world, this);
+        SpriteTreeWindow spriteTreeWindow = new SpriteTreeWindow(this);
         stage.addActor(spriteTreeWindow);
         stage.addActor(entityTreeWindow);
 

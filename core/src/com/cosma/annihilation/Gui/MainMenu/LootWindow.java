@@ -1,6 +1,5 @@
 package com.cosma.annihilation.Gui.MainMenu;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Gui.GuiWindow;
 import com.cosma.annihilation.Gui.InventoryTable;
 import com.cosma.annihilation.Items.InventorySlot;

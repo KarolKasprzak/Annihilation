@@ -1,11 +1,5 @@
 package com.cosma.annihilation.Systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,12 +7,17 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.utils.Timer;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Entities.EntityFactory;
-import com.cosma.annihilation.Utils.Animation.AnimationStates;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.signals.Listener;
+import com.cosma.annihilation.EntityEngine.signals.Signal;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.EntityEventSignal;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
-import com.cosma.annihilation.Utils.Util;
+
 
 public class HealthSystem extends IteratingSystem implements Listener<GameEvent> {
 
@@ -49,8 +48,9 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
         SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
 
         if (healthComponent.hp <= 0) {
-            skeletonComponent.setSkeletonAnimation(false, "dead", 7, false);
-
+            skeletonComponent.dead();
+            skeletonComponent.animationState.addEmptyAnimation(5, 0.2f, 0.1f);
+            entity.remove(AiComponent.class);
             Filter filter = new Filter();
             filter.categoryBits = CollisionID.SCENERY_BACKGROUND_OBJECT;
             filter.maskBits = CollisionID.MASK_SCENERY_BACKGROUND_OBJECT;
@@ -85,20 +85,19 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
                     aiComponent.isPaused = false;
                 }
             }, skeletonComponent.animationState.getCurrent(6).getAnimation().getDuration());
-            skeletonComponent.animationState.addEmptyAnimation(6, 0.1f, skeletonComponent.animationState.getCurrent(3).getAnimation().getDuration());
+            skeletonComponent.animationState.addEmptyAnimation(6, 0.1f, skeletonComponent.animationState.getCurrent(6).getAnimation().getDuration());
         }
-        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+
     }
 
     public void setDamageTexture(HealthComponent healthComponent, SkeletonComponent skeletonComponent) {
         float health = healthComponent.hp * 100 / healthComponent.maxHP ;
-        System.out.println(health);
-        if (health >= 90) {
-            return;
-        }
-        if (health <= 75) {
-            skeletonComponent.skeleton.setAttachment("body", "body_scratched");
-            if (health <= 45) {
+                if (health >= 90) {
+                    return;
+                }
+                if (health <= 75) {
+                    skeletonComponent.skeleton.setAttachment("body", "body_scratched");
+                    if (health <= 45) {
                 skeletonComponent.skeleton.setAttachment("body", "body_wounded");
             }
         }

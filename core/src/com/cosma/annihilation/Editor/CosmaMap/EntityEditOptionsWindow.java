@@ -1,7 +1,13 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
+
+import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
@@ -20,7 +26,7 @@ import com.kotcrab.vis.ui.widget.spinner.Spinner;
 import java.util.Arrays;
 
 public class EntityEditOptionsWindow extends VisWindow {
-    public EntityEditOptionsWindow(Entity entity) {
+    public EntityEditOptionsWindow(Entity entity, OrthographicCamera camera) {
         super(entity.getComponent(SerializationComponent.class).entityName);
         addCloseButton();
 
@@ -54,7 +60,7 @@ public class EntityEditOptionsWindow extends VisWindow {
                 textButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        AddEntityActionComponentEdit addWindow = new AddEntityActionComponentEdit((ActionComponent) component);
+                        AddEntityActionComponentEdit addWindow = new AddEntityActionComponentEdit((ActionComponent) component,entity,camera);
                         getStage().addActor(addWindow);
                         close();
                     }
@@ -69,11 +75,34 @@ public class EntityEditOptionsWindow extends VisWindow {
 
     class AddEntityActionComponentEdit extends VisWindow
     {
-        public AddEntityActionComponentEdit(ActionComponent actionComponent) {
+        @Override
+        public void act(float delta) {
+            super.act(delta);
+            if(waitForClick){
+                if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+                    Vector3 tempCoords = new Vector3();
+                    tempCoords.set(Gdx.input.getX(),Gdx.input.getY(),0);
+                    camera.unproject(tempCoords);
+                    actionComponent.actionTargetPosition = new Vector2(tempCoords.x,tempCoords.y);
+                    waitForClick = false;
+                }
+            }
+        }
+
+        private boolean waitForClick = false;
+        private ActionComponent actionComponent;
+        private OrthographicCamera camera;
+
+        public AddEntityActionComponentEdit(ActionComponent actionComponent, Entity entity,OrthographicCamera camera) {
             super("");
+            this.actionComponent = actionComponent;
+            this.camera = camera;
 
             VisLabel targetLabel = new VisLabel("Target: ");
             VisTextField targetTextField = new VisTextField();
+            if(actionComponent.actionTargetName != null){
+                targetTextField.setText(actionComponent.actionTargetName);
+            }
             VisTextButton saveButton = new VisTextButton("save");
             Array<String> actionList = new Array<>();
             for(EntityAction action: EntityAction.values()){
@@ -92,16 +121,33 @@ public class EntityEditOptionsWindow extends VisWindow {
                     close();
                 }
             });
+
+            VisTextButton setActionTargetButton = new VisTextButton("set target position");
+
+            setActionTargetButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    waitForClick = true;
+                }
+            });
+
+
             add(targetLabel);
             add(targetTextField).width(150);
             row();
             add(actionSelectBox);
             row();
+            add(setActionTargetButton);
+            row();
             add(saveButton);
+
             pack();
             addCloseButton();
             setSize(getWidth(), getHeight() * 2);
             setCenterOnAdd(true);
+
+
+
         }
     }
 

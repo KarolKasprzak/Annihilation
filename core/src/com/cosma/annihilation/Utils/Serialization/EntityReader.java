@@ -1,7 +1,5 @@
 package com.cosma.annihilation.Utils.Serialization;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -11,9 +9,10 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.Engine;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Animation.AnimationFactory;
 import com.cosma.annihilation.Utils.CollisionID;
-import com.cosma.annihilation.Utils.Enums.AiType;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.esotericsoftware.spine.*;
@@ -48,8 +47,8 @@ public class EntityReader implements Json.Serializer<Entity> {
 
     @Override
     public Entity read(Json json, JsonValue jsonData, Class type) {
-        Entity entity = new Entity();
 
+        Entity entity = new Entity();
         if (jsonData.has("BodyComponent")) {
 
             BodyComponent bodyComponent = new BodyComponent();
@@ -196,6 +195,18 @@ public class EntityReader implements Json.Serializer<Entity> {
 //
 
             skeletonComponent.animationState = new AnimationState(stateData);
+
+
+            for(Animation animation: skeletonComponent.skeleton.getData().getAnimations() ){
+                if(animation.getName().contains("dead")){
+                    skeletonComponent.deadAnimations.add(animation.getName());
+                }
+                if(animation.getName().contains("melee_attack")){
+                    skeletonComponent.meleeAttackAnimations.add(animation.getName());
+                }
+
+            }
+
             entity.add(skeletonComponent);
         }
 
@@ -212,6 +223,7 @@ public class EntityReader implements Json.Serializer<Entity> {
         }
 
         if (jsonData.has("SerializationComponent")) {
+
             SerializationComponent serializationComponent = new SerializationComponent();
             serializationComponent.entityName = jsonData.get("SerializationComponent").get("entityName").asString();
             entity.add(serializationComponent);

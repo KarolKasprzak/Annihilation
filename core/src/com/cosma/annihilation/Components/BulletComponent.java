@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Components;
 
-import com.badlogic.ashley.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Component;
 import com.badlogic.gdx.utils.Pool;
 
 public class BulletComponent implements Component, Pool.Poolable {

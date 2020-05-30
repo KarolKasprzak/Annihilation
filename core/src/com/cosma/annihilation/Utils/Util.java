@@ -1,9 +1,7 @@
 package com.cosma.annihilation.Utils;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -12,6 +10,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 
 import java.math.BigDecimal;
 
@@ -55,7 +55,7 @@ public class Util {
         return false;
     }
 
-    public  static boolean hasComponent(Entity entity,Class<? extends Component> componentClass ){
+    public  static boolean hasComponent(Entity entity, Class<? extends Component> componentClass ){
         return entity.getComponent(componentClass) != null;
     }
 

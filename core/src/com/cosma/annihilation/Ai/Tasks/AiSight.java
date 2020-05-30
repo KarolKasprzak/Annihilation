@@ -1,6 +1,5 @@
 package com.cosma.annihilation.Ai.Tasks;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
@@ -8,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.cosma.annihilation.Components.AiComponent;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 
 public class AiSight extends Task {
     private float sightRange = 5;
@@ -56,6 +56,7 @@ public class AiSight extends Task {
 
     @Override
     public void update(Entity entity, float deltaTime) {
+        entity.getComponent(BodyComponent.class);
         BodyComponent bodyComponent = entity.getComponent(BodyComponent.class);
         AiComponent aiComponent = entity.getComponent(AiComponent.class);
 

@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Ai;
 
-import com.badlogic.ashley.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Ai.Tasks.*;
 
 
@@ -10,6 +10,7 @@ public class HumanAiTest extends Task {
     private GoToPosition goToPosition;
     private ChaseEnemy chaseEnemy;
     private SkeletonAnimation skeletonAnimation;
+    private MeleeAttackTask meleeAttackTask;
 
 
     public HumanAiTest() {
@@ -18,6 +19,7 @@ public class HumanAiTest extends Task {
         goToPosition = new GoToPosition();
         chaseEnemy = new ChaseEnemy();
         skeletonAnimation = new SkeletonAnimation();
+        meleeAttackTask = new MeleeAttackTask();
         goToPosition.start();
     }
 
@@ -36,7 +38,9 @@ public class HumanAiTest extends Task {
             chaseEnemy.setEnemyPosition(aiSight.getEnemyPosition().x);
             chaseEnemy.update(entity, deltaTime);
             aiSight.reset();
+            meleeAttackTask.update(entity,deltaTime);
             if(chaseEnemy.isSuccess()){
+                System.out.println("meleeAttackTask");
             }
         }
         skeletonAnimation.update(entity, deltaTime);

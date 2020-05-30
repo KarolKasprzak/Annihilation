@@ -1,10 +1,5 @@
 package com.cosma.annihilation.Systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.signals.Signal;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +8,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.signals.Signal;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
@@ -31,7 +31,6 @@ public class PlayerControlSystem extends IteratingSystem {
     private boolean mouseCursorPosition = false;
     private World world;
     private Entity noiseTestEntity;
-
 
 
     public PlayerControlSystem(World world, Viewport viewport) {
@@ -62,64 +61,110 @@ public class PlayerControlSystem extends IteratingSystem {
         skeletonComponent.skeletonDirection = mouseCursorPosition;
         textureComponent.direction = mouseCursorPosition;
 
+
         if (entity.getComponent(PlayerComponent.class).numFootContacts >= 1) {
-            playerComponent.onGround = true;}
+            playerComponent.onGround = true;
+        }
 
         boolean isPlayerControlAvailable = playerComponent.isPlayerControlEnable;
         int x = Gdx.graphics.getWidth();
         mouseCursorPosition = Gdx.input.getX() >= x / 2;
 
-        if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround) {
-            playerBody.body.setLinearVelocity(0, playerBody.body.getLinearVelocity().y);
-            animationComponent.animationState = AnimationStates.IDLE;
-            if (!playerComponent.isWeaponHidden) {
-                animationComponent.animationState = AnimationStates.IDLE_WEAPON_SMALL;
+
+        if(playerComponent.activeTask != null){
+            //ai control player
+            playerComponent.activeTask.update(entity,deltaTime);
+            if(playerComponent.activeTask.isSuccess()){
+                playerComponent.activeTask = null;
             }
-        }
-        // Jumping
-        if (playerComponent.onGround && playerComponent.canJump && playerComponent.isWeaponHidden && isPlayerControlAvailable && playerComponent.jump) {
-
-            playerComponent.onGround = false;
-            playerComponent.canJump = false;
-            skeletonComponent.setSkeletonAnimation(true, "jump",0, false);
-
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    float x;
+        }else{
+            //normal control
+            if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround) {
+                playerBody.body.setLinearVelocity(0, playerBody.body.getLinearVelocity().y);
+            }
+            if (playerComponent.canMoveOnSide && playerComponent.onGround && playerComponent.isWeaponHidden && isPlayerControlAvailable) {
+                if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
+                    float desiredSpeed = playerComponent.velocity;
                     if (animationComponent.spriteDirection) {
-                        x = 0;
-                    } else x = -0;
-                    playerBody.body.applyLinearImpulse(new Vector2(x, 75),
+                        animationComponent.animationState = AnimationStates.WALK;
+                    } else {
+                        animationComponent.animationState = AnimationStates.WALK;
+                        desiredSpeed = desiredSpeed * 0.7f;
+                    }
+                    Vector2 vec = playerBody.body.getLinearVelocity();
+                    float speedX = desiredSpeed - vec.x;
+                    float impulse = playerBody.body.getMass() * speedX;
+                    playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
                             playerBody.body.getWorldCenter(), true);
-
                 }
-            }, 0.2f);
-            playerComponent.jump = false;
-        }
-        //Climbing
-        if (playerComponent.climbing) {
-            playerComponent.canJump = false;
-            playerBody.body.setGravityScale(0);
-            playerBody.body.setLinearVelocity(new Vector2(0, 0));
-        } else playerBody.body.setGravityScale(1);
+                if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
+                    float desiredSpeed = -playerComponent.velocity;
+                    if (animationComponent.spriteDirection) {
+                        animationComponent.animationState = AnimationStates.WALK;
+                        desiredSpeed = desiredSpeed * 0.7f;
+                    } else {
+                        animationComponent.animationState = AnimationStates.WALK;
+                    }
+                    Vector2 vec = playerBody.body.getLinearVelocity();
+                    float speedX = desiredSpeed - vec.x;
+                    float impulse = playerBody.body.getMass() * speedX;
+                    playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
+                            playerBody.body.getWorldCenter(), true);
+                }
+            }
+            // Jumping
+            if (playerComponent.onGround && playerComponent.canJump && playerComponent.isWeaponHidden && isPlayerControlAvailable && playerComponent.jump) {
 
+                playerComponent.onGround = false;
+                playerComponent.canJump = false;
+                skeletonComponent.setSkeletonAnimation(true, "jump", 0, false);
 
-        if (playerComponent.canClimb && playerBody.body.getLinearVelocity().x == 0) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W) || playerComponent.goUp) {
-                playerComponent.climbing = true;
-                if (playerBody.body.getLinearVelocity().x == 0f) {
-                    playerBody.body.setLinearVelocity(new Vector2(0, 1));
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        float x;
+                        if (animationComponent.spriteDirection) {
+                            x = 0;
+                        } else x = -0;
+                        playerBody.body.applyLinearImpulse(new Vector2(x, 75),
+                                playerBody.body.getWorldCenter(), true);
+
+                    }
+                }, 0.2f);
+                playerComponent.jump = false;
+            }
+            //Climbing
+            if (playerComponent.climbing) {
+                skeletonComponent.skeletonDirection = true;
+                playerBody.body.setGravityScale(0);
+                playerBody.body.getFixtureList().get(0).setSensor(true);
+                playerBody.body.setLinearVelocity(new Vector2(0, 0));
+                skeletonComponent.climbUp();
+
+                if (Gdx.input.isKeyPressed(Input.Keys.W) || playerComponent.goUp) {
+                    playerComponent.climbing = true;
+                    if (playerBody.body.getLinearVelocity().x == 0f) {
+                        playerBody.body.setLinearVelocity(new Vector2(0, 1));
+                    }
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.S) || playerComponent.goDown) {
+                    playerComponent.climbing = true;
+                    playerBody.body.setLinearVelocity(new Vector2(0, -1));
+                    if (playerBody.body.getPosition().y <= playerComponent.climbingStartPosition.y) {
+                        endClimb(playerBody,playerComponent);
+                    }
+                }
+                if (playerBody.body.getLinearVelocity().y == 0) {
+                    skeletonComponent.animationState.setTimeScale(0);
+                }else{
+                    skeletonComponent.animationState.setTimeScale(1);
+                }
+                if (playerBody.body.getPosition().y >= playerComponent.climbingTargetPosition.y) {
+                    endClimb(playerBody,playerComponent);
                 }
             }
         }
 
-        if (playerComponent.canClimb || playerComponent.canClimbDown) {
-            if (Gdx.input.isKeyPressed(Input.Keys.S) || playerComponent.goDown) {
-                playerComponent.climbing = true;
-                playerBody.body.setLinearVelocity(new Vector2(0, -1));
-            }
-        }
 
         //Stealth mode
 //        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ) {
@@ -127,70 +172,51 @@ public class PlayerControlSystem extends IteratingSystem {
 //        }
 
         //Moving on side
-        if (playerComponent.canMoveOnSide && playerComponent.onGround && playerComponent.isWeaponHidden && isPlayerControlAvailable) {
-            if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
-                float desiredSpeed = playerComponent.velocity;
-                playerComponent.climbing = false;
-                if (animationComponent.spriteDirection) {
-                    animationComponent.animationState = AnimationStates.WALK;
-                } else {
-                    animationComponent.animationState = AnimationStates.WALK;
-                    desiredSpeed = desiredSpeed * 0.7f;
-                }
-                Vector2 vec = playerBody.body.getLinearVelocity();
-                float speedX = desiredSpeed - vec.x;
-                float impulse = playerBody.body.getMass() * speedX;
-                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
-                        playerBody.body.getWorldCenter(), true);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
-                float desiredSpeed = -playerComponent.velocity;
-                playerComponent.climbing = false;
-                if (animationComponent.spriteDirection) {
-                    animationComponent.animationState = AnimationStates.WALK;
-                    desiredSpeed = desiredSpeed * 0.7f;
-                } else {
-                    animationComponent.animationState = AnimationStates.WALK;
-                }
-                Vector2 vec = playerBody.body.getLinearVelocity();
-                float speedX = desiredSpeed - vec.x;
-                float impulse = playerBody.body.getMass() * speedX;
-                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
-                        playerBody.body.getWorldCenter(), true);
-            }
-        }
-        //Moving on side with weapon
-        if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null && isPlayerControlAvailable) {
-            if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
-                float desiredSpeed = playerComponent.velocity * 0.8f;
-                if (!skeletonComponent.skeletonDirection) {
-                    desiredSpeed = desiredSpeed * 0.6f;
-                }
-                Vector2 vec = playerBody.body.getLinearVelocity();
-                playerComponent.climbing = false;
-                float speedX = desiredSpeed - vec.x;
-                float impulse = playerBody.body.getMass() * speedX;
-                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
-                        playerBody.body.getWorldCenter(), true);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
-                float desiredSpeed = -playerComponent.velocity * 0.8f;
-                if (animationComponent.spriteDirection) {
-//                    setPlayerAnimation(playerComponent, animationComponent);
-                    desiredSpeed = desiredSpeed * 0.7f;
-                } else {
-//                    setPlayerAnimation(playerComponent, animationComponent);
-                }
-                Vector2 vec = playerBody.body.getLinearVelocity();
-                float speedX = desiredSpeed - vec.x;
-                playerComponent.climbing = false;
-                float impulse = playerBody.body.getMass() * speedX;
-                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
-                        playerBody.body.getWorldCenter(), true);
-            }
-        }
 
-//        //simulatingPlayerNoise
+
+        //Moving on side with weapon
+//        if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null && isPlayerControlAvailable) {
+//            if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
+//                float desiredSpeed = playerComponent.velocity * 0.8f;
+//                if (!skeletonComponent.skeletonDirection) {
+//                    desiredSpeed = desiredSpeed * 0.6f;
+//                }
+//                Vector2 vec = playerBody.body.getLinearVelocity();
+//                float speedX = desiredSpeed - vec.x;
+//                float impulse = playerBody.body.getMass() * speedX;
+//                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
+//                        playerBody.body.getWorldCenter(), true);
+//            }
+//            if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
+//                float desiredSpeed = -playerComponent.velocity * 0.8f;
+//                if (animationComponent.spriteDirection) {
+////                    setPlayerAnimation(playerComponent, animationComponent);
+//                    desiredSpeed = desiredSpeed * 0.7f;
+//                } else {
+////                    setPlayerAnimation(playerComponent, animationComponent);
+//                }
+//                Vector2 vec = playerBody.body.getLinearVelocity();
+//                float speedX = desiredSpeed - vec.x;
+//                float impulse = playerBody.body.getMass() * speedX;
+//                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
+//                        playerBody.body.getWorldCenter(), true);
+//            }
+//        }
+
+        if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump ) {
+            if (playerComponent.isWeaponHidden) {
+                skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
+            } else {
+                skeletonComponent.setSkeletonAnimation(false, "weapon_walk", 3, true);
+            }
+        }
+        if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump && !playerComponent.climbing) {
+            skeletonComponent.animationState.setEmptyAnimation(3, 0.1f);
+            skeletonComponent.setSkeletonAnimation(false, "idle", 0, true);
+        }
+        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+
+        //        //simulatingPlayerNoise
 //        if (playerBody.body.getLinearVelocity().x != 0 && !playerComponent.isPlayerCrouch) {
 //
 //            world.rayCast(noiseRayCallback, playerBody.body.getPosition().x, playerBody.body.getPosition().y,
@@ -208,18 +234,13 @@ public class PlayerControlSystem extends IteratingSystem {
 //                }
 //            }
 //        }
+    }
 
-        if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump) {
-            if(playerComponent.isWeaponHidden){
-                skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
-            }else{
-                skeletonComponent.setSkeletonAnimation(false, "weapon_walk", 3, true);
-            }
-        }
-        if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump) {
-            skeletonComponent.animationState.setEmptyAnimation(3,0.1f);
-            skeletonComponent.setSkeletonAnimation(false, "idle",0, true);
-        }
-        skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+    public void endClimb(BodyComponent playerBodyComponent,PlayerComponent playerComponent){
+        playerComponent.climbing = false;
+        playerBodyComponent.body.getFixtureList().get(0).setSensor(false);
+        playerBodyComponent.body.setGravityScale(1);
+        playerComponent.canMoveOnSide = true;
+        playerComponent.canUseWeapon = true;
     }
 }

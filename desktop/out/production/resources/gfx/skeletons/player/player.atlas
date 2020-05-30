@@ -27,21 +27,21 @@ r_foot
   index: -1
 l_hand_on_grip
   rotate: false
-  xy: 197, 153
+  xy: 197, 188
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 l_hand
   rotate: false
-  xy: 197, 188
+  xy: 197, 153
   size: 17, 33
   orig: 17, 33
   offset: 0, 0
   index: -1
 l_arm
   rotate: false
-  xy: 231, 111
+  xy: 231, 145
   size: 18, 32
   orig: 18, 32
   offset: 0, 0
@@ -88,14 +88,14 @@ u_body
   orig: 26, 48
   offset: 0, 0
   index: -1
-weapon_p38
+weapon_colt
   rotate: false
-  xy: 1, 1
+  xy: 1, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-weapon_colt
+weapon_p38
   rotate: false
   xy: 1, 133
   size: 64, 64
@@ -104,19 +104,19 @@ weapon_colt
   index: -1
 weapon_p38_silent
   rotate: false
-  xy: 1, 67
+  xy: 1, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-weapon_stg
+gewehr46
   rotate: false
   xy: 1, 199
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
-gewehr46
+weapon_stg
   rotate: false
   xy: 99, 199
   size: 96, 32
@@ -132,12 +132,12 @@ r_hand
   index: -1
 r_arm
   rotate: false
-  xy: 231, 145
+  xy: 231, 111
   size: 18, 32
   orig: 18, 32
   offset: 0, 0
   index: -1
-weapon_flash_med
+weapon_flash
   rotate: false
   xy: 197, 85
   size: 32, 32
@@ -151,7 +151,7 @@ weapon_flash_dark
   orig: 32, 32
   offset: 0, 0
   index: -1
-weapon_flash
+weapon_flash_med
   rotate: false
   xy: 197, 51
   size: 32, 32

@@ -9,5 +9,6 @@ public enum EntityAction {
     CROUCH,
     EXPLORE,
     GO_TO,
-    TALK
+    TALK,
+    CLIMB_UP
 }

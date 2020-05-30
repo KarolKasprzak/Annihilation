@@ -1,28 +1,31 @@
 package com.cosma.annihilation.Systems;
 
 import box2dLight.Light;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
-import com.badlogic.ashley.systems.IteratingSystem;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.cosma.annihilation.Ai.PlayerTasks.PlayerGoToPosition;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.signals.Listener;
+import com.cosma.annihilation.EntityEngine.signals.Signal;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.EntityEngine;
-import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 
 import javax.jnlp.ClipboardService;
 
 public class ActionSystem extends IteratingSystem implements Listener<GameEvent> {
     private ComponentMapper<PlayerComponent> stateMapper;
+    private ComponentMapper<BodyComponent> bodyMapper;
     private PlayerComponent playerComponent;
+    private BodyComponent bodyComponent;
     private OrthographicCamera camera;
     private SpriteBatch batch;
 //    Filter filter;
@@ -31,6 +34,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     public ActionSystem(OrthographicCamera camera, SpriteBatch batch) {
         super(Family.all(PlayerComponent.class).get(), Constants.ACTION_SYSTEM);
         stateMapper = ComponentMapper.getFor(PlayerComponent.class);
+        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         this.batch = batch;
         this.camera = camera;
 //        filter = new Filter();
@@ -44,6 +48,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         playerComponent = stateMapper.get(entity);
+        bodyComponent = bodyMapper.get(entity);
         if (playerComponent.collisionEntityArray.size > 0) {
             playerComponent.processedEntity = playerComponent.collisionEntityArray.first();
             ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
@@ -59,16 +64,18 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
                     icon = Annihilation.getAssets().get("gfx/textures/talk_icon.png", Texture.class);
                     batch.draw(icon, entityBody.getPosition().x, entityBody.getPosition().y + 0.8f, icon.getWidth() / Constants.PPM, icon.getHeight() / Constants.PPM);
                     break;
-                case OPEN_CRATE:
-                case SWITCH_LIGHT:
-                    icon = Annihilation.getAssets().get("gfx/textures/action_icon.png", Texture.class);
-                    float width = icon.getWidth() / Constants.PPM;
-                    float height = icon.getHeight() / Constants.PPM;
-                    float x = entityBody.getPosition().x + actionComponent.offsetX - width / 2;
-                    float y = entityBody.getPosition().y + actionComponent.offsetY - height / 2;
-                    batch.draw(icon, x, y, width, height);
+                case CLIMB_UP:
+                    icon = Annihilation.getAssets().get("gfx/textures/action_icon_up.png", Texture.class);
+                    break;
+                default:
+                    icon = Annihilation.getAssets().get("gfx/textures/action_icon_down.png", Texture.class);
                     break;
             }
+            float width = icon.getWidth() / Constants.PPM;
+            float height = icon.getHeight() / Constants.PPM;
+            float x = entityBody.getPosition().x + actionComponent.offsetX - width / 2;
+            float y = entityBody.getPosition().y + actionComponent.offsetY - height / 2;
+            batch.draw(icon, x, y, width, height);
             batch.end();
         } else {
             playerComponent.processedEntity = null;
@@ -85,6 +92,9 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
                         ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
 
                         switch (actionComponent.action) {
+                            case CLIMB_UP:
+                                climbUp();
+
                             case OPEN_DOOR:
 //                            doorAction();
                                 break;
@@ -113,6 +123,20 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
             }
         }
     }
+
+    private void climbUp(){
+        System.out.println("start climb");
+        Entity playerEntity = ((EntityEngine) getEngine()).getPlayerEntity();
+        PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
+        playerComponent.climbing = true;
+        playerComponent.canMoveOnSide = false;
+        Body body = playerEntity.getComponent(BodyComponent.class).body;
+        body.getFixtureList().get(0).setSensor(true);
+        playerComponent.climbingTargetPosition = playerComponent.processedEntity.getComponent(ActionComponent.class).actionTargetPosition;
+        playerComponent.climbingStartPosition = playerComponent.processedEntity.getComponent(BodyComponent.class).body.getPosition();
+        playerComponent.activeTask = new PlayerGoToPosition(playerComponent.climbingStartPosition);
+    }
+
 
     private void goToAnotherMap() {
         playerComponent.mapName = playerComponent.processedEntity.getComponent(GateComponent.class).targetMapPath;

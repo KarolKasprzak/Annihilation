@@ -1,9 +1,10 @@
 package com.cosma.annihilation.Ai.Tasks;
 
-import com.badlogic.ashley.core.Entity;
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.cosma.annihilation.Components.AiComponent;
 import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Util;
 
 public class ChaseEnemy extends Task {

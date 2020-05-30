@@ -1,9 +1,11 @@
 package com.cosma.annihilation.Components;
 
-import com.badlogic.ashley.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Component;
 import com.badlogic.gdx.math.Vector2;
 import com.cosma.annihilation.Ai.HumanAiTest;
 import com.cosma.annihilation.Ai.Tasks.Task;
+import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Utils.Enums.AiType;
 
 public class AiComponent implements Component{
@@ -20,5 +22,6 @@ public class AiComponent implements Component{
     public Vector2 enemyPosition = new Vector2();
     public boolean isPaused = false;
     public AiType aiType;
+    public Item aiWeapon = Annihilation.getItem("fist");
 
 }

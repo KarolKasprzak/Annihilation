@@ -1,10 +1,10 @@
 package com.cosma.annihilation.World;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.cosma.annihilation.Components.PlayerComponent;
+import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Systems.ParticleRenderSystem;
 import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.BodyID;
@@ -64,6 +64,25 @@ public class CollisionManager implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+//        Fixture fa = contact.getFixtureA();
+//        Fixture fb = contact.getFixtureB();
+//        if (isPlayerFixture(fa)){
+//            PlayerComponent playerComponent = getPlayerComponent(fa);
+//            if(playerComponent.climbing){
+//                if(fa.getBody().getPosition().y < fb.getBody().getPosition().y){
+//                    contact.setEnabled(false);
+//                }
+//            }
+//        }
+//        if (isPlayerFixture(fb)){
+//            PlayerComponent playerComponent = getPlayerComponent(fb);
+//            if(playerComponent.climbing){
+//                if(fb.getBody().getPosition().y < fa.getBody().getPosition().y){
+//                    contact.setEnabled(false);
+//                }
+//            }
+//        }
+
 
     }
 
@@ -71,6 +90,8 @@ public class CollisionManager implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
     }
+
+
 
     private boolean isPlayerFixture(Fixture fixture) {
         if (fixture.getBody().getUserData() instanceof Entity) {
@@ -118,6 +139,11 @@ public class CollisionManager implements ContactListener {
             engine.getSystem(ParticleRenderSystem.class).spawnParticleEffect(bulletFixture.getBody().getPosition().x,bulletFixture.getBody().getPosition().y,collidedFixture.getBody());
             engine.removeEntity((Entity) bulletFixture.getBody().getUserData());
         }
+    }
+
+    private PlayerComponent getPlayerComponent(Fixture fixture) {
+            Entity entity = (Entity) fixture.getBody().getUserData();
+            return entity.getComponent(PlayerComponent.class);
     }
 
     private PlayerComponent getPlayerComponent(Fixture fa, Fixture fb) {

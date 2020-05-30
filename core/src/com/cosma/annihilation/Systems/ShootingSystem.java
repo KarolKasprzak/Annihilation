@@ -2,13 +2,6 @@ package com.cosma.annihilation.Systems;
 
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
@@ -25,6 +18,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Entities.EntityFactory;
+import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Engine;
+import com.cosma.annihilation.EntityEngine.core.Entity;
+import com.cosma.annihilation.EntityEngine.core.Family;
+import com.cosma.annihilation.EntityEngine.signals.Listener;
+import com.cosma.annihilation.EntityEngine.signals.Signal;
+import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
@@ -385,7 +385,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     /**Set targetEntity to null after every use */
     private void attackRaycast(boolean isMelee){
         if(isMelee){
-            raycastEnd.set((body.getPosition().x + playerComponent.activeWeapon.getRange()+0.5f)* direction,body.getPosition().y);
+            raycastEnd.set(body.getPosition().x + (playerComponent.activeWeapon.getRange()+0.5f)* direction,body.getPosition().y);
             world.rayCast(attackCallback, body.getPosition(),raycastEnd);
         }else{
             vector2temp.set(Gdx.input.getX(), Gdx.input.getY());

@@ -12,19 +12,28 @@ layers: {
 					{
 						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 						name: Rectangle_1
-						x: 4.9388256
-						y: 12.04236
-						width: 40.064102
+						x: 5.4055004
+						y: 12.006463
+						width: 100.50319
 						height: 0.9615383
 						bodyType: StaticBody
 					}
 					{
 						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 						name: Rectangle_2
-						x: 5.847973
-						y: 15.988796
-						width: 24.783482
+						x: 16.86464
+						y: 16.013157
+						width: 13.745018
 						height: 0.9044876
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_3
+						x: 4.060462
+						y: 16.019484
+						width: 12.95
+						height: 0.9363041
 						bodyType: StaticBody
 					}
 				]
@@ -100,6 +109,18 @@ layers: {
 					position: "24.0,13.0,0.0"
 					texture: "map/map_sprites/walls.atlas,wall_tiles"
 				}
+				{
+					position: "19.0,13.0,0.0"
+					texture: "map/map_sprites/ladders.atlas,ladder"
+				}
+				{
+					position: "19.0,14.0,0.0"
+					texture: "map/map_sprites/ladders.atlas,ladder"
+				}
+				{
+					position: "19.0,15.0,0.0"
+					texture: "map/map_sprites/ladders.atlas,ladder"
+				}
 			]
 		}
 		{
@@ -161,7 +182,7 @@ layers: {
 }
 entityList: [
 	{
-		position: "7.71897,14.196416"
+		position: "17.893326,14.3605175"
 		hp: 100
 		maxHp: 100
 		entityName: player.json
@@ -207,11 +228,136 @@ entityList: [
 		targetName: PointLight_4
 	}
 	{
-		position: "16.466665,14.278207"
+		position: "32.011353,14.17626"
 		hp: 100
 		maxHp: 100
 		entityName: mutant.json
-		startPosition: "16.466665,14.278207"
+		startPosition: "32.011353,14.17626"
+	}
+	{
+		position: "19.403204,14.097437"
+		entityName: ladder.json
+		actionTargetX: 19.471064
+		actionTargetY: 17.59389
+	}
+	{
+		position: "33.64427,14.796618"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "33.64427,14.796618"
+	}
+	{
+		position: "36.121197,14.473541"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "36.121197,14.473541"
+	}
+	{
+		position: "38.777607,15.083797"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "38.777607,15.083797"
+	}
+	{
+		position: "41.003246,14.90431"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "41.003246,14.90431"
+	}
+	{
+		position: "44.269913,15.406874"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "44.269913,15.406874"
+	}
+	{
+		position: "46.387863,15.119695"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "46.387863,15.119695"
+	}
+	{
+		position: "44.98786,17.740206"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "44.98786,17.740206"
+	}
+	{
+		position: "49.546837,15.478669"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "49.546837,15.478669"
+	}
+	{
+		position: "43.121193,17.991491"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "43.121193,17.991491"
+	}
+	{
+		position: "34.14684,19.822258"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "34.14684,19.822258"
+	}
+	{
+		position: "52.346832,18.170979"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "52.346832,18.170979"
+	}
+	{
+		position: "48.326324,19.714565"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "48.326324,19.714565"
+	}
+	{
+		position: "53.85453,16.806873"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "53.85453,16.806873"
+	}
+	{
+		position: "49.94171,18.996618"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "49.94171,18.996618"
+	}
+	{
+		position: "56.834015,18.888926"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "56.834015,18.888926"
+	}
+	{
+		position: "46.60325,20.468414"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "46.60325,20.468414"
+	}
+	{
+		position: "54.68017,19.319695"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "54.68017,19.319695"
 	}
 ]
 mapName: metro_test.map

@@ -1,6 +1,6 @@
 package com.cosma.annihilation.Components;
 
-import com.badlogic.ashley.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Component;
 
 public class TextComponent implements Component {
     public String text;

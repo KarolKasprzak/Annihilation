@@ -1,7 +1,6 @@
 package com.cosma.annihilation.Editor;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -19,11 +18,15 @@ import com.cosma.annihilation.Components.AiComponent;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Editor.CosmaMap.EntityEditOptionsWindow;
+import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Screens.MapEditor;
 import com.cosma.annihilation.Utils.Serialization.EntityReader;
+import com.cosma.annihilation.Utils.Util;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTree;
 import com.kotcrab.vis.ui.widget.VisWindow;
@@ -40,12 +43,18 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     private String selectedEntityName;
     private Body selectedBody;
     private boolean canMove = false;
+    private boolean canMoveWithDrag = false;
+    private boolean isLeftMouseButtonPressed = false;
+    private Vector3 vector3tempt = new Vector3();
+    private Vector3 vector3tempt1 = new Vector3();
     private Json json;
+
 
     public EntityTreeWindow(World world, MapEditor mapEditor) {
         super("Entity:");
         this.world = world;
         this.mapEditor = mapEditor;
+
 
         TableUtils.setSpacingDefaults(this);
         columnDefaults(0).left();
@@ -53,9 +62,23 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         json = new Json();
         json.setSerializer(Entity.class, new EntityReader(world));
 
-        final VisTree tree = new VisTree();
-        Node treeRoot = new Node(new VisLabel("Entity"));
+        VisCheckBox moveCheckBox = new VisCheckBox("Move: ");
+        moveCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(moveCheckBox.isChecked()){
+                    canMoveWithDrag = true;
+                }else{
+                    canMoveWithDrag = false;
+                }
+            }
+        });
 
+
+        final VisTree tree = new VisTree();
+        Node treeRoot = new Node(new VisLabel("Entity:"));
+        Node checkBoxNode = new Node(moveCheckBox);
+        treeRoot.add(checkBoxNode);
         FileHandle file = Gdx.files.local("entity");
         for (FileHandle rootDirectory : file.list()) {
             if (rootDirectory.isDirectory()) {
@@ -82,7 +105,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         tree.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (!tree.getSelection().isEmpty()) {
+                if (!tree.getSelection().isEmpty() && tree.getSelection().first().getActor() instanceof VisLabel) {
                     VisLabel label = ((VisLabel) tree.getSelection().first().getActor());
                     if (label.getName() != null) {
                         selectedEntityName = label.getName();
@@ -126,8 +149,15 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
 
     @Override
     public boolean touchDown(final int screenX, final int screenY, int pointer, int button) {
-        Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+        Vector3 worldCoordinates = vector3tempt.set(screenX,screenY,0);
         final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+
+        if(canMoveWithDrag && button == Input.Buttons.LEFT){
+            isLeftMouseButtonPressed = true;
+        }else{
+            isLeftMouseButtonPressed = false;
+        }
+
         if (canAddEntity && button == Input.Buttons.LEFT) {
             createEntity(selectedEntityName, vec.x, vec.y);
             canAddEntity = false;
@@ -186,7 +216,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                                             }
 
                                             if (result == options) {
-                                                EntityEditOptionsWindow window = new EntityEditOptionsWindow(entity);
+                                                EntityEditOptionsWindow window = new EntityEditOptionsWindow(entity,mapEditor.getCamera());
                                                 getStage().addActor(window);
                                             }
 
@@ -213,13 +243,42 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        Vector3 worldCoordinates = vector3tempt.set(screenX,screenY,0);
+        Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+        Vector3 deltaWorldCoordinates = vector3tempt1.set(screenX - Gdx.input.getDeltaX(), screenY - Gdx.input.getDeltaY(), 0);
+        Vector3 deltaVec = mapEditor.getCamera().unproject(deltaWorldCoordinates);
+        float amountX, amountY;
+
+        if (canMoveWithDrag && isLeftMouseButtonPressed && selectedBody != null) {
+            amountX = vec.x - deltaVec.x;
+            amountY = vec.y - deltaVec.y;
+            selectedBody.setTransform(selectedBody.getPosition().x+amountX, selectedBody.getPosition().y+amountY, 0);
+        }
+
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-
-
+        if(canMoveWithDrag){
+            Vector3 worldCoordinates = vector3tempt.set(screenX,screenY,0);
+            final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+            selectedBody = null;
+            Util.setCursorSystem();
+            world.QueryAABB(new QueryCallback() {
+                @Override
+                public boolean reportFixture(final Fixture fixture) {
+                    for (Entity entity : mapEditor.getMap().getEntityArrayList()) {
+                        if(fixture.getBody() == entity.getComponent(BodyComponent.class).body) {
+                         selectedBody = fixture.getBody();
+                         Util.setCursorMove();
+                         return false;
+                        }
+                    }
+                    return false;
+                }
+            }, vec.x - 0.1f, vec.y - 0.1f, vec.x + 0.1f, vec.y + 0.1f);
+        }
         return false;
     }
 
