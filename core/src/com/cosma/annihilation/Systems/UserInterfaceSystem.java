@@ -13,15 +13,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
-import com.cosma.annihilation.Gui.MainMenu.AmmoIndicatorWidget;
+import com.cosma.annihilation.Gui.AmmoIndicatorWidget;
 import com.cosma.annihilation.Gui.MainMenu.PlayerMenuWindow;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 
 
@@ -37,7 +37,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     private AmmoIndicatorWidget ammoIndicatorWidget;
     private Table coreTable;
 
-    public UserInterfaceSystem(EntityEngine engine) {
+    public UserInterfaceSystem(Engine engine) {
         super(Family.all(PlayerComponent.class).get(), Constants.USER_INTERFACE);
 
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
@@ -109,8 +109,8 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     }
 
 
-    public void openPlayerMenu(boolean openLootMenu) {
-        PlayerComponent playerComponent = ((EntityEngine) getEngine()).getPlayerEntity().getComponent(PlayerComponent.class);
+    public void openPlayerMenu() {
+        PlayerComponent playerComponent = getEngine().getPlayerEntity().getComponent(PlayerComponent.class);
         if (stage.getActors().contains(playerMainMenu, true)) {
             playerMainMenu.close();
             playerMainMenu.setOpen(false);
@@ -119,11 +119,17 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
             playerComponent.isPlayerControlEnable = false;
             stage.addActor(playerMainMenu);
             playerMainMenu.setOpen(true);
-            if (openLootMenu) {
-                playerMainMenu.openLootWindow();
-            }
             playerMainMenu.moveToCenter();
         }
+    }
+    public void openLootMenu(){
+        openPlayerMenu();
+        playerMainMenu.openLootWindow();
+    }
+
+    public void openNoteMenu(){
+        openPlayerMenu();
+        playerMainMenu.openNoteWindow();
     }
 
     public void resizeHUD(int width, int height) {
@@ -137,7 +143,7 @@ public class UserInterfaceSystem extends IteratingSystem implements Listener<Gam
     @Override
     public void receive(Signal<GameEvent> signal, GameEvent event) {
         if (event == GameEvent.OPEN_MENU) {
-            openPlayerMenu(false);
+            openPlayerMenu();
         }
     }
 }

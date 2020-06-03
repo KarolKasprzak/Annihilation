@@ -29,7 +29,6 @@ import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.CollisionID;
-import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Bone;
 
@@ -208,7 +207,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         Item weapon = playerComponent.activeWeapon;
         boolean removeItem = false;
         Item itemToRemove = null;
-        Array<Item> playerInventory = ((EntityEngine) getEngine()).getPlayerInventory();
+        Array<Item> playerInventory = getEngine().getPlayerInventory();
         for (Item item : playerInventory) {
             if (item.getItemType() == weapon.getAmmoType() && playerComponent.canShoot) {
                 if (item.getItemAmount() - weapon.getMaxAmmoInClip() > 0) {
@@ -304,9 +303,8 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         Bone muzzle = skeletonComponent.skeleton.findBone("muzzle");
         Bone target = skeletonComponent.skeleton.findBone("target");
         Bone shellEjector = skeletonComponent.skeleton.findBone("shell_ejector");
-        EntityEngine engine = (EntityEngine) this.getEngine();
         float angle = vector2temp.set(target.getWorldX(), target.getWorldY()).sub(muzzle.getWorldX(), muzzle.getWorldY()).angle();
-        engine.spawnBulletEntity(muzzle.getWorldX(), muzzle.getWorldY(), angle, 25, skeletonComponent.skeletonDirection);
+        getEngine().spawnBulletEntity(muzzle.getWorldX(), muzzle.getWorldY(), angle, 25, skeletonComponent.skeletonDirection);
         this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(shellEjector.getWorldX(), shellEjector.getWorldY()));
 //        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
         weaponLight.setActive(true);

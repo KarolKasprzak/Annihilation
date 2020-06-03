@@ -13,16 +13,16 @@ import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.Gui.GuiWindow;
 import com.cosma.annihilation.Gui.InventoryTable;
 import com.cosma.annihilation.Items.*;
-import com.cosma.annihilation.Utils.EntityEngine;
 
 public class InventoryWindow extends GuiWindow implements InventorySlotObserver {
 
-    private EntityEngine engine;
+    private Engine engine;
     private DragAndDrop dragAndDrop;
     private InventoryTable inventorySlotsTable;
     private InventorySlot weaponInventorySlot;
@@ -30,7 +30,7 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
     private ContextMenu contextMenu;
 
 
-    public InventoryWindow(String title, Skin skin, EntityEngine engine, float parentWidth) {
+    public InventoryWindow(String title, Skin skin, Engine engine, float parentWidth) {
         super(title, skin);
         this.engine = engine;
         float slotSize = parentWidth * 0.120f;
@@ -99,7 +99,6 @@ public class InventoryWindow extends GuiWindow implements InventorySlotObserver 
         table.row();
         table.add(infoLabel).left().colspan(2).expandX().fillX();
         add(table).expandX().fillX();
-//        table.debugAll();
     }
 
     void saveInventory() {

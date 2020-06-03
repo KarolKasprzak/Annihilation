@@ -1,10 +1,13 @@
 package com.cosma.annihilation.EntityEngine.core;
 
+import box2dLight.RayHandler;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.ReflectionPool;
+import com.cosma.annihilation.Utils.StartStatus;
 
 /**
  * Supports {@link Entity} and {@link Component} pooling. This improves performance in environments where creating/deleting
@@ -22,13 +25,7 @@ public class PooledEngine extends Engine {
     private EntityPool entityPool;
     private ComponentPools componentPools;
 
-    /**
-     * Creates a new PooledEngine with a maximum of 100 entities and 100 components of each type. Use
-     * {@link #PooledEngine(int, int, int, int)} to configure the entity and component pools.
-     */
-    public PooledEngine () {
-        this(10, 100, 10, 100);
-    }
+
 
     /**
      * Creates new PooledEngine with the specified pools size configurations.
@@ -37,8 +34,8 @@ public class PooledEngine extends Engine {
      * @param componentPoolInitialSize initial size for each component type pool.
      * @param componentPoolMaxSize maximum size for each component type pool.
      */
-    public PooledEngine (int entityPoolInitialSize, int entityPoolMaxSize, int componentPoolInitialSize, int componentPoolMaxSize) {
-        super();
+    public PooledEngine (int entityPoolInitialSize, int entityPoolMaxSize, int componentPoolInitialSize, int componentPoolMaxSize, World world, RayHandler rayHandler, StartStatus startStatus) {
+        super(world, rayHandler, startStatus);
 
         entityPool = new EntityPool(entityPoolInitialSize, entityPoolMaxSize);
         componentPools = new ComponentPools(componentPoolInitialSize, componentPoolMaxSize);

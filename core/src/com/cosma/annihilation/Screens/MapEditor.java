@@ -72,7 +72,7 @@ public class MapEditor implements Screen, InputProcessor {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
         world = new World(new Vector2(0, -10), true);
-        engine = new PooledEngine();
+        engine = new Engine();
 
         cameraUi = new OrthographicCamera();
         cameraUi.update();

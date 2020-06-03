@@ -23,16 +23,14 @@ import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.Utils.StartStatus;
 import com.cosma.annihilation.Systems.*;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.LuaScript.ScriptManager;
 import com.cosma.annihilation.Utils.StateManager;
 
 public class WorldBuilder implements Disposable, EntityListener, Listener<GameEvent> {
 
-
-    private EntityEngine engine;
     public World world;
+    private Engine engine;
     private OrthographicCamera camera;
     private Viewport viewport;
     private RayHandler rayHandler;
@@ -60,7 +58,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         rayHandler.setShadows(true);
 
 //        camera.zoom = camera.zoom - 0.2f;
-        engine = new EntityEngine(world, rayHandler, startStatus);
+        engine = new Engine(world, rayHandler, startStatus);
         engine.addEntityListener(this);
 
         EntityFactory.getInstance().setEngine(engine);
@@ -75,7 +73,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
         engine.addSystem(new UserInterfaceSystem(engine));
         engine.addSystem(new ActionSystem(camera, batch));
-        engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera,viewport));
+        engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera, viewport));
         engine.addSystem(new SpriteRenderSystem(camera, batch));
         engine.addSystem(new RenderSystem(camera, world, batch, shapeRenderer));
         engine.addSystem(new LightRenderSystem(camera, rayHandler));
@@ -84,11 +82,11 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world, viewport));
         engine.addSystem(new CameraSystem(camera));
-        engine.addSystem(new TileMapRender(camera, engine.getMapLoader().getMap()));
+        engine.addSystem(new TileMapRender(camera, engine.getCurrentMap()));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));
-        engine.addSystem(new ParticleRenderSystem(world,batch));
+        engine.addSystem(new ParticleRenderSystem(world, batch));
         engine.addEntityListener(this);
 
         signal.add(getEngine().getSystem(ActionSystem.class));

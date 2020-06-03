@@ -10,5 +10,6 @@ public enum EntityAction {
     EXPLORE,
     GO_TO,
     TALK,
-    CLIMB_UP
+    CLIMB_UP,
+    OPEN_NOTE
 }

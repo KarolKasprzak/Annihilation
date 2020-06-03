@@ -33,7 +33,7 @@ public abstract class GuiWindow extends Window {
     /** use after setting background**/
    public void setWindowSizeToScreenSize(){
        if(Gdx.graphics.getHeight() > getBackground().getMinHeight()*2){
-           setSize(getBackground().getMinWidth()*2,getBackground().getMinHeight()*2);
+           setSize(getBackground().getMinWidth()*2.5f,getBackground().getMinHeight()*2.5f);
        }else{
            float sizeRatio = getSizeRatio();
            setSize(Util.roundFloat(getBackground().getMinWidth()*sizeRatio,0),Util.roundFloat(getBackground().getMinHeight()*sizeRatio,0));

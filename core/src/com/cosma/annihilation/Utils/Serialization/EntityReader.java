@@ -262,6 +262,9 @@ public class EntityReader implements Json.Serializer<Entity> {
             if(jsonData.get("ActionComponent").has("targetName")){
                actionComponent.actionTargetName = jsonData.get("ActionComponent").get("targetName").asString();
             }
+            if(jsonData.get("ActionComponent").has("textToDisplay")){
+                actionComponent.textToDisplay = Annihilation.getLocalText(jsonData.get("ActionComponent").get("textToDisplay").asString());
+            }
             entity.add(actionComponent);
         }
 

@@ -72,6 +72,12 @@ public class Entity {
      * instance reference.
      * @return The removed {@link Component}, or null if the Entity did no contain such a component.
      */
+
+//    public boolean hasComponent(Class<? extends Component> componentClass){
+//        if()
+//        return false;
+//    }
+
     public Component remove (Class<? extends Component> componentClass) {
         ComponentType componentType = ComponentType.getFor(componentClass);
         int componentTypeIndex = componentType.getIndex();
@@ -138,6 +144,10 @@ public class Entity {
      */
     boolean hasComponent (ComponentType componentType) {
         return componentBits.get(componentType.getIndex());
+    }
+
+    public boolean hasComponent (Class<? extends Component> componentClass) {
+        return componentBits.get(ComponentType.getFor(componentClass).getIndex());
     }
 
     /**

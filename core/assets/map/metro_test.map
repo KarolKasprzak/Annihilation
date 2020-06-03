@@ -235,10 +235,11 @@ entityList: [
 		startPosition: "32.011353,14.17626"
 	}
 	{
-		position: "19.403204,14.097437"
+		position: "19.203846,13.601284"
 		entityName: ladder.json
-		actionTargetX: 19.471064
-		actionTargetY: 17.59389
+		targetName: ""
+		actionTargetX: 19.470402
+		actionTargetY: 17.99297
 	}
 	{
 		position: "33.64427,14.796618"
@@ -358,6 +359,10 @@ entityList: [
 		maxHp: 100
 		entityName: mutant.json
 		startPosition: "54.68017,19.319695"
+	}
+	{
+		position: "15.319994,14.006153"
+		entityName: note.json
 	}
 ]
 mapName: metro_test.map

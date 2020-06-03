@@ -4,15 +4,15 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Timer;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.EntityEngine.core.Component;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Systems.ParticleRenderSystem;
-import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 
 public class CollisionManager implements ContactListener {
-    private  EntityEngine engine;
+    private Engine engine;
 
-    public CollisionManager(EntityEngine engine) {
+    public CollisionManager(Engine engine) {
         this.engine = engine;
     }
 

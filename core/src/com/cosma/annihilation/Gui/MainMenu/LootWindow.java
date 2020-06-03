@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.PlayerInventoryComponent;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Gui.GuiWindow;
 import com.cosma.annihilation.Gui.InventoryTable;
@@ -15,7 +16,6 @@ import com.cosma.annihilation.Items.InventorySlot;
 import com.cosma.annihilation.Items.InventorySlotTarget;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.Tools;
-import com.cosma.annihilation.Utils.EntityEngine;
 
 public class LootWindow extends GuiWindow {
     private DragAndDrop dragAndDrop;
@@ -23,9 +23,9 @@ public class LootWindow extends GuiWindow {
     private ContainerComponent containerComponent;
     private Entity playerEntity;
     private boolean isOpen = false;
-    private EntityEngine engine;
+    private Engine engine;
 
-    public LootWindow(Skin skin,EntityEngine engine, float parentWidth) {
+    public LootWindow(Skin skin,Engine engine, float parentWidth) {
         super("", skin);
         this.engine = engine;
         dragAndDrop = new DragAndDrop();

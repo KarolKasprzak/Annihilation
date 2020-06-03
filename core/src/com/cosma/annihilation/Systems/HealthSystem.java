@@ -1,6 +1,7 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -46,6 +47,9 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
         BodyComponent bodyComponent = bodyMapper.get(entity);
         AiComponent aiComponent = aiComponentMapper.get(entity);
         SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
+
+
+
 
         if (healthComponent.hp <= 0) {
             skeletonComponent.dead();

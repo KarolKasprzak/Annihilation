@@ -8,7 +8,7 @@
     Fixtures: [
       {
         shapeType: Circle
-        radius: 0.6
+        radius: 0.4
         sensor: true
         destiny: 5
         friction: 1
@@ -20,10 +20,11 @@
     ]
   },
   SerializationComponent: {
-    entityName: ladder.json
+    entityName: note.json
   },
   ActionComponent: {
-    action: CLIMB_UP
+    action: OPEN_NOTE
+	textToDisplay: testNote
 	offsetX: 0
 	offsetY: 0.2
   },

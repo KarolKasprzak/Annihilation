@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.Gui.GuiWindow;
-import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.MenuButton;
 
 public class PlayerMenuWindow extends GuiWindow {
@@ -20,10 +20,11 @@ public class PlayerMenuWindow extends GuiWindow {
     private InventoryWindow inventoryWindow;
     private OptionsWindow optionsWindow;
     private LootWindow lootWindow;
-    private EntityEngine engine;
+    private NoteWindow noteWindow;
+    private Engine engine;
     private boolean isOpen = false;
 
-    public PlayerMenuWindow(String title, Skin skin, EntityEngine engine) {
+    public PlayerMenuWindow(String title, Skin skin, Engine engine) {
         super(title, skin);
         this.engine = engine;
         this.setModal(true);
@@ -37,6 +38,7 @@ public class PlayerMenuWindow extends GuiWindow {
         lootWindow = new LootWindow(skin,engine,getWidth());
         inventoryWindow = new InventoryWindow("Inventory:",skin,engine,getWidth());
         optionsWindow = new OptionsWindow("",skin,engine);
+        noteWindow = new NoteWindow(skin,engine,getWidth()*0.8f);
     }
 
     public Table getWindowTable() {
@@ -130,6 +132,12 @@ public class PlayerMenuWindow extends GuiWindow {
         clearWindow();
         addWindow(lootWindow);
         lootWindow.initialize();
+    }
+
+    public void openNoteWindow(){
+        clearWindow();
+        addWindow(noteWindow);
+        noteWindow.initialize();
     }
 
     @Override

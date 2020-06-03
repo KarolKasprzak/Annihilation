@@ -7,14 +7,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.Gui.GuiWindow;
-import com.cosma.annihilation.Utils.EntityEngine;
+
 
 
 public class OptionsWindow extends GuiWindow {
-    EntityEngine engine;
+    Engine engine;
 
-    public OptionsWindow(String title, Skin skin, EntityEngine engine) {
+    public OptionsWindow(String title, Skin skin, Engine engine) {
         super(title, skin);
         this.engine = engine;
 

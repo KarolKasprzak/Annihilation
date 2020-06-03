@@ -16,7 +16,6 @@ import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.EntityEngine;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 
 import javax.jnlp.ClipboardService;
@@ -107,8 +106,11 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
                             case TALK:
                                 startDialogAction();
                                 break;
+                            case OPEN_NOTE:
+                                openNoteWindow();
+                                break;
                             case SWITCH_LIGHT:
-                                Light light = ((EntityEngine) this.getEngine()).getCurrentMap().findLight(actionComponent.actionTargetName);
+                                Light light = getEngine().getCurrentMap().findLight(actionComponent.actionTargetName);
                                 if (light.isActive()) {
                                     light.setActive(false);
                                 } else {
@@ -126,7 +128,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 
     private void climbUp(){
         System.out.println("start climb");
-        Entity playerEntity = ((EntityEngine) getEngine()).getPlayerEntity();
+        Entity playerEntity = getEngine().getPlayerEntity();
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.climbing = true;
         playerComponent.canMoveOnSide = false;
@@ -146,8 +148,12 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 
     private void openLootWindow() {
         if (playerComponent.processedEntity.getComponent(ContainerComponent.class).itemList.size > 0) {
-            getEngine().getSystem(UserInterfaceSystem.class).openPlayerMenu(true);
+            getEngine().getSystem(UserInterfaceSystem.class).openLootMenu();
         }
+    }
+
+    private void openNoteWindow() {
+            getEngine().getSystem(UserInterfaceSystem.class).openNoteMenu();
     }
 
     private void startDialogAction() {
