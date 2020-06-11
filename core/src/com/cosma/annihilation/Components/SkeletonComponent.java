@@ -1,12 +1,17 @@
 package com.cosma.annihilation.Components;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
 
+import java.security.PublicKey;
+
 public class SkeletonComponent implements Component {
     public int drawOrder = 1;
     public Skeleton skeleton;
+    public Texture diffuseTexture;
+    public Texture normalTexture;
     public SkeletonBounds bounds;
     public AnimationState animationState;
     public Array<String> meleeAttackAnimations = new Array<>();

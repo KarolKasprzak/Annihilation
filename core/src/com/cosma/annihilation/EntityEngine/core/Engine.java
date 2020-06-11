@@ -138,6 +138,10 @@ public class Engine {
         return getPlayerEntity().getComponent(PlayerComponent.class);
     }
 
+    public RayHandler getRayHandler() {
+        return rayHandler;
+    }
+
     /**
      * return active weapon based on player inventory
      * if null return default "fist" weapon

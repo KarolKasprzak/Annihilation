@@ -60,6 +60,16 @@ public class AssetLoader {
                 }
             }
         }
+        FileHandle skeletonAtlas = Gdx.files.local("gfx/skeletons/");
+        for(FileHandle file:  skeletonAtlas.list()){
+            if(file.isDirectory()){
+                for(FileHandle texture: file.list(".atlas")){
+                    System.out.println(texture.name());
+                    manager.load(texture.path(),TextureAtlas.class);
+                }
+            }
+        }
+
         for(FileHandle texture: gfxAtlas.list(".atlas")){
             manager.load(texture.path(),TextureAtlas.class);
         }

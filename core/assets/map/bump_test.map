@@ -1,0 +1,122 @@
+{
+width: 100
+height: 100
+tileSize: 64
+layers: {
+	layers: [
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.ObjectMapLayer
+			name: Objects_layer1
+			objects: {
+				objects: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_1
+						x: 13.016023
+						y: 13.0487175
+						width: 20.962181
+						height: 0.8833332
+						bodyType: StaticBody
+					}
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+						name: Rectangle_2
+						x: 11.807691
+						y: 17.884615
+						width: 25.00513
+						height: 1.0192318
+						bodyType: StaticBody
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.LightsMapLayer
+			name: Lights_layer2
+			lights: {
+				lights: [
+					{
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						name: PointLight_1
+						raysNumber: 25
+						color: {
+							r: 1
+							g: 1
+							b: 0.827451
+							a: 0.6039216
+						}
+						lightDistance: 5
+						x: 23.138458
+						y: 16.739748
+						softLight: false
+					}
+				]
+			}
+		}
+		{
+			class: com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer
+			name: Sprite_layer3
+			height: 100
+			width: 100
+			sprites: [
+				{
+					position: "19.0,12.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_ground1"
+				}
+				{
+					position: "19.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall"
+				}
+				{
+					position: "25.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall2"
+				}
+				{
+					position: "23.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall3"
+				}
+				{
+					position: "21.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall"
+				}
+				{
+					position: "17.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall"
+				}
+				{
+					position: "27.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall2"
+				}
+				{
+					position: "29.0,14.0,0.0"
+					texture: "map/map_sprites/metro.atlas,metro_wall3"
+				}
+			]
+		}
+	]
+}
+entityList: [
+	{
+		position: "18.447437,15.171795"
+		hp: 100
+		maxHp: 100
+		entityName: player.json
+		mapName: null
+		id: PLAYER
+		inventoryItems: []
+	}
+	{
+		position: "24.697638,14.487595"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				itemID: gewehr46
+				tableIndex: 0
+			}
+		]
+	}
+]
+mapName: bump_test.map
+}

@@ -1,6 +1,7 @@
 package com.cosma.annihilation.Utils.Serialization;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -13,6 +14,7 @@ import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Animation.AnimationFactory;
 import com.cosma.annihilation.Utils.CollisionID;
+import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.esotericsoftware.spine.*;
@@ -179,10 +181,18 @@ public class EntityReader implements Json.Serializer<Entity> {
 
         if (jsonData.has("SkeletonComponent")) {
             SkeletonComponent skeletonComponent = new SkeletonComponent();
-            TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(jsonData.get("SkeletonComponent").get("atlasPath").asString()));
+            TextureAtlas atlas = Annihilation.getAssets().get(jsonData.get("SkeletonComponent").get("atlasPath").asString(),TextureAtlas.class);
+
+            if(jsonData.get("SkeletonComponent").has("normalPath")){
+                skeletonComponent.normalTexture = new Texture(jsonData.get("SkeletonComponent").get("normalPath").asString());
+                skeletonComponent.normalTexture.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);
+            }
+
+            skeletonComponent.diffuseTexture = atlas.getRegions().first().getTexture();
+
             SkeletonJson skeletonJson = new SkeletonJson(atlas);
 
-            skeletonJson.setScale(skeletonJson.getScale()/64);
+            skeletonJson.setScale(skeletonJson.getScale()/ Constants.PPM);
             SkeletonData skeletonData = skeletonJson.readSkeletonData(Gdx.files.internal(jsonData.get("SkeletonComponent").get("jsonPath").asString()));
             skeletonComponent.skeleton = new Skeleton(skeletonData);
 
