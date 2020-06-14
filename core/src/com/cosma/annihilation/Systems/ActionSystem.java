@@ -1,6 +1,5 @@
 package com.cosma.annihilation.Systems;
 
-import box2dLight.Light;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.cosma.annihilation.Ai.PlayerTasks.PlayerGoToPosition;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
 import com.cosma.annihilation.EntityEngine.core.Entity;

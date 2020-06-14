@@ -1,6 +1,5 @@
 package com.cosma.annihilation.World;
 
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Entities.EntityFactory;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
@@ -53,12 +53,12 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         rayHandler = new RayHandler(world);
-        rayHandler.setBlur(true);
-        rayHandler.setAmbientLight(0.1f);
-        rayHandler.setShadows(true);
+//        rayHandler.setBlur(true);
+//        rayHandler.setShadows(true);
+
 
 //        camera.zoom = camera.zoom - 0.2f;
-        engine = new Engine(world, rayHandler, startStatus);
+        engine = new Engine(world, rayHandler, startStatus, camera);
         engine.addEntityListener(this);
 
         EntityFactory.getInstance().setEngine(engine);

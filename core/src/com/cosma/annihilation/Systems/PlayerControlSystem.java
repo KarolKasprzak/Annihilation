@@ -55,11 +55,10 @@ public class PlayerControlSystem extends IteratingSystem {
         BodyComponent playerBody = bodyMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
         AnimationComponent animationComponent = animationMapper.get(entity);
-        TextureComponent textureComponent = entity.getComponent(TextureComponent.class);
         SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
         animationComponent.spriteDirection = mouseCursorPosition;
         skeletonComponent.skeletonDirection = mouseCursorPosition;
-        textureComponent.direction = mouseCursorPosition;
+
 
 
         if (entity.getComponent(PlayerComponent.class).numFootContacts >= 1) {

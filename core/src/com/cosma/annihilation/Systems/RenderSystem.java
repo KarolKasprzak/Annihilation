@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
+import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.systems.SortedIteratingSystem;
@@ -26,7 +28,14 @@ public class RenderSystem extends SortedIteratingSystem {
     private ComponentMapper<TextureComponent> textureMapper;
     private ComponentMapper<BodyComponent> bodyMapper;
 
-    public RenderSystem(OrthographicCamera camera, World world,SpriteBatch batch, ShapeRenderer shapeRenderer) {
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+
+    }
+
+    public RenderSystem(OrthographicCamera camera, World world, SpriteBatch batch, ShapeRenderer shapeRenderer) {
         super(Family.all(TextureComponent.class, BodyComponent.class).get(), new RenderComparator(), Constants.RENDER);
         this.batch = batch;
         this.camera = camera;
@@ -53,7 +62,8 @@ public class RenderSystem extends SortedIteratingSystem {
         float x1 = 0;
         float y1 = 0;
 
-        if (entity.getComponent(PlayerComponent.class) == null) {
+        batch.setShader(null);
+        if (!entity.hasComponent(PlayerComponent.class)) {
             batch.begin();
             if (textureComponent.texture != null && !textureComponent.renderAfterLight) {
                 position.x = position.x - (float) textureComponent.texture.getWidth() / Constants.PPM / 2;
@@ -63,8 +73,9 @@ public class RenderSystem extends SortedIteratingSystem {
                         1, 1, body.getAngle() * MathUtils.radiansToDegrees);
 
             }
+            if (textureComponent.textureRegion != null ) {
 
-            if (textureComponent.textureRegion != null && !textureComponent.renderAfterLight) {
+
                 position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
                 position.y = position.y - textureComponent.textureRegion.getRegionHeight() / Constants.PPM / 2;
 
@@ -73,9 +84,8 @@ public class RenderSystem extends SortedIteratingSystem {
                         textureComponent.textureRegion.getRegionWidth() / Constants.PPM * (textureComponent.flipTexture ? -1 : 1), textureComponent.textureRegion.getRegionHeight() / Constants.PPM,
                         1, 1, body.getAngle() * MathUtils.radiansToDegrees);
             }
-
             batch.end();
         }
-
+        batch.setShader(null);
     }
 }

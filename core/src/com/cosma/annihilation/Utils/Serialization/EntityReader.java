@@ -223,6 +223,14 @@ public class EntityReader implements Json.Serializer<Entity> {
         if (jsonData.has("TextureComponent")) {
             //TODO
             TextureComponent textureComponent = new TextureComponent();
+
+            if (jsonData.get("TextureComponent").has("atlasPatch")) {
+                String path = jsonData.get("TextureComponent").get("atlasPatch").asString();
+                textureComponent.textureRegion = Annihilation.getAssets().get(path.split(",")[0],TextureAtlas.class).findRegion(path.split(",")[1]);
+                textureComponent.normalTexture =Annihilation.getAssets().get(path.split(",")[0].replace(".atlas","_n.png"));
+                textureComponent.normalTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+            }
+
             if (jsonData.get("TextureComponent").has("patch")) {
                 textureComponent.texture = Annihilation.getAssets().get(jsonData.get("TextureComponent").get("patch").asString());
             }

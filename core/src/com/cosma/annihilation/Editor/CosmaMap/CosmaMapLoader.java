@@ -1,9 +1,9 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
-import box2dLight.ConeLight;
-import box2dLight.DirectionalLight;
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
+import com.cosma.annihilation.Box2dLight.ConeLight;
+import com.cosma.annihilation.Box2dLight.DirectionalLight;
+import com.cosma.annihilation.Box2dLight.PointLight;
+import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.badlogic.gdx.Gdx;

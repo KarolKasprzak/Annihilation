@@ -1,7 +1,7 @@
 package com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights;
 
-import box2dLight.Light;
 import com.badlogic.gdx.utils.Timer;
+import com.cosma.annihilation.Box2dLight.Light;
 
 public class LightControler {
 

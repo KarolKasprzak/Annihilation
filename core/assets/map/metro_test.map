@@ -131,19 +131,18 @@ layers: {
 					{
 						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
 						name: PointLight_3
-						isHighlighted: true
 						raysNumber: 25
 						color: {
 							r: 0.96862745
 							g: 0.8509804
-							b: 0.54509807
-							a: 0.8901961
+							b: 0.49803922
+							a: 0.9137255
 						}
-						lightDistance: 4
-						x: 13.96159
-						y: 15.664179
+						lightDistance: 3.5
+						x: 13.997488
+						y: 15.798795
 						softLight: false
-						softLength: 4.9999976
+						softLength: 4.599998
 					}
 					{
 						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
@@ -152,12 +151,12 @@ layers: {
 						color: {
 							r: 0.96862745
 							g: 0.8509804
-							b: 0.54509807
-							a: 0.8901961
+							b: 0.5372549
+							a: 0.9372549
 						}
-						lightDistance: 4
-						x: 9.586591
-						y: 15.637257
+						lightDistance: 3.5
+						x: 9.577617
+						y: 15.655206
 						softLight: false
 					}
 					{
@@ -191,7 +190,7 @@ entityList: [
 		inventoryItems: []
 	}
 	{
-		position: "11.854151,14.187358"
+		position: "13.799848,14.14913"
 		hp: 100
 		maxHp: 100
 		entityName: box.json
@@ -228,11 +227,11 @@ entityList: [
 		targetName: PointLight_4
 	}
 	{
-		position: "32.011353,14.17626"
+		position: "27.125328,14.178667"
 		hp: 100
 		maxHp: 100
 		entityName: mutant.json
-		startPosition: "32.011353,14.17626"
+		startPosition: "27.125328,14.178667"
 	}
 	{
 		position: "19.203846,13.601284"

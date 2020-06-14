@@ -28,7 +28,7 @@ public class AnimatedSprite extends Sprite{
     public AnimatedSprite() {
     }
 
-     void setTextureRegion(String region, String path) {
+     void setTextureDate(String region, String path) {
 
                 this.animation = new Animation<>(0.1f,Annihilation.getAssets().get(path,TextureAtlas.class).findRegions(region),Animation.PlayMode.LOOP);
                 this.textureRegion = animation.getKeyFrame(time);
@@ -58,7 +58,7 @@ public class AnimatedSprite extends Sprite{
         this.angle = angle;
     }
 
-    String getTextureDate(){
+    String getAtlasPath(){
         return ((FileTextureData)textureRegion.getTexture().getTextureData()).getFileHandle().pathWithoutExtension()+".atlas"+","+atlasRegionName;
     }
 

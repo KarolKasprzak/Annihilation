@@ -1,7 +1,7 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
-import box2dLight.Light;
 import com.badlogic.gdx.utils.OrderedMap;
+import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 
 import java.util.ArrayList;

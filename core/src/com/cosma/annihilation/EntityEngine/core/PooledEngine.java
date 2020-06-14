@@ -1,12 +1,12 @@
 package com.cosma.annihilation.EntityEngine.core;
 
-import box2dLight.RayHandler;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.badlogic.gdx.utils.ReflectionPool;
+import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Utils.StartStatus;
 
 /**
@@ -35,8 +35,6 @@ public class PooledEngine extends Engine {
      * @param componentPoolMaxSize maximum size for each component type pool.
      */
     public PooledEngine (int entityPoolInitialSize, int entityPoolMaxSize, int componentPoolInitialSize, int componentPoolMaxSize, World world, RayHandler rayHandler, StartStatus startStatus) {
-        super(world, rayHandler, startStatus);
-
         entityPool = new EntityPool(entityPoolInitialSize, entityPoolMaxSize);
         componentPools = new ComponentPools(componentPoolInitialSize, componentPoolMaxSize);
     }

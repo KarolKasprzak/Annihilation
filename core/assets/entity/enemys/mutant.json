@@ -13,7 +13,7 @@
   
   SkeletonComponent: {
   atlasPath: gfx/skeletons/mutant/mutant.atlas
-  normalPath: gfx/skeletons/mutant/mutant_nrm.png
+  normalPath: gfx/skeletons/mutant/mutant_n.png
   jsonPath: gfx/skeletons/mutant/mutant.json
   }
   

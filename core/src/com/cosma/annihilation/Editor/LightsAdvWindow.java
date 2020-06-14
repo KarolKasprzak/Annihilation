@@ -1,13 +1,14 @@
 package com.cosma.annihilation.Editor;
 
 
-import box2dLight.ConeLight;
-import box2dLight.Light;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.*;
+import com.cosma.annihilation.Box2dLight.ConeLight;
+import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
 import com.kotcrab.vis.ui.VisUI;

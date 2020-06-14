@@ -1,10 +1,8 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.cosma.annihilation.Annihilation;
 
 public class SpriteMapLayer extends MapLayer implements Json.Serializable {
 
@@ -19,13 +17,13 @@ public class SpriteMapLayer extends MapLayer implements Json.Serializable {
 
     public void createSprite(String regionName, String texturePath, float x, float y, float angle) {
         Sprite sprite = new Sprite();
-        sprite.setTextureRegion(regionName, texturePath);
+        sprite.setTextureDate(regionName, texturePath);
         sprite.setSpritePosition(x, y, angle);
         spriteArray.add(sprite);
     }
     public void createAnimatedSprite(String regionName, String texturePath, float x, float y, float angle){
         AnimatedSprite sprite = new AnimatedSprite();
-        sprite.setTextureRegion(regionName, texturePath);
+        sprite.setTextureDate(regionName, texturePath);
         sprite.setSpritePosition(x, y, angle);
         spriteArray.add(sprite);
     }
@@ -46,7 +44,7 @@ public class SpriteMapLayer extends MapLayer implements Json.Serializable {
                 json.writeValue("animated",true);
             }
             json.writeValue("position", sprite.getX() + "," + sprite.getY() + "," + sprite.getAngle());
-            json.writeValue("texture", sprite.getTextureDate());
+            json.writeValue("texture", sprite.getAtlasPath());
             json.writeObjectEnd();
         }
         json.writeArrayEnd();
@@ -62,13 +60,13 @@ public class SpriteMapLayer extends MapLayer implements Json.Serializable {
             String position = value.get("position").asString();
             if(value.has("animated")){
                 AnimatedSprite animatedSprite = new AnimatedSprite();
-                animatedSprite.setTextureRegion(texture.split(",")[1], texture.split(",")[0]);
+                animatedSprite.setTextureDate(texture.split(",")[1], texture.split(",")[0]);
                 animatedSprite.setSpritePosition(Float.parseFloat(position.split(",")[0]), Float.parseFloat(position.split(",")[1]), Float.parseFloat(position.split(",")[2]));
                 spriteArray.add(animatedSprite);
             }else{
                 Sprite sprite = new Sprite();
 
-                sprite.setTextureRegion(texture.split(",")[1], texture.split(",")[0]);
+                sprite.setTextureDate(texture.split(",")[1], texture.split(",")[0]);
                 sprite.setSpritePosition(Float.parseFloat(position.split(",")[0]), Float.parseFloat(position.split(",")[1]), Float.parseFloat(position.split(",")[2]));
                 spriteArray.add(sprite);
             }

@@ -1,6 +1,5 @@
 package com.cosma.annihilation.Screens;
 
-import box2dLight.RayHandler;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -22,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.*;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.TextureComponent;
 import com.cosma.annihilation.Editor.*;

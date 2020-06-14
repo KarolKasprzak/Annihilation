@@ -25,7 +25,7 @@
   
   SkeletonComponent: {
   atlasPath: gfx/skeletons/player/player.atlas
-  normalPath: gfx/skeletons/player/player_nrm.png
+  normalPath: gfx/skeletons/player/player_n.png
   jsonPath: gfx/skeletons/player/player.json
   }
   
@@ -69,11 +69,6 @@
 		UserDate: PLAYER_FOOT
       }
     ]
-  },
-  TextureComponent: {
-  renderOrder: 10
-  
-  },
-
+  }
 }
 

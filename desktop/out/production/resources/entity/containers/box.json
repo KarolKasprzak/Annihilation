@@ -39,7 +39,7 @@
     ]
   },
   TextureComponent: {
-  patch: gfx/textures/wood_box.png
+  atlasPatch: "gfx/atlas/containers.atlas,wood_box"
   },
  
   SerializationComponent: {

@@ -34,7 +34,11 @@ public class AssetLoader {
         for(FileHandle texture: mapSprites.list(".atlas")){
             manager.load(texture.path(),TextureAtlas.class);
         }
-
+        for(FileHandle texture: mapSprites.list(".png")){
+            if(texture.nameWithoutExtension().contains("_n")){
+                manager.load(texture.path(),Texture.class);
+            }
+        }
         //Load icon
         FileHandle iconTextures = Gdx.files.local("gfx/textures/icon/");
         for(FileHandle texture: iconTextures.list(".png")){
@@ -60,6 +64,12 @@ public class AssetLoader {
                 }
             }
         }
+        for(FileHandle texture: gfxAtlas.list(".png")){
+            if(texture.nameWithoutExtension().contains("_n")){
+                manager.load(texture.path(),Texture.class);
+            }
+        }
+
         FileHandle skeletonAtlas = Gdx.files.local("gfx/skeletons/");
         for(FileHandle file:  skeletonAtlas.list()){
             if(file.isDirectory()){

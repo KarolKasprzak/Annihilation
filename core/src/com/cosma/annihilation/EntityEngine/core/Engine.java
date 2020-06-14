@@ -1,16 +1,21 @@
 package com.cosma.annihilation.EntityEngine.core;
 
 
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.cosma.annihilation.Annihilation;
+import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
@@ -23,10 +28,13 @@ import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.StartStatus;
 
+import java.util.Arrays;
+
+
 /**
  * The heart of the Entity framework. It is responsible for keeping track of {@link Entity} and
  * managing {@link EntitySystem} objects. The Engine should be updated every tick via the {@link #update(float)} method.
- *
+ * <p>
  * With the Engine you can:
  *
  * <ul>
@@ -55,13 +63,21 @@ public class Engine {
     private World world;
     private RayHandler rayHandler;
     private Array<Body> bodiesToRemove;
+    private OrthographicCamera gameCamera;
+    private Array<Light> activeLights = new Array<>();
+
+    private Vector3 lightPosition = new Vector3();
+    private float[] lightPositionArray = new float[21];
+    private float[] lightColorArray = new float[21];
+
     StartStatus startStatus;
 
     //only to map editor
     public Engine() {
     }
 
-    public Engine(World world, RayHandler rayHandler, StartStatus startStatus) {
+    public Engine(World world, RayHandler rayHandler, StartStatus startStatus, OrthographicCamera gameCamera) {
+        this.gameCamera = gameCamera;
         this.rayHandler = rayHandler;
         this.world = world;
         this.startStatus = startStatus;
@@ -70,6 +86,7 @@ public class Engine {
         json = new Json();
         json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
         if (startStatus.isNewGame()) {
+//         mapLoader.loadMap("map/bump_test.map");
             mapLoader.loadMap("map/metro_test.map");
         } else {
             loadGame();
@@ -95,7 +112,7 @@ public class Engine {
         this.removeAllEntities();
 
 
-        mapLoader.loadMap("save/slot" + startStatus.getSaveSlot() + "/forest_test.map");
+        mapLoader.loadMap("save/slot" + startStatus.getSaveSlot() + "/metro_test.map");
 
         getPlayerComponent().activeWeapon = getPlayerActiveWeapon();
 //        mapLoader.getMap().getEntityArrayList().add(playerEntity);
@@ -113,18 +130,19 @@ public class Engine {
         mapFile.writeString(json.prettyPrint(mapLoader.getMap()), false);
     }
 
-    public GameMap getCurrentMap(){
+    public GameMap getCurrentMap() {
         return mapLoader.getMap();
     }
 
-    public void removePhysicBody(Body body){
-        if(!bodiesToRemove.contains(body, true)){
+    public void removePhysicBody(Body body) {
+        if (!bodiesToRemove.contains(body, true)) {
             bodiesToRemove.add(body);
         }
     }
 
-    public void removeAllBodies(){
-        for(Body body: bodiesToRemove){
+
+    public void removeAllBodies() {
+        for (Body body : bodiesToRemove) {
             world.destroyBody(body);
         }
         bodiesToRemove.clear();
@@ -138,12 +156,9 @@ public class Engine {
         return getPlayerEntity().getComponent(PlayerComponent.class);
     }
 
-    public RayHandler getRayHandler() {
-        return rayHandler;
-    }
 
     /**
-     * return active weapon based on player inventory
+     * @return active weapon based on player inventory
      * if null return default "fist" weapon
      **/
 
@@ -160,7 +175,78 @@ public class Engine {
         return getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
     }
 
-    public void spawnBulletEntity(float x, float y,float angle, float speed, boolean flip) {
+    /**
+     * @return return active light in current camera viewport
+     */
+
+    public ShaderProgram getNormalMapShaderInstance(){
+        ShaderProgram.pedantic = false;
+        ShaderProgram shader = new ShaderProgram(Gdx.files.internal("shaders/bumpmulti/ver.glsl").readString(), Gdx.files.internal("shaders/bumpmulti/frag.glsl").readString());
+        if (!shader.isCompiled())
+            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        shader.begin();
+        shader.setUniformi("u_texture", 0);
+        shader.setUniformi("u_normals", 1);
+        shader.end();
+        return shader;
+    }
+
+
+    public Array<Light> getActiveLights() {
+        return activeLights;
+    }
+
+    /**
+     * Use before batch.draw
+     * @param normalShader normal map shader
+     * @param invertX invert normal map X
+     * @param invertY invert normal map Y
+     */
+    public void prepareDataForNormalShaderRender(ShaderProgram normalShader, boolean invertX ,boolean invertY){
+        Arrays.fill(lightColorArray, 0);
+        Arrays.fill(lightPositionArray, 0);
+        for(int i = 0; i < activeLights.size; i++){
+            if(i<7){
+                Light light = activeLights.get(i);
+                lightPosition.x = light.getX();
+                lightPosition.y = light.getY();
+                lightPosition.z = 0;
+
+                gameCamera.project(lightPosition);
+
+                lightPositionArray[i*3] = lightPosition.x;
+                lightPositionArray[1+(i*3)] = lightPosition.y;
+                lightPositionArray[2+(i*3)] = 0.09f;
+
+                lightColorArray[i*3] = light.getColor().r;
+                lightColorArray[1+(i*3)] = light.getColor().g;
+                lightColorArray[2+(i*3)] = light.getColor().b;
+            }
+        }
+        normalShader.setUniform3fv("light[0]",lightPositionArray,0,21);
+        normalShader.setUniform3fv("lightColor[0]",lightColorArray,0,21);
+
+        if(invertX){
+            normalShader.setUniformi("xInvert", 0);
+        }else{
+            normalShader.setUniformi("xInvert", 1);
+        }
+        if(invertY){
+            normalShader.setUniformi("yInvert", 1);
+        }else{
+            normalShader.setUniformi("yInvert", 0);
+        }
+
+        normalShader.setUniformf("resolution",Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        normalShader.setUniformf("attenuation", 0.6f,0.7f,10);
+        normalShader.setUniformi("useNormals", 1);
+        normalShader.setUniformi("useShadow", 1);
+        normalShader.setUniformf("strength", 1f);
+    }
+
+
+
+    public void spawnBulletEntity(float x, float y, float angle, float speed, boolean flip) {
         Entity entity = this.createEntity();
         BodyComponent bodyComponent = this.createComponent(BodyComponent.class);
         BulletComponent bulletComponent = this.createComponent(BulletComponent.class);
@@ -206,17 +292,18 @@ public class Engine {
 
     /**
      * Creates a new Entity object.
+     *
      * @return @{@link Entity}
      */
 
-    public Entity createEntity () {
+    public Entity createEntity() {
         return new Entity();
     }
 
     /**
      * Creates a new {@link Component}. To use that method your components must have a visible no-arg constructor
      */
-    public <T extends Component> T createComponent (Class<T> componentType) {
+    public <T extends Component> T createComponent(Class<T> componentType) {
         try {
             return ClassReflection.newInstance(componentType);
         } catch (ReflectionException e) {
@@ -229,7 +316,7 @@ public class Engine {
      * This will throw an IllegalArgumentException if the given entity
      * was already registered with an engine.
      */
-    public void addEntity(Entity entity){
+    public void addEntity(Entity entity) {
         boolean delayed = updating || familyManager.notifying();
         entityManager.addEntity(entity, delayed);
     }
@@ -237,7 +324,7 @@ public class Engine {
     /**
      * Removes an entity from this Engine.
      */
-    public void removeEntity(Entity entity){
+    public void removeEntity(Entity entity) {
         boolean delayed = updating || familyManager.notifying();
         entityManager.removeEntity(entity, delayed);
     }
@@ -260,26 +347,26 @@ public class Engine {
 
     /**
      * Returns an {@link ImmutableArray} of {@link Entity} that is managed by the the Engine
-     *  but cannot be used to modify the state of the Engine. This Array is not Immutable in
-     *  the sense that its contents will not be modified, but in the sense that it only reflects
-     *  the state of the engine.
-     *
+     * but cannot be used to modify the state of the Engine. This Array is not Immutable in
+     * the sense that its contents will not be modified, but in the sense that it only reflects
+     * the state of the engine.
+     * <p>
      * The Array is Immutable in the sense that you cannot modify its contents through the API of
-     *  the {@link ImmutableArray} class, but is instead "Managed" by the Engine itself. The engine
-     *  may add or remove items from the array and this will be reflected in the returned array.
-     *
+     * the {@link ImmutableArray} class, but is instead "Managed" by the Engine itself. The engine
+     * may add or remove items from the array and this will be reflected in the returned array.
+     * <p>
      * This is an important note if you are looping through the returned entities and calling operations
-     *  that may add/remove entities from the engine, as the underlying iterator of the returned array
-     *  will reflect these modifications.
-     *
+     * that may add/remove entities from the engine, as the underlying iterator of the returned array
+     * will reflect these modifications.
+     * <p>
      * The returned array will have entities removed from it if they are removed from the engine,
-     *   but there is no way to introduce new Entities through the array's interface, or remove
-     *   entities from the engine through the array interface.
-     *
-     *  Discussion of this can be found at https://github.com/libgdx/ashley/issues/224
+     * but there is no way to introduce new Entities through the array's interface, or remove
+     * entities from the engine through the array interface.
+     * <p>
+     * Discussion of this can be found at https://github.com/libgdx/ashley/issues/224
      *
      * @return An unmodifiable array of entities that will match the state of the entities in the
-     *  engine.
+     * engine.
      */
     public ImmutableArray<Entity> getEntities() {
         return entityManager.getEntities();
@@ -290,21 +377,21 @@ public class Engine {
      * If the Engine already had a system of the same class,
      * the new one will replace the old one.
      */
-    public void addSystem(EntitySystem system){
+    public void addSystem(EntitySystem system) {
         systemManager.addSystem(system);
     }
 
     /**
      * Removes the {@link EntitySystem} from this Engine.
      */
-    public void removeSystem(EntitySystem system){
+    public void removeSystem(EntitySystem system) {
         systemManager.removeSystem(system);
     }
 
     /**
      * Removes all systems from this Engine.
      */
-    public void removeAllSystems(){
+    public void removeAllSystems() {
         systemManager.removeAllSystems();
     }
 
@@ -326,16 +413,16 @@ public class Engine {
     /**
      * Returns immutable collection of entities for the specified {@link Family}. Will return the same instance every time.
      */
-    public ImmutableArray<Entity> getEntitiesFor(Family family){
+    public ImmutableArray<Entity> getEntitiesFor(Family family) {
         return familyManager.getEntitiesFor(family);
     }
 
     /**
      * Adds an {@link EntityListener}.
-     *
+     * <p>
      * The listener will be notified every time an entity is added/removed to/from the engine.
      */
-    public void addEntityListener (EntityListener listener) {
+    public void addEntityListener(EntityListener listener) {
         addEntityListener(empty, 0, listener);
     }
 
@@ -344,13 +431,13 @@ public class Engine {
      * to/from the engine. The priority determines in which order the entity listeners will be called. Lower
      * value means it will get executed first.
      */
-    public void addEntityListener (int priority, EntityListener listener) {
+    public void addEntityListener(int priority, EntityListener listener) {
         addEntityListener(empty, priority, listener);
     }
 
     /**
      * Adds an {@link EntityListener} for a specific {@link Family}.
-     *
+     * <p>
      * The listener will be notified every time an entity is added/removed to/from the given family.
      */
     public void addEntityListener(Family family, EntityListener listener) {
@@ -362,22 +449,23 @@ public class Engine {
      * added/removed to/from the given family. The priority determines in which order the entity listeners will be called. Lower
      * value means it will get executed first.
      */
-    public void addEntityListener (Family family, int priority, EntityListener listener) {
+    public void addEntityListener(Family family, int priority, EntityListener listener) {
         familyManager.addEntityListener(family, priority, listener);
     }
 
     /**
      * Removes an {@link EntityListener}
      */
-    public void removeEntityListener (EntityListener listener) {
+    public void removeEntityListener(EntityListener listener) {
         familyManager.removeEntityListener(listener);
     }
 
     /**
      * Updates all the systems in this Engine.
+     *
      * @param deltaTime The time passed since the last frame.
      */
-    public void update(float deltaTime){
+    public void update(float deltaTime) {
         if (updating) {
             throw new IllegalStateException("Cannot call update() on an Engine that is already updating.");
         }
@@ -390,15 +478,20 @@ public class Engine {
 
                 if (system.checkProcessing()) {
                     system.update(deltaTime);
+                    activeLights.clear();
+                    for (Light light : rayHandler.getLightList()) {
+                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() / 2)) {
+                            activeLights.add(light);
+                        }
+                    }
                 }
 
-                while(componentOperationHandler.hasOperationsToProcess() || entityManager.hasPendingOperations()) {
+                while (componentOperationHandler.hasOperationsToProcess() || entityManager.hasPendingOperations()) {
                     componentOperationHandler.processOperations();
                     entityManager.processPendingOperations();
                 }
             }
-        }
-        finally {
+        } finally {
             updating = false;
         }
     }
@@ -420,8 +513,6 @@ public class Engine {
     }
 
 
-
-
     private class ComponentListener implements Listener<Entity> {
         @Override
         public void receive(Signal<Entity> signal, Entity object) {
@@ -431,31 +522,31 @@ public class Engine {
 
     private class EngineSystemListener implements SystemManager.SystemListener {
         @Override
-        public void systemAdded (EntitySystem system) {
+        public void systemAdded(EntitySystem system) {
             system.addedToEngineInternal(Engine.this);
         }
 
         @Override
-        public void systemRemoved (EntitySystem system) {
+        public void systemRemoved(EntitySystem system) {
             system.removedFromEngineInternal(Engine.this);
         }
     }
 
     private class EngineEntityListener implements EntityListener {
         @Override
-        public void entityAdded (Entity entity) {
+        public void entityAdded(Entity entity) {
             addEntityInternal(entity);
         }
 
         @Override
-        public void entityRemoved (Entity entity) {
+        public void entityRemoved(Entity entity) {
             removeEntityInternal(entity);
         }
     }
 
     private class EngineDelayedInformer implements ComponentOperationHandler.BooleanInformer {
         @Override
-        public boolean value () {
+        public boolean value() {
             return updating;
         }
     }
