@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class PlayerControlSystem extends IteratingSystem {
 
     private ComponentMapper<PlayerComponent> playerMapper;
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> physicsMapper;
     private ComponentMapper<AnimationComponent> animationMapper;
     private Signal<GameEvent> signal;
     private ArrayList<GameEvent> gameEventList = new ArrayList<>();
@@ -37,7 +37,7 @@ public class PlayerControlSystem extends IteratingSystem {
         super(Family.all(PlayerComponent.class).get(), Constants.PLAYER_CONTROL_SYSTEM);
         this.world = world;
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
         animationMapper = ComponentMapper.getFor(AnimationComponent.class);
         signal = new Signal<>();
 
@@ -52,7 +52,7 @@ public class PlayerControlSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        BodyComponent playerBody = bodyMapper.get(entity);
+        PhysicsComponent playerBody = physicsMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
         AnimationComponent animationComponent = animationMapper.get(entity);
         SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
@@ -103,6 +103,31 @@ public class PlayerControlSystem extends IteratingSystem {
                         desiredSpeed = desiredSpeed * 0.7f;
                     } else {
                         animationComponent.animationState = AnimationStates.WALK;
+                    }
+                    Vector2 vec = playerBody.body.getLinearVelocity();
+                    float speedX = desiredSpeed - vec.x;
+                    float impulse = playerBody.body.getMass() * speedX;
+                    playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
+                            playerBody.body.getWorldCenter(), true);
+                }
+            }
+            // Moving on side with weapon
+            if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null && isPlayerControlAvailable) {
+                if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
+                    float desiredSpeed = playerComponent.velocity * 0.8f;
+                    if (!skeletonComponent.skeletonDirection) {
+                        desiredSpeed = desiredSpeed * 0.6f;
+                    }
+                    Vector2 vec = playerBody.body.getLinearVelocity();
+                    float speedX = desiredSpeed - vec.x;
+                    float impulse = playerBody.body.getMass() * speedX;
+                    playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
+                            playerBody.body.getWorldCenter(), true);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
+                    float desiredSpeed = -playerComponent.velocity * 0.8f;
+                    if (animationComponent.spriteDirection) {
+                        desiredSpeed = desiredSpeed * 0.7f;
                     }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
@@ -170,37 +195,8 @@ public class PlayerControlSystem extends IteratingSystem {
 //            //TODO
 //        }
 
-        //Moving on side
 
 
-        //Moving on side with weapon
-//        if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null && isPlayerControlAvailable) {
-//            if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
-//                float desiredSpeed = playerComponent.velocity * 0.8f;
-//                if (!skeletonComponent.skeletonDirection) {
-//                    desiredSpeed = desiredSpeed * 0.6f;
-//                }
-//                Vector2 vec = playerBody.body.getLinearVelocity();
-//                float speedX = desiredSpeed - vec.x;
-//                float impulse = playerBody.body.getMass() * speedX;
-//                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
-//                        playerBody.body.getWorldCenter(), true);
-//            }
-//            if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
-//                float desiredSpeed = -playerComponent.velocity * 0.8f;
-//                if (animationComponent.spriteDirection) {
-////                    setPlayerAnimation(playerComponent, animationComponent);
-//                    desiredSpeed = desiredSpeed * 0.7f;
-//                } else {
-////                    setPlayerAnimation(playerComponent, animationComponent);
-//                }
-//                Vector2 vec = playerBody.body.getLinearVelocity();
-//                float speedX = desiredSpeed - vec.x;
-//                float impulse = playerBody.body.getMass() * speedX;
-//                playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
-//                        playerBody.body.getWorldCenter(), true);
-//            }
-//        }
 
         if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump ) {
             if (playerComponent.isWeaponHidden) {
@@ -235,10 +231,10 @@ public class PlayerControlSystem extends IteratingSystem {
 //        }
     }
 
-    public void endClimb(BodyComponent playerBodyComponent,PlayerComponent playerComponent){
+    public void endClimb(PhysicsComponent playerPhysicsComponent, PlayerComponent playerComponent){
         playerComponent.climbing = false;
-        playerBodyComponent.body.getFixtureList().get(0).setSensor(false);
-        playerBodyComponent.body.setGravityScale(1);
+        playerPhysicsComponent.body.getFixtureList().get(0).setSensor(false);
+        playerPhysicsComponent.body.setGravityScale(1);
         playerComponent.canMoveOnSide = true;
         playerComponent.canUseWeapon = true;
     }

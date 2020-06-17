@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Json;
 import com.cosma.annihilation.Components.AiComponent;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Editor.CosmaMap.EntityEditOptionsWindow;
 import com.cosma.annihilation.EntityEngine.core.Component;
@@ -121,8 +121,8 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
 
         Entity entity = json.fromJson(Entity.class, jsonList.get(key));
         for (Component component : entity.getComponents()) {
-            if (component instanceof BodyComponent) {
-                ((BodyComponent) component).body.setTransform(x, y, 0);
+            if (component instanceof PhysicsComponent) {
+                ((PhysicsComponent) component).body.setTransform(x, y, 0);
                 continue;
             }
             if (component instanceof AiComponent) {
@@ -194,7 +194,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                 @Override
                 public boolean reportFixture(final Fixture fixture) {
                     for (Entity entity : mapEditor.getMap().getEntityArrayList()) {
-                        if (fixture.getBody() == entity.getComponent(BodyComponent.class).body) {
+                        if (fixture.getBody() == entity.getComponent(PhysicsComponent.class).body) {
                             final int delete = 1;
                             final int move = 2;
                             final int options = 3;
@@ -269,7 +269,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                 @Override
                 public boolean reportFixture(final Fixture fixture) {
                     for (Entity entity : mapEditor.getMap().getEntityArrayList()) {
-                        if(fixture.getBody() == entity.getComponent(BodyComponent.class).body) {
+                        if(fixture.getBody() == entity.getComponent(PhysicsComponent.class).body) {
                          selectedBody = fixture.getBody();
                          Util.setCursorMove();
                          return false;

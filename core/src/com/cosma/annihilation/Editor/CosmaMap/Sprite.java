@@ -12,7 +12,15 @@ public class Sprite {
     private String atlasRegionName;
     private TextureRegion textureRegion;
     private Texture normalTexture;
+    private boolean renderOnFirstPlane = false;
 
+    public boolean isRenderOnFirstPlane() {
+        return renderOnFirstPlane;
+    }
+
+    public void setRenderOnFirstPlane(boolean renderOnFirstPlane) {
+        this.renderOnFirstPlane = renderOnFirstPlane;
+    }
 
     private boolean flipX = false, flipY = false;
 

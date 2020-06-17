@@ -91,8 +91,8 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  continue;
              }
 
-             if (component instanceof BodyComponent) {
-                 json.writeValue("position",(((BodyComponent) component).body.getPosition().x)+","+((BodyComponent) component).body.getPosition().y);
+             if (component instanceof PhysicsComponent) {
+                 json.writeValue("position",(((PhysicsComponent) component).body.getPosition().x)+","+((PhysicsComponent) component).body.getPosition().y);
                  continue;
              }
 
@@ -119,8 +119,8 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
         Entity entity = loadJason.fromJson(Entity.class, jsonList.get(jsonData.get("entityName").asString()));
         for(Component component: entity.getComponents()){
-            if(component instanceof BodyComponent){
-                ((BodyComponent) component).body.setTransform(Util.jsonStringToVector2(jsonData.get("position").asString()),0);
+            if(component instanceof PhysicsComponent){
+                ((PhysicsComponent) component).body.setTransform(Util.jsonStringToVector2(jsonData.get("position").asString()),0);
                 continue;
             }
             //TEST!! *TODO

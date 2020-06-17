@@ -50,24 +50,24 @@ public class MeleeAttackTask extends Task {
         return enemy;
     }
     public Vector2 getEnemyPosition(){
-        return enemy.getComponent(BodyComponent.class).body.getPosition();
+        return enemy.getComponent(PhysicsComponent.class).body.getPosition();
     }
 
 
     @Override
     public void update(Entity entity, float deltaTime) {
-        BodyComponent bodyComponent = entity.getComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
         AiComponent aiComponent = entity.getComponent(AiComponent.class);
         SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
 
-        raycast(bodyComponent.body,aiComponent);
+        raycast(physicsComponent.body,aiComponent);
 
         if(enemy != null){
             skeletonComponent.meleeIdle();
             attackTimer += attackTimer + deltaTime;
             System.out.println(attackTimer);
             if(attackTimer > timeBetweenAttack)
-            meleeAttack(bodyComponent.body,skeletonComponent,aiComponent);
+            meleeAttack(physicsComponent.body,skeletonComponent,aiComponent);
             timeBetweenAttack = MathUtils.random(3600000,50000000);
         }else{
             skeletonComponent.animationState.clearTrack(2);

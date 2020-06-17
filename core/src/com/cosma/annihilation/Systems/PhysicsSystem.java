@@ -1,7 +1,7 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.physics.box2d.World;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
@@ -16,7 +16,7 @@ public class PhysicsSystem extends IteratingSystem {
 
 
     public PhysicsSystem(World world) {
-        super(Family.all(BodyComponent.class).get(), Constants.PHYSIC_SYSTEM);
+        super(Family.all(PhysicsComponent.class).get(), Constants.PHYSIC_SYSTEM);
         this.world = world;
     }
 

@@ -20,7 +20,7 @@ uniform bool xInvert;
 
 void main() {
 
-vec3 FinalColor = vec3(0.0);
+
 
 // sample color & normals from our textures
 vec4 color = texture2D(u_texture, v_texCoords.st);
@@ -37,6 +37,7 @@ nColor = mix(nBase, nColor, strength);
 // normals need to be converted to [-1.0, 1.0] range and normalized
 vec3 normal = normalize(nColor * 2.0 - 1.0);
 
+vec3 FinalColor = vec3(0.0);
 for ( int i = 0; i < 7; ++i ){
 vec3 currentLight = light[i];
 vec3 currentLightColor = lightColor[i];
@@ -51,5 +52,6 @@ vec3 result = (currentLightColor.rgb * lambert) * att;
 result *= color.rgb;
 FinalColor += result;
 }
+
 gl_FragColor = v_color * vec4(FinalColor, color.a);
 }

@@ -3,7 +3,7 @@ package com.cosma.annihilation.Ai.Tasks;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.cosma.annihilation.Components.AiComponent;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Util;
 
@@ -45,7 +45,7 @@ public class ChaseEnemy extends Task {
             goToPosition.reset(enemyPosition);
             goToPosition.update(entity, deltaTime);
         }
-        Body body = entity.getComponent(BodyComponent.class).body;
+        Body body = entity.getComponent(PhysicsComponent.class).body;
         AiComponent aiComponent = entity.getComponent(AiComponent.class);
         if(enemyPosition == Util.roundFloat(body.getPosition().x,1)){
            success();

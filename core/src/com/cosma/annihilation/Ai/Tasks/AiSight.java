@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.cosma.annihilation.Components.AiComponent;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 
@@ -50,18 +50,18 @@ public class AiSight extends Task {
         return enemy;
     }
     public Vector2 getEnemyPosition(){
-        return enemy.getComponent(BodyComponent.class).body.getPosition();
+        return enemy.getComponent(PhysicsComponent.class).body.getPosition();
     }
 
 
     @Override
     public void update(Entity entity, float deltaTime) {
-        entity.getComponent(BodyComponent.class);
-        BodyComponent bodyComponent = entity.getComponent(BodyComponent.class);
+        entity.getComponent(PhysicsComponent.class);
+        PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
         AiComponent aiComponent = entity.getComponent(AiComponent.class);
 
-        World world = bodyComponent.body.getWorld();
-        world.rayCast(sightRayCallback, bodyComponent.body.getPosition().x, bodyComponent.body.getPosition().y,
-                bodyComponent.body.getPosition().x + sightRange * aiComponent.faceDirection, bodyComponent.body.getPosition().y);
+        World world = physicsComponent.body.getWorld();
+        world.rayCast(sightRayCallback, physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y,
+                physicsComponent.body.getPosition().x + sightRange * aiComponent.faceDirection, physicsComponent.body.getPosition().y);
     }
 }

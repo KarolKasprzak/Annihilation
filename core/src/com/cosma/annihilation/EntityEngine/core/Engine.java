@@ -3,7 +3,6 @@ package com.cosma.annihilation.EntityEngine.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
@@ -86,8 +85,8 @@ public class Engine {
         json = new Json();
         json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
         if (startStatus.isNewGame()) {
-//         mapLoader.loadMap("map/bump_test.map");
-            mapLoader.loadMap("map/metro_test.map");
+         mapLoader.loadMap("map/bump_test.map");
+//            mapLoader.loadMap("map/metro_test.map");
         } else {
             loadGame();
         }
@@ -96,9 +95,9 @@ public class Engine {
     public void loadGame() {
         for (Entity entity : this.getEntities()) {
             for (Component component : entity.getComponents()) {
-                if (component instanceof BodyComponent) {
-                    world.destroyBody(((BodyComponent) component).body);
-                    ((BodyComponent) component).body = null;
+                if (component instanceof PhysicsComponent) {
+                    world.destroyBody(((PhysicsComponent) component).body);
+                    ((PhysicsComponent) component).body = null;
                 }
             }
         }
@@ -191,6 +190,18 @@ public class Engine {
         return shader;
     }
 
+    public ShaderProgram getShader(){
+        ShaderProgram.pedantic = false;
+        ShaderProgram shader = new ShaderProgram(Gdx.files.internal("shaders/normal/ver.glsl").readString(), Gdx.files.internal("shaders/normal/frag.glsl").readString());
+        if (!shader.isCompiled())
+            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        shader.begin();
+        shader.setUniformi("u_texture", 0);
+        shader.setUniformi("u_normals", 1);
+        shader.end();
+        return shader;
+    }
+
 
     public Array<Light> getActiveLights() {
         return activeLights;
@@ -205,6 +216,12 @@ public class Engine {
     public void prepareDataForNormalShaderRender(ShaderProgram normalShader, boolean invertX ,boolean invertY){
         Arrays.fill(lightColorArray, 0);
         Arrays.fill(lightPositionArray, 0);
+        activeLights.clear();
+        for (Light light : rayHandler.getLightList()) {
+                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() / 2)) {
+                            activeLights.add(light);
+                        }
+                    }
         for(int i = 0; i < activeLights.size; i++){
             if(i<7){
                 Light light = activeLights.get(i);
@@ -214,13 +231,14 @@ public class Engine {
 
                 gameCamera.project(lightPosition);
 
-                lightPositionArray[i*3] = lightPosition.x;
-                lightPositionArray[1+(i*3)] = lightPosition.y;
-                lightPositionArray[2+(i*3)] = 0.09f;
-
+                lightPositionArray[i*3] = lightPosition.x / (float) Gdx.graphics.getWidth();
+                lightPositionArray[1+(i*3)] = lightPosition.y/ (float) Gdx.graphics.getHeight();
+                lightPositionArray[2+(i*3)] = 0.05f;
+                
                 lightColorArray[i*3] = light.getColor().r;
                 lightColorArray[1+(i*3)] = light.getColor().g;
                 lightColorArray[2+(i*3)] = light.getColor().b;
+
             }
         }
         normalShader.setUniform3fv("light[0]",lightPositionArray,0,21);
@@ -238,17 +256,19 @@ public class Engine {
         }
 
         normalShader.setUniformf("resolution",Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        normalShader.setUniformf("attenuation", 0.6f,0.7f,10);
+        normalShader.setUniformf("attenuation", 0.9f,1f,1);
         normalShader.setUniformi("useNormals", 1);
         normalShader.setUniformi("useShadow", 1);
         normalShader.setUniformf("strength", 1f);
+
+        normalShader.setUniformf("AmbientColor", 1, 1, 1, 0.1f);
     }
 
 
 
     public void spawnBulletEntity(float x, float y, float angle, float speed, boolean flip) {
         Entity entity = this.createEntity();
-        BodyComponent bodyComponent = this.createComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = this.createComponent(PhysicsComponent.class);
         BulletComponent bulletComponent = this.createComponent(BulletComponent.class);
         TextureComponent textureComponent = this.createComponent(TextureComponent.class);
 
@@ -257,9 +277,9 @@ public class Engine {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyComponent.body = world.createBody(bodyDef);
-        bodyComponent.body.setUserData(entity);
-        bodyComponent.body.setBullet(true);
+        physicsComponent.body = world.createBody(bodyDef);
+        physicsComponent.body.setUserData(entity);
+        physicsComponent.body.setBullet(true);
         //Physic fixture
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(0.05f, 0.01f);
@@ -271,20 +291,20 @@ public class Engine {
         fixtureDef.restitution = 0.2f;
         fixtureDef.filter.categoryBits = CollisionID.BULLET;
         fixtureDef.filter.maskBits = CollisionID.MASK_BULLET;
-        bodyComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
+        physicsComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
 
 
         float cos = MathUtils.cosDeg(angle), sin = MathUtils.sinDeg(angle);
         float vx = cos * speed;
         float vy = sin * speed;
-        bodyComponent.body.setLinearVelocity(vx, vy);
+        physicsComponent.body.setLinearVelocity(vx, vy);
         if (flip) {
             textureComponent.flipTexture = true;
         }
-        bodyComponent.body.setTransform(bodyComponent.body.getPosition(), MathUtils.atan2(bodyComponent.body.getLinearVelocity().y, bodyComponent.body.getLinearVelocity().x));
+        physicsComponent.body.setTransform(physicsComponent.body.getPosition(), MathUtils.atan2(physicsComponent.body.getLinearVelocity().y, physicsComponent.body.getLinearVelocity().x));
 
         entity.add(textureComponent);
-        entity.add(bodyComponent);
+        entity.add(physicsComponent);
         entity.add(bulletComponent);
         this.addEntity(entity);
     }
@@ -478,12 +498,12 @@ public class Engine {
 
                 if (system.checkProcessing()) {
                     system.update(deltaTime);
-                    activeLights.clear();
-                    for (Light light : rayHandler.getLightList()) {
-                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() / 2)) {
-                            activeLights.add(light);
-                        }
-                    }
+//                    activeLights.clear();
+//                    for (Light light : rayHandler.getLightList()) {
+//                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() / 2)) {
+//                            activeLights.add(light);
+//                        }
+//                    }
                 }
 
                 while (componentOperationHandler.hasOperationsToProcess() || entityManager.hasPendingOperations()) {

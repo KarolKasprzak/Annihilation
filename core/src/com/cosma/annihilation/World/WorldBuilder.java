@@ -57,7 +57,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 //        rayHandler.setShadows(true);
 
 
-//        camera.zoom = camera.zoom - 0.2f;
         engine = new Engine(world, rayHandler, startStatus, camera);
         engine.addEntityListener(this);
 
@@ -75,14 +74,18 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new ActionSystem(camera, batch));
         engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera, viewport));
         engine.addSystem(new SpriteRenderSystem(camera, batch));
-        engine.addSystem(new RenderSystem(camera, world, batch, shapeRenderer));
-        engine.addSystem(new LightRenderSystem(camera, rayHandler));
-        engine.addSystem(new SkeletonRenderSystem(camera, world, polygonSpriteBatch));
+
+//        engine.addSystem(new RenderSystem(camera, world, batch, shapeRenderer));
+//        engine.addSystem(new LightRenderSystem(camera, rayHandler));
+//        engine.addSystem(new SkeletonRenderSystem(camera, world, polygonSpriteBatch));
+//        engine.addSystem(new TileMapRender(camera, engine.getCurrentMap()));
+        engine.addSystem(new UnifiedRenderSystem(batch,camera,world,polygonSpriteBatch,rayHandler));
+
         engine.addSystem(new HealthSystem(camera));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world, viewport));
         engine.addSystem(new CameraSystem(camera));
-        engine.addSystem(new TileMapRender(camera, engine.getCurrentMap()));
+
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));
@@ -167,9 +170,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 //        System.out.println("b " + world.getBodyCount());
 //        for (Entity entity : engine.getEntities()) {
 //            for (Component component : entity.getComponents()) {
-//                if (component instanceof BodyComponent) {
-//                    world.destroyBody(((BodyComponent) component).body);
-//                    ((BodyComponent) component).body = null;
+//                if (component instanceof PhysicsComponent) {
+//                    world.destroyBody(((PhysicsComponent) component).body);
+//                    ((PhysicsComponent) component).body = null;
 //                }
 //            }
 //        }
@@ -205,9 +208,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 //        System.out.println("b " + world.getBodyCount());
 //        for (Entity entity : engine.getEntities()) {
 //            for (Component component : entity.getComponents()) {
-//                if (component instanceof BodyComponent) {
-//                    world.destroyBody(((BodyComponent) component).body);
-//                    ((BodyComponent) component).body = null;
+//                if (component instanceof PhysicsComponent) {
+//                    world.destroyBody(((PhysicsComponent) component).body);
+//                    ((PhysicsComponent) component).body = null;
 //                }
 //            }
 //        }

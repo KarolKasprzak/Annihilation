@@ -2,7 +2,7 @@ package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.cosma.annihilation.Box2dLight.RayHandler;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Components.SkeletonComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
@@ -18,7 +18,7 @@ public class LightRenderSystem extends IteratingSystem {
 
 
     public LightRenderSystem(OrthographicCamera camera, RayHandler rayHandler) {
-        super(Family.all(SkeletonComponent.class, BodyComponent.class).get(), Constants.LIGHT_RENDER);
+        super(Family.all(SkeletonComponent.class, PhysicsComponent.class).get(), Constants.LIGHT_RENDER);
         this.rayHandler = rayHandler;
         this.camera = camera;
 
@@ -26,7 +26,6 @@ public class LightRenderSystem extends IteratingSystem {
 
     @Override
     public void update(float deltaTime) {
-//        rayHandler.getLightMapTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         rayHandler.setCombinedMatrix(camera);
         rayHandler.updateAndRender();
     }

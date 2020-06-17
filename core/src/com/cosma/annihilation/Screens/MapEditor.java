@@ -22,13 +22,12 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.*;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.RayHandler;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Components.TextureComponent;
 import com.cosma.annihilation.Editor.*;
 import com.cosma.annihilation.Editor.CosmaMap.*;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.cosma.annihilation.EntityEngine.core.PooledEngine;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.Util;
@@ -218,7 +217,7 @@ public class MapEditor implements Screen, InputProcessor {
         currentMapPatch = path;
         if (getMap() != null && !getMap().getEntityArrayList().isEmpty()) {
             for (Entity entity : getMap().getEntityArrayList()) {
-                world.destroyBody(entity.getComponent(BodyComponent.class).body);
+                world.destroyBody(entity.getComponent(PhysicsComponent.class).body);
             }
             getMap().getEntityArrayList().clear();
             gameMap = null;
@@ -344,7 +343,7 @@ public class MapEditor implements Screen, InputProcessor {
                 if (textureComponent.texture == null) {
                     continue;
                 }
-                Body body = entity.getComponent(BodyComponent.class).body;
+                Body body = entity.getComponent(PhysicsComponent.class).body;
                 Vector2 position = body.getPosition();
                 position.x = position.x - (float) textureComponent.texture.getWidth() / Constants.PPM / 2;
                 position.y = position.y - (float) textureComponent.texture.getHeight() / Constants.PPM / 2;

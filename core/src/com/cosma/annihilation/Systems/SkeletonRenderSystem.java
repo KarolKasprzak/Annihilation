@@ -4,22 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
-import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.SkeletonRendererDebug;
-
-import java.util.Arrays;
 
 public class SkeletonRenderSystem extends IteratingSystem implements Disposable {
 
@@ -31,12 +25,12 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
     private SkeletonRendererDebug debugRenderer;
 
     private ComponentMapper<SkeletonComponent> skeletonMapper;
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> bodyMapper;
 
     private ShaderProgram shader;
 
     public SkeletonRenderSystem(OrthographicCamera camera, World world, PolygonSpriteBatch batch) {
-        super(Family.all(SkeletonComponent.class, BodyComponent.class).get(), Constants.SKELETONS_RENDER);
+        super(Family.all(SkeletonComponent.class, PhysicsComponent.class).get(), Constants.SKELETONS_RENDER);
         this.batch = batch;
         this.camera = camera;
         this.world = world;
@@ -48,7 +42,7 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
         skeletonRenderer = new SkeletonRenderer();
         skeletonRenderer.setPremultipliedAlpha(false);
         skeletonMapper = ComponentMapper.getFor(SkeletonComponent.class);
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
 
 
         shader = new ShaderProgram(Gdx.files.internal("shaders/bumpmulti/ver.glsl").readString(), Gdx.files.internal("shaders/bumpmulti/frag.glsl").readString());
@@ -60,7 +54,6 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
         shader.setUniformi("u_texture", 0);
         shader.setUniformi("u_normals", 1);
         shader.end();
-
     }
 
     @Override
@@ -71,10 +64,15 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-        batch.setShader(null);
-        batch.begin();
         SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
-        BodyComponent bodyComponent = bodyMapper.get(entity);
+        PhysicsComponent physicsComponent = bodyMapper.get(entity);
+
+//        skeletonComponent.normalTexture.bind(1);
+//        skeletonComponent.diffuseTexture.bind(0);
+
+        batch.setShader(null);
+
+        batch.begin();
 
         if (entity.getComponent(PlayerComponent.class) == null) {
             skeletonComponent.animationState.apply(skeletonComponent.skeleton);
@@ -85,14 +83,14 @@ public class SkeletonRenderSystem extends IteratingSystem implements Disposable 
         } else {
             skeletonComponent.skeleton.setFlipX(false);
         }
-        skeletonComponent.skeleton.setPosition(bodyComponent.body.getPosition().x, bodyComponent.body.getPosition().y - (bodyComponent.height / 2));
+        skeletonComponent.skeleton.setPosition(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y - (physicsComponent.height / 2));
         skeletonComponent.skeleton.updateWorldTransform();
         skeletonComponent.animationState.update(deltaTime);
         debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
+
         getEngine().prepareDataForNormalShaderRender(shader,skeletonComponent.skeletonDirection,false);
 
-        skeletonComponent.normalTexture.bind(1);
-        skeletonComponent.diffuseTexture.bind(0);
+
 
         skeletonRenderer.draw(batch, skeletonComponent.skeleton);
 

@@ -81,7 +81,7 @@ public abstract class AiCore {
 
     void setFaceToPlayer(Entity entity){
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-        Body aiBody = entity.getComponent(BodyComponent.class).body;
+        Body aiBody = entity.getComponent(PhysicsComponent.class).body;
         World world = aiBody.getWorld();
         world.rayCast(sightRayCallback, aiBody.getPosition(), rayEndVector.set(aiBody.getPosition().x - 6, aiBody.getPosition().y));
         world.rayCast(sightRayCallback, aiBody.getPosition(), rayEndVector.set(aiBody.getPosition().x + 6, aiBody.getPosition().y));
@@ -94,7 +94,7 @@ public abstract class AiCore {
 
     boolean isEnemyInSight(Entity entity) {
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-        Body aiBody = entity.getComponent(BodyComponent.class).body;
+        Body aiBody = entity.getComponent(PhysicsComponent.class).body;
 
         World world = aiBody.getWorld();
         if (!isBusy) {
@@ -116,7 +116,7 @@ public abstract class AiCore {
     boolean isEnemyInWeaponRange(Entity entity, float range) {
         if (!isBusy) {
             AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-            Body aiBody = entity.getComponent(BodyComponent.class).body;
+            Body aiBody = entity.getComponent(PhysicsComponent.class).body;
             World world = aiBody.getWorld();
             if (animationComponent.spriteDirection) {
                 world.rayCast(shootRayCallback, aiBody.getPosition(), rayEndVector.set(aiBody.getPosition().x + range, aiBody.getPosition().y));
@@ -132,7 +132,7 @@ public abstract class AiCore {
     void followEnemy(Entity entity) {
         if (!isBusy) {
             if (isPlayerSpotted) {
-                Body aiBody = entity.getComponent(BodyComponent.class).body;
+                Body aiBody = entity.getComponent(PhysicsComponent.class).body;
                 AiComponent aiComponent = entity.getComponent(AiComponent.class);
                 if (aiComponent.startPosition.x + 7 >= aiBody.getPosition().x) {
                     goToPosition(playerBody.getPosition(), entity);
@@ -143,7 +143,7 @@ public abstract class AiCore {
 
     void goToPosition(Vector2 targetPosition, Entity entity) {
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-        Body aiBody = entity.getComponent(BodyComponent.class).body;
+        Body aiBody = entity.getComponent(PhysicsComponent.class).body;
         Vector2 aiPosition = aiBody.getPosition();
         animationComponent.animationState = AnimationStates.WALK;
         if (Util.roundFloat(targetPosition.x, 1) != Util.roundFloat(aiPosition.x, 1)) {
@@ -159,7 +159,7 @@ public abstract class AiCore {
 
     void goToPosition(float positionX, Entity entity) {
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-        Body aiBody = entity.getComponent(BodyComponent.class).body;
+        Body aiBody = entity.getComponent(PhysicsComponent.class).body;
         Vector2 aiPosition = aiBody.getPosition();
         animationComponent.animationState = AnimationStates.WALK;
         if (Util.roundFloat(positionX, 1) != Util.roundFloat(aiPosition.x, 1)) {
@@ -176,7 +176,7 @@ public abstract class AiCore {
     void shoot(Entity entity) {
         if (!isBusy) {
             AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-            Body aiBody = entity.getComponent(BodyComponent.class).body;
+            Body aiBody = entity.getComponent(PhysicsComponent.class).body;
             World world = aiBody.getWorld();
             world.rayCast(shootRayCallback, aiBody.getPosition(), rayEndVector.set(aiBody.getPosition().x + 10, aiBody.getPosition().y));
             if (targetEntity != null) {
@@ -204,7 +204,7 @@ public abstract class AiCore {
     void patrol(Entity entity) {
         if (!isBusy) {
             AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-            Body aiBody = entity.getComponent(BodyComponent.class).body;
+            Body aiBody = entity.getComponent(PhysicsComponent.class).body;
             AiComponent aiComponent = entity.getComponent(AiComponent.class);
             Vector2 startPosition = aiComponent.startPosition;
             World world = aiBody.getWorld();

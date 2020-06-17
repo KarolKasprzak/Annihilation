@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -26,7 +25,7 @@ public class RenderSystem extends SortedIteratingSystem {
     private World world;
     private BitmapFont font;
     private ComponentMapper<TextureComponent> textureMapper;
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> bodyMapper;
 
 
     @Override
@@ -36,13 +35,13 @@ public class RenderSystem extends SortedIteratingSystem {
     }
 
     public RenderSystem(OrthographicCamera camera, World world, SpriteBatch batch, ShapeRenderer shapeRenderer) {
-        super(Family.all(TextureComponent.class, BodyComponent.class).get(), new RenderComparator(), Constants.RENDER);
+        super(Family.all(TextureComponent.class, PhysicsComponent.class).get(), new RenderComparator(), Constants.RENDER);
         this.batch = batch;
         this.camera = camera;
         this.world = world;
 
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         font = new BitmapFont();
         font.getData().setScale(1f * font.getScaleY() / font.getLineHeight());
     }

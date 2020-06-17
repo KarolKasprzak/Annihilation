@@ -2,6 +2,7 @@ package com.cosma.annihilation.Systems;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,7 @@ public class TileMapRender extends IteratingSystem {
     protected Batch batch;
     private ShaderProgram normalShader;
 
+
     public TileMapRender(OrthographicCamera camera, GameMap tiledMap) {
         super(Family.all().get(), Constants.TILE_MAP_RENDER);
         this.batch = new SpriteBatch();
@@ -33,13 +35,18 @@ public class TileMapRender extends IteratingSystem {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
-        normalShader = this.getEngine().getNormalMapShaderInstance();
+        this.normalShader = engine.getNormalMapShaderInstance();
+
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        batch.setShader(null);
+
+        normalShader.begin();
+        normalShader.setUniformi("u_normals", 1);
+        normalShader.end();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (TileMapLayer mapLayer : tiledMap.getLayers().getByType(TileMapLayer.class)) {
@@ -59,32 +66,31 @@ public class TileMapRender extends IteratingSystem {
                 }
             }
         }
+        batch.end();
 
-        this.getEngine().prepareDataForNormalShaderRender(normalShader,false,false);
-
+        batch.setShader(null);
         for (SpriteMapLayer mapLayer : tiledMap.getLayers().getByType(SpriteMapLayer.class)) {
             if (mapLayer.isLayerVisible()) {
                 for (Sprite sprite : mapLayer.getSpriteArray()) {
-                    position.set(sprite.getX(),sprite.getY());
-                    if(sprite instanceof AnimatedSprite){
+                    position.set(sprite.getX(), sprite.getY());
+                    if (sprite instanceof AnimatedSprite) {
                         ((AnimatedSprite) sprite).updateAnimation(deltaTime);
                     }
-
                     sprite.bindNormalTexture(1);
                     sprite.getTextureRegion().getTexture().bind(0);
+                    batch.begin();
 
-                    batch.draw(sprite.getTextureRegion(), position.x+(sprite.isFlipX() ? sprite.getTextureRegion().getRegionWidth() / Constants.PPM : 0), position.y, (float) sprite.getTextureRegion().getRegionWidth() / Constants.PPM, (float) sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
+
+                   this.getEngine().prepareDataForNormalShaderRender(normalShader, false, false);
+                    batch.draw(sprite.getTextureRegion(), position.x + (sprite.isFlipX() ? sprite.getTextureRegion().getRegionWidth() / Constants.PPM : 0), position.y, (float) sprite.getTextureRegion().getRegionWidth() / Constants.PPM, (float) sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
                             sprite.getTextureRegion().getRegionWidth() / Constants.PPM * (sprite.isFlipX() ? -1 : 1), sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
                             1, 1, sprite.getAngle());
-
+                    batch.end();
                 }
             }
         }
-
-        batch.end();
         batch.setShader(null);
     }
-
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {

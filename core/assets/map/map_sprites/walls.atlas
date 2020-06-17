@@ -1,8 +1,22 @@
 walls.png
-size: 388, 194
+size: 388, 356
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+glass
+  rotate: false
+  xy: 223, 195
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+metro_shoop
+  rotate: false
+  xy: 1, 195
+  size: 220, 160
+  orig: 220, 160
+  offset: 0, 0
+  index: -1
 wall_tiles
   rotate: false
   xy: 1, 1

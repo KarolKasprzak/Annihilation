@@ -40,7 +40,7 @@ public class EntityFactory {
 
     public Entity createBulletEntity(float x, float y, float targetX, float targetY, float speed, boolean flip){
         Entity entity = engine.createEntity();
-        BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = engine.createComponent(PhysicsComponent.class);
         BulletComponent bulletComponent = engine.createComponent(BulletComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
 
@@ -49,9 +49,9 @@ public class EntityFactory {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyComponent.body = world.createBody(bodyDef);
-        bodyComponent.body.setUserData(entity);
-        bodyComponent.body.setBullet(true);
+        physicsComponent.body = world.createBody(bodyDef);
+        physicsComponent.body.setUserData(entity);
+        physicsComponent.body.setBullet(true);
         //Physic fixture
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(0.3f, 0.01f);
@@ -62,22 +62,22 @@ public class EntityFactory {
         fixtureDef.friction = 1f;
         fixtureDef.filter.categoryBits = CollisionID.BULLET;
         fixtureDef.filter.maskBits = CollisionID.MASK_BULLET;
-        bodyComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
+        physicsComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
 
         float velx = targetX - x;
         float vely = targetY  - y;
         float length = (float) Math.sqrt(velx * velx + vely * vely);
 
         if(flip){
-            bodyComponent.body.setLinearVelocity(speed,vely/length*speed);
+            physicsComponent.body.setLinearVelocity(speed,vely/length*speed);
             textureComponent.flipTexture = true;
         }else{
-            bodyComponent.body.setLinearVelocity(-speed,vely/length*speed);
+            physicsComponent.body.setLinearVelocity(-speed,vely/length*speed);
         }
-        bodyComponent.body.setTransform(bodyComponent.body.getPosition(),MathUtils.atan2(bodyComponent.body.getLinearVelocity().y,bodyComponent.body.getLinearVelocity().x));
+        physicsComponent.body.setTransform(physicsComponent.body.getPosition(),MathUtils.atan2(physicsComponent.body.getLinearVelocity().y, physicsComponent.body.getLinearVelocity().x));
 
         entity.add(textureComponent);
-        entity.add(bodyComponent);
+        entity.add(physicsComponent);
         entity.add(bulletComponent);
 
         return entity;
@@ -85,7 +85,7 @@ public class EntityFactory {
 
     public Entity createBulletShellEntity(float x, float y){
         Entity entity = engine.createEntity();
-        BodyComponent bodyComponent = engine.createComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = engine.createComponent(PhysicsComponent.class);
         BulletComponent bulletComponent = engine.createComponent(BulletComponent.class);
         TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
 
@@ -95,9 +95,9 @@ public class EntityFactory {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
-        bodyComponent.body = world.createBody(bodyDef);
-        bodyComponent.body.setUserData(entity);
-        bodyComponent.body.setBullet(false);
+        physicsComponent.body = world.createBody(bodyDef);
+        physicsComponent.body.setUserData(entity);
+        physicsComponent.body.setBullet(false);
         //Physic fixture
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(0.02f, 0.01f);
@@ -110,10 +110,10 @@ public class EntityFactory {
         fixtureDef.filter.categoryBits = CollisionID.SCENERY_BACKGROUND_OBJECT ;
         fixtureDef.filter.maskBits = CollisionID.MASK_SCENERY_BACKGROUND_OBJECT;
 
-        bodyComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET_SHELL);
+        physicsComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET_SHELL);
 
         entity.add(textureComponent);
-        entity.add(bodyComponent);
+        entity.add(physicsComponent);
         entity.add(bulletComponent);
 
         return entity;
@@ -153,7 +153,7 @@ public class EntityFactory {
 
 //    public Entity createDoorEntity(){
 //        Entity entity = new Entity();
-//        BodyComponent bodyComponent = new BodyComponent();
+//        PhysicsComponent bodyComponent = new PhysicsComponent();
 //        TextureComponent textureComponent = new TextureComponent();
 //        ActionComponent actionComponent = new ActionComponent();
 //        HealthComponent healthComponent = new HealthComponent();

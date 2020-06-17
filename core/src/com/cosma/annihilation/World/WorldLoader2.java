@@ -15,7 +15,7 @@
 //import com.badlogic.gdx.math.Vector2;
 //import com.badlogic.gdx.physics.box2d.*;
 //import com.badlogic.gdx.utils.Array;
-//import com.cosma.annihilation.Components.BodyComponent;
+//import com.cosma.annihilation.Components.PhysicsComponent;
 //import com.cosma.annihilation.Components.PlayerComponent;
 //import com.cosma.annihilation.Entities.EntityFactory;
 //import com.cosma.annihilation.Gui.Inventory.InventoryItemLocation;
@@ -59,21 +59,21 @@
 //                    for(MapObject mo : layer.getObjects()){
 //                        if("spawn".equals(mo.getName())){
 //                            float[] dimension = getDimension(mo);
-//                            Body playerBody = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(BodyComponent.class).body;
+//                            Body playerBody = engine.getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PhysicsComponent.class).body;
 //                            playerBody.setTransform(dimension[0],dimension[1],0);
 //                            continue;
 //                        }
 //                        if("spawn_door".equals(mo.getName())){
 //                            float[] dimension = getDimension(mo);
 //                            Entity entity = entityFactory.createDoorEntity();
-//                            entity.getComponent(BodyComponent.class).body.setTransform(dimension[0],dimension[1],0);
+//                            entity.getComponent(PhysicsComponent.class).body.setTransform(dimension[0],dimension[1],0);
 //                            continue;
 //                        }
 //
 //                        if("spawn_enemy".equals(mo.getName())){
 //                            float[] dimension = getDimension(mo);
 //                            Entity entity = entityFactory.createTestEnemy();
-//                            entity.getComponent(BodyComponent.class).body.setTransform(dimension[0],dimension[1],0);
+//                            entity.getComponent(PhysicsComponent.class).body.setTransform(dimension[0],dimension[1],0);
 //
 //                            continue;
 //                        }

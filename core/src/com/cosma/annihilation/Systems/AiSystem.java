@@ -3,11 +3,8 @@ package com.cosma.annihilation.Systems;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
@@ -22,7 +19,7 @@ public class AiSystem extends IteratingSystem {
     private World world;
     private ComponentMapper<AiComponent> aiMapper;
     private ComponentMapper<AnimationComponent> animationMapper;
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> bodyMapper;
     private ComponentMapper<HealthComponent> healthMapper;
     private BitmapFont font;
     private SpriteBatch batch;
@@ -36,7 +33,7 @@ public class AiSystem extends IteratingSystem {
         this.worldCamera = camera;
         aiMapper = ComponentMapper.getFor(AiComponent.class);
         animationMapper = ComponentMapper.getFor(AnimationComponent.class);
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         healthMapper = ComponentMapper.getFor(HealthComponent.class);
         font = new BitmapFont();
         font.setColor(Color.RED);
@@ -52,7 +49,7 @@ public class AiSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         AiComponent aiComponent = aiMapper.get(entity);
-        BodyComponent bodyComponent = bodyMapper.get(entity);
+        PhysicsComponent physicsComponent = bodyMapper.get(entity);
         if(!aiComponent.isPaused){
             aiComponent.task.update(entity,deltaTime);
         }
@@ -63,9 +60,9 @@ public class AiSystem extends IteratingSystem {
 //
 //        if(!healthComponent.isDead){
 //            aiComponent.ai.update(entity);
-//        }else bodyComponent.body.setLinearVelocity(new Vector2(0, bodyComponent.body.getLinearVelocity().y));
+//        }else physicsComponent.body.setLinearVelocity(new Vector2(0, physicsComponent.body.getLinearVelocity().y));
 //
-//        Vector3 worldPosition = worldCamera.project(new Vector3(bodyComponent.body.getPosition().x,bodyComponent.body.getPosition().y+1,0));
+//        Vector3 worldPosition = worldCamera.project(new Vector3(physicsComponent.body.getPosition().x,physicsComponent.body.getPosition().y+1,0));
 //        batch.setProjectionMatrix(camera.combined);
 //        batch.begin();
 //        font.draw(batch, aiComponent.ai.getStatus(), worldPosition.x, worldPosition.y);

@@ -3,7 +3,7 @@ package com.cosma.annihilation.Ai.Tasks;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.cosma.annihilation.Components.AiComponent;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 
 public class Wander extends Task {
     private GoToPosition moveTo;
@@ -34,7 +34,7 @@ public class Wander extends Task {
 
     @Override
     public void update(Entity entity, float deltaTime) {
-        BodyComponent bodyComponent = entity.getComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
         AiComponent aiComponent = entity.getComponent(AiComponent.class);
 
         if(moveTo.isSuccess() || moveTo.isPrepared()){

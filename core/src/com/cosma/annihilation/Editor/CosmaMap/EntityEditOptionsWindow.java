@@ -1,6 +1,7 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
 
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.ActionComponent;
-import com.cosma.annihilation.Components.BodyComponent;
 import com.cosma.annihilation.Components.ContainerComponent;
 import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Items.Item;
@@ -22,8 +22,6 @@ import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
-
-import java.util.Arrays;
 
 public class EntityEditOptionsWindow extends VisWindow {
     public EntityEditOptionsWindow(Entity entity, OrthographicCamera camera) {
@@ -44,7 +42,7 @@ public class EntityEditOptionsWindow extends VisWindow {
                 add(textButton);
                 row();
             }
-            if (component instanceof BodyComponent) {
+            if (component instanceof PhysicsComponent) {
                 VisTextButton textButton = new VisTextButton("Edit body");
                 textButton.addListener(new ChangeListener() {
                     @Override

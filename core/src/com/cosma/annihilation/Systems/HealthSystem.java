@@ -1,7 +1,6 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -24,18 +23,18 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
 
 
     private ComponentMapper<HealthComponent> healthMapper;
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> bodyMapper;
     private ComponentMapper<AiComponent> aiComponentMapper;
     private ComponentMapper<SkeletonComponent> skeletonMapper;
     private OrthographicCamera camera;
 
 
     public HealthSystem(OrthographicCamera camera) {
-        super(Family.all(HealthComponent.class, BodyComponent.class, AiComponent.class, SkeletonComponent.class).get(), Constants.HEALTH_SYSTEM);
+        super(Family.all(HealthComponent.class, PhysicsComponent.class, AiComponent.class, SkeletonComponent.class).get(), Constants.HEALTH_SYSTEM);
         this.camera = camera;
 
         healthMapper = ComponentMapper.getFor(HealthComponent.class);
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         aiComponentMapper = ComponentMapper.getFor(AiComponent.class);
         skeletonMapper = ComponentMapper.getFor(SkeletonComponent.class);
     }
@@ -44,7 +43,7 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         HealthComponent healthComponent = healthMapper.get(entity);
-        BodyComponent bodyComponent = bodyMapper.get(entity);
+        PhysicsComponent physicsComponent = bodyMapper.get(entity);
         AiComponent aiComponent = aiComponentMapper.get(entity);
         SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
 
@@ -58,7 +57,7 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
             Filter filter = new Filter();
             filter.categoryBits = CollisionID.SCENERY_BACKGROUND_OBJECT;
             filter.maskBits = CollisionID.MASK_SCENERY_BACKGROUND_OBJECT;
-            bodyComponent.body.getFixtureList().first().setFilterData(filter);
+            physicsComponent.body.getFixtureList().first().setFilterData(filter);
             aiComponent.isPaused = true;
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -72,12 +71,12 @@ public class HealthSystem extends IteratingSystem implements Listener<GameEvent>
 
         if (healthComponent.isHit && healthComponent.hp > 0) {
             Vector2 attackerPosition = healthComponent.attackerPosition;
-            Vector2 position = bodyComponent.body.getPosition();
+            Vector2 position = physicsComponent.body.getPosition();
             if (attackerPosition.x > position.x) {
-                this.getEngine().addEntity(EntityFactory.getInstance().createBloodSplashEntity(bodyComponent.body.getPosition().x - 1, bodyComponent.body.getPosition().y + MathUtils.random(-0.2f, 0.3f), MathUtils.random(0, 90)));
+                this.getEngine().addEntity(EntityFactory.getInstance().createBloodSplashEntity(physicsComponent.body.getPosition().x - 1, physicsComponent.body.getPosition().y + MathUtils.random(-0.2f, 0.3f), MathUtils.random(0, 90)));
 
             } else {
-                this.getEngine().addEntity(EntityFactory.getInstance().createBloodSplashEntity(bodyComponent.body.getPosition().x + 1, bodyComponent.body.getPosition().y + MathUtils.random(-0.2f, 0.3f), MathUtils.random(0, 90)));
+                this.getEngine().addEntity(EntityFactory.getInstance().createBloodSplashEntity(physicsComponent.body.getPosition().x + 1, physicsComponent.body.getPosition().y + MathUtils.random(-0.2f, 0.3f), MathUtils.random(0, 90)));
             }
             healthComponent.isHit = false;
             aiComponent.isPaused = true;

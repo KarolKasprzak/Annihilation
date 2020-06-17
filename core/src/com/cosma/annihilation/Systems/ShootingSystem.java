@@ -35,7 +35,7 @@ import com.esotericsoftware.spine.Bone;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ShootingSystem extends IteratingSystem implements Listener<GameEvent> {
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> bodyMapper;
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<PlayerInventoryComponent> playerDateMapper;
     private ComponentMapper<PlayerStatsComponent> playerStatsMapper;
@@ -44,7 +44,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private World world;
     private SkeletonComponent skeletonComponent;
     private PlayerComponent playerComponent;
-    private BodyComponent bodyComponent;
+    private PhysicsComponent physicsComponent;
     private PlayerInventoryComponent playerInventoryComponent;
     private PlayerStatsComponent statsComponent;
     private RayCastCallback noiseRayCallback;
@@ -66,6 +66,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private OrthographicCamera worldCamera;
     private Viewport viewport;
     private int meleeBlowNumber = 1;
+    private RayHandler rayHandler;
 
     public ShootingSystem(World world, RayHandler rayHandler, Batch batch, OrthographicCamera camera, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.SHOOTING_SYSTEM);
@@ -73,22 +74,23 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         this.batch = batch;
         this.worldCamera = camera;
         this.viewport = viewport;
+        this.rayHandler = rayHandler;
 
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         playerDateMapper = ComponentMapper.getFor(PlayerInventoryComponent.class);
         playerStatsMapper = ComponentMapper.getFor(PlayerStatsComponent.class);
         skeletonMapper = ComponentMapper.getFor(SkeletonComponent.class);
         raycastEnd = new Vector2();
 
-        weaponLight = new PointLight(rayHandler, 45, new Color(1, 1f, 0.7f, 0.5f), 1f, 0, 0);
+        weaponLight = new PointLight(rayHandler, 45, new Color(1, 1f, 0.4f, 0.7f), 4f, 0, 0);
         weaponLight.setStaticLight(false);
         Filter filter = new Filter();
         filter.categoryBits = CollisionID.LIGHT;
         filter.maskBits = CollisionID.MASK_LIGHT;
         weaponLight.setContactFilter(filter);
         weaponLight.setXray(true);
-        weaponLight.setActive(false);
+        weaponLight.setActive(true);
 
         signal = new Signal<>();
         noiseTestEntityList = new Array<>();
@@ -119,7 +121,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         playerComponent = playerMapper.get(entity);
         playerInventoryComponent = playerDateMapper.get(entity);
         statsComponent = playerStatsMapper.get(entity);
-        bodyComponent = bodyMapper.get(entity);
+        physicsComponent = bodyMapper.get(entity);
         body = bodyMapper.get(entity).body;
         skeletonComponent = skeletonMapper.get(entity);
         weaponReloadTimer += deltaTime;
@@ -165,7 +167,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 //        if (!playerComponent.isWeaponHidden) {
 //            world.rayCast(callback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
 //            if (targetEntity != null) {
-//                BodyComponent targetBody = targetEntity.getComponent(BodyComponent.class);
+//                PhysicsComponent targetBody = targetEntity.getComponent(PhysicsComponent.class);
 //                Vector3 worldPosition = worldCamera.project(new Vector3(targetBody.body.getPosition().x, targetBody.body.getPosition().y, 0));
 //                batch.setProjectionMatrix(camera.combined);
 //                batch.begin();
@@ -284,7 +286,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             if (calculateAttackAccuracy() && targetEntity != null) {
                 targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
                 targetEntity.getComponent(HealthComponent.class).isHit = true;
-                targetEntity.getComponent(HealthComponent.class).attackerPosition = bodyComponent.body.getPosition();
+                targetEntity.getComponent(HealthComponent.class).attackerPosition = physicsComponent.body.getPosition();
             }
             targetEntity = null;
             createBulletAndLightEffect();
@@ -307,13 +309,14 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         getEngine().spawnBulletEntity(muzzle.getWorldX(), muzzle.getWorldY(), angle, 25, skeletonComponent.skeletonDirection);
         this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(shellEjector.getWorldX(), shellEjector.getWorldY()));
 //        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
+
         weaponLight.setActive(true);
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 weaponLight.setActive(false);
             }
-        }, 0.1f);
+        }, 0.2f);
     }
 
     private boolean calculateAttackAccuracyFloat() {
@@ -337,7 +340,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         if (playerAccuracy >= 0.95f) {
             return true;
         } else {
-            float distance = targetEntity.getComponent(BodyComponent.class).body.getPosition().x - body.getPosition().x;
+            float distance = targetEntity.getComponent(PhysicsComponent.class).body.getPosition().x - body.getPosition().x;
             if (distance > 0) {
                 distance = distance * -1;
             }

@@ -4,7 +4,7 @@ package com.cosma.annihilation.Ai.Tasks;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.cosma.annihilation.Components.AiComponent;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Util;
 
@@ -48,14 +48,14 @@ public class GoToPosition extends Task {
 
     @Override
     public void update(Entity entity, float deltaTime) {
-        BodyComponent bodyComponent = entity.getComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
         AiComponent aiComponent = entity.getComponent(AiComponent.class);
 
 
         if(isSuccess() || isPrepared()){
             return;
         }
-        Body aiBody = bodyComponent.body;
+        Body aiBody = physicsComponent.body;
         Vector2 aiPosition = aiBody.getPosition();
         if (Util.roundFloat(destX, 1) != Util.roundFloat(aiPosition.x, 1)) {
             if (destX < aiPosition.x) {

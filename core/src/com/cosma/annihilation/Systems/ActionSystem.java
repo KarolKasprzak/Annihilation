@@ -18,13 +18,12 @@ import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 
-import javax.jnlp.ClipboardService;
 
 public class ActionSystem extends IteratingSystem implements Listener<GameEvent> {
     private ComponentMapper<PlayerComponent> stateMapper;
-    private ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<PhysicsComponent> bodyMapper;
     private PlayerComponent playerComponent;
-    private BodyComponent bodyComponent;
+    private PhysicsComponent physicsComponent;
     private OrthographicCamera camera;
     private SpriteBatch batch;
 //    Filter filter;
@@ -33,7 +32,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     public ActionSystem(OrthographicCamera camera, SpriteBatch batch) {
         super(Family.all(PlayerComponent.class).get(), Constants.ACTION_SYSTEM);
         stateMapper = ComponentMapper.getFor(PlayerComponent.class);
-        bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+        bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         this.batch = batch;
         this.camera = camera;
 //        filter = new Filter();
@@ -47,7 +46,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         playerComponent = stateMapper.get(entity);
-        bodyComponent = bodyMapper.get(entity);
+        physicsComponent = bodyMapper.get(entity);
         if (playerComponent.collisionEntityArray.size > 0) {
             playerComponent.processedEntity = playerComponent.collisionEntityArray.first();
             ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
@@ -56,7 +55,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
             Texture icon;
-            Body entityBody = playerComponent.processedEntity.getComponent(BodyComponent.class).body;
+            Body entityBody = playerComponent.processedEntity.getComponent(PhysicsComponent.class).body;
 
             switch (actionComponent.action) {
                 case TALK:
@@ -132,10 +131,10 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.climbing = true;
         playerComponent.canMoveOnSide = false;
-        Body body = playerEntity.getComponent(BodyComponent.class).body;
+        Body body = playerEntity.getComponent(PhysicsComponent.class).body;
         body.getFixtureList().get(0).setSensor(true);
         playerComponent.climbingTargetPosition = playerComponent.processedEntity.getComponent(ActionComponent.class).actionTargetPosition;
-        playerComponent.climbingStartPosition = playerComponent.processedEntity.getComponent(BodyComponent.class).body.getPosition();
+        playerComponent.climbingStartPosition = playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getPosition();
         playerComponent.activeTask = new PlayerGoToPosition(playerComponent.climbingStartPosition);
     }
 
@@ -143,7 +142,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     private void goToAnotherMap() {
         playerComponent.mapName = playerComponent.processedEntity.getComponent(GateComponent.class).targetMapPath;
 //        worldBuilder.goToMap();
-//        playerComponent.getComponent(BodyComponent.class).body.setTransform(gateEntity.getComponent(GateComponent.class).playerPositionOnTargetMap,0);
+//        playerComponent.getComponent(PhysicsComponent.class).body.setTransform(gateEntity.getComponent(GateComponent.class).playerPositionOnTargetMap,0);
     }
 
     private void openLootWindow() {
@@ -163,22 +162,22 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     }
 
 //    private void doorAction() {
-//        if (playerComponent.processedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).isSensor()) {
-//            playerComponent.processedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).setSensor(false);
-//            playerComponent.processedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).setFilterData(filter1);
-//            playerComponent.processedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).refilter();
+//        if (playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).isSensor()) {
+//            playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).setSensor(false);
+//            playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).setFilterData(filter1);
+//            playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).refilter();
 //            playerComponent.processedEntity.getComponent(DoorComponent.class).isOpen = false;
 //
 //        } else {
-//            playerComponent.processedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).setSensor(true);
-//            playerComponent.processedEntity.getComponent(BodyComponent.class).body.getFixtureList().get(0).setFilterData(filter);
+//            playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).setSensor(true);
+//            playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).setFilterData(filter);
 //            playerComponent.processedEntity.getComponent(DoorComponent.class).isOpen = true;
 //
 //        }
 //    }
 //
 //    public void loadDoor(Entity entity){
-//        entity.getComponent(BodyComponent.class).body.getFixtureList().get(0).setSensor(true);
-//        entity.getComponent(BodyComponent.class).body.getFixtureList().get(0).setFilterData(filter);
+//        entity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).setSensor(true);
+//        entity.getComponent(PhysicsComponent.class).body.getFixtureList().get(0).setFilterData(filter);
 //    }
 }

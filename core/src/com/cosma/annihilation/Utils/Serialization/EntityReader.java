@@ -51,22 +51,22 @@ public class EntityReader implements Json.Serializer<Entity> {
     public Entity read(Json json, JsonValue jsonData, Class type) {
 
         Entity entity = new Entity();
-        if (jsonData.has("BodyComponent")) {
+        if (jsonData.has("PhysicsComponent")) {
 
-            BodyComponent bodyComponent = new BodyComponent();
-            if(jsonData.get("BodyComponent").has("width") && jsonData.get("BodyComponent").has("height")){
-                bodyComponent.width = jsonData.get("BodyComponent").get("width").asFloat();
-                bodyComponent.height = jsonData.get("BodyComponent").get("height").asFloat();
+            PhysicsComponent physicsComponent = new PhysicsComponent();
+            if(jsonData.get("PhysicsComponent").has("width") && jsonData.get("PhysicsComponent").has("height")){
+                physicsComponent.width = jsonData.get("PhysicsComponent").get("width").asFloat();
+                physicsComponent.height = jsonData.get("PhysicsComponent").get("height").asFloat();
             }
             BodyDef bodyDef = new BodyDef();
-            bodyDef.type = BodyDef.BodyType.valueOf(jsonData.get("BodyComponent").get("bodyType").asString());
-            bodyComponent.body = world.createBody(bodyDef);
-            bodyComponent.body.setFixedRotation(jsonData.get("BodyComponent").get("fixedRotation").asBoolean());
-            bodyComponent.body.setBullet(jsonData.get("BodyComponent").get("bullet").asBoolean());
-            bodyComponent.body.setUserData(entity);
-            bodyComponent.body.setTransform(new Vector2(jsonData.get("BodyComponent").get("positionX").asFloat(), jsonData.get("BodyComponent").get("positionY").asFloat()), 0);
+            bodyDef.type = BodyDef.BodyType.valueOf(jsonData.get("PhysicsComponent").get("bodyType").asString());
+            physicsComponent.body = world.createBody(bodyDef);
+            physicsComponent.body.setFixedRotation(jsonData.get("PhysicsComponent").get("fixedRotation").asBoolean());
+            physicsComponent.body.setBullet(jsonData.get("PhysicsComponent").get("bullet").asBoolean());
+            physicsComponent.body.setUserData(entity);
+            physicsComponent.body.setTransform(new Vector2(jsonData.get("PhysicsComponent").get("positionX").asFloat(), jsonData.get("PhysicsComponent").get("positionY").asFloat()), 0);
 
-            for (JsonValue value : jsonData.get("BodyComponent").get("Fixtures")) {
+            for (JsonValue value : jsonData.get("PhysicsComponent").get("Fixtures")) {
                 FixtureDef fixtureDef = new FixtureDef();
 
                 if (value.has("shapeX") && value.has("shapeY")) {
@@ -159,16 +159,16 @@ public class EntityReader implements Json.Serializer<Entity> {
                     }
                 }
                 if(value.has("hasCustomDate")){
-                    bodyComponent.body.createFixture(fixtureDef).setUserData(value.get("userDate").asString());
+                    physicsComponent.body.createFixture(fixtureDef).setUserData(value.get("userDate").asString());
                 }else{
                     if(value.has("userDate")){
-                        bodyComponent.body.createFixture(fixtureDef).setUserData(BodyID.valueOf(value.get("userDate").asString()));
+                        physicsComponent.body.createFixture(fixtureDef).setUserData(BodyID.valueOf(value.get("userDate").asString()));
                     }else{
-                        bodyComponent.body.createFixture(fixtureDef);
+                        physicsComponent.body.createFixture(fixtureDef);
                     }
                 }
                 fixtureDef.shape.dispose();
-                entity.add(bodyComponent);
+                entity.add(physicsComponent);
             }
         }
 
@@ -177,6 +177,12 @@ public class EntityReader implements Json.Serializer<Entity> {
             healthComponent.hp = jsonData.get("HealthComponent").get("hp").asInt();
             healthComponent.maxHP = jsonData.get("HealthComponent").get("maxHP").asInt();
             entity.add(healthComponent);
+        }
+
+        if (jsonData.has("DrawOrder")) {
+            DrawOrderComponent drawOrderComponent = new DrawOrderComponent();
+            drawOrderComponent.drawOrder = jsonData.get("DrawOrder").get("drawOrder").asInt();
+            entity.add(drawOrderComponent);
         }
 
         if (jsonData.has("SkeletonComponent")) {

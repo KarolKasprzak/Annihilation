@@ -23,13 +23,17 @@
   PlayerStatsComponent: {
   }
   
+  DrawOrder: {
+  drawOrder: 7
+  }
+  
   SkeletonComponent: {
   atlasPath: gfx/skeletons/player/player.atlas
   normalPath: gfx/skeletons/player/player_n.png
   jsonPath: gfx/skeletons/player/player.json
   }
   
-  BodyComponent: {
+  PhysicsComponent: {
     bodyType: DynamicBody
     positionX: 0
     positionY: 0

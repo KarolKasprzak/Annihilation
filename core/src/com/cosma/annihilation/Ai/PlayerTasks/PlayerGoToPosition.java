@@ -3,7 +3,7 @@ package com.cosma.annihilation.Ai.PlayerTasks;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.cosma.annihilation.Ai.Tasks.Task;
-import com.cosma.annihilation.Components.BodyComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.Components.SkeletonComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
@@ -49,7 +49,7 @@ public class PlayerGoToPosition extends Task {
 
     @Override
     public void update(Entity entity, float deltaTime) {
-        BodyComponent bodyComponent = entity.getComponent(BodyComponent.class);
+        PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
         PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
         SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
 
@@ -57,7 +57,7 @@ public class PlayerGoToPosition extends Task {
         if(isSuccess() || isPrepared()){
             return;
         }
-        Body aiBody = bodyComponent.body;
+        Body aiBody = physicsComponent.body;
         Vector2 aiPosition = aiBody.getPosition();
         if (Util.roundFloat(destX, 1) != Util.roundFloat(aiPosition.x, 1)) {
             if (destX < aiPosition.x) {

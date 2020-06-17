@@ -65,23 +65,6 @@ layers: {
 						y: 17.028852
 						softLight: false
 					}
-					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight
-						name: ConeLight_3
-						raysNumber: 25
-						color: {
-							r: 1
-							g: 1
-							b: 1
-							a: 0.9137255
-						}
-						lightDistance: 5
-						x: 30.110151
-						y: 17.626766
-						softLight: false
-						direction: 270
-						coneDegree: 45
-					}
 				]
 			}
 		}
@@ -122,6 +105,22 @@ layers: {
 				{
 					position: "31.0,14.0,0.0"
 					texture: "map/map_sprites/metro.atlas,metro_wall"
+				}
+				{
+					position: "14.0,14.0,0.0"
+					texture: "map/map_sprites/walls.atlas,wall_tiles1"
+				}
+				{
+					position: "28.0,14.0,0.0"
+					texture: "map/map_sprites/walls.atlas,metro_shoop"
+				}
+				{
+					position: "21.569334,13.994667,0.0"
+					texture: "map/map_sprites/walls.atlas,glass"
+				}
+				{
+					position: "20.000103,13.992104,0.0"
+					texture: "map/map_sprites/walls.atlas,glass"
 				}
 			]
 		}
