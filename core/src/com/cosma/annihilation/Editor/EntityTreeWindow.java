@@ -20,7 +20,7 @@ import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Editor.CosmaMap.EntityEditOptionsWindow;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.cosma.annihilation.Screens.MapEditor;
+import com.cosma.annihilation.Screens.EditorScreen;
 import com.cosma.annihilation.Utils.Serialization.EntityReader;
 import com.cosma.annihilation.Utils.Util;
 import com.kotcrab.vis.ui.util.TableUtils;
@@ -38,7 +38,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
 
     private HashMap<String, FileHandle> jsonList;
     private World world;
-    private MapEditor mapEditor;
+    private EditorScreen editorScreen;
     private boolean canAddEntity = false;
     private String selectedEntityName;
     private Body selectedBody;
@@ -50,10 +50,10 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     private Json json;
 
 
-    public EntityTreeWindow(World world, MapEditor mapEditor) {
+    public EntityTreeWindow(World world, EditorScreen editorScreen) {
         super("Entity:");
         this.world = world;
-        this.mapEditor = mapEditor;
+        this.editorScreen = editorScreen;
 
 
         TableUtils.setSpacingDefaults(this);
@@ -129,7 +129,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                 ((AiComponent) component).startPosition.set(x, y);
             }
         }
-        mapEditor.getMap().addEntity(entity);
+        editorScreen.getMap().addEntity(entity);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     @Override
     public boolean touchDown(final int screenX, final int screenY, int pointer, int button) {
         Vector3 worldCoordinates = vector3tempt.set(screenX,screenY,0);
-        final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+        final Vector3 vec = editorScreen.getCamera().unproject(worldCoordinates);
 
         if(canMoveWithDrag && button == Input.Buttons.LEFT){
             isLeftMouseButtonPressed = true;
@@ -193,7 +193,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
             world.QueryAABB(new QueryCallback() {
                 @Override
                 public boolean reportFixture(final Fixture fixture) {
-                    for (Entity entity : mapEditor.getMap().getEntityArrayList()) {
+                    for (Entity entity : editorScreen.getMap().getEntityArrayList()) {
                         if (fixture.getBody() == entity.getComponent(PhysicsComponent.class).body) {
                             final int delete = 1;
                             final int move = 2;
@@ -205,7 +205,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                                         @Override
                                         public void result(Integer result) {
                                             if (result == delete) {
-                                                mapEditor.getMap().removeEntity(((Entity) fixture.getBody().getUserData()));
+                                                editorScreen.getMap().removeEntity(((Entity) fixture.getBody().getUserData()));
                                                 world.destroyBody(fixture.getBody());
                                             }
 
@@ -216,7 +216,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                                             }
 
                                             if (result == options) {
-                                                EntityEditOptionsWindow window = new EntityEditOptionsWindow(entity,mapEditor.getCamera());
+                                                EntityEditOptionsWindow window = new EntityEditOptionsWindow(entity, editorScreen.getCamera());
                                                 getStage().addActor(window);
                                             }
 
@@ -244,9 +244,9 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Vector3 worldCoordinates = vector3tempt.set(screenX,screenY,0);
-        Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+        Vector3 vec = editorScreen.getCamera().unproject(worldCoordinates);
         Vector3 deltaWorldCoordinates = vector3tempt1.set(screenX - Gdx.input.getDeltaX(), screenY - Gdx.input.getDeltaY(), 0);
-        Vector3 deltaVec = mapEditor.getCamera().unproject(deltaWorldCoordinates);
+        Vector3 deltaVec = editorScreen.getCamera().unproject(deltaWorldCoordinates);
         float amountX, amountY;
 
         if (canMoveWithDrag && isLeftMouseButtonPressed && selectedBody != null) {
@@ -262,13 +262,13 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     public boolean mouseMoved(int screenX, int screenY) {
         if(canMoveWithDrag){
             Vector3 worldCoordinates = vector3tempt.set(screenX,screenY,0);
-            final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+            final Vector3 vec = editorScreen.getCamera().unproject(worldCoordinates);
             selectedBody = null;
             Util.setCursorSystem();
             world.QueryAABB(new QueryCallback() {
                 @Override
                 public boolean reportFixture(final Fixture fixture) {
-                    for (Entity entity : mapEditor.getMap().getEntityArrayList()) {
+                    for (Entity entity : editorScreen.getMap().getEntityArrayList()) {
                         if(fixture.getBody() == entity.getComponent(PhysicsComponent.class).body) {
                          selectedBody = fixture.getBody();
                          Util.setCursorMove();

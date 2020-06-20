@@ -3,21 +3,14 @@ package com.cosma.annihilation.Editor.CosmaMap;
 public abstract class MapLayer {
     private int width;
     private int height;
-    private String name = "";
     private boolean visible = true;;
 
-    public MapLayer(int width, int height, String name) {
+    public MapLayer(int width, int height) {
         this.width = width;
         this.height = height;
-        this.name = name;
     }
 
     public MapLayer() {
-
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setVisible(boolean visible) {
@@ -26,10 +19,6 @@ public abstract class MapLayer {
 
     public boolean isLayerVisible(){
         return visible;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getWidth() {

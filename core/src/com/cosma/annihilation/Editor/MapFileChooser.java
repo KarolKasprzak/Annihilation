@@ -4,15 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.cosma.annihilation.Editor.CosmaMap.GameMap;
-import com.cosma.annihilation.Screens.MapEditor;
+import com.cosma.annihilation.Screens.EditorScreen;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
 public class MapFileChooser extends VisWindow {
 
 
-    public MapFileChooser(MapEditor mapEditor) {
+    public MapFileChooser(EditorScreen editorScreen) {
         super("Load map:");
         addCloseButton();
         centerWindow();
@@ -22,7 +21,7 @@ public class MapFileChooser extends VisWindow {
             button.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    mapEditor.loadMap("map/"+button.getText());
+                    editorScreen.loadMap("map/"+button.getText());
                     close();
                 }
             });

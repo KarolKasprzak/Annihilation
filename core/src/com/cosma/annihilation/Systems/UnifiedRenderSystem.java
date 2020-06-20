@@ -70,9 +70,8 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         batch.setShader(null);
         polygonBatch.setShader(null);
         //render background (map)
-        for (SpriteMapLayer mapLayer : gameMap.getLayers().getByType(SpriteMapLayer.class)) {
-            if (mapLayer.isLayerVisible()) {
-                for (Sprite sprite : mapLayer.getSpriteArray()) {
+
+                for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
                     positionTmp.set(sprite.getX(), sprite.getY());
                     if (sprite instanceof AnimatedSprite) {
                         ((AnimatedSprite) sprite).updateAnimation(deltaTime);
@@ -87,8 +86,6 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
                             1, 1, sprite.getAngle());
                     batch.end();
                 }
-            }
-        }
 
 
         super.update(deltaTime);

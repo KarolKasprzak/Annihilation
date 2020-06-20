@@ -1,46 +1,60 @@
 editor_icon.png
-size: 768, 128
+size: 390, 390
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 cone_light
   rotate: false
-  xy: 0, 0
+  xy: 1, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-point_light_h
+cone_light_h
   rotate: false
-  xy: 128, 0
+  xy: 1, 131
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+geometry
+  rotate: false
+  xy: 1, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 point_light
   rotate: false
-  xy: 256, 0
+  xy: 131, 1
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+point_light_h
+  rotate: false
+  xy: 261, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 384, 0
+  xy: 131, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings_
   rotate: false
-  xy: 512, 0
+  xy: 131, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-sun_light
+texture
   rotate: false
-  xy: 640, 0
+  xy: 261, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

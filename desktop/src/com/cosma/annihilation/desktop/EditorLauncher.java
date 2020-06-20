@@ -8,21 +8,19 @@ import com.cosma.annihilation.Annihilation;
 
 import java.awt.*;
 
-public class DesktopLauncher {
+public class EditorLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		config.title = "Annihilation";
+		config.title = "Cosma Map Editor";
 		config.resizable = false;
-		config.fullscreen = false;
 		config.samples=3;
-		config.width = screenSize.width/2;
+		config.width = screenSize.width;
 		config.height = screenSize.height/2;
 		config.vSyncEnabled = true;
 
-
-		new LwjglApplication (new Annihilation(false),config);
+		new LwjglApplication (new Annihilation(true),config);
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 	}
 }

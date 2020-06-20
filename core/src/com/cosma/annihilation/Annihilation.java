@@ -3,7 +3,6 @@ package com.cosma.annihilation;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -14,7 +13,7 @@ import com.badlogic.gdx.utils.*;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemLoader;
 import com.cosma.annihilation.Screens.GameScreen;
-import com.cosma.annihilation.Screens.MapEditor;
+import com.cosma.annihilation.Screens.EditorScreen;
 import com.cosma.annihilation.Screens.MenuScreen;
 import com.cosma.annihilation.Utils.AssetLoader;
 import com.cosma.annihilation.Utils.Localization;
@@ -30,10 +29,12 @@ public class Annihilation extends Game {
 	private ItemLoader itemLoader;
 	private Cursor crosshairCursor;
 	private Cursor arrowCursor;
+	private boolean startEditor;
 	static Label.LabelStyle labelStyle;
 
-	public Annihilation() {
+	public Annihilation(boolean startEditor) {
 		super();
+		this.startEditor = startEditor;
 		assetLoader = new AssetLoader();
 	}
 
@@ -62,8 +63,11 @@ public class Annihilation extends Game {
 		crosshairCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local("gfx/interface/crossCursor.png")), 32, 32);
 		arrowCursor = Gdx.graphics.newCursor(new Pixmap(Gdx.files.local("gfx/interface/arrowCursor.png")), 32, 32);
 		Gdx.graphics.setCursor(arrowCursor);
-
-		this.setScreen(menuScreen);
+		if(startEditor){
+			setEditorScreen();
+		}else{
+			this.setScreen(menuScreen);
+		}
 	}
 
 	@Override
@@ -83,8 +87,8 @@ public class Annihilation extends Game {
 	}
 
 	public void setEditorScreen() {
-		MapEditor mapEditor = new MapEditor(this);
-		this.setScreen(mapEditor);
+		EditorScreen editorScreen = new EditorScreen(this);
+		this.setScreen(editorScreen);
 	}
 
 	public StartStatus getStartStatus() {
@@ -114,6 +118,7 @@ public class Annihilation extends Game {
 	public static AssetManager getAssets() {
 		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.manager;
 	}
+
 
 	public static String getLocalText(String key) {
 		return ((Annihilation) Gdx.app.getApplicationListener()).localization.getText(key);

@@ -2,8 +2,8 @@
   HealthComponent: {
     hp: 100
     maxHP: 100
-  },
-  BodyComponent: {
+  }
+  PhysicsComponent: {
     bodyType: DynamicBody
     positionX: 0
     positionY: 0
@@ -37,10 +37,15 @@
 		userDate: ACTION_TRIGGER
       }
     ]
-  },
+  }
+  
+  DrawOrder: {
+  drawOrder: 6
+  }
+  
   TextureComponent: {
   atlasPatch: "gfx/atlas/containers.atlas,wood_box"
-  },
+  }
  
   SerializationComponent: {
     entityName: box.json

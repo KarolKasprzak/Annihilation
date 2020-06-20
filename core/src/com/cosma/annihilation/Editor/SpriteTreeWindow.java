@@ -8,14 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Editor.CosmaMap.Sprite;
-import com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer;
-import com.cosma.annihilation.Screens.MapEditor;
+import com.cosma.annihilation.Screens.EditorScreen;
 import com.cosma.annihilation.Utils.Util;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
@@ -26,7 +27,7 @@ import com.kotcrab.vis.ui.widget.VisWindow;
 
 public class SpriteTreeWindow extends VisWindow implements InputProcessor {
 
-    private MapEditor mapEditor;
+    private EditorScreen editorScreen;
     private boolean canAddSprite = false;
     private String texturePath;
     private String textureRegionName;
@@ -40,10 +41,10 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
     private boolean canRotate = false;
     private boolean isRotating = false;
 
-    public SpriteTreeWindow(MapEditor mapEditor) {
+    public SpriteTreeWindow(EditorScreen editorScreen) {
 
         super("Sprite:");
-        this.mapEditor = mapEditor;
+        this.editorScreen = editorScreen;
         TableUtils.setSpacingDefaults(this);
         columnDefaults(0).left();
         final VisTree tree = new VisTree();
@@ -72,8 +73,6 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
                     childrenNode.setObject(textureRegion);
                     node.add(childrenNode);
                 }
-
-
             }
         }
         treeRoot.setExpanded(true);
@@ -95,7 +94,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (!tree.getSelection().isEmpty()) {
-                    if(tree.getSelection().first().getObject() instanceof TextureAtlas.AtlasRegion && mapEditor.isSpriteLayerSelected()){
+                    if(tree.getSelection().first().getObject() instanceof TextureAtlas.AtlasRegion && editorScreen.isSpriteEditModeSelected()){
                         canAddSprite = true;
                         if(((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).index > 0){
                             createAnimatedSprite = true;
@@ -108,13 +107,50 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
             }
         });
 
+        ClickListener clickListener = new ClickListener();
+
+       scrollPane.addListener(new ClickListener(){
+
+           @Override
+           public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+               super.enter(event, x, y, pointer, fromActor);
+               getStage().setScrollFocus(scrollPane);
+           }
+
+           @Override
+           public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+               super.exit(event, x, y, pointer, toActor);
+               getStage().setScrollFocus(null);
+           }
+
+
+       });
+
+
+
+//        this.addListener(new ClickListener(){
+//
+//            @Override
+//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                super.enter(event, x, y, pointer, fromActor);
+//                System.out.println("enter");
+//            }
+//
+//            @Override
+//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                super.exit(event, x, y, pointer, toActor);
+//                System.out.println("exit");
+//
+//            }
+//        });
+
     }
 
     private void findSprite(int x, int y){
         Vector3 worldCoordinates = new Vector3(x, y, 0);
-        final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+        final Vector3 vec = editorScreen.getCamera().unproject(worldCoordinates);
         boolean isSpriteSelected = false;
-        for(Sprite sprite: mapEditor.layersPanel.getSelectedLayer(SpriteMapLayer.class).getSpriteArray()){
+        for(Sprite sprite: editorScreen.getMap().getSpriteMapLayer().getSpriteArray()){
             if(vec.x >= sprite.getX() && vec.x <= sprite.getX() + sprite.getWidth() && vec.y <= sprite.getY()+sprite.getHeight() && vec.y >= sprite.getY()){
                     Util.setCursorMove();
                     canMove = true;
@@ -134,7 +170,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.FORWARD_DEL && selectedSprite != null) {
-            mapEditor.getMap().getLayers().getByType(SpriteMapLayer.class).first().getSpriteArray().removeValue(selectedSprite,true);
+            editorScreen.getMap().getSpriteMapLayer().getSpriteArray().removeValue(selectedSprite,true);
             selectedSprite = null;
             Util.setCursorSystem();
         }
@@ -154,13 +190,13 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
     @Override
     public boolean touchDown(final int screenX, final int screenY, int pointer, int button) {
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
-        final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
-        if (canAddSprite && button == Input.Buttons.LEFT && mapEditor.isSpriteLayerSelected()) {
+        final Vector3 vec = editorScreen.getCamera().unproject(worldCoordinates);
+        if (canAddSprite && button == Input.Buttons.LEFT && editorScreen.isSpriteEditModeSelected()) {
             if(createAnimatedSprite){
-                mapEditor.layersPanel.getSelectedLayer(SpriteMapLayer.class).createAnimatedSprite(textureRegionName,texturePath,
+                editorScreen.getMap().getSpriteMapLayer().createAnimatedSprite(textureRegionName,texturePath,
                         Util.roundFloat(vec.x,0),Util.roundFloat(vec.y,0),0);
             }else{
-                mapEditor.layersPanel.getSelectedLayer(SpriteMapLayer.class).createSprite(textureRegionName,texturePath,
+                editorScreen.getMap().getSpriteMapLayer().createSprite(textureRegionName,texturePath,
                         Util.roundFloat(vec.x,0),Util.roundFloat(vec.y,0),0);
             }
 
@@ -208,7 +244,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
-        final Vector3 vec = mapEditor.getCamera().unproject(worldCoordinates);
+        final Vector3 vec = editorScreen.getCamera().unproject(worldCoordinates);
         float amountY;
         if(isMoving){
                 selectedSprite.setSpritePosition(vec.x,vec.y);
@@ -218,7 +254,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
         }
         if (isRotating){
             Vector3 deltaWorldCoordinates = new Vector3(screenX - Gdx.input.getDeltaX(), screenY - Gdx.input.getDeltaY(), 0);
-            Vector3 deltaVec = mapEditor.getCamera().unproject(deltaWorldCoordinates);
+            Vector3 deltaVec = editorScreen.getCamera().unproject(deltaWorldCoordinates);
             amountY = vec.y - deltaVec.y;
             selectedSprite.setSpriteAngle(selectedSprite.getAngle() + amountY * 10);
         }
@@ -229,7 +265,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
 
-        if(mapEditor.isSpriteLayerSelected()){
+        if(editorScreen.isSpriteEditModeSelected()){
             findSprite(screenX,screenY);
         }
 

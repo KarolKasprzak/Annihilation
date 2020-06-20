@@ -6,9 +6,6 @@ public class RectangleObject extends MapObject {
     private float x,y,width,height,rotation;
     private BodyDef.BodyType bodyType;
 
-
-
-
     public float getX() {
         return x;
     }

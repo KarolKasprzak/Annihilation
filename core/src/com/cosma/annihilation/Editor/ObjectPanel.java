@@ -19,15 +19,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapObject;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
-import com.cosma.annihilation.Editor.CosmaMap.ObjectMapLayer;
-import com.cosma.annihilation.Screens.MapEditor;
+import com.cosma.annihilation.Screens.EditorScreen;
 import com.cosma.annihilation.Utils.Util;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.widget.*;
 
 public class ObjectPanel extends VisWindow implements InputProcessor {
 
-    private MapEditor mapEditor;
+    private EditorScreen editorScreen;
     private VisTextButton createRectangleButton, createJointButton;
     private float x1, y1, x2, y2;
     private BodyDef.BodyType bodyType = BodyDef.BodyType.StaticBody;
@@ -40,11 +39,11 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
             isLeftButtonPressed, isRightButtonPressed,canDraw = false,canCreateBox = false, canOpenEditWindow =false, canBodyEdit = false;
     private RectangleObject selectedObject;
 
-    public ObjectPanel(final MapEditor mapEditor) {
+    public ObjectPanel(final EditorScreen editorScreen) {
         super("Objects:");
-        this.mapEditor = mapEditor;
-        this.shapeRenderer = mapEditor.getShapeRenderer();
-        this.camera = mapEditor.getCamera();
+        this.editorScreen = editorScreen;
+        this.shapeRenderer = editorScreen.getShapeRenderer();
+        this.camera = editorScreen.getCamera();
 
         TableUtils.setSpacingDefaults(this);
         columnDefaults(0).left();
@@ -118,6 +117,9 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
         pack();
         setSize(getWidth(), getHeight());
         setPosition(1900, 200);
+
+        setMovable(false);
+        setResizable(false);
     }
 
     @Override
@@ -141,8 +143,8 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
     }
 
     private void createBoxObject(float x, float y, float w, float h) {
-        if (mapEditor.isObjectLayerSelected()) {
-            Util.createBox2dObject(mapEditor.getWorld(), x, y, w, h, bodyType, mapEditor.layersPanel.getSelectedLayer(ObjectMapLayer.class).createBoxObject(x, y, w, h, bodyType), 0,null);
+        if (editorScreen.isObjectEditModeSelected()) {
+            Util.createBox2dObject(editorScreen.getWorld(), x, y, w, h, bodyType, editorScreen.getMap().getObjectMapLayer().createBoxObject(x, y, w, h, bodyType), 0,null);
             canCreateBox = false;
         }
     }
@@ -156,8 +158,8 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.FORWARD_DEL && selectedBody != null &&  selectedObject != null) {
-            mapEditor.layersPanel.getSelectedLayer(ObjectMapLayer.class).getObjects().remove(selectedObject.getName());
-            mapEditor.getWorld().destroyBody(selectedBody);
+            editorScreen.getMap().getObjectMapLayer().getObjects().remove(selectedObject.getName());
+            editorScreen.getWorld().destroyBody(selectedBody);
         }
         return false;
     }
@@ -174,7 +176,7 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && canCreateBox() && mapEditor.isObjectLayerSelected()) {
+        if (button == Input.Buttons.LEFT && canCreateBox() && editorScreen.isObjectEditModeSelected()) {
             Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
             Vector3 vec = camera.unproject(worldCoordinates);
             canDraw = true;
@@ -281,10 +283,10 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
         Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 vec = camera.unproject(worldCoordinates);
 
-        if (mapEditor.isObjectLayerSelected()) {
+        if (editorScreen.isObjectEditModeSelected()) {
             boolean isObjectSelected = false;
 
-            for (MapObject mapObject : mapEditor.layersPanel.getSelectedLayer(ObjectMapLayer.class).getObjects()) {
+            for (MapObject mapObject : editorScreen.getMap().getObjectMapLayer().getObjects()) {
                 if (mapObject instanceof RectangleObject) {
                     RectangleObject obj = (RectangleObject) mapObject;
                     if (vec.x >= obj.getX() - obj.getWidth() && vec.x <= obj.getX() + obj.getWidth() && vec.y >= obj.getY() - obj.getHeight() && vec.y <= obj.getY() + obj.getHeight()) {
@@ -292,7 +294,7 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
                         isObjectSelected = true;
                         obj.setHighlighted(true);
                         selectedObject = obj;
-                        mapEditor.getWorld().getBodies(bodies);
+                        editorScreen.getWorld().getBodies(bodies);
                         for (Body body : bodies) {
                             if (body.getUserData().equals(obj.getName())) {
                                 selectedBody = body;
@@ -347,7 +349,7 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
             }
 
             if (!isObjectSelected) {
-                for (MapObject mapObject : mapEditor.layersPanel.getSelectedLayer(ObjectMapLayer.class).getObjects()) {
+                for (MapObject mapObject : editorScreen.getMap().getObjectMapLayer().getObjects()) {
                     if (mapObject instanceof RectangleObject) {
                         mapObject.setHighlighted(false);
                     }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.cosma.annihilation.Screens.MapEditor;
+import com.cosma.annihilation.Screens.EditorScreen;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
 import com.kotcrab.vis.ui.widget.*;
@@ -13,7 +13,7 @@ import com.kotcrab.vis.ui.widget.*;
 public class MapCreatorWindow extends VisWindow {
 
     private MapCreatorWindow window;
-    public MapCreatorWindow(final MapEditor mapEditor) {
+    public MapCreatorWindow(final EditorScreen editorScreen) {
         super("");
 
         window = this;
@@ -46,7 +46,7 @@ public class MapCreatorWindow extends VisWindow {
         add(new VisLabel("Map height: "));
         add(mapHeight).expand().fill();
         row();
-        add(new VisLabel("Tile size/pixel per unit: "));
+        add(new VisLabel("Pixel per unit: "));
         add(mapUnit).expand().fill();
         row();
         add(buttonTable).fill().expand().colspan(2).padBottom(3);
@@ -65,7 +65,7 @@ public class MapCreatorWindow extends VisWindow {
         acceptButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
-                mapEditor.createNewMap(Integer.valueOf(mapWidth.getText()),Integer.valueOf(mapHeight.getText()),Integer.valueOf(mapUnit.getText()));
+                editorScreen.createNewMap(Integer.valueOf(mapWidth.getText()),Integer.valueOf(mapHeight.getText()),Integer.valueOf(mapUnit.getText()));
                 window.close();
             }
         });

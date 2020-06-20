@@ -10,7 +10,7 @@ public class ObjectMapLayer extends MapLayer {
     private MapObjects objects = new MapObjects();
 
     public ObjectMapLayer(int width, int height, String name) {
-        super(width, height, name);
+        super(width, height);
     }
 
     public ObjectMapLayer() {

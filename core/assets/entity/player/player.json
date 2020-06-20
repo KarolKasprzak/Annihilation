@@ -24,7 +24,7 @@
   }
   
   DrawOrder: {
-  drawOrder: 7
+  drawOrder: 5
   }
   
   SkeletonComponent: {

@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.12.0</string>
+        <string>4.8.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -26,7 +26,7 @@
             </struct>
         </array>
         <key>allowRotation</key>
-        <true/>
+        <false/>
         <key>shapeDebug</key>
         <false/>
         <key>dpi</key>
@@ -74,7 +74,7 @@
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
-        <uint>0</uint>
+        <uint>1</uint>
         <key>webpQualityLevel</key>
         <uint>101</uint>
         <key>textureSubPath</key>
@@ -102,7 +102,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -149,7 +149,7 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <false/>
+        <true/>
         <key>trimSpriteNames</key>
         <false/>
         <key>prependSmartFolderName</key>
@@ -163,7 +163,7 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
@@ -182,11 +182,13 @@
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">cone_light.png</key>
-            <key type="filename">point_ligh_h.png</key>
+            <key type="filename">cone_light_h.png</key>
+            <key type="filename">geometry.png</key>
             <key type="filename">point_light.png</key>
+            <key type="filename">point_light_h.png</key>
             <key type="filename">settings.png</key>
             <key type="filename">settings_.png</key>
-            <key type="filename">sun_light.png</key>
+            <key type="filename">texture.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -202,12 +204,14 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>cone_light.png</filename>
-            <filename>point_light.png</filename>
-            <filename>settings.png</filename>
-            <filename>sun_light.png</filename>
-            <filename>point_ligh_h.png</filename>
             <filename>settings_.png</filename>
+            <filename>texture.png</filename>
+            <filename>cone_light.png</filename>
+            <filename>cone_light_h.png</filename>
+            <filename>geometry.png</filename>
+            <filename>point_light.png</filename>
+            <filename>point_light_h.png</filename>
+            <filename>settings.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.cosma.annihilation.Annihilation;
@@ -12,11 +11,10 @@ import com.cosma.annihilation.Components.ActionComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
-import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapSunLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Constants;
-import org.omg.CORBA.AnyHolder;
+
 
 public class MapRender {
 
@@ -51,88 +49,69 @@ public class MapRender {
 
     public void renderMap(float delta) {
         batch.begin();
-        if (gameMap.getLayers().getCount() > 0) {
-            for (TileMapLayer mapLayer : gameMap.getLayers().getByType(TileMapLayer.class)) {
-                if (mapLayer.isLayerVisible()) {
-                    for (int x = 0; x < gameMap.getWidth(); x++) {
-                        for (int y = 0; y < gameMap.getHeight(); y++) {
-                            if (mapLayer.getTile(x, y) == null) {
-                                continue;
-                            }
-                            Tile tile = mapLayer.getTile(x, y);
-                            if (tile.getTextureRegion() == null) {
-                                continue;
-                            }
-                            TextureRegion texture = tile.getTextureRegion();
-                            batch.draw(tile.getTextureRegion(), x, y, texture.getRegionWidth()/gameMap.getTileSize(), texture.getRegionHeight()/gameMap.getTileSize());
-                        }
-                    }
+
+
+//        for (SpriteMapLayer mapLayer : gameMap.getLayers().getByType(SpriteMapLayer.class)) {
+//            if (mapLayer.isLayerVisible()) {
+//                for (Sprite sprite : mapLayer.getSpriteArray()) {
+//                    if (sprite instanceof AnimatedSprite) {
+//                        ((AnimatedSprite) sprite).updateAnimation(delta);
+//                    }
+//                    if (sprite.getTextureRegion() != null) {
+//                        position.set(sprite.getX(), sprite.getY());
+//                        batch.draw(sprite.getTextureRegion(), position.x + (sprite.isFlipX() ? sprite.getTextureRegion().getRegionWidth() / Constants.PPM : 0), position.y, (float) sprite.getTextureRegion().getRegionWidth() / Constants.PPM / 2, (float) sprite.getTextureRegion().getRegionHeight() / Constants.PPM / 2,
+//                                sprite.getTextureRegion().getRegionWidth() / Constants.PPM * (sprite.isFlipX() ? -1 : 1), sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
+//                                1, 1, sprite.getAngle());
+//
+//                    }
+//                }
+//            }
+//        }
+
+        for (Entity entity : gameMap.getEntityArrayList()) {
+            if (entity.getComponent(ActionComponent.class) != null) {
+                if (entity.getComponent(ActionComponent.class).actionTargetPosition != null) {
+                    ActionComponent actionComponent = entity.getComponent(ActionComponent.class);
+                    Texture texture = Annihilation.getAssets().get("gfx/interface/target.png", Texture.class);
+                    batch.draw(texture, actionComponent.actionTargetPosition.x - (texture.getWidth() / 2 / Constants.PPM), actionComponent.actionTargetPosition.y - (texture.getHeight() / 2 / Constants.PPM),
+                            texture.getHeight() / Constants.PPM, texture.getWidth() / Constants.PPM);
                 }
             }
-
-            for (SpriteMapLayer mapLayer : gameMap.getLayers().getByType(SpriteMapLayer.class)) {
-                if (mapLayer.isLayerVisible()) {
-                    for (Sprite sprite : mapLayer.getSpriteArray()) {
-                        if(sprite instanceof AnimatedSprite){
-                            ((AnimatedSprite) sprite).updateAnimation(delta);
-                        }
-                        if (sprite.getTextureRegion() != null) {
-                            position.set(sprite.getX(), sprite.getY());
-                            batch.draw(sprite.getTextureRegion(), position.x + (sprite.isFlipX() ? sprite.getTextureRegion().getRegionWidth()/Constants.PPM : 0), position.y, (float) sprite.getTextureRegion().getRegionWidth()/Constants.PPM/2, (float) sprite.getTextureRegion().getRegionHeight()/Constants.PPM/2,
-                                    sprite.getTextureRegion().getRegionWidth()/Constants.PPM * (sprite.isFlipX() ? -1 : 1), sprite.getTextureRegion().getRegionHeight()/Constants.PPM,
-                                    1, 1, sprite.getAngle());
-
-                        }
-                    }
-                }
-            }
-
-            for(Entity entity: gameMap.getEntityArrayList()){
-                if(entity.getComponent(ActionComponent.class) != null){
-                    if(entity.getComponent(ActionComponent.class).actionTargetPosition != null){
-                        ActionComponent actionComponent = entity.getComponent(ActionComponent.class);
-                        Texture texture = Annihilation.getAssets().get("gfx/interface/target.png",Texture.class);
-                        batch.draw(texture,actionComponent.actionTargetPosition.x-(texture.getWidth()/2/Constants.PPM),actionComponent.actionTargetPosition.y-(texture.getHeight()/2/Constants.PPM),
-                                texture.getHeight()/Constants.PPM,texture.getWidth()/Constants.PPM);
-                    }
-                }
-            }
-
-            for (LightsMapLayer mapLayer : gameMap.getLayers().getByType(LightsMapLayer.class)) {
-                if (mapLayer.isLayerVisible()) {
-                    for (MapLight light : mapLayer.getLights()) {
-                        if (light instanceof MapPointLight) {
-                            TextureAtlas.AtlasRegion texture = iconPack.findRegion("point_light");
-                            if (light.isHighlighted()) {
-                                texture = iconPack.findRegion("point_light_h");
-                            }
-                            batch.draw(texture, light.getX() - (texture.getRegionWidth() / gameMap.getTileSize()) / 2, light.getY() - (texture.getRegionHeight() / gameMap.getTileSize()) / 2, texture.getRegionWidth() / gameMap.getTileSize() / 2, texture.getRegionHeight() / gameMap.getTileSize() / 2);
-                        }
-
-                        if (light instanceof MapConeLight || light instanceof MapSunLight) {
-                            TextureAtlas.AtlasRegion texture = iconPack.findRegion("cone_light");
-                            if (light.isHighlighted()) {
-                                texture = iconPack.findRegion("point_light_h");
-                            }
-                            batch.draw(texture, light.getX() - (texture.getRegionWidth() / gameMap.getTileSize()) / 4, light.getY() - (texture.getRegionHeight() / gameMap.getTileSize()) / 4, texture.getRegionWidth() / gameMap.getTileSize() / 2, texture.getRegionHeight() / gameMap.getTileSize() / 2);
-                        }
-                    }
-                }
-            }
-
         }
+
+
+        if (gameMap.getLightsMapLayer().isLayerVisible()) {
+            for (MapLight light : gameMap.getLightsMapLayer().getLights()) {
+                if (light instanceof MapPointLight) {
+                    TextureAtlas.AtlasRegion texture = iconPack.findRegion("point_light");
+                    if (light.isHighlighted()) {
+                        texture = iconPack.findRegion("point_light_h");
+                    }
+                    batch.draw(texture, light.getX() - (texture.getRegionWidth() / gameMap.getTileSize()) / 2, light.getY() - (texture.getRegionHeight() / gameMap.getTileSize()) / 2, texture.getRegionWidth() / gameMap.getTileSize(), texture.getRegionHeight() / gameMap.getTileSize());
+
+                    System.out.println("x: " + light.getX());
+                    System.out.println("render x: " + (light.getX() - (texture.getRegionWidth() / 2 / gameMap.getTileSize())));
+                }
+
+                if (light instanceof MapConeLight) {
+                    TextureAtlas.AtlasRegion texture = iconPack.findRegion("cone_light");
+                    if (light.isHighlighted()) {
+                        texture = iconPack.findRegion("cone_light_h");
+                    }
+                    batch.draw(texture, light.getX() - (texture.getRegionWidth() / gameMap.getTileSize()) / 2, light.getY() - (texture.getRegionHeight() / gameMap.getTileSize()) / 2, texture.getRegionWidth() / gameMap.getTileSize() , texture.getRegionHeight() / gameMap.getTileSize());
+                }
+            }
+        }
+
         batch.end();
         renderer.begin();
-        for (ObjectMapLayer layer : gameMap.getLayers().getByType(ObjectMapLayer.class)) {
-            if (layer.isLayerVisible()) {
-                for (RectangleObject object : layer.getObjects().getByType(RectangleObject.class)) {
-                    renderer.setColor(Color.WHITE);
-                    if (object.isHighlighted()) {
-                        renderer.setColor(Color.ORANGE);
-                    }
-                    renderer.rect(object.getX(), object.getY(), object.getWidth() / 2, object.getHeight() / 2, object.getWidth(), object.getHeight(), 1, 1, object.getRotation());
+        if (gameMap.getObjectMapLayer().isLayerVisible()) {
+            for (RectangleObject object : gameMap.getObjectMapLayer().getObjects().getByType(RectangleObject.class)) {
+                renderer.setColor(Color.WHITE);
+                if (object.isHighlighted()) {
+                    renderer.setColor(Color.ORANGE);
                 }
-
+                renderer.rect(object.getX(), object.getY(), object.getWidth() / 2, object.getHeight() / 2, object.getWidth(), object.getHeight(), 1, 1, object.getRotation());
             }
         }
         renderer.end();

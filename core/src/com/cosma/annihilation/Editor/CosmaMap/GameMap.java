@@ -11,21 +11,12 @@ public class GameMap{
     private int width;
     private int height;
     private int tileSize;
-    private MapLayers layers = new MapLayers();
     private ArrayList<Entity> entityList;
     private String mapName;
 
-
-
-    transient private OrderedMap<String, Light> lightMap;
-
-    public Light findLight(String name) {
-        return lightMap.get(name);
-    }
-
-    public void putLight(String name,Light light) {
-        lightMap.put(name,light);
-    }
+    private SpriteMapLayer spriteMapLayer;
+    private ObjectMapLayer objectMapLayer;
+    private LightsMapLayer lightsMapLayer;
 
     public GameMap(int width, int height, int tileSize) {
         this.width = width;
@@ -33,15 +24,25 @@ public class GameMap{
         this.tileSize = tileSize;
         lightMap = new OrderedMap<>();
         entityList = new ArrayList<>();
+        spriteMapLayer = new SpriteMapLayer();
+        objectMapLayer = new ObjectMapLayer();
+        lightsMapLayer = new LightsMapLayer();
     }
 
+    public SpriteMapLayer getSpriteMapLayer() {
+        return spriteMapLayer;
+    }
+
+    public ObjectMapLayer getObjectMapLayer() {
+        return objectMapLayer;
+    }
+
+    public LightsMapLayer getLightsMapLayer() {
+        return lightsMapLayer;
+    }
 
     public GameMap() {
         lightMap = new OrderedMap<>();
-    }
-
-    public MapLayers getLayers () {
-        return layers;
     }
 
     public int getWidth() {
@@ -72,27 +73,14 @@ public class GameMap{
         return entityList;
     }
 
-    public void createTileMapLayer(){
-        String name = "Tiles_layer" +(layers.getCount()+1);
-        TileMapLayer mapLayer = new TileMapLayer(width,height,name);
-        layers.add(mapLayer);
+    transient private OrderedMap<String, Light> lightMap;
+
+    public Light findLight(String name) {
+        return lightMap.get(name);
     }
 
-    public void createObjectMapLayer(){
-        String name = "Objects_layer" +(layers.getCount()+1);
-        ObjectMapLayer mapLayer = new ObjectMapLayer(width,height,name);
-        layers.add(mapLayer);
+    public void putLight(String name,Light light) {
+        lightMap.put(name,light);
     }
 
-    public void createLightsLayer(){
-        String name = "Lights_layer" +(layers.getCount()+1);
-        LightsMapLayer mapLayer = new LightsMapLayer(width,height,name);
-        layers.add(mapLayer);
-    }
-
-    public void createSpriteLayer(){
-        String name = "Sprite_layer" +(layers.getCount()+1);
-        SpriteMapLayer spriteMapLayer = new SpriteMapLayer(width,height,name);
-        layers.add(spriteMapLayer);
-    }
 }
