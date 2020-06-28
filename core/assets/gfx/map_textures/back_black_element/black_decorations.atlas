@@ -1,0 +1,26 @@
+black_decorations.png
+size: 194, 102
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+roof_lattice
+  rotate: false
+  xy: 1, 1
+  size: 192, 32
+  orig: 192, 32
+  offset: 0, 0
+  index: -1
+roof_pipe
+  rotate: false
+  xy: 1, 35
+  size: 192, 32
+  orig: 192, 32
+  offset: 0, 0
+  index: -1
+roof_wires
+  rotate: false
+  xy: 1, 69
+  size: 192, 32
+  orig: 192, 32
+  offset: 0, 0
+  index: -1

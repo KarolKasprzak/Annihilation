@@ -35,7 +35,6 @@ public class TileMapRender extends IteratingSystem {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
-        this.normalShader = engine.getNormalMapShaderInstance();
 
     }
 

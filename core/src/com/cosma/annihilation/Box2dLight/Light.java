@@ -3,6 +3,7 @@ package com.cosma.annihilation.Box2dLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -20,10 +21,15 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public abstract class Light implements Disposable {
 
+
+
 	static final Color DefaultColor = new Color(0.75f, 0.75f, 0.5f, 0.75f);
 	static final float zeroColorBits = Color.toFloatBits(0f, 0f, 0f, 0f);
 	static final int MIN_RAYS = 3;
-	
+
+
+
+
 	protected final Color color = new Color();
 	protected final Vector2 tmpPosition = new Vector2();
 	
@@ -54,7 +60,21 @@ public abstract class Light implements Disposable {
 	protected float[] f;
 	protected int m_index = 0;
 
-	/** 
+	protected Vector3 attenuation = new Vector3(0.4f,2f,15f);
+
+	public Vector3 getAttenuation() {
+		return attenuation;
+	}
+
+	public void setAttenuation(Vector3 attenuation) {
+		this.attenuation = attenuation;
+	}
+
+	public void setAttenuation(float x,float y, float z) {
+		this.attenuation.set(x,y,z);
+	}
+
+	/**
 	 * Creates new active light and automatically adds it to the specified
 	 * {@link RayHandler} instance.
 	 * 

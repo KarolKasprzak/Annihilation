@@ -65,7 +65,6 @@ public class MeleeAttackTask extends Task {
         if(enemy != null){
             skeletonComponent.meleeIdle();
             attackTimer += attackTimer + deltaTime;
-            System.out.println(attackTimer);
             if(attackTimer > timeBetweenAttack)
             meleeAttack(physicsComponent.body,skeletonComponent,aiComponent);
             timeBetweenAttack = MathUtils.random(3600000,50000000);

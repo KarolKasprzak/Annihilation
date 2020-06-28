@@ -3,6 +3,13 @@ size: 390, 390
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+color
+  rotate: false
+  xy: 261, 261
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 cone_light
   rotate: false
   xy: 1, 1
@@ -33,21 +40,21 @@ point_light
   index: -1
 point_light_h
   rotate: false
-  xy: 261, 1
+  xy: 131, 131
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 131, 131
+  xy: 131, 261
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 settings_
   rotate: false
-  xy: 131, 261
+  xy: 261, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

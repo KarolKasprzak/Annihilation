@@ -7,30 +7,15 @@ import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Utils.Constants;
 
-public class Sprite {
+public class Sprite implements Comparable<Sprite>{
     private float x, y, width, height, angle;
     private String atlasRegionName;
     private TextureRegion textureRegion;
     private Texture normalTexture;
     private boolean renderOnFirstPlane = false;
+    private int order = 5;
+    private boolean isHighlighted = false;
 
-    public boolean isRenderOnFirstPlane() {
-        return renderOnFirstPlane;
-    }
-
-    public void setRenderOnFirstPlane(boolean renderOnFirstPlane) {
-        this.renderOnFirstPlane = renderOnFirstPlane;
-    }
-
-    private boolean flipX = false, flipY = false;
-
-    public boolean isFlipX() {
-        return flipX;
-    }
-
-    public boolean isFlipY() {
-        return flipY;
-    }
 
     public Sprite() {
     }
@@ -72,8 +57,8 @@ public class Sprite {
         return textureRegion;
     }
 
-    public void bindNormalTexture(int tex){
-        if(normalTexture != null){
+    public void bindNormalTexture(int tex) {
+        if (normalTexture != null) {
             normalTexture.bind(tex);
         }
     }
@@ -96,5 +81,44 @@ public class Sprite {
 
     public float getAngle() {
         return angle;
+    }
+
+    public int getRenderOrder() {
+        return order;
+    }
+
+    public boolean isHighlighted() {
+        return isHighlighted;
+    }
+
+    public void setHighlighted(boolean highlighted) {
+        isHighlighted = highlighted;
+    }
+
+    public void setRenderOrder(int order) {
+        this.order = order;
+    }
+
+    public boolean isRenderOnFirstPlane() {
+        return renderOnFirstPlane;
+    }
+
+    public void setRenderOnFirstPlane(boolean renderOnFirstPlane) {
+        this.renderOnFirstPlane = renderOnFirstPlane;
+    }
+
+    private boolean flipX = false, flipY = false;
+
+    public boolean isFlipX() {
+        return flipX;
+    }
+
+    public boolean isFlipY() {
+        return flipY;
+    }
+
+    @Override
+    public int compareTo(Sprite o) {
+        return Integer.compare(order, o.order);
     }
 }

@@ -1,5 +1,6 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
+import com.badlogic.gdx.graphics.Color;
 import com.cosma.annihilation.Box2dLight.ConeLight;
 import com.cosma.annihilation.Box2dLight.DirectionalLight;
 import com.cosma.annihilation.Box2dLight.PointLight;
@@ -17,6 +18,8 @@ import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.Util;
+
+import java.awt.*;
 
 
 public class CosmaMapLoader {
@@ -39,9 +42,8 @@ public class CosmaMapLoader {
         json.setSerializer(Entity.class,new GameEntitySerializer(world,engine));
         map = json.fromJson(GameMap.class, mapFile);
 
-        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightIntensity());
-        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
-
+//        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
+//        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightIntensity());
         createMapObject();
     }
 

@@ -48,7 +48,7 @@ public class LightsPanel extends VisWindow implements InputProcessor {
     private Filter filter;
     private boolean canDragObject, isLeftButtonPressed, canCreateLight = false;
     private AmbientLightsWindow ambientLightsWindow;
-
+    private AmbientLightsWindow shaderAmbientLightsWindow;
 
     public LightsPanel(final EditorScreen editorScreen, RayHandler rayHandler) {
         super("Lights:");
@@ -56,8 +56,8 @@ public class LightsPanel extends VisWindow implements InputProcessor {
         this.editorScreen = editorScreen;
         this.camera = editorScreen.getCamera();
 
-        ambientLightsWindow = new AmbientLightsWindow(editorScreen.getMap(),editorScreen.getRayHandler());
-
+        ambientLightsWindow = new AmbientLightsWindow(editorScreen.getMap(),rayHandler,false);
+        shaderAmbientLightsWindow = new AmbientLightsWindow(editorScreen.getMap(),rayHandler,true);
 
         Drawable white = VisUI.getSkin().getDrawable("white");
         final Image image = new Image(white);
@@ -122,7 +122,6 @@ public class LightsPanel extends VisWindow implements InputProcessor {
         selectedColor = Color.WHITE;
 
         VisTextButton ambientButton = new VisTextButton("ambient");
-
         ambientButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -130,12 +129,23 @@ public class LightsPanel extends VisWindow implements InputProcessor {
             }
         });
 
+        VisTextButton shaderAmbientButton = new VisTextButton("shader ambient");
+        shaderAmbientButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                getStage().addActor(shaderAmbientLightsWindow);
+            }
+        });
+
         row();
         add(setPointLight).left().top();
         add(setConeLight).left().top();
         row();
-        add(createLightButton).center().top();
-        add(ambientButton).center().top();
+        add(createLightButton).left();
+        row();
+        add(ambientButton).left();
+        row();
+        add(shaderAmbientButton).left();
         add(image).top().size(Gdx.graphics.getHeight() * 0.017f).center().top().expandX().expandY();
         setPanelButtonsDisable(true);
         pack();

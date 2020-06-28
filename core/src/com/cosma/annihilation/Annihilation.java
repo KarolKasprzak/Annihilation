@@ -87,7 +87,7 @@ public class Annihilation extends Game {
 	}
 
 	public void setEditorScreen() {
-		EditorScreen editorScreen = new EditorScreen(this);
+		EditorScreen editorScreen = new EditorScreen();
 		this.setScreen(editorScreen);
 	}
 

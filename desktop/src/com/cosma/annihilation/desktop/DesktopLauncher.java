@@ -15,8 +15,12 @@ public class DesktopLauncher {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		config.title = "Annihilation";
 		config.resizable = false;
-		config.fullscreen = false;
+		config.fullscreen = true;
 		config.samples=3;
+
+//		config.width = 640;
+//		config.height = 360;
+
 		config.width = screenSize.width/2;
 		config.height = screenSize.height/2;
 		config.vSyncEnabled = true;

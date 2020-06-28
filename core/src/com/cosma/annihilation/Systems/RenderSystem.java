@@ -44,6 +44,8 @@ public class RenderSystem extends SortedIteratingSystem {
         bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         font = new BitmapFont();
         font.getData().setScale(1f * font.getScaleY() / font.getLineHeight());
+
+
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -46,8 +45,6 @@ public class EditorScreen implements Screen, InputProcessor {
     private Viewport viewport, viewportUi;
     private OrthographicCamera camera, cameraUi;
     private World world;
-    private static final float MAX_STEP_TIME = 1 / 45f;
-    private static float accumulator = 0f;
     private InputMultiplexer im;
     private boolean canCameraDrag = false;
     private float zoomLevel = 0.3f;
@@ -61,11 +58,12 @@ public class EditorScreen implements Screen, InputProcessor {
     private String currentMapPatch;
 
     private boolean isSpriteLayerSelected, isObjectLayerSelected, isLightsLayerSelected, isLightsRendered, drawGrid = true, isDebugRenderEnabled = true;
+    private boolean renderWithShader = false;
     private VisLabel editorModeLabel;
     private VisTable rightTable;
     private Box2DDebugRenderer debugRenderer;
 
-    public EditorScreen(Game game) {
+    public EditorScreen() {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
         world = new World(new Vector2(0, -10), true);
@@ -77,6 +75,8 @@ public class EditorScreen implements Screen, InputProcessor {
         stage = new Stage(viewportUi);
         VisUI.load(VisUI.SkinScale.X1);
         rayHandler = new RayHandler(world);
+        rayHandler.setBlur(true);
+        rayHandler.setShadows(true);
         isLightsRendered = false;
 
         mapCreatorWindow = new MapCreatorWindow(this);
@@ -115,6 +115,26 @@ public class EditorScreen implements Screen, InputProcessor {
             }
         });
 
+        final VisCheckBox diffuseButton = new VisCheckBox("Use diffuse lights: ");
+        diffuseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(diffuseButton.isChecked()){
+                    RayHandler.useDiffuseLight(true);
+                }else{
+                    RayHandler.useDiffuseLight(false);
+                }
+            }
+        });
+
+        final VisCheckBox shaderButton = new VisCheckBox("Enable shader: ");
+        shaderButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                renderWithShader = shaderButton.isChecked();
+            }
+        });
+
         final VisCheckBox gridButton = new VisCheckBox("Grid: ");
         gridButton.setChecked(true);
         gridButton.addListener(new ChangeListener() {
@@ -140,7 +160,8 @@ public class EditorScreen implements Screen, InputProcessor {
         menuBar.getTable().add(debugButton);
         menuBar.getTable().add(gridButton);
         menuBar.getTable().add(lightsButton);
-
+        menuBar.getTable().add(diffuseButton);
+        menuBar.getTable().add(shaderButton);
         topTable.add(menuBar.getTable()).expandX().fillX();
         root.add(topTable).fillX().expandX().colspan(2);
         root.row();
@@ -188,7 +209,7 @@ public class EditorScreen implements Screen, InputProcessor {
 
     public void createNewMap(int x, int y, int scale) {
         gameMap = new GameMap(x, y, scale);
-        mapRender = new MapRender(shapeRenderer, gameMap, batch);
+        mapRender = new MapRender(shapeRenderer, gameMap, batch,rayHandler,camera);
         loadPanels();
         setCameraOnMapCenter();
     }
@@ -209,8 +230,7 @@ public class EditorScreen implements Screen, InputProcessor {
             rightTable.clear();
         }
         loadPanels();
-        mapRender = new MapRender(shapeRenderer, gameMap, batch);
-
+        mapRender = new MapRender(shapeRenderer, gameMap, batch,rayHandler,camera);
     }
 
     private void saveAs() {
@@ -287,13 +307,8 @@ public class EditorScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        float frameTime = Math.min(delta, 0.25f);
         engine.update(delta);
-        accumulator += frameTime;
-//        if (accumulator >= MAX_STEP_TIME) {
-//            world.step(MAX_STEP_TIME, 6, 2);
-//            accumulator -= MAX_STEP_TIME;
-//        }
+
         camera.update();
         cameraUi.update();
         batch.setProjectionMatrix(camera.combined);
@@ -305,7 +320,7 @@ public class EditorScreen implements Screen, InputProcessor {
                 mapRender.renderGrid();
             }
             Gdx.gl.glDisable(GL20.GL_BLEND);
-            mapRender.renderMap(delta);
+            mapRender.renderMap(delta,renderWithShader,isDebugRenderEnabled);
         }
         if (gameMap != null && !gameMap.getEntityArrayList().isEmpty()) {
             batch.begin();
@@ -388,12 +403,6 @@ public class EditorScreen implements Screen, InputProcessor {
         return false;
     }
 
-
-    private Vector3 getWorldCoordinates() {
-        Vector3 worldCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        return camera.unproject(worldCoordinates);
-    }
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         FocusManager.resetFocus(stage);
@@ -456,23 +465,24 @@ public class EditorScreen implements Screen, InputProcessor {
 
         float width = objectPanel.getWidth();
 
+        EntityTreeWindow entityTreeWindow = new EntityTreeWindow(world, this);
+        SpriteTreeWindow spriteTreeWindow = new SpriteTreeWindow(this);
 
         rightTable.add(editModePanel).top().minHeight(stage.getHeight() * height).minWidth(width);
         rightTable.row();
 
 
-
-
         rightTable.add(objectPanel).fillX().top().minHeight(stage.getHeight() * height);
         rightTable.row();
-
 
         rightTable.add(lightsPanel).fillX().top().minHeight(stage.getHeight() * height);
         rightTable.row();
 
-        EntityTreeWindow entityTreeWindow = new EntityTreeWindow(world, this);
-        SpriteTreeWindow spriteTreeWindow = new SpriteTreeWindow(this);
-        stage.addActor(spriteTreeWindow);
+        rightTable.add(spriteTreeWindow).fillX().top().minHeight(stage.getHeight() * 0.4f);
+        rightTable.row();
+
+
+
         stage.addActor(entityTreeWindow);
 
         im.addProcessor(entityTreeWindow);

@@ -9,10 +9,15 @@ public class LightsMapLayer extends MapLayer {
     private Color ambientLightColor;
     private float ambientLightIntensity;
 
+    private Color shaderAmbientLightColor;
+    private float shaderAmbientLightIntensity;
 
     public LightsMapLayer() {
         ambientLightColor = Color.WHITE;
         ambientLightIntensity = 0;
+
+        shaderAmbientLightColor = Color.WHITE;
+        shaderAmbientLightIntensity = 0;
     }
 
     public MapLights getLights() {
@@ -55,6 +60,22 @@ public class LightsMapLayer extends MapLayer {
 
     public float getAmbientLightIntensity() {
         return ambientLightIntensity;
+    }
+
+    public Color getShaderAmbientLightColor() {
+        return shaderAmbientLightColor;
+    }
+
+    public void setShaderAmbientLightColor(Color shaderAmbientLightColor) {
+        this.shaderAmbientLightColor = shaderAmbientLightColor;
+    }
+
+    public float getShaderAmbientLightIntensity() {
+        return shaderAmbientLightIntensity;
+    }
+
+    public void setShaderAmbientLightIntensity(float shaderAmbientLightIntensity) {
+        this.shaderAmbientLightIntensity = shaderAmbientLightIntensity;
     }
 
     public void setAmbientLightIntensity(float ambientLightIntensity) {

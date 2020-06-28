@@ -50,7 +50,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 
         //create shader
         ShaderProgram.pedantic = false;
-        shader = new ShaderProgram(Gdx.files.internal("shaders/bumpmulti/ver.glsl").readString(), Gdx.files.internal("shaders/bumpmulti/frag.glsl").readString());
+        shader = new ShaderProgram(Gdx.files.internal("shaders/normalMap/ver.glsl").readString(), Gdx.files.internal("shaders/normalMap/frag.glsl").readString());
         if (!shader.isCompiled())
             throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
         shader.begin();
@@ -67,8 +67,8 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 
         batch.setProjectionMatrix(camera.combined);
         polygonBatch.setProjectionMatrix(camera.combined);
-        batch.setShader(null);
-        polygonBatch.setShader(null);
+        batch.setShader(shader);
+        polygonBatch.setShader(shader);
         //render background (map)
 
                 for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
@@ -94,8 +94,8 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 
 
         //render Light
-//        rayHandler.setCombinedMatrix(camera);
-//        rayHandler.updateAndRender();
+        rayHandler.setCombinedMatrix(camera);
+        rayHandler.updateAndRender();
     }
 
     @Override
@@ -106,8 +106,8 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
             PhysicsComponent physicsComponent = physicsMapper.get(entity);
 
-//            skeletonComponent.normalTexture.bind(1);
-//            skeletonComponent.diffuseTexture.bind(0);
+            skeletonComponent.normalTexture.bind(1);
+            skeletonComponent.diffuseTexture.bind(0);
 
 
             if (entity.getComponent(PlayerComponent.class) == null) {
@@ -124,12 +124,9 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             skeletonComponent.animationState.update(deltaTime);
 
             polygonBatch.begin();
-//            getEngine().prepareDataForNormalShaderRender(shader,skeletonComponent.skeletonDirection,false);
+            getEngine().prepareDataForNormalShaderRender(shader,skeletonComponent.skeletonDirection,false);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton);
             polygonBatch.end();
-
-
-            System.out.println(skeletonComponent.skeleton.getX());
         }
 
         //sprite render

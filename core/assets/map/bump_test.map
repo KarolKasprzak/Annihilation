@@ -1,134 +1,10 @@
 {
-width: 100
-height: 100
+width: 64
+height: 64
 tileSize: 64
-layers: {
-	layers: [
-		{
-			class: com.cosma.annihilation.Editor.CosmaMap.ObjectMapLayer
-			name: Objects_layer1
-			objects: {
-				objects: [
-					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
-						name: Rectangle_1
-						x: 13.016023
-						y: 13.0487175
-						width: 20.962181
-						height: 0.8833332
-						bodyType: StaticBody
-					}
-					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
-						name: Rectangle_2
-						x: 11.807691
-						y: 17.884615
-						width: 25.00513
-						height: 1.0192318
-						bodyType: StaticBody
-					}
-				]
-			}
-		}
-		{
-			class: com.cosma.annihilation.Editor.CosmaMap.LightsMapLayer
-			name: Lights_layer2
-			lights: {
-				lights: [
-					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
-						name: PointLight_1
-						raysNumber: 25
-						color: {
-							r: 0.9019608
-							g: 0.9019608
-							b: 0.54901963
-							a: 0.8745098
-						}
-						lightDistance: 5
-						x: 21.937174
-						y: 16.924368
-						softLight: false
-					}
-					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
-						name: PointLight_2
-						raysNumber: 25
-						color: {
-							r: 0.41960785
-							g: 1
-							b: 0.61960787
-							a: 0.7529412
-						}
-						lightDistance: 6.5
-						x: 27.044865
-						y: 17.028852
-						softLight: false
-					}
-				]
-			}
-		}
-		{
-			class: com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer
-			name: Sprite_layer3
-			height: 100
-			width: 100
-			sprites: [
-				{
-					position: "19.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall"
-				}
-				{
-					position: "25.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall2"
-				}
-				{
-					position: "23.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall3"
-				}
-				{
-					position: "21.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall"
-				}
-				{
-					position: "17.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall"
-				}
-				{
-					position: "27.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall2"
-				}
-				{
-					position: "29.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall3"
-				}
-				{
-					position: "31.0,14.0,0.0"
-					texture: "map/map_sprites/metro.atlas,metro_wall"
-				}
-				{
-					position: "14.0,14.0,0.0"
-					texture: "map/map_sprites/walls.atlas,wall_tiles1"
-				}
-				{
-					position: "28.0,14.0,0.0"
-					texture: "map/map_sprites/walls.atlas,metro_shoop"
-				}
-				{
-					position: "21.569334,13.994667,0.0"
-					texture: "map/map_sprites/walls.atlas,glass"
-				}
-				{
-					position: "20.000103,13.992104,0.0"
-					texture: "map/map_sprites/walls.atlas,glass"
-				}
-			]
-		}
-	]
-}
 entityList: [
 	{
-		position: "32.05513,15.469232"
+		position: "23.852966,14.945143"
 		hp: 100
 		maxHp: 100
 		entityName: player.json
@@ -136,27 +12,82 @@ entityList: [
 		id: PLAYER
 		inventoryItems: []
 	}
-	{
-		position: "24.697638,14.487595"
-		hp: 100
-		maxHp: 100
-		entityName: box.json
-		itemList: [
+]
+mapName: bump_test.map
+spriteMapLayer: {
+	height: 0
+	width: 0
+	sprites: [
+		{
+			position: "25.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "28.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "31.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "22.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "29.0,13.0,0.0"
+			texture: "gfx/map_textures/furnitures/furniture.atlas,employee_storage"
+		}
+		{
+			position: "29.668358,12.999731,0.0"
+			texture: "gfx/map_textures/furnitures/furniture.atlas,employee_storage"
+		}
+	]
+}
+objectMapLayer: {
+	objects: {
+		objects: [
 			{
-				itemID: gewehr46
-				tableIndex: 0
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_1
+				x: 18.875
+				y: 11.997756
+				width: 18.266024
+				height: 0.99871826
+				bodyType: StaticBody
 			}
 			{
-				itemID: stg
-				tableIndex: 1
-			}
-			{
-				itemID: ammo7mm
-				itemAmount: 75
-				tableIndex: 2
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_2
+				x: 21.296206
+				y: 16.81315
+				width: 12.86923
+				height: 1.5525646
+				bodyType: StaticBody
 			}
 		]
 	}
-]
-mapName: bump_test.map
+}
+lightsMapLayer: {
+	lights: {
+		lights: [
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_1
+				raysNumber: 25
+				color: {
+					r: 1
+					g: 1
+					b: 1
+					a: 1
+				}
+				lightDistance: 7.5
+				x: 32.303898
+				y: 15.53238
+				softLight: false
+			}
+		]
+	}
+	shaderAmbientLightIntensity: 7.4505806E-9
+}
 }

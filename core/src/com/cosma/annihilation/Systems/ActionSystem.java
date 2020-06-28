@@ -126,7 +126,6 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     }
 
     private void climbUp(){
-        System.out.println("start climb");
         Entity playerEntity = getEngine().getPlayerEntity();
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.climbing = true;
@@ -137,7 +136,6 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
         playerComponent.climbingStartPosition = playerComponent.processedEntity.getComponent(PhysicsComponent.class).body.getPosition();
         playerComponent.activeTask = new PlayerGoToPosition(playerComponent.climbingStartPosition);
     }
-
 
     private void goToAnotherMap() {
         playerComponent.mapName = playerComponent.processedEntity.getComponent(GateComponent.class).targetMapPath;

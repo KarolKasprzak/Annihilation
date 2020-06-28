@@ -30,15 +30,20 @@ public class AssetLoader {
             manager.load(texture.path(),TextureAtlas.class);
         }
         //Load map textures
-        FileHandle mapSprites = Gdx.files.local("map/map_sprites/");
-        for(FileHandle texture: mapSprites.list(".atlas")){
-            manager.load(texture.path(),TextureAtlas.class);
-        }
-        for(FileHandle texture: mapSprites.list(".png")){
-            if(texture.nameWithoutExtension().contains("_n")){
-                manager.load(texture.path(),Texture.class);
+        FileHandle gfxMapAtlas = Gdx.files.local("gfx/map_textures/");
+        for(FileHandle file:  gfxMapAtlas.list()){
+            if(file.isDirectory()){
+                for(FileHandle texture: file.list(".atlas")){
+                    manager.load(texture.path(),TextureAtlas.class);
+                }
+                for(FileHandle texture: file.list(".png")){
+                    if(texture.nameWithoutExtension().contains("_n")){
+                        manager.load(texture.path(),Texture.class);
+                    }
+                }
             }
         }
+
         //Load icon
         FileHandle iconTextures = Gdx.files.local("gfx/textures/icon/");
         for(FileHandle texture: iconTextures.list(".png")){
@@ -74,7 +79,6 @@ public class AssetLoader {
         for(FileHandle file:  skeletonAtlas.list()){
             if(file.isDirectory()){
                 for(FileHandle texture: file.list(".atlas")){
-                    System.out.println(texture.name());
                     manager.load(texture.path(),TextureAtlas.class);
                 }
             }

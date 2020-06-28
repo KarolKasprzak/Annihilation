@@ -49,32 +49,38 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
         columnDefaults(0).left();
         final VisTree tree = new VisTree();
         Node treeRoot = new Node(new VisLabel("Sprite"));
-        FileHandle file = Gdx.files.local("map/map_sprites");
-        for (FileHandle atlasFile : file.list("atlas")) {
-            Node node = new Node(new VisLabel(atlasFile.nameWithoutExtension()));
-
-            node.setObject(atlasFile);
-
-            treeRoot.add(node);
-            TextureAtlas atlas = Annihilation.getAssets().get(atlasFile.path(),TextureAtlas.class);
-            for(TextureAtlas.AtlasRegion textureRegion : atlas.getRegions()){
-                if(textureRegion.index < 0){
-                    VisLabel label = new VisLabel(textureRegion.name);
-                    label.setName(textureRegion.name);
-                    Node childrenNode = new Node(label);
-                    childrenNode.setObject(textureRegion);
-                    childrenNode.setIcon(new TextureRegionDrawable(textureRegion));
-                    node.add(childrenNode);
+        FileHandle file = Gdx.files.local("gfx/map_textures");
+        for(FileHandle folderFile : file.list()){
+            if (folderFile.isDirectory()){
+                Node folderNode = new Node(new VisLabel(folderFile.nameWithoutExtension()));
+                treeRoot.add(folderNode);
+                for (FileHandle atlasFile : folderFile.list("atlas")) {
+                    Node atlasNode = new Node(new VisLabel(atlasFile.nameWithoutExtension()));
+                    atlasNode.setObject(atlasFile);
+                    folderNode.add(atlasNode);
+                    TextureAtlas atlas = Annihilation.getAssets().get(atlasFile.path(),TextureAtlas.class);
+                    for(TextureAtlas.AtlasRegion textureRegion : atlas.getRegions()){
+                        if(textureRegion.index < 0){
+                            VisLabel label = new VisLabel(textureRegion.name);
+                            label.setName(textureRegion.name);
+                            Node childrenNode = new Node(label);
+                            childrenNode.setObject(textureRegion);
+                            childrenNode.setIcon(new TextureRegionDrawable(textureRegion));
+                            atlasNode.add(childrenNode);
+                        }
+                        if(textureRegion.index == 1){
+                            VisLabel label = new VisLabel(textureRegion.name+"*");
+                            label.setName(textureRegion.name);
+                            Node childrenNode = new Node(label);
+                            childrenNode.setObject(textureRegion);
+                            atlasNode.add(childrenNode);
+                        }
+                    }
                 }
-                if(textureRegion.index == 1){
-                    VisLabel label = new VisLabel(textureRegion.name+"*");
-                    label.setName(textureRegion.name);
-                    Node childrenNode = new Node(label);
-                    childrenNode.setObject(textureRegion);
-                    node.add(childrenNode);
-                }
+
             }
         }
+
         treeRoot.setExpanded(true);
         tree.add(treeRoot);
         ScrollPane scrollPane = new ScrollPane(tree);
@@ -126,24 +132,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
 
        });
 
-
-
-//        this.addListener(new ClickListener(){
-//
-//            @Override
-//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                super.enter(event, x, y, pointer, fromActor);
-//                System.out.println("enter");
-//            }
-//
-//            @Override
-//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-//                super.exit(event, x, y, pointer, toActor);
-//                System.out.println("exit");
-//
-//            }
-//        });
-
+       setMovable(false);
     }
 
     private void findSprite(int x, int y){
@@ -155,12 +144,20 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
                     Util.setCursorMove();
                     canMove = true;
                     canRotate = true;
+                    if(selectedSprite != null && selectedSprite != sprite){
+                        selectedSprite.setHighlighted(false);
+                    }
                     selectedSprite = sprite;
+                    selectedSprite.setHighlighted(true);
                     isSpriteSelected = true;
+
             }
         }
         if(!isSpriteSelected){
             Util.setCursorSystem();
+            if(selectedSprite != null){
+                selectedSprite.setHighlighted(false);
+            }
             canMove = false;
             canRotate = false;
             selectedSprite = null;

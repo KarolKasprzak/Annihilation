@@ -1,0 +1,19 @@
+electronics.png
+size: 68, 34
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+light switch
+  rotate: false
+  xy: 1, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+pc_retro
+  rotate: false
+  xy: 35, 1
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

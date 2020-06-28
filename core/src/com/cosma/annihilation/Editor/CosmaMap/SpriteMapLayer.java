@@ -44,6 +44,9 @@ public class SpriteMapLayer extends MapLayer implements Json.Serializable {
             }
             json.writeValue("position", sprite.getX() + "," + sprite.getY() + "," + sprite.getAngle());
             json.writeValue("texture", sprite.getAtlasPath());
+            if(sprite.getRenderOrder() != 5){
+                json.writeValue("order", sprite.getRenderOrder());
+            }
             json.writeObjectEnd();
         }
         json.writeArrayEnd();
@@ -63,6 +66,9 @@ public class SpriteMapLayer extends MapLayer implements Json.Serializable {
                 spriteArray.add(animatedSprite);
             }else{
                 Sprite sprite = new Sprite();
+                if(value.has("order")){
+                    sprite.setRenderOrder(value.get("order").asInt());
+                }
                 sprite.setTextureDate(texture.split(",")[1], texture.split(",")[0]);
                 sprite.setSpritePosition(Float.parseFloat(position.split(",")[0]), Float.parseFloat(position.split(",")[1]), Float.parseFloat(position.split(",")[2]));
                 spriteArray.add(sprite);

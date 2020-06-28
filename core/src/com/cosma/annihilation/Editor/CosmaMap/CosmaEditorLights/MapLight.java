@@ -1,6 +1,7 @@
 package com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 
 public abstract class MapLight {
     private String name;
@@ -16,6 +17,7 @@ public abstract class MapLight {
     private float softLength = 2.5f;
     private short maskBit;
     private short categoryBit;
+    private Vector3 attenuation = new Vector3(0.4f,2f,15f);
 
     MapLight() {
     }
@@ -33,6 +35,18 @@ public abstract class MapLight {
         this.raysNumber = raysNumber;
         this.lightDistance = distance;
 
+    }
+
+    public Vector3 getAttenuation() {
+        return attenuation;
+    }
+
+    public void setAttenuation(Vector3 attenuation) {
+        this.attenuation = attenuation;
+    }
+
+    public void setAttenuation(float x,float y, float z) {
+        this.attenuation.set(x,y,z);
     }
 
     public float getLightDistance() {

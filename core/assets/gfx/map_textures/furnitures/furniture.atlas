@@ -1,0 +1,19 @@
+furniture.png
+size: 130, 196
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+employee_storage
+  rotate: false
+  xy: 1, 1
+  size: 64, 128
+  orig: 64, 128
+  offset: 0, 0
+  index: -1
+wood_desk
+  rotate: false
+  xy: 1, 131
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1

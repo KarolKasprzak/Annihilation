@@ -17,7 +17,7 @@ public class EditorLauncher {
 		config.resizable = false;
 		config.samples=3;
 		config.width = screenSize.width;
-		config.height = screenSize.height/2;
+		config.height = screenSize.height;
 		config.vSyncEnabled = true;
 
 		new LwjglApplication (new Annihilation(true),config);

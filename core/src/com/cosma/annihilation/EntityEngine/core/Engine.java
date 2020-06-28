@@ -3,6 +3,7 @@ package com.cosma.annihilation.EntityEngine.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
@@ -174,34 +175,6 @@ public class Engine {
         return getEntitiesFor(Family.all(PlayerComponent.class).get()).first().getComponent(PlayerInventoryComponent.class).inventoryItems;
     }
 
-    /**
-     * @return return active light in current camera viewport
-     */
-
-    public ShaderProgram getNormalMapShaderInstance(){
-        ShaderProgram.pedantic = false;
-        ShaderProgram shader = new ShaderProgram(Gdx.files.internal("shaders/bumpmulti/ver.glsl").readString(), Gdx.files.internal("shaders/bumpmulti/frag.glsl").readString());
-        if (!shader.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
-        shader.begin();
-        shader.setUniformi("u_texture", 0);
-        shader.setUniformi("u_normals", 1);
-        shader.end();
-        return shader;
-    }
-
-    public ShaderProgram getShader(){
-        ShaderProgram.pedantic = false;
-        ShaderProgram shader = new ShaderProgram(Gdx.files.internal("shaders/normal/ver.glsl").readString(), Gdx.files.internal("shaders/normal/frag.glsl").readString());
-        if (!shader.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
-        shader.begin();
-        shader.setUniformi("u_texture", 0);
-        shader.setUniformi("u_normals", 1);
-        shader.end();
-        return shader;
-    }
-
 
     public Array<Light> getActiveLights() {
         return activeLights;
@@ -231,8 +204,8 @@ public class Engine {
 
                 gameCamera.project(lightPosition);
 
-                lightPositionArray[i*3] = lightPosition.x / (float) Gdx.graphics.getWidth();
-                lightPositionArray[1+(i*3)] = lightPosition.y/ (float) Gdx.graphics.getHeight();
+                lightPositionArray[i*3] = lightPosition.x ;
+                lightPositionArray[1+(i*3)] = lightPosition.y;
                 lightPositionArray[2+(i*3)] = 0.05f;
                 
                 lightColorArray[i*3] = light.getColor().r;
@@ -256,12 +229,16 @@ public class Engine {
         }
 
         normalShader.setUniformf("resolution",Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        normalShader.setUniformf("attenuation", 0.9f,1f,1);
+        normalShader.setUniformf("attenuation", 0.1f,2f,10);
         normalShader.setUniformi("useNormals", 1);
         normalShader.setUniformi("useShadow", 1);
-        normalShader.setUniformf("strength", 1f);
+        normalShader.setUniformf("strength", 0.9f);
 
-        normalShader.setUniformf("AmbientColor", 1, 1, 1, 0.1f);
+        normalShader.setUniformf("strength", 0.9f);
+
+        Color color = getCurrentMap().getLightsMapLayer().getShaderAmbientLightColor();
+        
+        normalShader.setUniformf("ambientColor", color.r, color.g, color.b, getCurrentMap().getLightsMapLayer().getShaderAmbientLightIntensity());
     }
 
 
