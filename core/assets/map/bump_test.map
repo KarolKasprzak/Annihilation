@@ -39,8 +39,48 @@ spriteMapLayer: {
 			texture: "gfx/map_textures/furnitures/furniture.atlas,employee_storage"
 		}
 		{
-			position: "29.668358,12.999731,0.0"
+			position: "32.0,13.0,0.0"
 			texture: "gfx/map_textures/furnitures/furniture.atlas,employee_storage"
+		}
+		{
+			position: "31.985947,16.280132,0.0"
+			texture: "gfx/map_textures/map_objects/lights.atlas,wood_door — kopia"
+		}
+		{
+			position: "25.811588,16.298082,0.0"
+			texture: "gfx/map_textures/map_objects/lights.atlas,wood_door — kopia"
+		}
+		{
+			position: "34.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "37.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "34.0,13.0,0.0"
+			texture: "gfx/map_textures/furnitures/furniture.atlas,employee_storage"
+		}
+		{
+			position: "31.0,13.0,0.0"
+			texture: "gfx/map_textures/map_objects/electronics.atlas,box_military"
+		}
+		{
+			position: "0.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "10.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "32.0,26.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
+		}
+		{
+			position: "61.0,14.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
 		}
 	]
 }
@@ -52,16 +92,16 @@ objectMapLayer: {
 				name: Rectangle_1
 				x: 18.875
 				y: 11.997756
-				width: 18.266024
+				width: 21.653008
 				height: 0.99871826
 				bodyType: StaticBody
 			}
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_2
-				x: 21.296206
+				x: 18.582745
 				y: 16.81315
-				width: 12.86923
+				width: 20.997185
 				height: 1.5525646
 				bodyType: StaticBody
 			}
@@ -73,7 +113,23 @@ lightsMapLayer: {
 		lights: [
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
-				name: PointLight_1
+				name: PointLight_3
+				raysNumber: 25
+				color: {
+					r: 0.38431373
+					g: 0.8901961
+					b: 0.1882353
+					a: 1
+				}
+				lightDistance: 2.5
+				x: 39.30745
+				y: 13.366293
+				softLight: false
+				softLength: 2.9999995
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_2
 				raysNumber: 25
 				color: {
 					r: 1
@@ -81,13 +137,13 @@ lightsMapLayer: {
 					b: 1
 					a: 1
 				}
-				lightDistance: 7.5
-				x: 32.303898
-				y: 15.53238
+				lightDistance: 5
+				x: 32.19203
+				y: 16.33587
 				softLight: false
 			}
 		]
 	}
-	shaderAmbientLightIntensity: 7.4505806E-9
+	shaderAmbientLightIntensity: 0.50000006
 }
 }

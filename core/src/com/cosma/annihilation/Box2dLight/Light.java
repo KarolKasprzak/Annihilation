@@ -60,20 +60,6 @@ public abstract class Light implements Disposable {
 	protected float[] f;
 	protected int m_index = 0;
 
-	protected Vector3 attenuation = new Vector3(0.4f,2f,15f);
-
-	public Vector3 getAttenuation() {
-		return attenuation;
-	}
-
-	public void setAttenuation(Vector3 attenuation) {
-		this.attenuation = attenuation;
-	}
-
-	public void setAttenuation(float x,float y, float z) {
-		this.attenuation.set(x,y,z);
-	}
-
 	/**
 	 * Creates new active light and automatically adds it to the specified
 	 * {@link RayHandler} instance.

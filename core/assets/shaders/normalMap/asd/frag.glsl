@@ -13,7 +13,6 @@ uniform sampler2D u_normals;
 uniform vec2 resolution;
 uniform bool useNormals;
 uniform bool useShadow;
-uniform vec3 attenuation;
 uniform float strength;
 uniform bool yInvert;
 uniform bool xInvert;
@@ -40,16 +39,23 @@ vec3 normal = normalize(nColor * 2.0 - 1.0);
 
 vec3 sum = vec3(0.0);
 for ( int i = 0; i < 7; ++i ){
+
+
+
 vec3 currentLight = light[i];
 vec3 currentLightColor = lightColor[i];
 // here we do a simple distance calculation
+
+
 vec3 deltaPos = vec3( (currentLight.xy - gl_FragCoord.xy) / resolution.xy, currentLight.z );
-vec3 lightDir = normalize(deltaPos);
-float lambert = useNormals ? clamp(dot(normal, lightDir), 0.0, 1.0) : 1.0;
-// now let's get a nice little falloff
-float d = sqrt(dot(deltaPos, deltaPos));
-float att = useShadow ? 1.0 / ( attenuation.x + (attenuation.y*d) + (attenuation.z*d*d) ) : 1.0;
-vec3 result = (currentLightColor.rgb * lambert) * att;
+
+float distance = length(currentLight.xy-gl_FragCoord.xy);
+float attenuation = 1.0 / distance;
+ 
+vec3 lightDir = normalize(deltaPos * 1);
+float lambert = clamp(dot(normal, lightDir), 0.0, 1.0);
+
+vec3 result = (currentLightColor.rgb * lambert);
 result *= color.rgb;
 sum += result;
 }

@@ -1,9 +1,12 @@
 package com.cosma.annihilation.Editor;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.cosma.annihilation.Editor.CosmaMap.AnimatedSprite;
 import com.cosma.annihilation.Editor.CosmaMap.Sprite;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
@@ -32,6 +35,26 @@ public class SpriteEditWindow  extends VisWindow {
             }
         });
 
+        if(sprite instanceof AnimatedSprite){
+            VisCheckBox isLoop = new VisCheckBox("animation loop");
+            if(((AnimatedSprite) sprite).getPlayMode().equals(Animation.PlayMode.LOOP)){
+                isLoop.setChecked(true);
+            }else{
+                isLoop.setChecked(false);
+            }
+            isLoop.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    if(isLoop.isChecked()){
+                        ((AnimatedSprite) sprite).setPlayMode(Animation.PlayMode.LOOP);
+                    }else{
+                        ((AnimatedSprite) sprite).setPlayMode(Animation.PlayMode.NORMAL);
+                    }
+                }
+            });
+            add(isLoop);
+        }
+        row();
         add(positionX);
         row();
         add(positionY);

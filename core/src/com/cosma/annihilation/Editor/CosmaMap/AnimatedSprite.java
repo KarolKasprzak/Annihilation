@@ -23,9 +23,15 @@ public class AnimatedSprite extends Sprite{
     }
     private float time = 0;
 
-
-
     public AnimatedSprite() {
+    }
+
+    public void setPlayMode(Animation.PlayMode playMode){
+        animation.setPlayMode(playMode);
+    }
+
+    public Animation.PlayMode getPlayMode(){
+        return animation.getPlayMode();
     }
 
      void setTextureDate(String region, String path) {
@@ -38,9 +44,12 @@ public class AnimatedSprite extends Sprite{
 
         }
 
-        public void updateAnimation(float deltaTime){
+    public void updateAnimation(float deltaTime){
             time += deltaTime;
-            textureRegion = animation.getKeyFrame(time,true);
+            textureRegion = animation.getKeyFrame(time);
+            if(animation.isAnimationFinished(time)){
+             time = 0;
+            }
         }
 
     public void setSpritePosition(float x,float y, float angle){

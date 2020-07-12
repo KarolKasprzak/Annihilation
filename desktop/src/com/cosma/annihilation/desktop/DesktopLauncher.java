@@ -18,15 +18,15 @@ public class DesktopLauncher {
 		config.fullscreen = true;
 		config.samples=3;
 
-//		config.width = 640;
-//		config.height = 360;
-
 		config.width = screenSize.width/2;
 		config.height = screenSize.height/2;
 		config.vSyncEnabled = true;
 
 
-		new LwjglApplication (new Annihilation(false),config);
+      	new LwjglApplication (new Annihilation(false),config);
+
+
+
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 	}
 }

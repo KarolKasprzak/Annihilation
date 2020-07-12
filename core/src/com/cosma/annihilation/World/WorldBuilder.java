@@ -44,7 +44,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
         //Game camera
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(15, 5,camera);
+        viewport = new ExtendViewport(10, 5,camera);
 
         viewport.apply(true);
 //        batch = new SpriteBatch();
@@ -52,6 +52,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         polygonSpriteBatch = new PolygonSpriteBatch();
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
+        RayHandler.setGammaCorrection(true);
         rayHandler = new RayHandler(world);
         rayHandler.setBlur(true);
         rayHandler.setShadows(true);

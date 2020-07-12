@@ -181,8 +181,21 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../sprite root/map_textures/electronics/light switch.png</key>
-            <key type="filename">../../sprite root/map_textures/electronics/pc_retro.png</key>
+            <key type="filename">../../../sprite root/map_textures/crates/box_military.png</key>
+            <key type="filename">../../../sprite root/map_textures/crates/box_military_n.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../sprite root/map_textures/electronics/light switch.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -198,8 +211,9 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../sprite root/map_textures/electronics/light switch.png</filename>
-            <filename>../../sprite root/map_textures/electronics/pc_retro.png</filename>
+            <filename>../../../sprite root/map_textures/crates/box_military.png</filename>
+            <filename>../../../sprite root/map_textures/crates/box_military_n.png</filename>
+            <filename>../../../sprite root/map_textures/electronics/light switch.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
@@ -212,7 +226,7 @@
         <key>commonDivisorY</key>
         <uint>1</uint>
         <key>packNormalMaps</key>
-        <false/>
+        <true/>
         <key>autodetectNormalMaps</key>
         <true/>
         <key>normalMapFilter</key>

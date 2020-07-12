@@ -83,9 +83,10 @@ public class MapRender {
         Arrays.fill(lightPositionArray, 0);
         activeLights.clear();
         for (Light light : rayHandler.getLightList()) {
-            if (camera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance())) {
-                activeLights.add(light);
-            }
+            activeLights.add(light);
+//            if (camera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance())) {
+//                activeLights.add(light);
+//            }
         }
         for (int i = 0; i < activeLights.size; i++) {
             if (i < 7) {
@@ -109,16 +110,10 @@ public class MapRender {
         shader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
         shader.setUniformi("xInvert", 0);
         shader.setUniformi("yInvert", 0);
-
         shader.setUniformf("resolution",Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        shader.setUniformf("attenuation", 0.01f, 2f, 5f);
-        shader.setUniformi("useNormals", 1);
-        shader.setUniformi("useShadow", 1);
         shader.setUniformf("strength", 1f);
         Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();
         shader.setUniformf("ambientColor", color.r, color.g, color.b,gameMap.getLightsMapLayer().getShaderAmbientLightIntensity());
-
-
     }
 
     public void setGameMap(GameMap gameMap) {
@@ -169,6 +164,7 @@ public class MapRender {
             }
         }
         batch.setShader(null);
+        batch.flush();
 
         batch.begin();
 

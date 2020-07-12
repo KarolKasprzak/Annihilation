@@ -124,7 +124,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             skeletonComponent.animationState.update(deltaTime);
 
             polygonBatch.begin();
-            getEngine().prepareDataForNormalShaderRender(shader,skeletonComponent.skeletonDirection,false);
+            getEngine().prepareDataForNormalShaderRender(shader,!skeletonComponent.skeletonDirection,false);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton);
             polygonBatch.end();
         }
