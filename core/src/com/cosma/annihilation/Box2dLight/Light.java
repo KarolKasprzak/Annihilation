@@ -60,6 +60,46 @@ public abstract class Light implements Disposable {
 	protected float[] f;
 	protected int m_index = 0;
 
+	//shader uniform
+	private float lightZPositionForShader = 0.05f;
+	private float lightDistanceForShader = 0.5f;
+	private float intensityForShader = 1.0f;
+	private boolean renderWithShader = true;
+
+	public boolean isRenderWithShader() {
+		return renderWithShader;
+	}
+
+	public void setRenderWithShader(boolean renderWithShader) {
+		this.renderWithShader = renderWithShader;
+	}
+
+	public float getLightZPosition() {
+		return lightZPositionForShader;
+	}
+
+	public void setLightZPosition(float lightZPositionForShader) {
+		this.lightZPositionForShader = lightZPositionForShader;
+	}
+
+	public float getLightDistanceForShader() {
+		return lightDistanceForShader;
+	}
+
+	public void setLightDistanceForShader(float lightDistanceForShader) {
+		this.lightDistanceForShader = lightDistanceForShader;
+	}
+
+	public float getIntensityForShader() {
+		return intensityForShader;
+	}
+
+	public void setIntensityForShader(float intensityForShader) {
+		this.intensityForShader = intensityForShader;
+	}
+
+
+
 	/**
 	 * Creates new active light and automatically adds it to the specified
 	 * {@link RayHandler} instance.

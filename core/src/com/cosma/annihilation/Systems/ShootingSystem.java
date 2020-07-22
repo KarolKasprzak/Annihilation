@@ -5,9 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
@@ -31,6 +29,7 @@ import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Bone;
+import com.esotericsoftware.spine.attachments.RegionAttachment;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -90,7 +89,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         filter.maskBits = CollisionID.MASK_LIGHT;
         weaponLight.setContactFilter(filter);
         weaponLight.setXray(true);
-        weaponLight.setActive(true);
+        weaponLight.setActive(false);
 
         signal = new Signal<>();
         noiseTestEntityList = new Array<>();
@@ -130,7 +129,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
         viewport.unproject(vector2temp);
 
-        Bone bodyTarget = skeletonComponent.skeleton.findBone("armTarget");
+        Bone bodyTarget = skeletonComponent.skeleton.findBone("bodyTarget");
         vector2temp.set(root.worldToLocal(vector2temp));
         bodyTarget.setPosition(vector2temp.x, vector2temp.y);
 
@@ -151,9 +150,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             Bone rArmTarget = skeletonComponent.skeleton.findBone("r_hand_target");
             Bone lArmTarget = skeletonComponent.skeleton.findBone("l_hand_target");
             Bone flash = skeletonComponent.skeleton.findBone("flash");
-            if (weaponLight.isActive()) {
-                weaponLight.setPosition(flash.getWorldX(), flash.getWorldY());
-            }
             Bone grip = skeletonComponent.skeleton.findBone("grip");
             rArmTarget.setPosition(vector2temp.x, vector2temp.y);
             vector2temp.set(grip.getWorldX(), grip.getWorldY());

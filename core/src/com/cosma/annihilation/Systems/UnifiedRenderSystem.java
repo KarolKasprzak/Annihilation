@@ -12,7 +12,6 @@ import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.AnimatedSprite;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 import com.cosma.annihilation.Editor.CosmaMap.Sprite;
-import com.cosma.annihilation.Editor.CosmaMap.SpriteMapLayer;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;

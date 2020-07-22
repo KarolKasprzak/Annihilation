@@ -17,7 +17,54 @@ public abstract class MapLight {
     private float softLength = 2.5f;
     private short maskBit;
     private short categoryBit;
-    private Vector3 attenuation = new Vector3(0.4f,2f,15f);
+
+    private boolean isLightEnabled = true;
+    private float lightZPositionForShader = 0.05f;
+    private float lightFalloffDistance = 0.5f;
+    private float intensityForShader = 1.0f;
+    private boolean renderWithShader = true;
+
+    public boolean isLightEnabled() {
+        return isLightEnabled;
+    }
+
+    public void setLightEnabled(boolean lightEnabled) {
+        isLightEnabled = lightEnabled;
+    }
+
+    public float getLightZPositionForShader() {
+        return lightZPositionForShader;
+    }
+
+    public void setLightZPositionForShader(float lightZPositionForShader) {
+        this.lightZPositionForShader = lightZPositionForShader;
+    }
+
+    public float getLightFalloffDistance() {
+        return lightFalloffDistance;
+    }
+
+    public void setLightFalloffDistance(float lightFalloffDistance) {
+        this.lightFalloffDistance = lightFalloffDistance;
+    }
+
+    public float getIntensityForShader() {
+        return intensityForShader;
+    }
+
+    public void setIntensityForShader(float intensityForShader) {
+        this.intensityForShader = intensityForShader;
+    }
+
+    public boolean isRenderWithShader() {
+        return renderWithShader;
+    }
+
+    public void setRenderWithShader(boolean renderWithShader) {
+        this.renderWithShader = renderWithShader;
+    }
+
+
 
     MapLight() {
     }
@@ -35,18 +82,6 @@ public abstract class MapLight {
         this.raysNumber = raysNumber;
         this.lightDistance = distance;
 
-    }
-
-    public Vector3 getAttenuation() {
-        return attenuation;
-    }
-
-    public void setAttenuation(Vector3 attenuation) {
-        this.attenuation = attenuation;
-    }
-
-    public void setAttenuation(float x,float y, float z) {
-        this.attenuation.set(x,y,z);
     }
 
     public float getLightDistance() {

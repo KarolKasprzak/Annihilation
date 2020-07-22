@@ -38,6 +38,8 @@ public class MapRender {
     private Vector3 lightPosition = new Vector3();
     private float[] lightPositionArray = new float[21];
     private float[] lightColorArray = new float[21];
+    private float[] intensityArray = new float[7];
+    private float[] distanceArray = new float[7];
     private Array<Light> activeLights = new Array<>();
 
     private OrthographicCamera camera;
@@ -81,9 +83,13 @@ public class MapRender {
     public void prepareDataForNormalShaderRender() {
         Arrays.fill(lightColorArray, 0);
         Arrays.fill(lightPositionArray, 0);
+        Arrays.fill(intensityArray, 0);
+        Arrays.fill(distanceArray, 0);
         activeLights.clear();
         for (Light light : rayHandler.getLightList()) {
-            activeLights.add(light);
+            if(light.isRenderWithShader()){
+                activeLights.add(light);
+            }
 //            if (camera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance())) {
 //                activeLights.add(light);
 //            }
@@ -99,19 +105,32 @@ public class MapRender {
 
                 lightPositionArray[i * 3] = lightPosition.x;
                 lightPositionArray[1 + (i * 3)] = lightPosition.y;
-                lightPositionArray[2 + (i * 3)] = 0.05f;
+                lightPositionArray[2+(i*3)] = light.getLightZPosition();
 
                 lightColorArray[i * 3] = light.getColor().r;
                 lightColorArray[1 + (i * 3)] = light.getColor().g;
                 lightColorArray[2 + (i * 3)] = light.getColor().b;
+
+                intensityArray[i] = light.getIntensityForShader();
+                distanceArray[i] = light.getLightDistanceForShader();
             }
         }
-        shader.setUniform3fv("light[0]", lightPositionArray, 0, 21);
+        if(activeLights.size < 7){
+            shader.setUniformi("arraySize",activeLights.size);
+        }else{
+            shader.setUniformi("arraySize",7);
+        }
+
+        shader.setUniform1fv("intensityArray",intensityArray,0,7);
+        shader.setUniform1fv("distanceArray",distanceArray,0,7);
+
+        shader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
         shader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
+
+
         shader.setUniformi("xInvert", 0);
         shader.setUniformi("yInvert", 0);
         shader.setUniformf("resolution",Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        shader.setUniformf("strength", 1f);
         Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();
         shader.setUniformf("ambientColor", color.r, color.g, color.b,gameMap.getLightsMapLayer().getShaderAmbientLightIntensity());
     }
@@ -164,7 +183,7 @@ public class MapRender {
             }
         }
         batch.setShader(null);
-        batch.flush();
+
 
         batch.begin();
 

@@ -28,7 +28,7 @@ public class LightsAdvWindow extends VisWindow{
     private ColorPicker picker;
 
     public LightsAdvWindow(final MapLight selectedLight, final Light selectedBox2dLight) {
-        super("Adv. light set.");
+        super("Light settings: ");
         addCloseButton();
 
         final Image image = new Image(white);
@@ -44,7 +44,7 @@ public class LightsAdvWindow extends VisWindow{
         image.setColor(selectedLight.getColor());
         selectedColor = selectedLight.getColor();
 
-        final Spinner distanceSpinner = new Spinner("distance", new SimpleFloatSpinnerModel(selectedLight.getLightDistance(), 1f, 45f, 0.5f, 2));
+        final Spinner distanceSpinner = new Spinner("distance", new SimpleFloatSpinnerModel(selectedLight.getLightDistance(), 0.1f, 45f, 0.5f, 2));
         distanceSpinner.getTextField().setFocusBorderEnabled(false);
         distanceSpinner.getTextField().addListener(new FocusListener() {
             @Override
@@ -136,15 +136,106 @@ public class LightsAdvWindow extends VisWindow{
             softButton.setChecked(true);
         }
 
+        final VisCheckBox enabledButton = new VisCheckBox("active");
+        if(selectedLight.isLightEnabled()){
+            enabledButton.setChecked(true);
+        }
+
+        final VisCheckBox renderWithShaderButton = new VisCheckBox("render light with shader");
+        if(selectedLight.isRenderWithShader()){
+            renderWithShaderButton.setChecked(true);
+        }
+
+        //shader Z spinner
+        final Spinner lightZSpinner = new Spinner("light Z", new SimpleFloatSpinnerModel(selectedLight.getLightZPositionForShader(), 0f, 0.2f, 0.01f, 2));
+        lightZSpinner.getTextField().setFocusBorderEnabled(false);
+        lightZSpinner.getTextField().addListener(new FocusListener() {
+            @Override
+            public void scrollFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                super.scrollFocusChanged(event, actor, focused);
+                if(focused){
+                    getStage().setScrollFocus(null);
+                }
+            }
+        });
+        lightZSpinner.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                selectedLight.setLightZPositionForShader(((SimpleFloatSpinnerModel) lightZSpinner.getModel()).getValue());
+                selectedBox2dLight.setLightZPosition(((SimpleFloatSpinnerModel) lightZSpinner.getModel()).getValue());
+            }
+        });
+        //shader light falloff distance spinner
+        final Spinner falloffSpinner = new Spinner("light falloff", new SimpleFloatSpinnerModel(selectedLight.getLightFalloffDistance(), 0f, 1f, 0.05f, 2));
+        falloffSpinner.getTextField().setFocusBorderEnabled(false);
+        falloffSpinner.getTextField().addListener(new FocusListener() {
+            @Override
+            public void scrollFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                super.scrollFocusChanged(event, actor, focused);
+                if(focused){
+                    getStage().setScrollFocus(null);
+                }
+            }
+        });
+        falloffSpinner.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                selectedLight.setLightFalloffDistance(((SimpleFloatSpinnerModel) falloffSpinner.getModel()).getValue());
+                selectedBox2dLight.setLightDistanceForShader(((SimpleFloatSpinnerModel) falloffSpinner.getModel()).getValue());
+            }
+        });
+        //shader light intensity  spinner
+        final Spinner intensitySpinner = new Spinner("light intensity", new SimpleFloatSpinnerModel(selectedLight.getIntensityForShader(), 0f, 2.0f, 0.05f, 2));
+        intensitySpinner.getTextField().setFocusBorderEnabled(false);
+        intensitySpinner.getTextField().addListener(new FocusListener() {
+            @Override
+            public void scrollFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                super.scrollFocusChanged(event, actor, focused);
+                if(focused){
+                    getStage().setScrollFocus(null);
+                }
+            }
+        });
+        intensitySpinner.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                selectedLight.setIntensityForShader(((SimpleFloatSpinnerModel) intensitySpinner.getModel()).getValue());
+                selectedBox2dLight.setIntensityForShader(((SimpleFloatSpinnerModel) intensitySpinner.getModel()).getValue());
+            }
+        });
+
         add(image).top().size(25).center().top().expandX().expandY();
         add(distanceSpinner);
         add(softDistanceSpinner);
         row();
         add(staticButton);
         add(softButton);
+        add(enabledButton);
+        row();
+        add(new VisLabel("Light shader settings: "));
+        row();
+        add(lightZSpinner);
+        add(intensitySpinner);
+        add(falloffSpinner);
+        row();
+
         row();
         add(cancelButton);
         add(saveButton);
+
+
+        enabledButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(enabledButton.isChecked()){
+                    selectedLight.setLightEnabled(true);
+                    selectedBox2dLight.setActive(true);
+                }else{
+                    selectedLight.setLightEnabled(false);
+                    selectedBox2dLight.setActive(false);
+                }
+            }
+        });
 
         image.addListener(new ClickListener() {
             @Override
@@ -178,6 +269,19 @@ public class LightsAdvWindow extends VisWindow{
                 selectedLight.setSoftLight(false);
                 selectedBox2dLight.setSoft(false);
             }
+            }
+        });
+
+        renderWithShaderButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(renderWithShaderButton.isChecked()){
+                    selectedLight.setRenderWithShader(true);
+                    selectedBox2dLight.setRenderWithShader(true);
+                }else{
+                    selectedLight.setRenderWithShader(false);
+                    selectedBox2dLight.setRenderWithShader(false);
+                }
             }
         });
 

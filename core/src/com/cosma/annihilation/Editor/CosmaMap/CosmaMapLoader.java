@@ -42,7 +42,7 @@ public class CosmaMapLoader {
         json.setSerializer(Entity.class,new GameEntitySerializer(world,engine));
         map = json.fromJson(GameMap.class, mapFile);
 
-//        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
+        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
 //        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightIntensity());
         createMapObject();
     }
@@ -64,6 +64,11 @@ public class CosmaMapLoader {
                 filter.maskBits = CollisionID.MASK_LIGHT;
                 filter.categoryBits = CollisionID.LIGHT;
                 point.setContactFilter(filter);
+                point.setActive(light.isLightEnabled());
+                point.setLightZPosition(light.getLightZPositionForShader());
+                point.setIntensityForShader(light.getIntensityForShader());
+                point.setLightDistanceForShader(light.getLightFalloffDistance());
+                point.setRenderWithShader(light.isRenderWithShader());
                 map.putLight(light.getName(), point);
             }
             for (MapConeLight light :  map.getLightsMapLayer().getLights().getByType(MapConeLight.class)) {

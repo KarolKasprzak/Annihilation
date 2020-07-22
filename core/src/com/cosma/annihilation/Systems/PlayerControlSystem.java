@@ -54,9 +54,7 @@ public class PlayerControlSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         PhysicsComponent playerBody = physicsMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
-        AnimationComponent animationComponent = animationMapper.get(entity);
         SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
-        animationComponent.spriteDirection = mouseCursorPosition;
         skeletonComponent.skeletonDirection = mouseCursorPosition;
 
 
@@ -84,12 +82,12 @@ public class PlayerControlSystem extends IteratingSystem {
             if (playerComponent.canMoveOnSide && playerComponent.onGround && playerComponent.isWeaponHidden && isPlayerControlAvailable) {
                 if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
                     float desiredSpeed = playerComponent.velocity;
-                    if (animationComponent.spriteDirection) {
-                        animationComponent.animationState = AnimationStates.WALK;
-                    } else {
-                        animationComponent.animationState = AnimationStates.WALK;
-                        desiredSpeed = desiredSpeed * 0.7f;
-                    }
+//                    if (animationComponent.spriteDirection) {
+//                        animationComponent.animationState = AnimationStates.WALK;
+//                    } else {
+//                        animationComponent.animationState = AnimationStates.WALK;
+//                        desiredSpeed = desiredSpeed * 0.7f;
+//                    }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
                     float impulse = playerBody.body.getMass() * speedX;
@@ -98,12 +96,12 @@ public class PlayerControlSystem extends IteratingSystem {
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
                     float desiredSpeed = -playerComponent.velocity;
-                    if (animationComponent.spriteDirection) {
-                        animationComponent.animationState = AnimationStates.WALK;
-                        desiredSpeed = desiredSpeed * 0.7f;
-                    } else {
-                        animationComponent.animationState = AnimationStates.WALK;
-                    }
+//                    if (animationComponent.spriteDirection) {
+//                        animationComponent.animationState = AnimationStates.WALK;
+//                        desiredSpeed = desiredSpeed * 0.7f;
+//                    } else {
+//                        animationComponent.animationState = AnimationStates.WALK;
+//                    }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
                     float impulse = playerBody.body.getMass() * speedX;
@@ -126,9 +124,9 @@ public class PlayerControlSystem extends IteratingSystem {
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
                     float desiredSpeed = -playerComponent.velocity * 0.8f;
-                    if (animationComponent.spriteDirection) {
-                        desiredSpeed = desiredSpeed * 0.7f;
-                    }
+//                    if (animationComponent.spriteDirection) {
+//                        desiredSpeed = desiredSpeed * 0.7f;
+//                    }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
                     float impulse = playerBody.body.getMass() * speedX;
@@ -147,7 +145,7 @@ public class PlayerControlSystem extends IteratingSystem {
                     @Override
                     public void run() {
                         float x;
-                        if (animationComponent.spriteDirection) {
+                        if (skeletonComponent.skeletonDirection) {
                             x = 0;
                         } else x = -0;
                         playerBody.body.applyLinearImpulse(new Vector2(x, 75),

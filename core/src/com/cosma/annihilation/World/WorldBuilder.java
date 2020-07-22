@@ -52,11 +52,13 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         polygonSpriteBatch = new PolygonSpriteBatch();
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
-        RayHandler.setGammaCorrection(true);
-        rayHandler = new RayHandler(world);
-        rayHandler.setBlur(true);
-        rayHandler.setShadows(true);
+        RayHandler.setGammaCorrection(false);
         RayHandler.useDiffuseLight(true);
+        rayHandler = new RayHandler(world,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        rayHandler.setBlur(true);
+        rayHandler.setBlurNum(2);
+        rayHandler.setShadows(true);
+//        rayHandler.setAmbientLight(0.1f,0.1f,0.1f,0.1f);
 
         engine = new Engine(world, rayHandler, startStatus, camera);
         engine.addEntityListener(this);
@@ -109,7 +111,8 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.removeAllBodies();
         engine.update(delta);
         inputManager.update(engine);
-        camera.update();
+
+
 
     }
 

@@ -10,10 +10,6 @@
     entityName: player.json
   }
   
-  AnimationComponent: {
-	id: PLAYER
-  }
-  
   PlayerInventoryComponent: {
   }
   

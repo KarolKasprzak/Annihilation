@@ -23,7 +23,7 @@
   AiComponent: {
   }
   
-  BodyComponent: {
+  PhysicsComponent: {
     bodyType: DynamicBody
     positionX: 0
     positionY: 0

@@ -110,7 +110,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                     if (label.getName() != null) {
                         selectedEntityName = label.getName();
                         canAddEntity = true;
-                        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Crosshair);
+                        Util.setCursorMove();
                     }
                 }
             }
@@ -122,6 +122,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         Entity entity = json.fromJson(Entity.class, jsonList.get(key));
         for (Component component : entity.getComponents()) {
             if (component instanceof PhysicsComponent) {
+
                 ((PhysicsComponent) component).body.setTransform(x, y, 0);
                 continue;
             }
@@ -130,6 +131,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
             }
         }
         editorScreen.getMap().addEntity(entity);
+        System.out.println("cretaed");
     }
 
     @Override
@@ -161,17 +163,17 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         if (canAddEntity && button == Input.Buttons.LEFT) {
             createEntity(selectedEntityName, vec.x, vec.y);
             canAddEntity = false;
-            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+            Util.setCursorSystem();
         }
         if (canAddEntity && button == Input.Buttons.RIGHT) {
             canAddEntity = false;
-            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+            Util.setCursorSystem();
         }
 
         if (canMove && button == Input.Buttons.RIGHT) {
             canMove = false;
             selectedBody = null;
-            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+            Util.setCursorSystem();
         }
 
         if (canMove && button == Input.Buttons.LEFT) {
@@ -184,7 +186,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
             }
             selectedBody.setActive(true);
             selectedBody.setAwake(true);
-            Gdx.graphics.setSystemCursor(Cursor.SystemCursor.Arrow);
+            Util.setCursorSystem();
             canMove = false;
             selectedBody = null;
         }
@@ -231,7 +233,6 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
                 }
             }, vec.x - 0.2f, vec.y - 0.2f, vec.x + 0.2f, vec.y + 0.2f);
         }
-
 
         return false;
     }

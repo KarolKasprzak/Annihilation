@@ -90,7 +90,8 @@ public class AmbientLightsWindow extends VisWindow {
                     map.getLightsMapLayer().setAmbientLightColor(ambientColor);
                         map.getLightsMapLayer().setAmbientLightIntensity(((SimpleFloatSpinnerModel) distanceSpinner.getModel()).getValue());
                         if(RayHandler.isDiffuse){
-                            rayHandler.setAmbientLight(0);
+                            rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightIntensity());
+                            rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
                         }else{
                             rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
                             rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightIntensity());

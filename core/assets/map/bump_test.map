@@ -9,8 +9,46 @@ entityList: [
 		maxHp: 100
 		entityName: player.json
 		mapName: null
-		id: PLAYER
 		inventoryItems: []
+	}
+	{
+		position: "30.325642,13.659296"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				itemID: ammo7mm
+				itemAmount: 17
+				tableIndex: 0
+			}
+			{
+				itemID: gewehr46
+				tableIndex: 1
+			}
+			{
+				itemID: stg
+				tableIndex: 2
+			}
+			{
+				itemID: colt
+				tableIndex: 3
+			}
+		]
+	}
+	{
+		position: "33.979588,14.015768"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "41.76933,14.368331"
+	}
+	{
+		position: "41.35266,14.368331"
+		hp: 100
+		maxHp: 100
+		entityName: mutant.json
+		startPosition: "41.35266,14.368331"
 	}
 ]
 mapName: bump_test.map
@@ -43,11 +81,11 @@ spriteMapLayer: {
 			texture: "gfx/map_textures/furnitures/furniture.atlas,employee_storage"
 		}
 		{
-			position: "31.985947,16.280132,0.0"
+			position: "30.62645,15.1129875,0.0"
 			texture: "gfx/map_textures/map_objects/lights.atlas,wood_door — kopia"
 		}
 		{
-			position: "25.811588,16.298082,0.0"
+			position: "24.874393,15.037132,0.0"
 			texture: "gfx/map_textures/map_objects/lights.atlas,wood_door — kopia"
 		}
 		{
@@ -82,6 +120,14 @@ spriteMapLayer: {
 			position: "61.0,14.0,0.0"
 			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles — kopia — kopia — kopia"
 		}
+		{
+			position: "19.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles1"
+		}
+		{
+			position: "16.0,13.0,0.0"
+			texture: "gfx/map_textures/walls/walls.atlas,wall_tiles2"
+		}
 	]
 }
 objectMapLayer: {
@@ -90,9 +136,9 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_1
-				x: 18.875
+				x: 13.707052
 				y: 11.997756
-				width: 21.653008
+				width: 43.96731
 				height: 0.99871826
 				bodyType: StaticBody
 			}
@@ -101,7 +147,7 @@ objectMapLayer: {
 				name: Rectangle_2
 				x: 18.582745
 				y: 16.81315
-				width: 20.997185
+				width: 28.240986
 				height: 1.5525646
 				bodyType: StaticBody
 			}
@@ -122,8 +168,8 @@ lightsMapLayer: {
 					a: 1
 				}
 				lightDistance: 2.5
-				x: 39.30745
-				y: 13.366293
+				x: 37.28814
+				y: 13.824146
 				softLight: false
 				softLength: 2.9999995
 			}
@@ -134,16 +180,69 @@ lightsMapLayer: {
 				color: {
 					r: 1
 					g: 1
+					b: 0.65882355
+					a: 1
+				}
+				lightDistance: 4.5
+				x: 30.84051
+				y: 15.515518
+				softLight: false
+				lightZPositionForShader: 0.02
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_0
+				raysNumber: 25
+				color: {
+					r: 0.9411765
+					g: 0.12156863
+					b: 0.12156863
+					a: 1
+				}
+				lightDistance: 4
+				x: 24.771135
+				y: 15.29022
+				softLight: false
+				lightZPositionForShader: 0
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_4
+				raysNumber: 25
+				color: {
+					r: 1
+					g: 1
 					b: 1
 					a: 1
 				}
-				lightDistance: 5
-				x: 32.19203
-				y: 16.33587
+				lightDistance: 4.5
+				x: 38.885868
+				y: 15.875212
 				softLight: false
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_5
+				raysNumber: 25
+				color: {
+					r: 0.38431373
+					g: 0.8901961
+					b: 0.1882353
+					a: 1
+				}
+				lightDistance: 1
+				x: 33.382114
+				y: 14.118695
 			}
 		]
 	}
-	shaderAmbientLightIntensity: 0.50000006
+	ambientLightColor: {
+		r: 0.26666668
+		g: 0.25882354
+		b: 0.27450982
+		a: 0.19215687
+	}
+	ambientLightIntensity: 0.40000004
+	shaderAmbientLightIntensity: 0.3
 }
 }

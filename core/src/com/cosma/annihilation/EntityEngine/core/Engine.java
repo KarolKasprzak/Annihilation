@@ -192,6 +192,10 @@ public class Engine {
         activeLights.clear();
         for (Light light : rayHandler.getLightList()) {
             activeLights.add(light);
+//            if(light.isRenderWithShader()){
+//
+//            }
+
 //                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() +3)) {
 //
 //                        }
@@ -201,21 +205,22 @@ public class Engine {
                 Light light = activeLights.get(i);
                 lightPosition.x = light.getX();
                 lightPosition.y = light.getY();
-                lightPosition.z = 0.5f;
+                lightPosition.z = 0f;
 
                 gameCamera.project(lightPosition);
 
                 lightPositionArray[i*3] = lightPosition.x ;
                 lightPositionArray[1+(i*3)] = lightPosition.y;
-                lightPositionArray[2+(i*3)] = 0.05f;
+                lightPositionArray[2+(i*3)] = light.getLightZPosition();
                 
                 lightColorArray[i*3] = light.getColor().r;
                 lightColorArray[1+(i*3)] = light.getColor().g;
                 lightColorArray[2+(i*3)] = light.getColor().b;
-
             }
         }
-        normalShader.setUniform3fv("light[0]",lightPositionArray,0,21);
+
+        normalShader.setUniformi("arraySize",activeLights.size);
+        normalShader.setUniform3fv("lightPosition[0]",lightPositionArray,0,21);
         normalShader.setUniform3fv("lightColor[0]",lightColorArray,0,21);
 
         if(invertX){
@@ -230,11 +235,11 @@ public class Engine {
         }
 
         normalShader.setUniformf("resolution",Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-        normalShader.setUniformf("strength", 0.8f);
+
 
 
         Color color = getCurrentMap().getLightsMapLayer().getShaderAmbientLightColor();
-        
+
         normalShader.setUniformf("ambientColor", color.r, color.g, color.b, getCurrentMap().getLightsMapLayer().getShaderAmbientLightIntensity());
     }
 

@@ -74,7 +74,7 @@ public class EditorScreen implements Screen, InputProcessor {
         viewportUi = new ScreenViewport(cameraUi);
         stage = new Stage(viewportUi);
         VisUI.load(VisUI.SkinScale.X1);
-        rayHandler = new RayHandler(world);
+        rayHandler = new RayHandler(world,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         rayHandler.setBlur(true);
         rayHandler.setShadows(true);
         isLightsRendered = false;
@@ -87,7 +87,7 @@ public class EditorScreen implements Screen, InputProcessor {
         stage.addActor(root);
 
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(16 / 1.3f, 9 / 1.3f, camera);
+        viewport = new ExtendViewport(10, 5,camera);
         camera.update();
         camera.zoom = 5;
         viewport.apply(true);
@@ -383,6 +383,10 @@ public class EditorScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+
+        if (keycode == Input.Keys.C) {
+            camera.zoom = 1.0f;
+        }
 
         if (keycode == Input.Keys.PLUS) {
             camera.zoom -= zoomLevel;
