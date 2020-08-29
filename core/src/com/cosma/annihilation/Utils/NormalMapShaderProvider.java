@@ -12,7 +12,7 @@ import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 
 import java.util.Arrays;
 
-public class ShaderData {
+public class NormalMapShaderProvider {
 
     private Vector3 lightPosition = new Vector3();
     private float[] lightPositionArray = new float[21];
@@ -24,15 +24,31 @@ public class ShaderData {
     private OrthographicCamera camera;
     private RayHandler rayHandler;
     private GameMap gameMap;
+    private ShaderProgram shader;
 
-    public ShaderData(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
+    public NormalMapShaderProvider(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
         this.gameMap = gameMap;
         this.camera = camera;
         this.rayHandler = rayHandler;
+        ShaderProgram.pedantic = false;
+        shader = new ShaderProgram(Gdx.files.internal("shaders/normalMap/ver.glsl").readString(), Gdx.files.internal("shaders/normalMap/frag.glsl").readString());
+        if (!shader.isCompiled())
+            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        shader.begin();
+        shader.setUniformi("u_texture", 0);
+        shader.setUniformi("u_normals", 1);
+        shader.end();
     }
 
+    public void updateMap(GameMap gameMap){
+        this.gameMap = gameMap;
+    }
 
-    public void update(ShaderProgram shader, boolean flipX){
+    public ShaderProgram getShader() {
+        return shader;
+    }
+
+    public void prepareData(boolean flipX){
         Arrays.fill(lightColorArray, 0);
         Arrays.fill(lightPositionArray, 0);
         Arrays.fill(intensityArray, 0);
@@ -79,8 +95,12 @@ public class ShaderData {
         shader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
         shader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
 
+        if(flipX){
+            shader.setUniformi("xInvert", 1);
+        }else{
+            shader.setUniformi("xInvert", 0);
+        }
 
-        shader.setUniformi("xInvert", 0);
         shader.setUniformi("yInvert", 0);
         shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();

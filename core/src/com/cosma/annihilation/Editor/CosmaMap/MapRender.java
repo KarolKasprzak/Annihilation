@@ -1,12 +1,10 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -21,8 +19,7 @@ import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Constants;
-
-import java.util.Arrays;
+import com.cosma.annihilation.Utils.NormalMapShaderProvider;
 
 
 public class MapRender {
@@ -33,7 +30,6 @@ public class MapRender {
     private SpriteBatch batch;
     private TextureAtlas iconPack;
     private Vector2 position = new Vector2();
-    private ShaderProgram shader;
 
     private Vector3 lightPosition = new Vector3();
     private float[] lightPositionArray = new float[21];
@@ -44,6 +40,7 @@ public class MapRender {
 
     private OrthographicCamera camera;
     private RayHandler rayHandler;
+    private NormalMapShaderProvider shaderData;
 
 
     public MapRender(ShapeRenderer renderer, GameMap gameMap, SpriteBatch batch, RayHandler rayHandler, OrthographicCamera camera) {
@@ -56,14 +53,9 @@ public class MapRender {
         this.renderer = renderer;
         iconPack = Annihilation.getAssets().get("gfx/atlas/editor_icon.atlas", TextureAtlas.class);
 
-        ShaderProgram.pedantic = false;
-        shader = new ShaderProgram(Gdx.files.internal("shaders/normalMap/ver.glsl").readString(), Gdx.files.internal("shaders/normalMap/frag.glsl").readString());
-        if (!shader.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
-        shader.begin();
-        shader.setUniformi("u_texture", 0);
-        shader.setUniformi("u_normals", 1);
-        shader.end();
+
+
+        shaderData = new NormalMapShaderProvider(camera,rayHandler,gameMap);
     }
 
     public void renderGrid() {
@@ -80,61 +72,6 @@ public class MapRender {
         renderer.end();
     }
 
-    public void prepareDataForNormalShaderRender() {
-        Arrays.fill(lightColorArray, 0);
-        Arrays.fill(lightPositionArray, 0);
-        Arrays.fill(intensityArray, 0);
-        Arrays.fill(distanceArray, 0);
-        activeLights.clear();
-        for (Light light : rayHandler.getLightList()) {
-            if(light.isRenderWithShader()){
-                activeLights.add(light);
-            }
-//            if (camera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance())) {
-//                activeLights.add(light);
-//            }
-        }
-        for (int i = 0; i < activeLights.size; i++) {
-            if (i < 7) {
-                Light light = activeLights.get(i);
-                lightPosition.x = light.getX();
-                lightPosition.y = light.getY();
-                lightPosition.z = 0;
-
-                camera.project(lightPosition);
-
-                lightPositionArray[i * 3] = lightPosition.x;
-                lightPositionArray[1 + (i * 3)] = lightPosition.y;
-                lightPositionArray[2+(i*3)] = light.getLightZPosition();
-
-                lightColorArray[i * 3] = light.getColor().r;
-                lightColorArray[1 + (i * 3)] = light.getColor().g;
-                lightColorArray[2 + (i * 3)] = light.getColor().b;
-
-                intensityArray[i] = light.getIntensityForShader();
-                distanceArray[i] = light.getLightDistanceForShader();
-            }
-        }
-        if(activeLights.size < 7){
-            shader.setUniformi("arraySize",activeLights.size);
-        }else{
-            shader.setUniformi("arraySize",7);
-        }
-
-        shader.setUniform1fv("intensityArray",intensityArray,0,7);
-        shader.setUniform1fv("distanceArray",distanceArray,0,7);
-
-        shader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
-        shader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
-
-
-        shader.setUniformi("xInvert", 0);
-        shader.setUniformi("yInvert", 0);
-        shader.setUniformf("resolution",Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();
-        shader.setUniformf("ambientColor", color.r, color.g, color.b,gameMap.getLightsMapLayer().getShaderAmbientLightIntensity());
-    }
-
     public void setGameMap(GameMap gameMap) {
         this.gameMap = gameMap;
     }
@@ -144,7 +81,7 @@ public class MapRender {
 
         //render sprite
         if(renderWithShader){
-            batch.setShader(shader);
+            batch.setShader(shaderData.getShader());
         }else{
             batch.setShader(null);
         }
@@ -157,14 +94,12 @@ public class MapRender {
                     ((AnimatedSprite) sprite).updateAnimation(delta);
                 }
 
-
-
                 sprite.bindNormalTexture(1);
                 sprite.getTextureRegion().getTexture().bind(0);
 
                 batch.begin();
                 if (sprite.getTextureRegion() != null) {
-                    prepareDataForNormalShaderRender();
+                    shaderData.prepareData(false);
                     position.set(sprite.getX(), sprite.getY());
                     batch.draw(sprite.getTextureRegion(), position.x + (sprite.isFlipX() ? sprite.getTextureRegion().getRegionWidth() / Constants.PPM : 0), position.y, (float) sprite.getTextureRegion().getRegionWidth() / Constants.PPM / 2, (float) sprite.getTextureRegion().getRegionHeight() / Constants.PPM / 2,
                             sprite.getTextureRegion().getRegionWidth() / Constants.PPM * (sprite.isFlipX() ? -1 : 1), sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
@@ -174,11 +109,7 @@ public class MapRender {
                                 sprite.getTextureRegion().getRegionWidth() / Constants.PPM * (sprite.isFlipX() ? -1 : 1), sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
                                 1, 1, sprite.getAngle());
                     }
-
                 }
-
-
-
                 batch.end();
             }
         }
@@ -221,10 +152,12 @@ public class MapRender {
         }
 
         batch.end();
+
         renderer.begin();
-        if (gameMap.getObjectMapLayer().isLayerVisible()) {
+        renderer.set(ShapeRenderer.ShapeType.Filled);
+        if (gameMap.getObjectMapLayer().isLayerVisible() && debugRender) {
             for (RectangleObject object : gameMap.getObjectMapLayer().getObjects().getByType(RectangleObject.class)) {
-                renderer.setColor(Color.WHITE);
+                renderer.setColor(0.6f,0.6f,0.6f,0.5f);
                 if (object.isHighlighted()) {
                     renderer.setColor(Color.ORANGE);
                 }

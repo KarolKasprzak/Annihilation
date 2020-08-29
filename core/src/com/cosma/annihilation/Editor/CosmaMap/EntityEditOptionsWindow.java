@@ -150,10 +150,27 @@ public class EntityEditOptionsWindow extends VisWindow {
     }
 
 
+
+
     class AddEntityInventoryWindow extends VisWindow {
+        private void drawItem(ContainerComponent containerComponent, VisTable visTable){
+            for(Item item: containerComponent.itemList){
+                visTable.add(new VisLabel((item.getItemId() + " " + item.getItemAmount())));
+                visTable.row();
+            }
+        }
+
         AddEntityInventoryWindow(ContainerComponent containerComponent) {
             super(containerComponent.name);
+
+            VisTable itemTable = new VisTable();
+
+            this.add(itemTable);
+            drawItem(containerComponent,itemTable);
+
+
             VisList<Item> itemList = new VisList<>();
+
             itemList.setItems(containerComponent.itemList);
 
             VisTextButton removeButton = new VisTextButton("Remove item");
@@ -185,7 +202,6 @@ public class EntityEditOptionsWindow extends VisWindow {
                     }
                 }
             });
-
 
             add(itemList);
             row();

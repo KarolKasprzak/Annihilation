@@ -10,10 +10,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.ObjectMap;
+
 
 public class AssetLoader {
     public AssetManager manager;
+    private ObjectMap<String,Array<Texture>> parallaxMap;
 
     public AssetLoader() {
         manager = new AssetManager();
@@ -23,6 +27,21 @@ public class AssetLoader {
     public void load() {
 
         loadFonts();
+
+        //Load parallax textures
+        parallaxMap = new ObjectMap<>();
+        FileHandle parallaxTextures = Gdx.files.local("gfx/parallax/");
+        for (FileHandle file : parallaxTextures.list()) {
+            if (file.isDirectory()) {
+                Array<Texture> textureArray = new Array<>();
+                for (FileHandle textureFile : file.list(".png")) {
+                    Texture texture = new Texture(textureFile);
+                    textureArray.add(texture);
+                }
+                System.out.println(file.name());
+                parallaxMap.put(file.name(),textureArray);
+            }
+        }
 
         //Load map tile textures
         FileHandle mapTextures = Gdx.files.local("map/map_tiles/");
@@ -123,6 +142,10 @@ public class AssetLoader {
 
     private void loadFonts(){
         manager.setLoader(BitmapFont.class, new BitmapFontLoader(new InternalFileHandleResolver()));
+    }
+
+    public Array<Texture> getParallax(String name){
+        return parallaxMap.get(name);
     }
 
     public void dispose() {

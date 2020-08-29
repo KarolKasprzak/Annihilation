@@ -16,6 +16,7 @@ public class ObjectEditWindow extends VisWindow {
         VisLabel bodyUserDate = new VisLabel("Body date: "+body.getUserData());
         row();
         this.add(bodyUserDate);
+
         int index = 0;
         for(Fixture fixture: body.getFixtureList()){
             VisLabel userDate = new VisLabel("fixture "+index+": "+fixture.getUserData());
@@ -37,9 +38,6 @@ public class ObjectEditWindow extends VisWindow {
                 mapObject.setUserDate(textField.getText());
             }
         });
-
-
-
 
 
         pack();

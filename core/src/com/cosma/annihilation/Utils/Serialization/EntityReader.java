@@ -43,6 +43,8 @@ public class EntityReader implements Json.Serializer<Entity> {
         animationFactory = new AnimationFactory();
     }
 
+
+
     @Override
     public void write(Json json, Entity object, Class knownType) {
     }
@@ -172,6 +174,14 @@ public class EntityReader implements Json.Serializer<Entity> {
             }
         }
 
+        if (jsonData.has("ParallaxComponent")) {
+            ParallaxComponent parallaxComponent = new ParallaxComponent();
+            parallaxComponent.parallaxName = jsonData.get("ParallaxComponent").get("parallaxName").asString();
+            parallaxComponent.textures = Annihilation.getParallax(parallaxComponent.parallaxName);
+            
+            entity.add(parallaxComponent);
+        }
+
         if (jsonData.has("HealthComponent")) {
             HealthComponent healthComponent = new HealthComponent();
             healthComponent.hp = jsonData.get("HealthComponent").get("hp").asInt();
@@ -197,7 +207,6 @@ public class EntityReader implements Json.Serializer<Entity> {
             skeletonComponent.diffuseTexture = atlas.getRegions().first().getTexture();
 
             SkeletonJson skeletonJson = new SkeletonJson(atlas);
-
             skeletonJson.setScale(skeletonJson.getScale()/ Constants.PPM);
             SkeletonData skeletonData = skeletonJson.readSkeletonData(Gdx.files.internal(jsonData.get("SkeletonComponent").get("jsonPath").asString()));
             skeletonComponent.skeleton = new Skeleton(skeletonData);

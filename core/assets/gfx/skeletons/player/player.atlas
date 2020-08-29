@@ -4,67 +4,18 @@ size: 256,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-weapon_flash_dark
-  rotate: false
-  xy: 165, 177
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-weapon_flash
-  rotate: false
-  xy: 165, 143
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-weapon_flash_med
-  rotate: false
-  xy: 165, 211
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: -1
-weapon_colt
-  rotate: false
-  xy: 67, 1
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-weapon_p38
-  rotate: false
-  xy: 133, 1
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-weapon_p38_silent
-  rotate: false
-  xy: 1, 131
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-weapon_stg
-  rotate: false
-  xy: 67, 67
-  size: 96, 32
-  orig: 96, 32
-  offset: 0, 0
-  index: -1
-gewehr46
-  rotate: false
-  xy: 1, 197
-  size: 96, 32
-  orig: 96, 32
-  offset: 0, 0
-  index: -1
 player_arm_l
   rotate: false
-  xy: 199, 1
+  xy: 165, 72
   size: 40, 69
   orig: 40, 69
+  offset: 0, 0
+  index: -1
+l_leg
+  rotate: false
+  xy: 165, 143
+  size: 30, 70
+  orig: 30, 70
   offset: 0, 0
   index: -1
 player
@@ -74,16 +25,65 @@ player
   orig: 64, 128
   offset: 0, 0
   index: -1
-head
+weapon_flash_dark
   rotate: false
-  xy: 199, 143
-  size: 27, 27
-  orig: 27, 27
+  xy: 199, 215
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon_flash_med
+  rotate: false
+  xy: 165, 215
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon_flash
+  rotate: false
+  xy: 197, 143
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon_p38_silent
+  rotate: false
+  xy: 67, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+weapon_colt
+  rotate: false
+  xy: 133, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+weapon_p38
+  rotate: false
+  xy: 1, 131
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+gewehr46
+  rotate: false
+  xy: 67, 67
+  size: 96, 32
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+weapon_stg
+  rotate: false
+  xy: 1, 197
+  size: 96, 32
+  orig: 96, 32
   offset: 0, 0
   index: -1
 player_arm_r
   rotate: false
-  xy: 165, 72
+  xy: 199, 1
   size: 40, 69
   orig: 40, 69
   offset: 0, 0

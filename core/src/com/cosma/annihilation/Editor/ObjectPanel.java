@@ -289,7 +289,10 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
             for (MapObject mapObject : editorScreen.getMap().getObjectMapLayer().getObjects()) {
                 if (mapObject instanceof RectangleObject) {
                     RectangleObject obj = (RectangleObject) mapObject;
-                    if (vec.x >= obj.getX() - obj.getWidth() && vec.x <= obj.getX() + obj.getWidth() && vec.y >= obj.getY() - obj.getHeight() && vec.y <= obj.getY() + obj.getHeight()) {
+
+//                    if (vec.x >= obj.getX() - obj.getWidth() && vec.x <= obj.getX() + obj.getWidth() && vec.y >= obj.getY() - obj.getHeight() && vec.y <= obj.getY() + obj.getHeight()) {
+
+                    if(vec.x > obj.getX() && vec.x < obj.getX()+obj.getWidth() && vec.y > obj.getY() && vec.y < obj.getY() + obj.getHeight()){
 
                         isObjectSelected = true;
                         obj.setHighlighted(true);
@@ -308,7 +311,7 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
                                 } else {
                                     canDragRight = false;
                                 }
-                                if (Util.roundFloat(x, 1) == Util.roundFloat(vec.x, 1) && Util.isFloatInRange(vec.y, y, y + height)) {
+                                if (Util.roundFloat(x, 0) == Util.roundFloat(vec.x, 0) && Util.isFloatInRange(vec.y, y, y + height)) {
                                     Util.setCursorSizeHorizontal();
                                     canDragLeft = true;
                                 } else {
