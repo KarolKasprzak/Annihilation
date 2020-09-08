@@ -1,7 +1,8 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
 
-import com.cosma.annihilation.Components.PhysicsComponent;
+import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorComponentsWindows.ParallaxWindow;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -13,9 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Components.ActionComponent;
-import com.cosma.annihilation.Components.ContainerComponent;
-import com.cosma.annihilation.Components.SerializationComponent;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.Tools;
 import com.cosma.annihilation.Utils.Enums.EntityAction;
@@ -34,7 +32,7 @@ public class EntityEditOptionsWindow extends VisWindow {
                 textButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        AddEntityInventoryWindow addWindow = new AddEntityInventoryWindow((ContainerComponent) component);
+                        EntityInventoryWindow addWindow = new EntityInventoryWindow((ContainerComponent) component);
                         getStage().addActor(addWindow);
                         close();
                     }
@@ -53,12 +51,27 @@ public class EntityEditOptionsWindow extends VisWindow {
                 add(textButton);
                 row();
             }
+            if (component instanceof ParallaxComponent) {
+                VisTextButton textButton = new VisTextButton("Edit parallax");
+                textButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+
+                        ParallaxWindow parallaxWindow = new ParallaxWindow((ParallaxComponent) component,entity);
+                        getStage().addActor(parallaxWindow);
+                        close();
+                    }
+                });
+                add(textButton);
+                row();
+            }
+
             if (component instanceof ActionComponent) {
                 VisTextButton textButton = new VisTextButton("Edit action");
                 textButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        AddEntityActionComponentEdit addWindow = new AddEntityActionComponentEdit((ActionComponent) component,entity,camera);
+                        EntityActionComponentEdit addWindow = new EntityActionComponentEdit((ActionComponent) component,entity,camera);
                         getStage().addActor(addWindow);
                         close();
                     }
@@ -71,7 +84,7 @@ public class EntityEditOptionsWindow extends VisWindow {
         setCenterOnAdd(true);
     }
 
-    class AddEntityActionComponentEdit extends VisWindow
+    class EntityActionComponentEdit extends VisWindow
     {
         @Override
         public void act(float delta) {
@@ -91,7 +104,7 @@ public class EntityEditOptionsWindow extends VisWindow {
         private ActionComponent actionComponent;
         private OrthographicCamera camera;
 
-        public AddEntityActionComponentEdit(ActionComponent actionComponent, Entity entity,OrthographicCamera camera) {
+        public EntityActionComponentEdit(ActionComponent actionComponent, Entity entity, OrthographicCamera camera) {
             super("");
             this.actionComponent = actionComponent;
             this.camera = camera;
@@ -143,16 +156,11 @@ public class EntityEditOptionsWindow extends VisWindow {
             addCloseButton();
             setSize(getWidth(), getHeight() * 2);
             setCenterOnAdd(true);
-
-
-
         }
     }
 
 
-
-
-    class AddEntityInventoryWindow extends VisWindow {
+    class EntityInventoryWindow extends VisWindow {
         private void drawItem(ContainerComponent containerComponent, VisTable visTable){
             for(Item item: containerComponent.itemList){
                 visTable.add(new VisLabel((item.getItemId() + " " + item.getItemAmount())));
@@ -160,7 +168,7 @@ public class EntityEditOptionsWindow extends VisWindow {
             }
         }
 
-        AddEntityInventoryWindow(ContainerComponent containerComponent) {
+        EntityInventoryWindow(ContainerComponent containerComponent) {
             super(containerComponent.name);
 
             VisTable itemTable = new VisTable();

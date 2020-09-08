@@ -8,11 +8,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.ActionComponent;
+import com.cosma.annihilation.Components.ParallaxComponent;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
@@ -119,7 +122,15 @@ public class MapRender {
         batch.begin();
 
         //render entity
+
+        renderer.begin();
+        renderer.set(ShapeRenderer.ShapeType.Line);
         for (Entity entity : gameMap.getEntityArrayList()) {
+            if (entity.hasComponent(ParallaxComponent.class)){
+                Body body = entity.getComponent(PhysicsComponent.class).body;
+                ParallaxComponent parallaxComponent = entity.getComponent(ParallaxComponent.class);
+                renderer.rect(body.getPosition().x - parallaxComponent.displayW/2, body.getPosition().y - parallaxComponent.displayH/2,parallaxComponent.displayW,parallaxComponent.displayH);
+            }
             if (entity.getComponent(ActionComponent.class) != null) {
                 if (entity.getComponent(ActionComponent.class).actionTargetPosition != null) {
                     ActionComponent actionComponent = entity.getComponent(ActionComponent.class);
@@ -129,6 +140,7 @@ public class MapRender {
                 }
             }
         }
+        renderer.end();
         //render lights
         if (gameMap.getLightsMapLayer().isLayerVisible() && debugRender) {
             for (MapLight light : gameMap.getLightsMapLayer().getLights()) {

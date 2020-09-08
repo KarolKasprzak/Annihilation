@@ -82,6 +82,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 //        engine.addSystem(new LightRenderSystem(camera, rayHandler));
 //        engine.addSystem(new SkeletonRenderSystem(camera, world, polygonSpriteBatch));
 //        engine.addSystem(new TileMapRender(camera, engine.getCurrentMap()));
+        engine.addSystem(new ParallaxRenderSystem(batch,camera));
         engine.addSystem(new UnifiedRenderSystem(batch,camera,world,polygonSpriteBatch,rayHandler,engine.getCurrentMap()));
 
         engine.addSystem(new HealthSystem(camera));

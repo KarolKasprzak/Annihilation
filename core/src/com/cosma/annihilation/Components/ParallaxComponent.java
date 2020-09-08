@@ -7,6 +7,7 @@ import com.cosma.annihilation.EntityEngine.core.Component;
 public class ParallaxComponent implements Component {
     public String parallaxName;
     public Array<Texture> textures;
+    public float scroll = 0;
 
     //display size
     public int widthMultiplier = 1;

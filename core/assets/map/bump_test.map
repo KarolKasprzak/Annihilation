@@ -4,7 +4,7 @@ height: 64
 tileSize: 64
 entityList: [
 	{
-		position: "23.852966,14.945143"
+		position: "39.53125,14.119788"
 		hp: 100
 		maxHp: 100
 		entityName: player.json
@@ -35,6 +35,14 @@ entityList: [
 				tableIndex: 3
 			}
 		]
+	}
+	{
+		position: "44.003117,14.4020815"
+		parallaxName: city
+		displayH: 1.4600005
+		displayW: 2.5600004
+		widthMultiplier: 1
+		entityName: parallax.json
 	}
 ]
 mapName: bump_test.map

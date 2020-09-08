@@ -124,6 +124,10 @@ public class Annihilation extends Game {
 		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.getParallax(name);
 	}
 
+	public static  Array<String> getAvailableParallaxNames(){
+		return  ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.getAvailableParallaxNames();
+	}
+
 	public static String getLocalText(String key) {
 		return ((Annihilation) Gdx.app.getApplicationListener()).localization.getText(key);
 	}

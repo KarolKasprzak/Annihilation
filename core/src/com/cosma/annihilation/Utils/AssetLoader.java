@@ -38,7 +38,11 @@ public class AssetLoader {
                     Texture texture = new Texture(textureFile);
                     textureArray.add(texture);
                 }
-                System.out.println(file.name());
+
+                for(int i = 0; i <textureArray.size;i++){
+                    textureArray.get(i).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.ClampToEdge);
+                }
+
                 parallaxMap.put(file.name(),textureArray);
             }
         }
@@ -145,7 +149,16 @@ public class AssetLoader {
     }
 
     public Array<Texture> getParallax(String name){
-        return parallaxMap.get(name);
+        if(parallaxMap.containsKey(name)){
+            return parallaxMap.get(name);
+        }
+        else{
+            return null;
+        }
+    }
+
+    public Array<String> getAvailableParallaxNames(){
+       return  parallaxMap.keys().toArray();
     }
 
     public void dispose() {

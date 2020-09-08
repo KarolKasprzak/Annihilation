@@ -1,0 +1,29 @@
+{
+ PhysicsComponent: {
+    bodyType: KinematicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: false
+	bullet: false
+    Fixtures: [
+	   {
+        shapeType: Circle
+        radius: 0.2
+        sensor: true
+        destiny: 0
+        friction: 0
+		restitution: 0
+      }
+    ]
+  }
+  SerializationComponent: {
+    entityName: parallax.json
+  }
+  ParallaxComponent: {
+    parallaxName: test
+	displayH: 1
+	displayW: 1
+	widthMultiplier: 1
+  }
+  
+ }

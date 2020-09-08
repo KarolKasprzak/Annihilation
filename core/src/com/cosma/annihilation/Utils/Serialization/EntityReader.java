@@ -176,9 +176,11 @@ public class EntityReader implements Json.Serializer<Entity> {
 
         if (jsonData.has("ParallaxComponent")) {
             ParallaxComponent parallaxComponent = new ParallaxComponent();
-            parallaxComponent.parallaxName = jsonData.get("ParallaxComponent").get("parallaxName").asString();
-            parallaxComponent.textures = Annihilation.getParallax(parallaxComponent.parallaxName);
-            
+//            parallaxComponent.parallaxName = jsonData.get("ParallaxComponent").get("parallaxName").asString();
+//            parallaxComponent.textures = Annihilation.getParallax(parallaxComponent.parallaxName);
+//            parallaxComponent.displayH = jsonData.get("ParallaxComponent").get("displayH").asFloat();
+//            parallaxComponent.displayW = jsonData.get("ParallaxComponent").get("displayW").asFloat();
+//            parallaxComponent.widthMultiplier = jsonData.get("ParallaxComponent").get("widthMultiplier").asInt();
             entity.add(parallaxComponent);
         }
 

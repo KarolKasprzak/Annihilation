@@ -55,6 +55,14 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  continue;
              }
 
+             if (component instanceof ParallaxComponent) {
+                 json.writeValue("parallaxName", ((ParallaxComponent) component).parallaxName);
+                 json.writeValue("displayH", ((ParallaxComponent) component).displayH);
+                 json.writeValue("displayW", ((ParallaxComponent) component).displayW);
+                 json.writeValue("widthMultiplier", ((ParallaxComponent) component).widthMultiplier);
+                 continue;
+             }
+
              if (component instanceof AiComponent) {
                  json.writeValue("startPosition", ((AiComponent) component).startPosition.x+","+((AiComponent) component).startPosition.y);
                  continue;
@@ -119,6 +127,15 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
 
         Entity entity = loadJason.fromJson(Entity.class, jsonList.get(jsonData.get("entityName").asString()));
         for(Component component: entity.getComponents()){
+
+            if(component instanceof ParallaxComponent){
+                ((ParallaxComponent) component).parallaxName = jsonData.get("parallaxName").asString();
+                ((ParallaxComponent) component).textures = Annihilation.getParallax(((ParallaxComponent) component).parallaxName);
+                ((ParallaxComponent) component).displayH = jsonData.get("displayH").asFloat();
+                ((ParallaxComponent) component).displayW = jsonData.get("displayW").asFloat();
+                ((ParallaxComponent) component).widthMultiplier = jsonData.get("widthMultiplier").asInt();
+            }
+
             if(component instanceof PhysicsComponent){
                 ((PhysicsComponent) component).body.setTransform(Util.jsonStringToVector2(jsonData.get("position").asString()),0);
                 continue;
