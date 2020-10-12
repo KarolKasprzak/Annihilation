@@ -36,7 +36,7 @@ public class ParallaxRenderSystem extends IteratingSystem {
         y = physicsComponent.body.getPosition().y - parallaxComponent.displayH/2;
 
         float xSpeed = this.getEngine().getPlayerEntity().getComponent(PhysicsComponent.class).body.getLinearVelocity().x;
-        parallaxComponent.scroll += xSpeed/12;
+        parallaxComponent.scroll += xSpeed/15;
 
         for(int i = 0;i<parallaxComponent.textures.size;i++) {
 
@@ -44,13 +44,10 @@ public class ParallaxRenderSystem extends IteratingSystem {
             height = parallaxComponent.displayH;
             int srcX = (int)parallaxComponent.scroll*i;
 
-            batch.draw(parallaxComponent.textures.get(i), x, y, 0, 0, width, height,1,1,0,srcX,0,250,150,false,false);
+            batch.draw(parallaxComponent.textures.get(i), x, y, 0, 0, width, height,1,1,0,srcX,0,
+                    parallaxComponent.textures.get(i).getWidth()/2,parallaxComponent.textures.get(i).getHeight()/2,false,false);
         }
 
-
-
-
         batch.end();
-
     }
 }

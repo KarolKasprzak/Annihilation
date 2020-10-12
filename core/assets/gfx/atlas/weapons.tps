@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>parallax_city.atlas</filename>
+                <filename>weapons.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,65 +181,23 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../sprite root/map_textures/parallax/city0.png</key>
+            <key type="filename">../../sprite root/weapons/weapon_stg_scope.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>68,26,136,52</rect>
+                <rect>24,8,48,16</rect>
                 <key>scale9Paddings</key>
-                <rect>68,26,136,52</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../sprite root/map_textures/parallax/city1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>68,38,136,75</rect>
-                <key>scale9Paddings</key>
-                <rect>68,38,136,75</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../sprite root/map_textures/parallax/city2.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>53,36,107,71</rect>
-                <key>scale9Paddings</key>
-                <rect>53,36,107,71</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../sprite root/map_textures/parallax/city3.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>68,40,136,80</rect>
-                <key>scale9Paddings</key>
-                <rect>68,40,136,80</rect>
+                <rect>24,8,48,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../sprite root/map_textures/parallax/city1.png</filename>
-            <filename>../../sprite root/map_textures/parallax/city2.png</filename>
-            <filename>../../sprite root/map_textures/parallax/city3.png</filename>
-            <filename>../../sprite root/map_textures/parallax/city0.png</filename>
+            <filename>../../sprite root/weapons/weapon_stg_scope.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

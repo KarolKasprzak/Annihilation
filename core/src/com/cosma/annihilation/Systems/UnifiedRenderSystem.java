@@ -22,6 +22,7 @@ import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.NormalMapShaderProvider;
 import com.cosma.annihilation.Utils.RenderComparator;
 import com.esotericsoftware.spine.SkeletonRenderer;
+import com.esotericsoftware.spine.SkeletonRendererDebug;
 
 public class UnifiedRenderSystem extends SortedIteratingSystem {
 
@@ -35,6 +36,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
     private PolygonSpriteBatch polygonBatch;
     private Vector2 positionTmp = new Vector2();
     private SkeletonRenderer skeletonRenderer;
+    private SkeletonRendererDebug debugRenderer;
     private NormalMapShaderProvider shaderData;
 
     public UnifiedRenderSystem(SpriteBatch batch, OrthographicCamera camera, World world, PolygonSpriteBatch polygonBatch, RayHandler rayHandler, GameMap gameMap) {
@@ -49,6 +51,11 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 
         skeletonRenderer = new SkeletonRenderer();
         skeletonRenderer.setPremultipliedAlpha(false);
+
+        debugRenderer = new SkeletonRendererDebug();
+        debugRenderer.setBoundingBoxes(true);
+        debugRenderer.setRegionAttachments(true);
+        debugRenderer.setScale(0.01f);
 
         shaderData = new NormalMapShaderProvider(camera,rayHandler,gameMap);
     }
@@ -125,6 +132,9 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             shaderData.prepareData(!skeletonComponent.skeletonDirection);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton);
             polygonBatch.end();
+
+//            debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
+//            debugRenderer.draw(skeletonComponent.skeleton);
         }
 
         //sprite render

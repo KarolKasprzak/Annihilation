@@ -31,7 +31,12 @@ public class InputManager implements InputProcessor {
         if (keycode == Input.Keys.SPACE && playerComponent.canJump && playerComponent.isPlayerControlEnable && playerComponent.isWeaponHidden) {
             playerComponent.jump = true;
         }
-        if (keycode == Input.Keys.R && playerComponent.isPlayerControlEnable && !playerComponent.isWeaponHidden) {
+
+        if (keycode == Input.Keys.CONTROL_LEFT && playerComponent.onGround && playerComponent.isPlayerControlEnable && playerComponent.isWeaponHidden) {
+            playerComponent.isPlayerCrouch = !playerComponent.isPlayerCrouch;
+        }
+
+        if (keycode == Input.Keys.R && playerComponent.isPlayerControlEnable && !playerComponent.isWeaponHidden && playerComponent.onGround ) {
             signal.dispatch(GameEvent.WEAPON_RELOAD);
         }
         if (keycode == Input.Keys.I || keycode == Input.Keys.ESCAPE) {

@@ -187,15 +187,6 @@ public class PlayerControlSystem extends IteratingSystem {
             }
         }
 
-
-        //Stealth mode
-//        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ) {
-//            //TODO
-//        }
-
-
-
-
         if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump ) {
             if (playerComponent.isWeaponHidden) {
                 skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
@@ -205,7 +196,12 @@ public class PlayerControlSystem extends IteratingSystem {
         }
         if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump && !playerComponent.climbing) {
             skeletonComponent.animationState.setEmptyAnimation(3, 0.1f);
-            skeletonComponent.setSkeletonAnimation(false, "idle", 0, true);
+            if(playerComponent.isPlayerCrouch){
+                skeletonComponent.animationState.setEmptyAnimation(3, 0.1f);
+                skeletonComponent.setSkeletonAnimation(false, "idle_crouch", 0, true);
+            }else{
+                skeletonComponent.setSkeletonAnimation(false, "idle", 0, true);
+            }
         }
         skeletonComponent.animationState.apply(skeletonComponent.skeleton);
 

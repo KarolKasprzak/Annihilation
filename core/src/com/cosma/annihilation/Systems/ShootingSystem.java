@@ -29,6 +29,8 @@ import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Bone;
+import com.esotericsoftware.spine.Slot;
+import com.esotericsoftware.spine.SlotData;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -133,9 +135,9 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         vector2temp.set(root.worldToLocal(vector2temp));
         bodyTarget.setPosition(vector2temp.x, vector2temp.y);
 
-        if(skeletonComponent.skeletonDirection){
+        if (skeletonComponent.skeletonDirection) {
             direction = 1;
-        }else {
+        } else {
             direction = -1;
         }
 
@@ -243,6 +245,8 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         if (playerComponent.activeWeapon.isAutomatic()) {
             isWeaponShooting = true;
             automaticWeaponShoot();
+
+
         } else if (weaponReloadTimer > playerComponent.activeWeapon.getReloadTime()) {
             weaponShoot();
             weaponReloadTimer = 0;
@@ -269,6 +273,12 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
     private void weaponShoot() {
         Item weapon = playerComponent.activeWeapon;
+
+        System.out.println(skeletonComponent.skeleton.findSlot("weapon_rifle").getAttachment().getName());
+
+                ((RegionAttachment) skeletonComponent.skeleton.findSlot("weapon_rifle").getAttachment())
+                        .setRegion(Annihilation.getAssets().get("gfx/atlas/weapons.atlas", TextureAtlas.class).findRegion("weapon_stg_scope"));
+
         if (weapon.getAmmoInClip() > 0) {
 //             Gdx.input.setCursorPosition(Gdx.input.getX(), MathUtils.round(Gdx.input.getY()-(Gdx.graphics.getHeight()*weapon.getWeaponRecoil())));
 //            Bone armTarget = skeletonComponent.skeleton.findBone("r_hand_target");
@@ -350,14 +360,14 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             isMeleeAttackFinish = false;
             playerComponent.canMoveOnSide = false;
             skeletonComponent.skeleton.updateWorldTransform();
-            switch (meleeBlowNumber){
+            switch (meleeBlowNumber) {
                 case 1:
                     skeletonComponent.setSkeletonAnimation(false, "fist_r_punch", 4, false);
-                    meleeBlowNumber ++;
+                    meleeBlowNumber++;
                     break;
                 case 2:
                     skeletonComponent.setSkeletonAnimation(false, "fist_l_punch", 4, false);
-                    meleeBlowNumber --;
+                    meleeBlowNumber--;
                     break;
             }
 
@@ -366,9 +376,9 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                 public void run() {
                     playerComponent.canMoveOnSide = true;
                     isMeleeAttackFinish = true;
-                    if(true){
+                    if (true) {
                         attackRaycast(true);
-                        if(targetEntity != null){
+                        if (targetEntity != null) {
                             targetEntity.getComponent(HealthComponent.class).decreaseHp(playerComponent.activeWeapon.getDamage());
                             targetEntity.getComponent(HealthComponent.class).hit(body.getPosition());
                         }
@@ -379,15 +389,18 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             skeletonComponent.animationState.addEmptyAnimation(4, 0.2f, skeletonComponent.animationState.getCurrent(4).getAnimation().getDuration());
         }
     }
-    /**Set targetEntity to null after every use */
-    private void attackRaycast(boolean isMelee){
-        if(isMelee){
-            raycastEnd.set(body.getPosition().x + (playerComponent.activeWeapon.getRange()+0.5f)* direction,body.getPosition().y);
-            world.rayCast(attackCallback, body.getPosition(),raycastEnd);
-        }else{
+
+    /**
+     * Set targetEntity to null after every use
+     */
+    private void attackRaycast(boolean isMelee) {
+        if (isMelee) {
+            raycastEnd.set(body.getPosition().x + (playerComponent.activeWeapon.getRange() + 0.5f) * direction, body.getPosition().y);
+            world.rayCast(attackCallback, body.getPosition(), raycastEnd);
+        } else {
             vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
             viewport.unproject(vector2temp);
-            world.rayCast(attackCallback, body.getPosition(),vector2temp);
+            world.rayCast(attackCallback, body.getPosition(), vector2temp);
         }
     }
 
