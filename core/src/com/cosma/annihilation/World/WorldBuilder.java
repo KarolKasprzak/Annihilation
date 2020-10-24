@@ -58,7 +58,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         rayHandler.setBlur(true);
         rayHandler.setBlurNum(2);
         rayHandler.setShadows(true);
-//        rayHandler.setAmbientLight(0.1f,0.1f,0.1f,0.1f);
 
         engine = new Engine(world, rayHandler, startStatus, camera);
         engine.addEntityListener(this);
@@ -73,23 +72,17 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
 
+        engine.addSystem(new GateSystem());
         engine.addSystem(new UserInterfaceSystem(engine));
         engine.addSystem(new ActionSystem(camera, batch));
         engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera, viewport));
         engine.addSystem(new SpriteRenderSystem(camera, batch));
-
-//        engine.addSystem(new RenderSystem(camera, world, batch, shapeRenderer));
-//        engine.addSystem(new LightRenderSystem(camera, rayHandler));
-//        engine.addSystem(new SkeletonRenderSystem(camera, world, polygonSpriteBatch));
-//        engine.addSystem(new TileMapRender(camera, engine.getCurrentMap()));
         engine.addSystem(new ParallaxRenderSystem(batch,camera));
         engine.addSystem(new UnifiedRenderSystem(batch,camera,world,polygonSpriteBatch,rayHandler,engine.getCurrentMap()));
-
         engine.addSystem(new HealthSystem(camera));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world, viewport));
         engine.addSystem(new CameraSystem(camera));
-
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));

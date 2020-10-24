@@ -55,6 +55,13 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  continue;
              }
 
+             if (component instanceof GateComponent) {
+                 json.writeValue("gateName", ((GateComponent) component).gateName);
+                 json.writeValue("moveDistance", ((GateComponent) component).moveDistance);
+                 json.writeValue("isOpen", ((GateComponent) component).isOpen);
+                 continue;
+             }
+
              if (component instanceof ParallaxComponent) {
                  json.writeValue("parallaxName", ((ParallaxComponent) component).parallaxName);
                  json.writeValue("displayH", ((ParallaxComponent) component).displayH);
@@ -104,9 +111,9 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  continue;
              }
 
-             if (component instanceof GateComponent) {
-                 json.writeValue("targetMapPath", ((GateComponent) component).targetMapPath);
-                 json.writeValue("targetPosition", ((GateComponent) component).playerPositionOnTargetMap.x+","+((GateComponent) component).playerPositionOnTargetMap.y);
+             if (component instanceof MapChangeComponent) {
+                 json.writeValue("targetMapPath", ((MapChangeComponent) component).targetMapPath);
+                 json.writeValue("targetPosition", ((MapChangeComponent) component).playerPositionOnTargetMap.x+","+((MapChangeComponent) component).playerPositionOnTargetMap.y);
              }
 
              if (component instanceof ActionComponent) {
@@ -154,6 +161,18 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                 }
             }
 
+            if(component instanceof  GateComponent){
+                if(jsonData.has("isOpen")){
+                    ((GateComponent) component).isOpen = jsonData.get("isOpen").asBoolean();
+                }
+                if(jsonData.has("moveDistance")){
+                    ((GateComponent) component).moveDistance = jsonData.get("moveDistance").asInt();
+                }
+                if(jsonData.has("gateName")){
+                    ((GateComponent) component).gateName = jsonData.get("gateName").asString();
+                }
+            }
+
             if(component instanceof PlayerInventoryComponent){
                 if(jsonData.has("inventoryItems")){
                     ((PlayerInventoryComponent) component).inventoryItems = loadItemArray(jsonData,"inventoryItems");
@@ -177,13 +196,13 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                     ((DialogueComponent) component).dialog = dialogueManager.getDialogue(((DialogueComponent) component).dialogId);
             }
 
-            if(component instanceof GateComponent){
+            if(component instanceof MapChangeComponent){
                 if(jsonData.has("targetPosition")){
-                    ((GateComponent) component).playerPositionOnTargetMap = Util.jsonStringToVector2(jsonData.get("targetPosition").asString());
+                    ((MapChangeComponent) component).playerPositionOnTargetMap = Util.jsonStringToVector2(jsonData.get("targetPosition").asString());
                 }
                 if(jsonData.has("targetMapPath")){
 
-                    ((GateComponent) component).targetMapPath = jsonData.get("targetMapPath").asString();
+                    ((MapChangeComponent) component).targetMapPath = jsonData.get("targetMapPath").asString();
                 }
             }
 

@@ -131,7 +131,7 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
             }
         }
         editorScreen.getMap().addEntity(entity);
-        System.out.println("cretaed");
+        System.out.println("created");
     }
 
     @Override

@@ -7,11 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.ActionComponent;
 import com.cosma.annihilation.Components.ParallaxComponent;
@@ -33,22 +30,9 @@ public class MapRender {
     private SpriteBatch batch;
     private TextureAtlas iconPack;
     private Vector2 position = new Vector2();
-
-    private Vector3 lightPosition = new Vector3();
-    private float[] lightPositionArray = new float[21];
-    private float[] lightColorArray = new float[21];
-    private float[] intensityArray = new float[7];
-    private float[] distanceArray = new float[7];
-    private Array<Light> activeLights = new Array<>();
-
-    private OrthographicCamera camera;
-    private RayHandler rayHandler;
     private NormalMapShaderProvider shaderData;
 
-
     public MapRender(ShapeRenderer renderer, GameMap gameMap, SpriteBatch batch, RayHandler rayHandler, OrthographicCamera camera) {
-        this.camera = camera;
-        this.rayHandler = rayHandler;
 
         this.batch = batch;
         this.gameMap = gameMap;
@@ -79,15 +63,12 @@ public class MapRender {
         this.gameMap = gameMap;
     }
 
-    public void renderMap(float delta,boolean renderWithShader , boolean debugRender) {
+    public void renderMap(float delta, boolean debugRender) {
 
 
         //render sprite
-        if(renderWithShader){
-            batch.setShader(shaderData.getShader());
-        }else{
-            batch.setShader(null);
-        }
+        batch.setShader(shaderData.getShader());
+
 
         if (gameMap.getSpriteMapLayer().isLayerVisible()) {
             gameMap.getSpriteMapLayer().getSpriteArray().sort();
@@ -97,12 +78,11 @@ public class MapRender {
                     ((AnimatedSprite) sprite).updateAnimation(delta);
                 }
 
-                sprite.bindNormalTexture(1);
-                sprite.getTextureRegion().getTexture().bind(0);
-
                 batch.begin();
                 if (sprite.getTextureRegion() != null) {
                     shaderData.prepareData(false);
+                    sprite.bindNormalTexture(1);
+                    sprite.getTextureRegion().getTexture().bind(0);
                     position.set(sprite.getX(), sprite.getY());
                     batch.draw(sprite.getTextureRegion(), position.x + (sprite.isFlipX() ? sprite.getTextureRegion().getRegionWidth() / Constants.PPM : 0), position.y, (float) sprite.getTextureRegion().getRegionWidth() / Constants.PPM / 2, (float) sprite.getTextureRegion().getRegionHeight() / Constants.PPM / 2,
                             sprite.getTextureRegion().getRegionWidth() / Constants.PPM * (sprite.isFlipX() ? -1 : 1), sprite.getTextureRegion().getRegionHeight() / Constants.PPM,
@@ -117,7 +97,6 @@ public class MapRender {
             }
         }
         batch.setShader(null);
-
 
         batch.begin();
 
@@ -141,6 +120,8 @@ public class MapRender {
             }
         }
         renderer.end();
+
+
         //render lights
         if (gameMap.getLightsMapLayer().isLayerVisible() && debugRender) {
             for (MapLight light : gameMap.getLightsMapLayer().getLights()) {

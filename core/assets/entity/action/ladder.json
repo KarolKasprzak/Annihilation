@@ -1,5 +1,5 @@
 {
-  BodyComponent: {
+  PhysicsComponent: {
     bodyType: KinematicBody
     positionX: 0
     positionY: 0

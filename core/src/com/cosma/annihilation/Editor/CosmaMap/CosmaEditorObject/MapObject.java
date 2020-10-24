@@ -5,6 +5,14 @@ public abstract class MapObject {
     private boolean visible = true;
     private boolean isHighlighted = false;
     private String userDate;
+    private String bodyUserDate;
+
+    MapObject() {
+    }
+
+    public String getBodyUserDate() {return bodyUserDate;}
+
+    public void setBodyUserDate(String bodyUserDate) {this.bodyUserDate = bodyUserDate;}
 
     public boolean isHighlighted() {
         return isHighlighted;
@@ -12,9 +20,6 @@ public abstract class MapObject {
 
     public void setHighlighted(boolean highlighted) {
         isHighlighted = highlighted;
-    }
-
-    MapObject() {
     }
 
     public String getUserDate() {

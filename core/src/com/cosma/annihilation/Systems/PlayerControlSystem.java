@@ -14,7 +14,6 @@ import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 
 import java.util.ArrayList;
@@ -23,22 +22,18 @@ public class PlayerControlSystem extends IteratingSystem {
 
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<PhysicsComponent> physicsMapper;
-    private ComponentMapper<AnimationComponent> animationMapper;
     private Signal<GameEvent> signal;
     private ArrayList<GameEvent> gameEventList = new ArrayList<>();
     private RayCastCallback noiseRayCallback;
     // false = left, true = right
     private boolean mouseCursorPosition = false;
-    private World world;
-    private Entity noiseTestEntity;
 
+    private Entity noiseTestEntity;
 
     public PlayerControlSystem(World world, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.PLAYER_CONTROL_SYSTEM);
-        this.world = world;
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
-        animationMapper = ComponentMapper.getFor(AnimationComponent.class);
         signal = new Signal<>();
 
         noiseRayCallback = (fixture, point, normal, fraction) -> {
@@ -76,18 +71,18 @@ public class PlayerControlSystem extends IteratingSystem {
             }
         }else{
             //normal control
+            //prevent slip
             if (!Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT) && playerComponent.onGround) {
                 playerBody.body.setLinearVelocity(0, playerBody.body.getLinearVelocity().y);
             }
+            //moving on side
             if (playerComponent.canMoveOnSide && playerComponent.onGround && playerComponent.isWeaponHidden && isPlayerControlAvailable) {
+
                 if (Gdx.input.isKeyPressed(Input.Keys.D) || playerComponent.goRight) {
                     float desiredSpeed = playerComponent.velocity;
-//                    if (animationComponent.spriteDirection) {
-//                        animationComponent.animationState = AnimationStates.WALK;
-//                    } else {
-//                        animationComponent.animationState = AnimationStates.WALK;
-//                        desiredSpeed = desiredSpeed * 0.7f;
-//                    }
+                    if(playerComponent.isPlayerCrouch){
+                        desiredSpeed = desiredSpeed * 0.7f;
+                    }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
                     float impulse = playerBody.body.getMass() * speedX;
@@ -96,18 +91,18 @@ public class PlayerControlSystem extends IteratingSystem {
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
                     float desiredSpeed = -playerComponent.velocity;
-//                    if (animationComponent.spriteDirection) {
-//                        animationComponent.animationState = AnimationStates.WALK;
-//                        desiredSpeed = desiredSpeed * 0.7f;
-//                    } else {
-//                        animationComponent.animationState = AnimationStates.WALK;
-//                    }
+                    if(playerComponent.isPlayerCrouch){
+                        desiredSpeed = desiredSpeed * 0.7f;
+                    }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
                     float impulse = playerBody.body.getMass() * speedX;
                     playerBody.body.applyLinearImpulse(new Vector2(impulse, 0),
                             playerBody.body.getWorldCenter(), true);
                 }
+
+
+
             }
             // Moving on side with weapon
             if (playerComponent.canMoveOnSide && playerComponent.onGround && !playerComponent.isWeaponHidden && playerComponent.activeWeapon != null && isPlayerControlAvailable) {
@@ -124,9 +119,9 @@ public class PlayerControlSystem extends IteratingSystem {
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || playerComponent.goLeft) {
                     float desiredSpeed = -playerComponent.velocity * 0.8f;
-//                    if (animationComponent.spriteDirection) {
-//                        desiredSpeed = desiredSpeed * 0.7f;
-//                    }
+                    if (skeletonComponent.skeletonDirection) {
+                        desiredSpeed = desiredSpeed * 0.7f;
+                    }
                     Vector2 vec = playerBody.body.getLinearVelocity();
                     float speedX = desiredSpeed - vec.x;
                     float impulse = playerBody.body.getMass() * speedX;
@@ -186,15 +181,25 @@ public class PlayerControlSystem extends IteratingSystem {
                 }
             }
         }
-
+        //apply correct animation
         if (playerBody.body.getLinearVelocity().x != 0 && playerComponent.onGround && playerComponent.canJump ) {
-            if (playerComponent.isWeaponHidden) {
-                skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
-            } else {
-                skeletonComponent.setSkeletonAnimation(false, "weapon_walk", 3, true);
+            //move animations
+            if(playerComponent.isPlayerCrouch){
+                if (playerComponent.isWeaponHidden) {
+                    skeletonComponent.setSkeletonAnimation(false, "walk_crouch", 0, true);
+                } else {
+                    skeletonComponent.setSkeletonAnimation(false, "walk_crouch", 3, true);
+                }
+            }else{
+                if (playerComponent.isWeaponHidden) {
+                    skeletonComponent.setSkeletonAnimation(false, "walk", 0, true);
+                } else {
+                    skeletonComponent.setSkeletonAnimation(false, "weapon_walk", 3, true);
+                }
             }
         }
         if (playerBody.body.getLinearVelocity().x == 0 && playerComponent.onGround && playerComponent.canJump && !playerComponent.climbing) {
+            //idle animations
             skeletonComponent.animationState.setEmptyAnimation(3, 0.1f);
             if(playerComponent.isPlayerCrouch){
                 skeletonComponent.animationState.setEmptyAnimation(3, 0.1f);

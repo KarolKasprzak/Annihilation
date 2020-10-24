@@ -14,11 +14,11 @@ import com.kotcrab.vis.ui.widget.VisWindow;
 import com.kotcrab.vis.ui.widget.spinner.SimpleFloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
-public class ParallaxWindow extends VisWindow {
+public class EditParallaxComponent extends VisWindow {
 
 
 
-    public ParallaxWindow(ParallaxComponent parallaxComponent, Entity entity) {
+    public EditParallaxComponent(ParallaxComponent parallaxComponent, Entity entity) {
         super("Parallax component");
 
         VisLabel displayWLabel = new VisLabel("Display width: " + parallaxComponent.displayW);

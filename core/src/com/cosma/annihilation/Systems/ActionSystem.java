@@ -4,7 +4,9 @@ package com.cosma.annihilation.Systems;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Ai.PlayerTasks.PlayerGoToPosition;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.Light;
@@ -15,8 +17,11 @@ import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
+import com.cosma.annihilation.EntityEngine.utils.ImmutableArray;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
+import com.cosma.annihilation.Utils.Util;
+import net.dermetfan.gdx.physics.box2d.PositionController;
 
 
 public class ActionSystem extends IteratingSystem implements Listener<GameEvent> {
@@ -83,49 +88,62 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
 
     @Override
     public void receive(Signal<GameEvent> signal, GameEvent event) {
-        if (playerComponent != null) {
-            switch (event) {
-                case PERFORM_ACTION:
-                    if (playerComponent.processedEntity != null && playerComponent.isWeaponHidden && playerComponent.canPerformAction) {
-                        ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
+        if (playerComponent != null && event.equals(GameEvent.PERFORM_ACTION)) {
+            if (playerComponent.processedEntity != null && playerComponent.isWeaponHidden && playerComponent.canPerformAction) {
+                ActionComponent actionComponent = playerComponent.processedEntity.getComponent(ActionComponent.class);
 
-                        switch (actionComponent.action) {
-                            case CLIMB_UP:
-                                climbUp();
-
-                            case OPEN_DOOR:
+                switch (actionComponent.action) {
+                    case CLIMB_UP:
+                        climbUp();
+                        break;
+                    case OPEN_DOOR:
 //                            doorAction();
-                                break;
-                            case OPEN_CRATE:
-                                openLootWindow();
-                                break;
-                            case GO_TO:
-                                goToAnotherMap();
-                                break;
-                            case TALK:
-                                startDialogAction();
-                                break;
-                            case OPEN_NOTE:
-                                openNoteWindow();
-                                break;
-                            case SWITCH_LIGHT:
-                                Light light = getEngine().getCurrentMap().findLight(actionComponent.actionTargetName);
-                                if (light.isActive()) {
-                                    light.setActive(false);
-                                } else {
-                                    light.setActive(true);
-                                }
-                                break;
+                        break;
+                    case OPEN_GATE:
+                        openGate();
+                        break;
+                    case OPEN_CRATE:
+                        openLootWindow();
+                        break;
+                    case GO_TO:
+                        goToAnotherMap();
+                        break;
+                    case TALK:
+                        startDialogAction();
+                        break;
+                    case OPEN_NOTE:
+                        openNoteWindow();
+                        break;
+                    case SWITCH_LIGHT:
+                        Light light = getEngine().getCurrentMap().findLight(actionComponent.actionTargetName);
+                        if (light.isActive()) {
+                            light.setActive(false);
+                        } else {
+                            light.setActive(true);
                         }
-                    }
-                    break;
-                case CROUCH:
-                    break;
+                        break;
+                }
             }
         }
     }
 
-    private void climbUp(){
+    private void openGate() {
+        ImmutableArray<Entity> entities = getEngine().getEntitiesFor(Family.all(GateComponent.class).get());
+        for (Entity entity : entities) {
+            GateComponent gateComponent = entity.getComponent(GateComponent.class);
+            if (gateComponent.gateName.equals(playerComponent.processedEntity.getComponent(ActionComponent.class).actionTargetName) && !gateComponent.isMoving) {
+                Vector2 position = entity.getComponent(PhysicsComponent.class).body.getPosition();
+                if(gateComponent.isOpen){
+                    gateComponent.targetPosition.set(position.x,position.y-gateComponent.moveDistance);
+                }else{
+                    gateComponent.targetPosition.set(position.x,position.y+gateComponent.moveDistance);
+                }
+                gateComponent.isMoving = true;
+            }
+        }
+    }
+
+    private void climbUp() {
         Entity playerEntity = getEngine().getPlayerEntity();
         PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
         playerComponent.climbing = true;
@@ -138,9 +156,9 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     }
 
     private void goToAnotherMap() {
-        playerComponent.mapName = playerComponent.processedEntity.getComponent(GateComponent.class).targetMapPath;
+        playerComponent.mapName = playerComponent.processedEntity.getComponent(MapChangeComponent.class).targetMapPath;
 //        worldBuilder.goToMap();
-//        playerComponent.getComponent(PhysicsComponent.class).body.setTransform(gateEntity.getComponent(GateComponent.class).playerPositionOnTargetMap,0);
+//        playerComponent.getComponent(PhysicsComponent.class).body.setTransform(gateEntity.getComponent(MapChangeComponent.class).playerPositionOnTargetMap,0);
     }
 
     private void openLootWindow() {
@@ -150,7 +168,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
     }
 
     private void openNoteWindow() {
-            getEngine().getSystem(UserInterfaceSystem.class).openNoteMenu();
+        getEngine().getSystem(UserInterfaceSystem.class).openNoteMenu();
     }
 
     private void startDialogAction() {

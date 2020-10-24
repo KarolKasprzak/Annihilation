@@ -433,41 +433,29 @@
 		"default": {
 			"flash": {
 				"weapon_flash": {
-					"name": "weapon_flash",
-					"width": 32,
-					"height": 32
+					"name": "weapon_flash"
 				},
 				"weapon_flash_dark": {
-					"name": "weapon_flash_dark",
-					"width": 32,
-					"height": 32
+					"name": "weapon_flash_dark"
 				},
 				"weapon_flash_med": {
-					"name": "weapon_flash_med",
-					"width": 32,
-					"height": 32
+					"name": "weapon_flash_med"
 				}
 			},
 			"weapon_pistol": {
 				"weapon_p38": {
 					"name": "weapon_p38",
-					"width": 64,
-					"height": 64,
 					"x": 9.66,
 					"y": -2,
 					"rotation": -10.09
 				},
 				"weapon_p38_silent": {
 					"name": "weapon_p38_silent",
-					"width": 64,
-					"height": 64,
 					"x": 1.58,
 					"y": -0.07
 				},
 				"weapon_colt": {
 					"name": "weapon_colt",
-					"width": 64,
-					"height": 64,
 					"x": 8.17,
 					"y": 0.29,
 					"rotation": -2.44
@@ -476,32 +464,24 @@
 			"weapon_rifle": {
 				"weapon_stg": {
 					"name": "weapon_stg",
-					"width": 96,
-					"height": 32,
 					"x": 23.01,
 					"y": -0.84,
 					"rotation": -4.15
 				},
 				"gewehr46": {
 					"name": "gewehr46",
-					"width": 96,
-					"height": 32,
 					"x": 20.78,
 					"y": 3.28,
 					"rotation": -0.89
 				},
 				"weapon_stg_1": {
 					"name": "weapon_stg_1",
-					"width": 96,
-					"height": 32,
 					"path": "weapon_stg"
 				}
 			},
 			"player_arm_r": {
 				"player_arm_r": {
 					"name": "player_arm_r",
-					"width": 40,
-					"height": 69,
 					"hull": 15,
 					"triangles": [
 						7,
@@ -793,8 +773,6 @@
 			"player_arm_l": {
 				"player_arm_l": {
 					"name": "player_arm_l",
-					"width": 40,
-					"height": 69,
 					"hull": 21,
 					"triangles": [
 						10,
@@ -1122,8 +1100,6 @@
 			"l_leg": {
 				"l_leg": {
 					"name": "l_leg",
-					"width": 30,
-					"height": 70,
 					"hull": 18,
 					"triangles": [
 						20,
@@ -1486,8 +1462,6 @@
 			"player": {
 				"player": {
 					"name": "player",
-					"width": 64,
-					"height": 130,
 					"hull": 44,
 					"triangles": [
 						36,
@@ -3204,8 +3178,8 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": -48.13,
-							"y": -13.42
+							"x": -14.89,
+							"y": -19.97
 						}
 					]
 				},
@@ -3259,8 +3233,8 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": -81.31,
-							"y": -3.31
+							"x": -15.86,
+							"y": -19.73
 						}
 					]
 				},
@@ -3268,8 +3242,8 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": -1.18,
-							"y": -1.25
+							"x": 36.19,
+							"y": 0.97
 						}
 					],
 					"rotate": [
@@ -3311,41 +3285,42 @@
 					{
 						"time": 0,
 						"bendPositive": false,
-						"mix": 0.71
+						"mix": 0.17
 					}
 				],
 				"r_forearm_ik": [
 					{
 						"time": 0,
 						"bendPositive": false,
-						"mix": 0.73
+						"mix": 0.21
 					}
 				],
 				"r_arm_ik": [
 					{
 						"time": 0,
 						"bendPositive": false,
-						"mix": 0.4
+						"mix": 0.31
 					}
 				],
 				"l_arm_ik": [
 					{
 						"time": 0,
 						"bendPositive": false,
-						"mix": 0.92
+						"mix": 0.23
 					}
 				],
 				"l_forearm_ik": [
 					{
 						"time": 0,
-						"bendPositive": false
+						"bendPositive": false,
+						"mix": 0.28
 					}
 				],
 				"l_hand_ik": [
 					{
 						"time": 0,
 						"bendPositive": false,
-						"mix": 0.83
+						"mix": 0.25
 					}
 				],
 				"bone_ik": [

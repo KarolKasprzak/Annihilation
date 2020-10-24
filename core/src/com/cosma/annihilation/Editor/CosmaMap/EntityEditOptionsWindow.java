@@ -2,21 +2,17 @@ package com.cosma.annihilation.Editor.CosmaMap;
 
 
 import com.cosma.annihilation.Components.*;
-import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorComponentsWindows.ParallaxWindow;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorComponentsWindows.EditActionComponent;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorComponentsWindows.EditGateComponent;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorComponentsWindows.EditParallaxComponent;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.Tools;
-import com.cosma.annihilation.Utils.Enums.EntityAction;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
@@ -37,7 +33,7 @@ public class EntityEditOptionsWindow extends VisWindow {
                         close();
                     }
                 });
-                add(textButton);
+                add(textButton).pad(5);
                 row();
             }
             if (component instanceof PhysicsComponent) {
@@ -48,7 +44,7 @@ public class EntityEditOptionsWindow extends VisWindow {
                         //*todo
                     }
                 });
-                add(textButton);
+                add(textButton).pad(5);
                 row();
             }
             if (component instanceof ParallaxComponent) {
@@ -57,12 +53,27 @@ public class EntityEditOptionsWindow extends VisWindow {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
 
-                        ParallaxWindow parallaxWindow = new ParallaxWindow((ParallaxComponent) component,entity);
-                        getStage().addActor(parallaxWindow);
+                        EditParallaxComponent editParallaxComponent = new EditParallaxComponent((ParallaxComponent) component,entity);
+                        getStage().addActor(editParallaxComponent);
                         close();
                     }
                 });
-                add(textButton);
+                add(textButton).pad(5);
+                row();
+            }
+
+            if (component instanceof GateComponent) {
+                VisTextButton textButton = new VisTextButton("Edit gate");
+                textButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+
+                        EditGateComponent editGateComponent = new EditGateComponent((GateComponent) component);
+                        getStage().addActor(editGateComponent);
+                        close();
+                    }
+                });
+                add(textButton).pad(5);
                 row();
             }
 
@@ -71,12 +82,12 @@ public class EntityEditOptionsWindow extends VisWindow {
                 textButton.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        EntityActionComponentEdit addWindow = new EntityActionComponentEdit((ActionComponent) component,entity,camera);
+                        EditActionComponent addWindow = new EditActionComponent((ActionComponent) component,entity,camera);
                         getStage().addActor(addWindow);
                         close();
                     }
                 });
-                add(textButton);
+                add(textButton).pad(5);
                 row();
             }
         }
@@ -84,80 +95,10 @@ public class EntityEditOptionsWindow extends VisWindow {
         setCenterOnAdd(true);
     }
 
-    class EntityActionComponentEdit extends VisWindow
-    {
-        @Override
-        public void act(float delta) {
-            super.act(delta);
-            if(waitForClick){
-                if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-                    Vector3 tempCoords = new Vector3();
-                    tempCoords.set(Gdx.input.getX(),Gdx.input.getY(),0);
-                    camera.unproject(tempCoords);
-                    actionComponent.actionTargetPosition = new Vector2(tempCoords.x,tempCoords.y);
-                    waitForClick = false;
-                }
-            }
-        }
-
-        private boolean waitForClick = false;
-        private ActionComponent actionComponent;
-        private OrthographicCamera camera;
-
-        public EntityActionComponentEdit(ActionComponent actionComponent, Entity entity, OrthographicCamera camera) {
-            super("");
-            this.actionComponent = actionComponent;
-            this.camera = camera;
-
-            VisLabel targetLabel = new VisLabel("Target: ");
-            VisTextField targetTextField = new VisTextField();
-            if(actionComponent.actionTargetName != null){
-                targetTextField.setText(actionComponent.actionTargetName);
-            }
-            VisTextButton saveButton = new VisTextButton("save");
-            Array<String> actionList = new Array<>();
-            for(EntityAction action: EntityAction.values()){
-                actionList.add(action.toString());
-            }
-            VisSelectBox<String> actionSelectBox = new VisSelectBox<>();
-            actionSelectBox.setItems(actionList);
-
-            saveButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    actionComponent.actionTargetName = targetTextField.getText();
-                    if(!actionSelectBox.getSelected().equals("NOTHING")){
-                        actionComponent.action = EntityAction.valueOf(actionSelectBox.getSelected());
-                    }
-                    close();
-                }
-            });
-
-            VisTextButton setActionTargetButton = new VisTextButton("set target position");
-
-            setActionTargetButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    waitForClick = true;
-                }
-            });
 
 
-            add(targetLabel);
-            add(targetTextField).width(150);
-            row();
-            add(actionSelectBox);
-            row();
-            add(setActionTargetButton);
-            row();
-            add(saveButton);
 
-            pack();
-            addCloseButton();
-            setSize(getWidth(), getHeight() * 2);
-            setCenterOnAdd(true);
-        }
-    }
+
 
 
     class EntityInventoryWindow extends VisWindow {

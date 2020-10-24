@@ -1,9 +1,12 @@
 package com.cosma.annihilation.Components;
 
-import com.cosma.annihilation.EntityEngine.core.Component;
 import com.badlogic.gdx.math.Vector2;
+import com.cosma.annihilation.EntityEngine.core.Component;
 
 public class GateComponent implements Component {
-    public String targetMapPath;
-    public Vector2 playerPositionOnTargetMap = new Vector2();
+    public boolean isOpen = false;
+    public boolean isMoving = false;
+    public int moveDistance = 2;
+    public Vector2 targetPosition = new Vector2();
+    public String gateName;
 }

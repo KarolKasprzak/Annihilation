@@ -1,0 +1,32 @@
+{
+  SerializationComponent: {
+    entityName: lab_gate2.json
+  }
+  PhysicsComponent: {
+    bodyType: KinematicBody
+    positionX: 0
+    positionY: 0
+	fixedRotation: false
+	bullet: false
+    Fixtures: [
+      {
+        shapeType: Polygon
+        shapeX: 0
+        shapeY: 0
+		shapeW: 0.2
+        shapeH: 2.5
+		shapeA: 0
+        sensor: false
+        destiny: 5
+        friction: 0
+		restitution: 0
+		categoryBits: scenery
+		maskBits: scenery
+      }
+    ]
+  }
+  GateComponent: {
+	isOpen: false
+	moveDistance: 3
+  }  
+}

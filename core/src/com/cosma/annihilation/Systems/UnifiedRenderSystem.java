@@ -137,8 +137,11 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 //            debugRenderer.draw(skeletonComponent.skeleton);
         }
 
+
+
         //sprite render
         if (textureMapper.has(entity)) {
+            Vector2 position = physicsMapper.get(entity).body.getPosition();
 
         }
     }

@@ -20,12 +20,11 @@
     ]
   },
   SerializationComponent: {
-    entityName: light_switch.json
+    entityName: open_physic_door.json
   },
   ActionComponent: {
-    action: SWITCH_LIGHT
+    action: OPEN_GATE
 	offsetX: 0
 	offsetY: 0.2
-	
   },
 }

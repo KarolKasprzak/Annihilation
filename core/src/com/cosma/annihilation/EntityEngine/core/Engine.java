@@ -87,7 +87,8 @@ public class Engine {
         json = new Json();
         json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
         if (startStatus.isNewGame()) {
-         mapLoader.loadMap("map/bump_test.map");
+            mapLoader.loadMap("map/asd.map");
+//         mapLoader.loadMap("map/bump_test.map");
 //            mapLoader.loadMap("map/metro_test.map");
         } else {
             loadGame();

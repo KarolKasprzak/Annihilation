@@ -26,7 +26,7 @@
             </struct>
         </array>
         <key>allowRotation</key>
-        <false/>
+        <true/>
         <key>shapeDebug</key>
         <false/>
         <key>dpi</key>
@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>room_interiors.atlas</filename>
+                <filename>player.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -149,13 +149,13 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <false/>
+        <true/>
         <key>trimSpriteNames</key>
         <false/>
         <key>prependSmartFolderName</key>
         <false/>
         <key>autodetectAnimations</key>
-        <true/>
+        <false/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -181,41 +181,123 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../sprite root/map_textures/interior/lab_corridor.png</key>
-            <key type="filename">../../../sprite root/map_textures/interior/lab_corridor_n.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/gewehr46.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_stg.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_stg_scope.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>142,48,283,96</rect>
+                <rect>24,8,48,16</rect>
                 <key>scale9Paddings</key>
-                <rect>142,48,283,96</rect>
+                <rect>24,8,48,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../../sprite root/map_textures/interior/wood_door.png</key>
-            <key type="filename">../../../sprite root/map_textures/interior/wood_door_n.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/head.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>128,40,256,80</rect>
+                <rect>7,7,13,13</rect>
                 <key>scale9Paddings</key>
-                <rect>128,40,256,80</rect>
+                <rect>7,7,13,13</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../sprite root/skeletons/player/library/l_leg.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,18,15,35</rect>
+                <key>scale9Paddings</key>
+                <rect>8,18,15,35</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../sprite root/skeletons/player/library/player.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/player_n.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,33,32,65</rect>
+                <key>scale9Paddings</key>
+                <rect>16,33,32,65</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../sprite root/skeletons/player/library/player_arm_l.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/player_arm_r.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,17,20,35</rect>
+                <key>scale9Paddings</key>
+                <rect>10,17,20,35</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_colt.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_p38.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_p38_silent.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_flash.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_flash_dark.png</key>
+            <key type="filename">../../../sprite root/skeletons/player/library/weapon_flash_med.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,8,16,16</rect>
+                <key>scale9Paddings</key>
+                <rect>8,8,16,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../sprite root/map_textures/interior/wood_door.png</filename>
-            <filename>../../../sprite root/map_textures/interior/wood_door_n.png</filename>
-            <filename>../../../sprite root/map_textures/interior/lab_corridor.png</filename>
-            <filename>../../../sprite root/map_textures/interior/lab_corridor_n.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/gewehr46.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/head.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/l_leg.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/player.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/player_arm_l.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/player_arm_r.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_colt.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_flash.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_flash_dark.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_flash_med.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_p38.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_p38_silent.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_stg.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/weapon_stg_scope.png</filename>
+            <filename>../../../sprite root/skeletons/player/library/player_n.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
@@ -236,7 +318,7 @@
         <key>normalMapSuffix</key>
         <string>_n</string>
         <key>normalMapSheetFileName</key>
-        <filename></filename>
+        <filename>player_n.png</filename>
         <key>exporterProperties</key>
         <map type="ExporterProperties"/>
     </struct>

@@ -1,6 +1,7 @@
 package com.cosma.annihilation.Components;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
@@ -11,6 +12,7 @@ public class SkeletonComponent implements Component {
     public int drawOrder = 1;
     public Skeleton skeleton;
     public Texture diffuseTexture;
+    public TextureAtlas diffuseTextureAtlas;
     public Texture normalTexture;
     public SkeletonBounds bounds;
     public AnimationState animationState;

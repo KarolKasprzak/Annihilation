@@ -58,7 +58,6 @@ public class EditorScreen implements Screen, InputProcessor {
     private String currentMapPatch;
 
     private boolean isSpriteLayerSelected, isObjectLayerSelected, isLightsLayerSelected, isLightsRendered, drawGrid = true, isDebugRenderEnabled = true;
-    private boolean renderWithShader = false;
     private VisLabel editorModeLabel;
     private VisTable rightTable;
     private Box2DDebugRenderer debugRenderer;
@@ -127,13 +126,6 @@ public class EditorScreen implements Screen, InputProcessor {
             }
         });
 
-        final VisCheckBox shaderButton = new VisCheckBox("Enable shader: ");
-        shaderButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                renderWithShader = shaderButton.isChecked();
-            }
-        });
 
         final VisCheckBox gridButton = new VisCheckBox("Grid: ");
         gridButton.setChecked(true);
@@ -161,7 +153,6 @@ public class EditorScreen implements Screen, InputProcessor {
         menuBar.getTable().add(gridButton);
         menuBar.getTable().add(lightsButton);
         menuBar.getTable().add(diffuseButton);
-        menuBar.getTable().add(shaderButton);
         topTable.add(menuBar.getTable()).expandX().fillX();
         root.add(topTable).fillX().expandX().colspan(2);
         root.row();
@@ -320,7 +311,7 @@ public class EditorScreen implements Screen, InputProcessor {
                 mapRender.renderGrid();
             }
             Gdx.gl.glDisable(GL20.GL_BLEND);
-            mapRender.renderMap(delta,renderWithShader,isDebugRenderEnabled);
+            mapRender.renderMap(delta,isDebugRenderEnabled);
         }
         if (gameMap != null && !gameMap.getEntityArrayList().isEmpty()) {
             batch.begin();

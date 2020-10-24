@@ -182,8 +182,8 @@ lightsMapLayer: {
 					a: 1
 				}
 				lightDistance: 4.5
-				x: 30.871761
-				y: 15.400934
+				x: 30.920198
+				y: 15.336351
 				softLight: false
 				lightZPositionForShader: 0.03
 				lightFalloffDistance: 0.75000006
@@ -199,13 +199,14 @@ lightsMapLayer: {
 					b: 0.7921569
 					a: 1
 				}
-				lightDistance: 4.5
-				x: 43.978058
-				y: 14.41167
+				lightDistance: 6.5
+				x: 44.006706
+				y: 14.443963
 				softLight: false
-				lightZPositionForShader: 0.07
-				lightFalloffDistance: 0.95
-				intensityForShader: 1.7499993
+				softLength: 0.20000014
+				lightZPositionForShader: 0.16000001
+				lightFalloffDistance: 0.84999996
+				intensityForShader: 2
 			}
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight

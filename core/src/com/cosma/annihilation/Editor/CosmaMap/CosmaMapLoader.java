@@ -43,9 +43,7 @@ public class CosmaMapLoader {
         map = json.fromJson(GameMap.class, mapFile);
 
 
-        rayHandler.setAmbientLight(0.2f,0.2f,0.2f,0.2f);
-//        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightColor());
-//        rayHandler.setAmbientLight(map.getLightsMapLayer().getAmbientLightIntensity());
+        rayHandler.setAmbientLight(0.5f,0.5f,0.5f,0.5f);
         createMapObject();
     }
 
@@ -58,7 +56,7 @@ public class CosmaMapLoader {
 
         //load lights
             for (MapPointLight light : map.getLightsMapLayer().getLights().getByType(MapPointLight.class)) {
-                PointLight point = new PointLight(rayHandler, light.getRaysNumber(), light.getColor(), light.getLightDistance(), light.getX(), light.getY());
+                PointLight point = new PointLight(rayHandler, 100, light.getColor(), light.getLightDistance(), light.getX(), light.getY());
                 point.setStaticLight(light.isStaticLight());
                 point.setSoft(light.isSoftLight());
                 point.setSoftnessLength(light.getSoftLength());
@@ -74,7 +72,7 @@ public class CosmaMapLoader {
                 map.putLight(light.getName(), point);
             }
             for (MapConeLight light :  map.getLightsMapLayer().getLights().getByType(MapConeLight.class)) {
-                ConeLight cone = new ConeLight(rayHandler, light.getRaysNumber(), light.getColor(), light.getLightDistance(), light.getX(), light.getY(), light.getDirection(), light.getConeDegree());
+                ConeLight cone = new ConeLight(rayHandler, 100, light.getColor(), light.getLightDistance(), light.getX(), light.getY(), light.getDirection(), light.getConeDegree());
                 cone.setStaticLight(light.isStaticLight());
                 cone.setSoft(light.isSoftLight());
                 cone.setSoftnessLength(light.getSoftLength());

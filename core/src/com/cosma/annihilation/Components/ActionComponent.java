@@ -7,7 +7,6 @@ import com.cosma.annihilation.Utils.Enums.EntityAction;
 
 public class ActionComponent implements Component {
     public EntityAction action;
-    public Object actionTarget;
     public String actionTargetName;
     public String textToDisplay;
     public Vector2 actionTargetPosition;

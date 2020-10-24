@@ -1,0 +1,133 @@
+{
+width: 64
+height: 64
+tileSize: 64
+entityList: [
+	{
+		position: "40.256584,17.054016"
+		hp: 100
+		maxHp: 100
+		entityName: player.json
+		mapName: null
+		inventoryItems: []
+	}
+	{
+		position: "36.083534,17.150406"
+		entityName: open_physic_door.json
+		targetName: lab_gate
+	}
+	{
+		position: "35.624985,17.26217"
+		gateName: lab_gate
+		moveDistance: 3
+		isOpen: false
+		entityName: lab_gate2.json
+	}
+]
+mapName: asd.map
+spriteMapLayer: {
+	height: 0
+	width: 0
+	sprites: [
+		{
+			position: "27.0,16.0,0.0"
+			texture: "gfx/map_textures/interior/room_interiors.atlas,wood_door"
+		}
+		{
+			position: "35.0,16.0,0.0"
+			texture: "gfx/map_textures/interior/room_interiors.atlas,lab_corridor"
+		}
+		{
+			position: "39.105152,18.151398,0.0"
+			texture: "gfx/map_textures/back_black_element/black_decorations.atlas,roof_wires"
+		}
+	]
+}
+objectMapLayer: {
+	objects: {
+		objects: [
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_1
+				x: 26.606548
+				y: 15.545685
+				width: 26.043224
+				height: 0.46510506
+				bodyType: StaticBody
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_2
+				x: 34.910843
+				y: 18.706205
+				width: 15.601433
+				height: 2.3744793
+				bodyType: StaticBody
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_3
+				x: 26.719131
+				y: 18.282324
+				width: 9.024998
+				height: 2.003645
+				bodyType: StaticBody
+			}
+		]
+	}
+}
+lightsMapLayer: {
+	lights: {
+		lights: [
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_1
+				raysNumber: 25
+				color: {
+					r: 0.92941177
+					g: 0.9411765
+					b: 0.7529412
+					a: 1
+				}
+				lightDistance: 7
+				x: 38.114063
+				y: 18.189577
+				softLight: false
+				lightZPositionForShader: 0.07
+				lightFalloffDistance: 0.79999995
+				intensityForShader: 1.000001
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_2
+				raysNumber: 25
+				color: {
+					r: 1
+					g: 1
+					b: 1
+					a: 1
+				}
+				lightDistance: 5
+				x: 28.071869
+				y: 17.350517
+				softLight: false
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_3
+				raysNumber: 25
+				color: {
+					r: 0.92941177
+					g: 0.9411765
+					b: 0.7529412
+					a: 1
+				}
+				lightDistance: 7
+				x: 43.175526
+				y: 18.014582
+				lightZPositionForShader: 0.040000007
+			}
+		]
+	}
+}
+}

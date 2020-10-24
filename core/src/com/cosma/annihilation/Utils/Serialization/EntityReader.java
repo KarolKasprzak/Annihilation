@@ -191,6 +191,13 @@ public class EntityReader implements Json.Serializer<Entity> {
             entity.add(healthComponent);
         }
 
+        if (jsonData.has("GateComponent")) {
+            GateComponent gateComponent = new GateComponent();
+            gateComponent.isOpen = jsonData.get("GateComponent").get("isOpen").asBoolean();
+            gateComponent.moveDistance = jsonData.get("GateComponent").get("moveDistance").asInt();
+            entity.add(gateComponent);
+        }
+
         if (jsonData.has("DrawOrder")) {
             DrawOrderComponent drawOrderComponent = new DrawOrderComponent();
             drawOrderComponent.drawOrder = jsonData.get("DrawOrder").get("drawOrder").asInt();
@@ -207,6 +214,7 @@ public class EntityReader implements Json.Serializer<Entity> {
             }
 
             skeletonComponent.diffuseTexture = atlas.getRegions().first().getTexture();
+            skeletonComponent.diffuseTextureAtlas = atlas;
 
             SkeletonJson skeletonJson = new SkeletonJson(atlas);
             skeletonJson.setScale(skeletonJson.getScale()/ Constants.PPM);
@@ -270,9 +278,9 @@ public class EntityReader implements Json.Serializer<Entity> {
             entity.add(dialogueComponent);
         }
 
-        if (jsonData.has("GateComponent")) {
-            GateComponent gateComponent = new GateComponent();
-            entity.add(gateComponent);
+        if (jsonData.has("MapChangeComponent")) {
+            MapChangeComponent mapChangeComponent = new MapChangeComponent();
+            entity.add(mapChangeComponent);
         }
 
         if (jsonData.has("StateComponent")) {

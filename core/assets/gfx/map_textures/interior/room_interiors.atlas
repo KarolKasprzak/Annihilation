@@ -1,11 +1,18 @@
 room_interiors.png
-size: 514, 162
+size: 569, 356
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-wood_door
+lab_corridor
   rotate: false
   xy: 1, 1
+  size: 567, 192
+  orig: 567, 192
+  offset: 0, 0
+  index: -1
+wood_door
+  rotate: false
+  xy: 1, 195
   size: 512, 160
   orig: 512, 160
   offset: 0, 0

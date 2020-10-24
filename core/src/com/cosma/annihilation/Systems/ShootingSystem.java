@@ -274,10 +274,9 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private void weaponShoot() {
         Item weapon = playerComponent.activeWeapon;
 
-        System.out.println(skeletonComponent.skeleton.findSlot("weapon_rifle").getAttachment().getName());
-
-                ((RegionAttachment) skeletonComponent.skeleton.findSlot("weapon_rifle").getAttachment())
-                        .setRegion(Annihilation.getAssets().get("gfx/atlas/weapons.atlas", TextureAtlas.class).findRegion("weapon_stg_scope"));
+//
+//                ((RegionAttachment) skeletonComponent.skeleton.findSlot("weapon_rifle").getAttachment())
+//                        .setRegion(skeletonComponent.diffuseTextureAtlas.findRegion("weapon_stg_scope"));
 
         if (weapon.getAmmoInClip() > 0) {
 //             Gdx.input.setCursorPosition(Gdx.input.getX(), MathUtils.round(Gdx.input.getY()-(Gdx.graphics.getHeight()*weapon.getWeaponRecoil())));

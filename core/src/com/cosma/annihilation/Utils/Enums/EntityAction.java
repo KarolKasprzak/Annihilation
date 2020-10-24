@@ -5,8 +5,10 @@ public enum EntityAction {
     SWITCH_LIGHT,
     OPEN_CRATE,
     PICK_UP,
+    //for animated door
     OPEN_DOOR,
-    CROUCH,
+    //for physic moved gates
+    OPEN_GATE,
     EXPLORE,
     GO_TO,
     TALK,
