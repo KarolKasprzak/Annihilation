@@ -17,11 +17,34 @@ entityList: [
 		targetName: lab_gate
 	}
 	{
-		position: "35.624985,17.26217"
+		position: "35.588528,17.258526"
 		gateName: lab_gate
-		moveDistance: 3
+		moveDistance: 2.4
 		isOpen: false
 		entityName: lab_gate2.json
+	}
+	{
+		position: "37.080788,17.006887"
+		hp: 100
+		maxHp: 100
+		entityName: box.json
+		itemList: [
+			{
+				itemID: ammo7mm
+				itemAmount: 100
+				tableIndex: 0
+			}
+			{
+				itemID: stg
+				tableIndex: 1
+			}
+		]
+	}
+]
+materialList: [
+	{
+		dimensions: "39.021038,16.051262,3.198944,2.572918"
+		material: CONCRETE
 	}
 ]
 mapName: asd.map
@@ -31,7 +54,8 @@ spriteMapLayer: {
 	sprites: [
 		{
 			position: "27.0,16.0,0.0"
-			texture: "gfx/map_textures/interior/room_interiors.atlas,wood_door"
+			texture: "gfx/map_textures/interior/room_interiors.atlas,lab_corridor"
+			order: 4
 		}
 		{
 			position: "35.0,16.0,0.0"
@@ -67,10 +91,19 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_3
-				x: 26.719131
-				y: 18.282324
+				x: 26.72955
+				y: 18.709408
 				width: 9.024998
 				height: 2.003645
+				bodyType: StaticBody
+			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_4
+				x: 35.480606
+				y: 18.486069
+				width: 0.23437881
+				height: 0.29895782
 				bodyType: StaticBody
 			}
 		]
@@ -89,13 +122,13 @@ lightsMapLayer: {
 					b: 0.7529412
 					a: 1
 				}
-				lightDistance: 7
-				x: 38.114063
-				y: 18.189577
-				softLight: false
+				lightDistance: 6.1
+				x: 38.15052
+				y: 17.949993
+				softLength: 0.20000014
 				lightZPositionForShader: 0.07
 				lightFalloffDistance: 0.79999995
-				intensityForShader: 1.000001
+				intensityForShader: 1.1500008
 			}
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight

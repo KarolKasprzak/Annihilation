@@ -16,6 +16,7 @@ import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapMaterialObject;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Constants;
@@ -63,7 +64,7 @@ public class MapRender {
         this.gameMap = gameMap;
     }
 
-    public void renderMap(float delta, boolean debugRender) {
+    public void renderMap(float delta, boolean debugRender, boolean renderMaterialObject) {
 
 
         //render sprite
@@ -155,6 +156,16 @@ public class MapRender {
                     renderer.setColor(Color.ORANGE);
                 }
                 renderer.rect(object.getX(), object.getY(), object.getWidth() / 2, object.getHeight() / 2, object.getWidth(), object.getHeight(), 1, 1, object.getRotation());
+            }
+        }
+
+        if (renderMaterialObject) {
+            for (MapMaterialObject object : gameMap.getMapMaterialObjects()) {
+                renderer.setColor(1,1,1,0.5f);
+                if (object.isHighlighted()) {
+                    renderer.setColor(Color.ORANGE);
+                }
+                renderer.rect(object.getX(), object.getY(), object.getWidth() / 2, object.getHeight() / 2, object.getWidth(), object.getHeight(), 1, 1, 0);
             }
         }
         renderer.end();

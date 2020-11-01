@@ -45,6 +45,12 @@ entityList: [
 		entityName: parallax.json
 	}
 ]
+materialList: [
+	{
+		dimensions: "24.054165,8.398435,4.036457,2.03125"
+		material: STEEL
+	}
+]
 mapName: bump_test.map
 spriteMapLayer: {
 	height: 0

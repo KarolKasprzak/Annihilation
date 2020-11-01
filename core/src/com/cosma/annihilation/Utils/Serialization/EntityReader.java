@@ -194,7 +194,7 @@ public class EntityReader implements Json.Serializer<Entity> {
         if (jsonData.has("GateComponent")) {
             GateComponent gateComponent = new GateComponent();
             gateComponent.isOpen = jsonData.get("GateComponent").get("isOpen").asBoolean();
-            gateComponent.moveDistance = jsonData.get("GateComponent").get("moveDistance").asInt();
+            gateComponent.moveDistance = jsonData.get("GateComponent").get("moveDistance").asFloat();
             entity.add(gateComponent);
         }
 
@@ -259,9 +259,7 @@ public class EntityReader implements Json.Serializer<Entity> {
             if (jsonData.get("TextureComponent").has("patch")) {
                 textureComponent.texture = Annihilation.getAssets().get(jsonData.get("TextureComponent").get("patch").asString());
             }
-            if (jsonData.get("TextureComponent").has("renderOrder")) {
-                textureComponent.renderOrder = jsonData.get("TextureComponent").get("renderOrder").asInt();
-            }
+
             entity.add(textureComponent);
         }
 

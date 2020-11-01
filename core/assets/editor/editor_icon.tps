@@ -197,6 +197,7 @@
             <key type="filename">cone_light.png</key>
             <key type="filename">cone_light_h.png</key>
             <key type="filename">geometry.png</key>
+            <key type="filename">material.png</key>
             <key type="filename">point_light.png</key>
             <key type="filename">point_light_h.png</key>
             <key type="filename">settings.png</key>
@@ -226,6 +227,7 @@
             <filename>point_light_h.png</filename>
             <filename>settings.png</filename>
             <filename>color.png</filename>
+            <filename>material.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

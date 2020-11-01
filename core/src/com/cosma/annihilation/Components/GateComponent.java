@@ -6,7 +6,7 @@ import com.cosma.annihilation.EntityEngine.core.Component;
 public class GateComponent implements Component {
     public boolean isOpen = false;
     public boolean isMoving = false;
-    public int moveDistance = 2;
+    public float moveDistance = 2;
     public Vector2 targetPosition = new Vector2();
     public String gateName;
 }

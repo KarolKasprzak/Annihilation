@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.*;
@@ -118,6 +119,10 @@ public class Annihilation extends Game {
 
 	public static AssetManager getAssets() {
 		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.manager;
+	}
+
+	public static TextureRegion getTextureRegion(String textureAtlasName, String textureRegionName) {
+		return ((Annihilation) Gdx.app.getApplicationListener()).assetLoader.getTextureRegion(textureAtlasName,textureRegionName);
 	}
 
 	public static Array<Texture> getParallax(String name) {

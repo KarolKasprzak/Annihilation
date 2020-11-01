@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>room_interiors.atlas</filename>
+                <filename>fx_textures.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,57 +181,25 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../sprite root/map_textures/interior/lab_corridor.png</key>
-            <key type="filename">../../../sprite root/map_textures/interior/lab_corridor_n.png</key>
+            <key type="filename">../../sprite root/fx_textures/bullet_hole.png</key>
+            <key type="filename">../../sprite root/fx_textures/bullet_hole_n.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>142,48,283,96</rect>
+                <rect>3,3,5,5</rect>
                 <key>scale9Paddings</key>
-                <rect>142,48,283,96</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../sprite root/map_textures/interior/lab_gate.png</key>
-            <key type="filename">../../../sprite root/map_textures/interior/lab_gate_n.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>5,40,9,80</rect>
-                <key>scale9Paddings</key>
-                <rect>5,40,9,80</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../../sprite root/map_textures/interior/wood_door.png</key>
-            <key type="filename">../../../sprite root/map_textures/interior/wood_door_n.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>128,40,256,80</rect>
-                <key>scale9Paddings</key>
-                <rect>128,40,256,80</rect>
+                <rect>3,3,5,5</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../sprite root/map_textures/interior/wood_door.png</filename>
-            <filename>../../../sprite root/map_textures/interior/wood_door_n.png</filename>
-            <filename>../../../sprite root/map_textures/interior/lab_corridor.png</filename>
-            <filename>../../../sprite root/map_textures/interior/lab_corridor_n.png</filename>
-            <filename>../../../sprite root/map_textures/interior/lab_gate.png</filename>
-            <filename>../../../sprite root/map_textures/interior/lab_gate_n.png</filename>
+            <filename>../../sprite root/fx_textures/bullet_hole.png</filename>
+            <filename>../../sprite root/fx_textures/bullet_hole_n.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

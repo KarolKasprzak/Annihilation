@@ -3204,8 +3204,8 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": -48.13,
-							"y": -13.42
+							"x": -13.15,
+							"y": 37.39
 						}
 					]
 				},
@@ -3473,12 +3473,28 @@
 						}
 					]
 				},
+				"r_foot_target": {
+					"translate": [
+						{
+							"time": 0,
+							"x": -4.38
+						}
+					]
+				},
+				"l_foot_target": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 4.73
+						}
+					]
+				},
 				"r_hand_target": {
 					"translate": [
 						{
 							"time": 0,
-							"x": 49.93,
-							"y": 75.85
+							"x": 31.04,
+							"y": 45.82
 						}
 					],
 					"rotate": [
@@ -3506,7 +3522,8 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": 10
+							"x": 32.62,
+							"y": -2.16
 						}
 					]
 				},
@@ -3550,8 +3567,8 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": 2.82,
-							"y": 1.76
+							"x": 29.26,
+							"y": -2.2
 						}
 					]
 				}
@@ -4725,22 +4742,22 @@
 					"translate": [
 						{
 							"time": 0,
-							"x": 28.76,
-							"y": 39.5
+							"x": 30.05,
+							"y": 26.86
 						},
 						{
 							"time": 0.5833,
-							"x": 2.08,
-							"y": 68.31
+							"x": 10.52,
+							"y": 51.66
 						},
 						{
 							"time": 0.9166,
-							"x": -16.53,
-							"y": 12.05
+							"x": -7.64,
+							"y": 8.33
 						},
 						{
 							"time": 1.3333,
-							"x": -0.69,
+							"x": 22.41,
 							"y": 68.71
 						},
 						{
@@ -4843,6 +4860,26 @@
 						"time": 0,
 						"bendPositive": false,
 						"mix": 0.35
+					},
+					{
+						"time": 0.5833,
+						"bendPositive": false,
+						"mix": 0.12
+					},
+					{
+						"time": 0.9166,
+						"bendPositive": false,
+						"mix": 0.31
+					},
+					{
+						"time": 1.0833,
+						"bendPositive": false,
+						"mix": 0.254
+					},
+					{
+						"time": 1.3333,
+						"bendPositive": false,
+						"mix": 0.17
 					}
 				],
 				"l_forearm_ik": [
@@ -4850,6 +4887,16 @@
 						"time": 0,
 						"bendPositive": false,
 						"mix": 0.85
+					},
+					{
+						"time": 0.5833,
+						"bendPositive": false,
+						"mix": 0.9
+					},
+					{
+						"time": 1.0833,
+						"bendPositive": false,
+						"mix": 0.9
 					}
 				],
 				"l_hand_ik": [
@@ -4857,24 +4904,19 @@
 						"time": 0,
 						"bendPositive": false,
 						"mix": 0
+					},
+					{
+						"time": 0.5833,
+						"bendPositive": false,
+						"mix": 0.04
+					},
+					{
+						"time": 1.0833,
+						"bendPositive": false,
+						"mix": 0.04
 					}
 				]
-			},
-			"drawOrder": [
-				{
-					"time": 0,
-					"offsets": [
-						{
-							"slot": "weapon_pistol",
-							"offset": -4
-						},
-						{
-							"slot": "weapon_rifle",
-							"offset": -4
-						}
-					]
-				}
-			]
+			}
 		},
 		"weapon_gewehr46_reload": {
 			"bones": {
@@ -9942,6 +9984,288 @@
 						"time": 1,
 						"bendPositive": false,
 						"mix": 0.15
+					}
+				]
+			}
+		},
+		"weapon_stg_shoot": {
+			"bones": {
+				"spine1": {
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 6.47
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"r_arm": {
+					"rotate": [
+						{
+							"time": 0,
+							"angle": -10.66
+						},
+						{
+							"time": 0.0833,
+							"angle": -26.04
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						},
+						{
+							"time": 0.0833
+						}
+					]
+				},
+				"l_arm": {
+					"translate": [
+						{
+							"time": 0,
+							"x": -0.61,
+							"y": 8.21
+						}
+					],
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 18.92
+						},
+						{
+							"time": 0.0833,
+							"angle": 2.38
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						},
+						{
+							"time": 0.0833
+						}
+					]
+				},
+				"l_forearm": {
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 42.53
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"r_forearm": {
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 85.92
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"spine2": {
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 3.72
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"bodyTarget": {
+					"translate": [
+						{
+							"time": 0,
+							"x": -12.26,
+							"y": -104.68
+						}
+					]
+				},
+				"r_hand": {
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 10.1
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"r_hand_target": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 31.04,
+							"y": 45.82
+						}
+					],
+					"rotate": [
+						{
+							"time": 0,
+							"angle": 38.45
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"l_hand_target": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 14.94,
+							"y": 40.79
+						},
+						{
+							"time": 0.0833,
+							"x": 7.81,
+							"y": 40.56
+						}
+					]
+				},
+				"muzzle": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 32.62,
+							"y": -2.16
+						}
+					]
+				},
+				"grip": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 9.4,
+							"y": 18.49
+						},
+						{
+							"time": 0.0833,
+							"x": 9.82,
+							"y": 22.47
+						}
+					],
+					"rotate": [
+						{
+							"time": 0,
+							"angle": -90
+						}
+					],
+					"shear": [
+						{
+							"time": 0
+						}
+					]
+				},
+				"flash": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 10
+						}
+					]
+				},
+				"shell_ejector": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 10
+						}
+					]
+				},
+				"target": {
+					"translate": [
+						{
+							"time": 0,
+							"x": 29.26,
+							"y": -2.2
+						}
+					]
+				}
+			},
+			"slots": {
+				"weapon_rifle": {
+					"attachment": [
+						{
+							"time": 0,
+							"name": "weapon_stg"
+						}
+					]
+				}
+			},
+			"ik": {
+				"spine1_ik": [
+					{
+						"time": 0,
+						"bendPositive": false,
+						"mix": 0.1
+					}
+				],
+				"spine2_ik": [
+					{
+						"time": 0,
+						"bendPositive": false,
+						"mix": 0.05
+					}
+				],
+				"r_hand_ik": [
+					{
+						"time": 0,
+						"bendPositive": false
+					}
+				],
+				"r_forearm_ik": [
+					{
+						"time": 0,
+						"bendPositive": false,
+						"mix": 0.94
+					}
+				],
+				"r_arm_ik": [
+					{
+						"time": 0,
+						"mix": 0.02
+					}
+				],
+				"l_arm_ik": [
+					{
+						"time": 0,
+						"bendPositive": false,
+						"mix": 0
+					}
+				],
+				"l_forearm_ik": [
+					{
+						"time": 0,
+						"mix": 0.92
+					}
+				],
+				"l_hand_ik": [
+					{
+						"time": 0,
+						"mix": 0
 					}
 				]
 			}

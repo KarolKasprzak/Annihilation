@@ -2,6 +2,7 @@ package com.cosma.annihilation.Editor.CosmaMap;
 
 import com.badlogic.gdx.utils.OrderedMap;
 import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapMaterialObject;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class GameMap{
     private int height;
     private int tileSize;
     private ArrayList<Entity> entityList;
+    private ArrayList<MapMaterialObject>materialList;
     private String mapName;
 
     private SpriteMapLayer spriteMapLayer;
@@ -27,6 +29,7 @@ public class GameMap{
         spriteMapLayer = new SpriteMapLayer();
         objectMapLayer = new ObjectMapLayer();
         lightsMapLayer = new LightsMapLayer();
+        materialList = new ArrayList<>();
     }
 
     public SpriteMapLayer getSpriteMapLayer() {
@@ -42,6 +45,7 @@ public class GameMap{
     }
 
     public GameMap() {
+        materialList = new ArrayList<>();
         lightMap = new OrderedMap<>();
     }
 
@@ -65,13 +69,15 @@ public class GameMap{
         entityList.remove(entity);
     }
 
-    public String getMapName() {return mapName;}
-
-    public void setMapName(String mapName) {this.mapName = mapName;}
-
     public ArrayList<Entity> getEntityArrayList(){
         return entityList;
     }
+
+    public ArrayList<MapMaterialObject> getMapMaterialObjects() {return materialList;}
+
+    public String getMapName() {return mapName;}
+
+    public void setMapName(String mapName) {this.mapName = mapName;}
 
     transient private OrderedMap<String, Light> lightMap;
 

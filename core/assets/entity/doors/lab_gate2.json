@@ -27,6 +27,13 @@
   }
   GateComponent: {
 	isOpen: false
-	moveDistance: 3
+	moveDistance: 2
   }  
+  TextureComponent: {
+  atlasPatch: "gfx/map_textures/interior/room_interiors.atlas,lab_gate"
+  }
+  DrawOrder: {
+  drawOrder: 4
+  }
+  
 }

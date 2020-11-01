@@ -166,7 +166,7 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                     ((GateComponent) component).isOpen = jsonData.get("isOpen").asBoolean();
                 }
                 if(jsonData.has("moveDistance")){
-                    ((GateComponent) component).moveDistance = jsonData.get("moveDistance").asInt();
+                    ((GateComponent) component).moveDistance = jsonData.get("moveDistance").asFloat();
                 }
                 if(jsonData.has("gateName")){
                     ((GateComponent) component).gateName = jsonData.get("gateName").asString();

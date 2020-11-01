@@ -55,9 +55,11 @@ public class EditorScreen implements Screen, InputProcessor {
     public ObjectPanel objectPanel;
     private MapRender mapRender;
     public LightsPanel lightsPanel;
+    public  MaterialPanel materialPanel;
     private String currentMapPatch;
 
-    private boolean isSpriteLayerSelected, isObjectLayerSelected, isLightsLayerSelected, isLightsRendered, drawGrid = true, isDebugRenderEnabled = true;
+    private boolean isSpriteLayerSelected, isObjectLayerSelected, isLightsLayerSelected, isLightsRendered, isMaterialLayerSelected,
+            drawGrid = true, isDebugRenderEnabled = true;
     private VisLabel editorModeLabel;
     private VisTable rightTable;
     private Box2DDebugRenderer debugRenderer;
@@ -73,7 +75,7 @@ public class EditorScreen implements Screen, InputProcessor {
         viewportUi = new ScreenViewport(cameraUi);
         stage = new Stage(viewportUi);
         VisUI.load(VisUI.SkinScale.X1);
-        rayHandler = new RayHandler(world,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        rayHandler = new RayHandler(world, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         rayHandler.setBlur(true);
         rayHandler.setShadows(true);
         isLightsRendered = false;
@@ -86,7 +88,7 @@ public class EditorScreen implements Screen, InputProcessor {
         stage.addActor(root);
 
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(10, 5,camera);
+        viewport = new ExtendViewport(10, 5, camera);
         camera.update();
         camera.zoom = 5;
         viewport.apply(true);
@@ -118,9 +120,9 @@ public class EditorScreen implements Screen, InputProcessor {
         diffuseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(diffuseButton.isChecked()){
+                if (diffuseButton.isChecked()) {
                     RayHandler.useDiffuseLight(true);
-                }else{
+                } else {
                     RayHandler.useDiffuseLight(false);
                 }
             }
@@ -200,7 +202,7 @@ public class EditorScreen implements Screen, InputProcessor {
 
     public void createNewMap(int x, int y, int scale) {
         gameMap = new GameMap(x, y, scale);
-        mapRender = new MapRender(shapeRenderer, gameMap, batch,rayHandler,camera);
+        mapRender = new MapRender(shapeRenderer, gameMap, batch, rayHandler, camera);
         loadPanels();
         setCameraOnMapCenter();
     }
@@ -221,7 +223,7 @@ public class EditorScreen implements Screen, InputProcessor {
             rightTable.clear();
         }
         loadPanels();
-        mapRender = new MapRender(shapeRenderer, gameMap, batch,rayHandler,camera);
+        mapRender = new MapRender(shapeRenderer, gameMap, batch, rayHandler, camera);
     }
 
     private void saveAs() {
@@ -267,14 +269,22 @@ public class EditorScreen implements Screen, InputProcessor {
 
 
     private void setEditorModeLabel() {
-        if (isLightsLayerSelected) {
-            editorModeLabel.setText("Light edit mode");
-        }
-        if (isObjectLayerSelected) {
-            editorModeLabel.setText("Object edit mode");
-        }
-        if (isSpriteLayerSelected) {
-            editorModeLabel.setText("Sprite edit mode");
+        if (isMaterialLayerSelected) {
+            editorModeLabel.setText("Material edit mode");
+        } else {
+            if (isLightsLayerSelected) {
+                editorModeLabel.setText("Light edit mode");
+            } else {
+                if (isObjectLayerSelected) {
+                    editorModeLabel.setText("Object edit mode");
+                } else {
+                    if (isSpriteLayerSelected) {
+                        editorModeLabel.setText("Sprite edit mode");
+                    } else {
+                        editorModeLabel.setText("");
+                    }
+                }
+            }
         }
     }
 
@@ -311,7 +321,7 @@ public class EditorScreen implements Screen, InputProcessor {
                 mapRender.renderGrid();
             }
             Gdx.gl.glDisable(GL20.GL_BLEND);
-            mapRender.renderMap(delta,isDebugRenderEnabled);
+            mapRender.renderMap(delta, isDebugRenderEnabled, isMaterialLayerSelected());
         }
         if (gameMap != null && !gameMap.getEntityArrayList().isEmpty()) {
             batch.begin();
@@ -457,6 +467,7 @@ public class EditorScreen implements Screen, InputProcessor {
         editModePanel = new EditModePanel(this);
         objectPanel = new ObjectPanel(this);
         lightsPanel = new LightsPanel(this, rayHandler);
+        materialPanel = new MaterialPanel(this);
 
         float width = objectPanel.getWidth();
 
@@ -466,6 +477,8 @@ public class EditorScreen implements Screen, InputProcessor {
         rightTable.add(editModePanel).top().minHeight(stage.getHeight() * height).minWidth(width);
         rightTable.row();
 
+        rightTable.add(materialPanel).fillX().top();
+        rightTable.row();
 
         rightTable.add(objectPanel).fillX().top().minHeight(stage.getHeight() * height);
         rightTable.row();
@@ -485,26 +498,40 @@ public class EditorScreen implements Screen, InputProcessor {
 
         rightTable.add().expandY();
         im.addProcessor(objectPanel);
+        im.addProcessor(materialPanel);
         im.addProcessor(lightsPanel);
         setCameraOnMapCenter();
     }
 
+    public void setMaterialLayerSelected() {
+        isMaterialLayerSelected = !isMaterialLayerSelected;
+        materialPanel.disableButtons();
+        isObjectLayerSelected = false;
+        isLightsLayerSelected = false;
+        isSpriteLayerSelected = false;
+    }
 
     public void setObjectLayerSelected() {
-        isObjectLayerSelected = true;
+        isObjectLayerSelected = !isObjectLayerSelected;
+        materialPanel.disableButtons();
+        isMaterialLayerSelected = false;
         isLightsLayerSelected = false;
         isSpriteLayerSelected = false;
     }
 
     public void setSpriteLayerSelected() {
+        isMaterialLayerSelected = false;
+        materialPanel.disableButtons();
         isObjectLayerSelected = false;
         isLightsLayerSelected = false;
-        isSpriteLayerSelected = true;
+        isSpriteLayerSelected = !isSpriteLayerSelected;
     }
 
     public void setLightsLayerSelected() {
+        isMaterialLayerSelected = false;
+        materialPanel.disableButtons();
         isObjectLayerSelected = false;
-        isLightsLayerSelected = true;
+        isLightsLayerSelected = !isLightsLayerSelected;
         isSpriteLayerSelected = false;
     }
 
@@ -514,6 +541,10 @@ public class EditorScreen implements Screen, InputProcessor {
 
     public boolean isObjectEditModeSelected() {
         return isObjectLayerSelected;
+    }
+
+    public boolean isMaterialLayerSelected() {
+        return isMaterialLayerSelected;
     }
 
     public RayHandler getRayHandler() {

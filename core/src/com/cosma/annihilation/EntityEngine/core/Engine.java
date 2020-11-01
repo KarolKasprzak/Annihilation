@@ -18,6 +18,7 @@ import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapMaterialObject;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaMapLoader;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
@@ -184,11 +185,12 @@ public class Engine {
 
     /**
      * Use before batch.draw
+     *
      * @param normalShader normal map shader
-     * @param invertX invert normal map X
-     * @param invertY invert normal map Y
+     * @param invertX      invert normal map X
+     * @param invertY      invert normal map Y
      */
-    public void prepareDataForNormalShaderRender(ShaderProgram normalShader, boolean invertX ,boolean invertY){
+    public void prepareDataForNormalShaderRender(ShaderProgram normalShader, boolean invertX, boolean invertY) {
         Arrays.fill(lightColorArray, 0);
         Arrays.fill(lightPositionArray, 0);
         activeLights.clear();
@@ -201,9 +203,9 @@ public class Engine {
 //                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() +3)) {
 //
 //                        }
-                    }
-        for(int i = 0; i < activeLights.size; i++){
-            if(i<7){
+        }
+        for (int i = 0; i < activeLights.size; i++) {
+            if (i < 7) {
                 Light light = activeLights.get(i);
                 lightPosition.x = light.getX();
                 lightPosition.y = light.getY();
@@ -211,33 +213,32 @@ public class Engine {
 
                 gameCamera.project(lightPosition);
 
-                lightPositionArray[i*3] = lightPosition.x ;
-                lightPositionArray[1+(i*3)] = lightPosition.y;
-                lightPositionArray[2+(i*3)] = light.getLightZPosition();
-                
-                lightColorArray[i*3] = light.getColor().r;
-                lightColorArray[1+(i*3)] = light.getColor().g;
-                lightColorArray[2+(i*3)] = light.getColor().b;
+                lightPositionArray[i * 3] = lightPosition.x;
+                lightPositionArray[1 + (i * 3)] = lightPosition.y;
+                lightPositionArray[2 + (i * 3)] = light.getLightZPosition();
+
+                lightColorArray[i * 3] = light.getColor().r;
+                lightColorArray[1 + (i * 3)] = light.getColor().g;
+                lightColorArray[2 + (i * 3)] = light.getColor().b;
             }
         }
 
-        normalShader.setUniformi("arraySize",activeLights.size);
-        normalShader.setUniform3fv("lightPosition[0]",lightPositionArray,0,21);
-        normalShader.setUniform3fv("lightColor[0]",lightColorArray,0,21);
+        normalShader.setUniformi("arraySize", activeLights.size);
+        normalShader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
+        normalShader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
 
-        if(invertX){
+        if (invertX) {
             normalShader.setUniformi("xInvert", 1);
-        }else{
+        } else {
             normalShader.setUniformi("xInvert", 0);
         }
-        if(invertY){
+        if (invertY) {
             normalShader.setUniformi("yInvert", 1);
-        }else{
+        } else {
             normalShader.setUniformi("yInvert", 0);
         }
 
-        normalShader.setUniformf("resolution",Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
-
+        normalShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 
         Color color = getCurrentMap().getLightsMapLayer().getShaderAmbientLightColor();
@@ -245,6 +246,17 @@ public class Engine {
         normalShader.setUniformf("ambientColor", color.r, color.g, color.b, getCurrentMap().getLightsMapLayer().getShaderAmbientLightIntensity());
     }
 
+
+    // todo
+
+    public boolean isPointInDrawField(float x, float y) {
+        for (MapMaterialObject mapMaterialObject : getCurrentMap().getMapMaterialObjects()) {
+            if (mapMaterialObject.getRectangle().contains(x, y)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public void spawnBulletEntity(float x, float y, float angle, float speed, boolean flip) {

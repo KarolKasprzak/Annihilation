@@ -60,7 +60,7 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
 
     @Override
     public String toString() {
-        return itemId;
+        return itemId + ": " + itemAmount ;
     }
 
     @Override

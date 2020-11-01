@@ -10,9 +10,10 @@ public class TextureComponent implements Component {
     public Texture texture;
     public Texture normalTexture;
     public TextureRegion textureRegion;
-    public int renderOrder = 3;
     public  boolean renderAfterLight = false;
     public boolean flipTexture = false;
     public boolean direction = false;
     public boolean renderWithShader = false;
+
+
 }

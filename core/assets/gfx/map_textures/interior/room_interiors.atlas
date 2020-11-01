@@ -10,6 +10,13 @@ lab_corridor
   orig: 567, 192
   offset: 0, 0
   index: -1
+lab_gate
+  rotate: false
+  xy: 515, 195
+  size: 18, 160
+  orig: 18, 160
+  offset: 0, 0
+  index: -1
 wood_door
   rotate: false
   xy: 1, 195

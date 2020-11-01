@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -68,6 +69,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private Viewport viewport;
     private int meleeBlowNumber = 1;
     private RayHandler rayHandler;
+    private int weaponSpread = 0;
 
     public ShootingSystem(World world, RayHandler rayHandler, Batch batch, OrthographicCamera camera, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.SHOOTING_SYSTEM);
@@ -263,7 +265,11 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             public void run() {
                 if (isWeaponShooting) {
                     weaponShoot();
+                    /// TODO: 25.10.2020
+                    weaponSpread -= 0;
+                    Gdx.input.setCursorPosition(Gdx.input.getX(),Gdx.input.getY() + weaponSpread);
                 } else {
+                    weaponSpread = 0;
                     this.cancel();
                 }
             }
@@ -278,7 +284,14 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 //                ((RegionAttachment) skeletonComponent.skeleton.findSlot("weapon_rifle").getAttachment())
 //                        .setRegion(skeletonComponent.diffuseTextureAtlas.findRegion("weapon_stg_scope"));
 
+
+
         if (weapon.getAmmoInClip() > 0) {
+            vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
+            viewport.unproject(vector2temp);
+            spawnBulletHole(vector2temp.x,vector2temp.y);
+
+
 //             Gdx.input.setCursorPosition(Gdx.input.getX(), MathUtils.round(Gdx.input.getY()-(Gdx.graphics.getHeight()*weapon.getWeaponRecoil())));
 //            Bone armTarget = skeletonComponent.skeleton.findBone("r_hand_target");
 ////            armTarget.setWorldY(armTarget.getWorldY()+1*weapon.getWeaponRecoil());
@@ -286,7 +299,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 ////            armTarget.setWorldY(armTarget.getWorldY()+1);
             skeletonComponent.skeleton.updateWorldTransform();
             skeletonComponent.setSkeletonAnimation(false, playerComponent.activeWeapon.getShootAnimation(), 4, false);
-            skeletonComponent.animationState.addEmptyAnimation(4, 0.2f, skeletonComponent.animationState.getCurrent(4).getAnimation().getDuration());
+            skeletonComponent.animationState.addEmptyAnimation(4, 0.1f, 0.1f);
             world.rayCast(attackCallback, body.getPosition(), raycastEnd.set(body.getPosition().x + 15 * direction, body.getPosition().y));
             if (calculateAttackAccuracy() && targetEntity != null) {
                 targetEntity.getComponent(HealthComponent.class).hp -= playerComponent.activeWeapon.getDamage();
@@ -469,6 +482,26 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private int calcualteAttackDamage() {
         //TODO
         return 0;
+    }
+
+    void spawnBulletHole(float x, float y){
+        if(this.getEngine().isPointInDrawField(x,y)){
+            Entity entity = new Entity();
+            TextureComponent textureComponent = new TextureComponent();
+            textureComponent.textureRegion = Annihilation.getTextureRegion("fx_textures","bullet_hole");
+            textureComponent.normalTexture = Annihilation.getAssets().get("gfx/atlas/fx_textures_n.png", Texture.class);
+            entity.add(textureComponent);
+
+            DrawOrderComponent drawOrderComponent = new DrawOrderComponent();
+            drawOrderComponent.drawOrder = 3;
+            entity.add(drawOrderComponent);
+
+            SpriteComponent spriteComponent = new SpriteComponent();
+            spriteComponent.x = x;
+            spriteComponent.y = y;
+            entity.add(spriteComponent);
+            getEngine().addEntity(entity);
+        }
     }
 
 

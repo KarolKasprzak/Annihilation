@@ -61,8 +61,4 @@ public class RectangleObject extends MapObject {
         this.rotation = rotation;
         this.bodyType = bodyType;
     }
-
-
-
-
 }

@@ -28,16 +28,27 @@ public class EditModePanel extends VisWindow {
         VisImageButton objectsEditButton = new VisImageButton(new TextureRegionDrawable(iconAtlas.findRegion("geometry")));
         VisImageButton lightsEditButton =  new VisImageButton(new TextureRegionDrawable(iconAtlas.findRegion("cone_light_h")));
         VisImageButton spritesEditButton =  new VisImageButton(new TextureRegionDrawable(iconAtlas.findRegion("texture")));
+        VisImageButton materialEditButton =  new VisImageButton(new TextureRegionDrawable(iconAtlas.findRegion("material")));
 
         float size = Gdx.graphics.getHeight()*0.04f;
 
         add(objectsEditButton).size(size);
         add(lightsEditButton).size(size);
         add(spritesEditButton).size(size);
+        add(materialEditButton).size(size);
 
         pack();
         setMovable(false);
         setResizable(false);
+
+        materialEditButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                editorScreen.lightsPanel.setPanelButtonsDisable(true);
+                editorScreen.objectPanel.setPanelButtonsDisable(true);
+                editorScreen.setMaterialLayerSelected();
+            }
+        });
 
         objectsEditButton.addListener(new ChangeListener() {
             @Override

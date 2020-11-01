@@ -100,6 +100,7 @@ public abstract class SortedIteratingSystem extends EntitySystem implements Enti
         }
     }
 
+
     /**
      * @return set of entities processed by the system
      */

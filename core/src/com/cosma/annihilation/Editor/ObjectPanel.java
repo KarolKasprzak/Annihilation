@@ -275,7 +275,7 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
                 selectedBody.setTransform(width / 2 + x, height / 2 + y, selectedObject.getRotation() * MathUtils.degreesToRadians);
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -362,7 +362,7 @@ public class ObjectPanel extends VisWindow implements InputProcessor {
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
