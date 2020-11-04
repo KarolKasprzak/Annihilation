@@ -24,7 +24,10 @@ public class CameraSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
 
+
+
         PhysicsComponent body = bodyMapper.get(entity);
+
         camera.position.set(body.body.getPosition().x,body.body.getPosition().y + 1,0);
         camera.update();
     }

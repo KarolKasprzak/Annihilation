@@ -3,7 +3,7 @@ package com.cosma.annihilation.Utils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
-    // --------------- UI / Window ------------
+
 
 
     // -------------- Physics -----------------
@@ -31,7 +31,7 @@ public class Constants {
     public static final int RENDER = 8;
     public static final int AI_SYSTEM = 7;
     public static final int TILE_MAP_RENDER = 6;
-    public static final int CAMERA_SYSTEM = 5;
+    public static final int CAMERA_SYSTEM = 1;
     public static final int COLLISION_SYSTEM = 4;
     public static final int HEALTH_SYSTEM = 3;
     public static final int ANIMATION = 2;

@@ -121,4 +121,8 @@ public class Sprite implements Comparable<Sprite>{
     public int compareTo(Sprite o) {
         return Integer.compare(order, o.order);
     }
+
+    public Texture getNormalTexture() {
+        return normalTexture;
+    }
 }

@@ -1,7 +1,5 @@
 package com.cosma.annihilation.desktop;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.cosma.annihilation.Annihilation;
@@ -16,17 +14,12 @@ public class DesktopLauncher {
 		config.title = "Annihilation";
 		config.resizable = false;
 		config.fullscreen = true;
-		config.samples=3;
-
-		config.width = screenSize.width/2;
-		config.height = screenSize.height/2;
 		config.vSyncEnabled = true;
-
+		config.samples=0;
+		config.width = screenSize.width;
+		config.height = screenSize.height;
 
       	new LwjglApplication (new Annihilation(false),config);
 
-
-
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 	}
 }

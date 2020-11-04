@@ -92,6 +92,15 @@ public abstract class SortedIteratingSystem extends EntitySystem implements Enti
         shouldSort = true;
     }
 
+    /** Override 'firstPassProcessEntity' method */
+    public void firstPassUpdate(float deltaTime){
+        sort();
+        for (int i = 0; i < sortedEntities.size; ++i) {
+            firstPassProcessEntity(sortedEntities.get(i), deltaTime);
+        }
+    }
+    
+
     @Override
     public void update (float deltaTime) {
         sort();
@@ -123,4 +132,7 @@ public abstract class SortedIteratingSystem extends EntitySystem implements Enti
      * @param deltaTime The delta time between the last and current frame
      */
     protected abstract void processEntity (Entity entity, float deltaTime);
+
+    public void firstPassProcessEntity(Entity entity, float deltaTime){};
+    
 }

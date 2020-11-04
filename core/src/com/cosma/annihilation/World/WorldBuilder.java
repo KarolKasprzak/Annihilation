@@ -32,8 +32,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     public World world;
     private Engine engine;
     private OrthographicCamera camera;
-    private Viewport viewport;
-    private RayHandler rayHandler;
+    private ExtendViewport viewport;
     private InputManager inputManager;
 
     SpriteBatch batch;
@@ -54,7 +53,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         RayHandler.setGammaCorrection(false);
         RayHandler.useDiffuseLight(true);
-        rayHandler = new RayHandler(world,Gdx.graphics.getWidth()/10,Gdx.graphics.getHeight()/10);
+        RayHandler rayHandler = new RayHandler(world, Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 10);
         rayHandler.setBlur(true);
         rayHandler.setBlurNum(1);
         rayHandler.setShadows(true);
@@ -77,7 +76,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new ActionSystem(camera, batch));
         engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera, viewport));
         engine.addSystem(new ParallaxRenderSystem(batch,camera));
-        engine.addSystem(new UnifiedRenderSystem(batch,camera,world,polygonSpriteBatch,rayHandler,engine.getCurrentMap()));
+        engine.addSystem(new UnifiedRenderSystem(batch,camera,world,polygonSpriteBatch, rayHandler,engine.getCurrentMap(),viewport));
         engine.addSystem(new HealthSystem(camera));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world, viewport));
