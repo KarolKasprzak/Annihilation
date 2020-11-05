@@ -452,14 +452,16 @@ public class EditorScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
-        if (amount == 1) {
+    public boolean scrolled(float amountX, float amountY) {
+        if (amountY == 1) {
             camera.zoom += zoomLevel;
-        } else if (amount == -1) {
+        } else if (amountY == -1) {
             camera.zoom -= zoomLevel;
         }
+
         return false;
     }
+
 
     private void loadPanels() {
         float height = 0.10f;

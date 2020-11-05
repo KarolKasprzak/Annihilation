@@ -746,9 +746,8 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
     }
 
     @Override
-    public boolean scrolled(int amount) {
-        camera.rotate((float) amount * 3f, 0, 0, 1);
-        return false;
+    public boolean scrolled(float amountX, float amountY) {
+        return super.scrolled(amountX, amountY);
     }
 
     @Override

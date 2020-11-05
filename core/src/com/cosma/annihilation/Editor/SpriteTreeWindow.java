@@ -47,32 +47,32 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
         this.editorScreen = editorScreen;
         TableUtils.setSpacingDefaults(this);
         columnDefaults(0).left();
-        final VisTree tree = new VisTree();
-        Node treeRoot = new Node(new VisLabel("Sprite"));
+        final VisTree<SpriteNode,Object> tree = new VisTree();
+        SpriteNode treeRoot = new SpriteNode(new VisLabel("Sprite"));
         FileHandle file = Gdx.files.local("gfx/map_textures");
         for(FileHandle folderFile : file.list()){
             if (folderFile.isDirectory()){
-                Node folderNode = new Node(new VisLabel(folderFile.nameWithoutExtension()));
+                SpriteNode folderNode = new SpriteNode(new VisLabel(folderFile.nameWithoutExtension()));
                 treeRoot.add(folderNode);
                 for (FileHandle atlasFile : folderFile.list("atlas")) {
-                    Node atlasNode = new Node(new VisLabel(atlasFile.nameWithoutExtension()));
-                    atlasNode.setObject(atlasFile);
+                    SpriteNode atlasNode = new SpriteNode(new VisLabel(atlasFile.nameWithoutExtension()));
+                    atlasNode.setValue(atlasFile);
                     folderNode.add(atlasNode);
                     TextureAtlas atlas = Annihilation.getAssets().get(atlasFile.path(),TextureAtlas.class);
                     for(TextureAtlas.AtlasRegion textureRegion : atlas.getRegions()){
                         if(textureRegion.index < 0){
                             VisLabel label = new VisLabel(textureRegion.name);
                             label.setName(textureRegion.name);
-                            Node childrenNode = new Node(label);
-                            childrenNode.setObject(textureRegion);
+                            SpriteNode childrenNode = new SpriteNode(label);
+                            childrenNode.setValue(textureRegion);
                             childrenNode.setIcon(new TextureRegionDrawable(textureRegion));
                             atlasNode.add(childrenNode);
                         }
                         if(textureRegion.index == 1){
                             VisLabel label = new VisLabel(textureRegion.name+"*");
                             label.setName(textureRegion.name);
-                            Node childrenNode = new Node(label);
-                            childrenNode.setObject(textureRegion);
+                            SpriteNode childrenNode = new SpriteNode(label);
+                            childrenNode.setValue(textureRegion);
                             atlasNode.add(childrenNode);
                         }
                     }
@@ -100,13 +100,13 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (!tree.getSelection().isEmpty()) {
-                    if(tree.getSelection().first().getObject() instanceof TextureAtlas.AtlasRegion && editorScreen.isSpriteEditModeSelected()){
+                    if(tree.getSelection().first().getValue() instanceof TextureAtlas.AtlasRegion && editorScreen.isSpriteEditModeSelected()){
                         canAddSprite = true;
-                        if(((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).index > 0){
+                        if(((TextureAtlas.AtlasRegion) tree.getSelection().first().getValue()).index > 0){
                             createAnimatedSprite = true;
                         }
-                        textureRegionName = ((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).name;
-                        texturePath = ((FileTextureData) ((TextureAtlas.AtlasRegion) tree.getSelection().first().getObject()).getTexture().getTextureData()).getFileHandle().pathWithoutExtension()+".atlas";
+                        textureRegionName = ((TextureAtlas.AtlasRegion) tree.getSelection().first().getValue()).name;
+                        texturePath = ((FileTextureData) ((TextureAtlas.AtlasRegion) tree.getSelection().first().getValue()).getTexture().getTextureData()).getFileHandle().pathWithoutExtension()+".atlas";
                         Util.setCursorMove();
                     }
                 }
@@ -163,6 +163,13 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
             selectedSprite = null;
         }
     }
+
+    private class SpriteNode extends  Node{
+        public SpriteNode(Actor actor) {
+            super(actor);
+        }
+    }
+
 
     @Override
     public boolean keyDown(int keycode) {
@@ -270,7 +277,7 @@ public class SpriteTreeWindow extends VisWindow implements InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean scrolled(float amountX, float amountY) {
         return false;
     }
 }

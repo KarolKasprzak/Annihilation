@@ -75,19 +75,19 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         });
 
 
-        final VisTree tree = new VisTree();
-        Node treeRoot = new Node(new VisLabel("Entity:"));
-        Node checkBoxNode = new Node(moveCheckBox);
+        final VisTree<EntityNode,String> tree = new VisTree();
+        EntityNode treeRoot = new EntityNode(new VisLabel("Entity:"));
+        EntityNode checkBoxNode = new EntityNode(moveCheckBox);
         treeRoot.add(checkBoxNode);
         FileHandle file = Gdx.files.local("entity");
         for (FileHandle rootDirectory : file.list()) {
             if (rootDirectory.isDirectory()) {
-                Node node = new Node(new VisLabel(rootDirectory.nameWithoutExtension()));
+                Node node = new EntityNode(new VisLabel(rootDirectory.nameWithoutExtension()));
                 treeRoot.add(node);
                 for (FileHandle childrenDirectory : rootDirectory.list(".json")) {
                     VisLabel label = new VisLabel(childrenDirectory.nameWithoutExtension());
                     label.setName(childrenDirectory.nameWithoutExtension());
-                    Node childrenNode = new Node(label);
+                    Node childrenNode = new EntityNode(label);
                     jsonList.put(childrenDirectory.nameWithoutExtension(), childrenDirectory);
                     node.add(childrenNode);
                 }
@@ -133,6 +133,13 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
         editorScreen.getMap().addEntity(entity);
         System.out.println("created");
     }
+
+    private class EntityNode extends Node{
+        public EntityNode(Actor actor) {
+            super(actor);
+        }
+    }
+
 
     @Override
     public boolean keyDown(int keycode) {
@@ -284,7 +291,8 @@ public class EntityTreeWindow extends VisWindow implements InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean scrolled(float amountX, float amountY) {
         return false;
     }
+
 }
