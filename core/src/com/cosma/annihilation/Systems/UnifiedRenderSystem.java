@@ -128,8 +128,11 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         //render Light
 
 
-//        rayHandler.setCombinedMatrix(camera);
-//        rayHandler.updateAndRender();
+
+        rayHandler.setCombinedMatrix(camera);
+        rayHandler.update();
+        normalMap.bind(1);
+        rayHandler.render();
     }
 
     @Override

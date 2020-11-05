@@ -123,10 +123,12 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
 
             @Override protected void updateLightShaderPerLight (Light light) {
                 // light position must be normalized
-                float x = (light.getX())/viewportWidth;
-                float y = (light.getY())/viewportHeight;
+
+                float x = (light.getX())/viewport.getWorldWidth();
+                System.out.println(light.getX()/viewport.getWorldWidth());
+                float y = (light.getY())/viewport.getWorldHeight();
                 lightShader.setUniformf("u_lightpos", x, y, 0.05f);
-                lightShader.setUniformf("u_intensity", 10);
+                lightShader.setUniformf("u_intensity", 2);
             }
         };
         rayHandler.setLightShader(lightShader);
@@ -262,6 +264,13 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
     Color bgColor = new Color();
     @Override
     public void render() {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, 1);
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, -1);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-1, 0);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(1, 0);
+
+
+
 
         /** Rotate directional light like sun :) */
         if (lightsType == 3) {
@@ -329,34 +338,35 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
                     0, 0, normals.getWidth(), normals.getHeight(), // tex dimensions
                     false, true); // flip x, y
         } else {
-            for (int x = 0; x < 6; x++) {
-                for (int y = 0; y < 6; y++) {
-                    batch.setColor(bgColor.set(x/5.0f, y/6.0f, 0.5f, 1));
-                    batch.draw(bg, x * bgWidth, y * bgHeight, bgWidth, bgHeight);
-                }
-            }
-            batch.setColor(Color.WHITE);
-            batch.enableBlending();
-            for (DeferredObject deferredObject :assetArray) {
-                deferredObject.draw(batch);
-            }
-            for (int i = 0; i < BALLSNUM; i++) {
-                Body ball = balls.get(i);
-                Vector2 position = ball.getPosition();
-                float angle = MathUtils.radiansToDegrees * ball.getAngle();
-                marble.x = position.x - RADIUS;
-                marble.y = position.y - RADIUS;
-                marble.rotation = angle;
-                marble.draw(batch);
-            }
+//            for (int x = 0; x < 6; x++) {
+//                for (int y = 0; y < 6; y++) {
+//                    batch.setColor(bgColor.set(x/5.0f, y/6.0f, 0.5f, 1));
+//                    batch.draw(bg, x * bgWidth, y * bgHeight, bgWidth, bgHeight);
+//                }
+//            }
+//            batch.setColor(Color.WHITE);
+//            batch.enableBlending();
+//            for (DeferredObject deferredObject :assetArray) {
+//                deferredObject.draw(batch);
+//            }
+//            for (int i = 0; i < BALLSNUM; i++) {
+//                Body ball = balls.get(i);
+//                Vector2 position = ball.getPosition();
+//                float angle = MathUtils.radiansToDegrees * ball.getAngle();
+//                marble.x = position.x - RADIUS;
+//                marble.y = position.y - RADIUS;
+//                marble.rotation = angle;
+//                marble.draw(batch);
+//            }
         }
         batch.end();
 
         /** BOX2D LIGHT STUFF BEGIN */
         if (!drawNormals) {
+            normals.bind(1);
             rayHandler.setCombinedMatrix(camera);
             if (stepped) rayHandler.update();
-            normals.bind(1);
+
             rayHandler.render();
         }
         /** BOX2D LIGHT STUFF END */
