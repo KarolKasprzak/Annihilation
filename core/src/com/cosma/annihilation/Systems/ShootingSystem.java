@@ -16,7 +16,6 @@ import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.PointLight;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
-import com.cosma.annihilation.Entities.EntityFactory;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
@@ -31,9 +30,6 @@ import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.esotericsoftware.spine.Bone;
-import com.esotericsoftware.spine.Slot;
-import com.esotericsoftware.spine.SlotData;
-import com.esotericsoftware.spine.attachments.RegionAttachment;
 
 import java.util.concurrent.ThreadLocalRandom;
 
