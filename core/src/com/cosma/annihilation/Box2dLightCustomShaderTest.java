@@ -123,9 +123,9 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
 
             @Override protected void updateLightShaderPerLight (Light light) {
                 // light position must be normalized
+                System.out.println(light.getX());
+                float x = (light.getX())/viewportWidth;
 
-                float x = (light.getX())/viewport.getWorldWidth();
-                System.out.println(light.getX()/viewport.getWorldWidth());
                 float y = (light.getY())/viewport.getWorldHeight();
                 lightShader.setUniformf("u_lightpos", x, y, 0.05f);
                 lightShader.setUniformf("u_intensity", 2);
@@ -289,7 +289,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
             deferredObject.update();
         }
         normalFbo.begin();
-        batch.disableBlending();
+//        batch.disableBlending();
         batch.begin();
         batch.setShader(normalShader);
         normalShader.setUniformf("u_rot", 0f);
@@ -300,7 +300,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
                 batch.draw(bgN, x * bgWidth, y * bgHeight, bgWidth, bgHeight);
             }
         }
-        batch.enableBlending();
+//        batch.enableBlending();
         for (DeferredObject deferredObject :assetArray) {
             normalShader.setUniformf("u_rot", MathUtils.degreesToRadians * deferredObject.rotation);
             deferredObject.drawNormal(batch);
@@ -325,19 +325,19 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
 
         Texture normals = normalFbo.getColorBufferTexture();
 
-        batch.disableBlending();
-        batch.begin();
-        batch.setShader(null);
-        if (drawNormals) {
-            // draw flipped so it looks ok
-            batch.draw(normals, 0, 0, // x, y
-                    viewportWidth / 2, viewportHeight / 2, // origx, origy
-                    viewportWidth, viewportHeight, // width, height
-                    1, 1, // scale x, y
-                    0,// rotation
-                    0, 0, normals.getWidth(), normals.getHeight(), // tex dimensions
-                    false, true); // flip x, y
-        } else {
+//        batch.disableBlending();
+//        batch.begin();
+//        batch.setShader(null);
+//        if (drawNormals) {
+//            // draw flipped so it looks ok
+//            batch.draw(normals, 0, 0, // x, y
+//                    viewportWidth / 2, viewportHeight / 2, // origx, origy
+//                    viewportWidth, viewportHeight, // width, height
+//                    1, 1, // scale x, y
+//                    0,// rotation
+//                    0, 0, normals.getWidth(), normals.getHeight(), // tex dimensions
+//                    false, true); // flip x, y
+//        } else {
 //            for (int x = 0; x < 6; x++) {
 //                for (int y = 0; y < 6; y++) {
 //                    batch.setColor(bgColor.set(x/5.0f, y/6.0f, 0.5f, 1));
@@ -358,8 +358,8 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
 //                marble.rotation = angle;
 //                marble.draw(batch);
 //            }
-        }
-        batch.end();
+//        }
+//        batch.end();
 
         /** BOX2D LIGHT STUFF BEGIN */
         if (!drawNormals) {

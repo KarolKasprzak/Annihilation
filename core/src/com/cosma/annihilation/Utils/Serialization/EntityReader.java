@@ -256,10 +256,6 @@ public class EntityReader implements Json.Serializer<Entity> {
                 textureComponent.normalTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
             }
 
-            if (jsonData.get("TextureComponent").has("patch")) {
-                textureComponent.texture = Annihilation.getAssets().get(jsonData.get("TextureComponent").get("patch").asString());
-            }
-
             entity.add(textureComponent);
         }
 

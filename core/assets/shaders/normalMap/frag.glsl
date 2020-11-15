@@ -62,5 +62,5 @@ vec3 ambient = ambientColor.rgb * ambientColor.a;
 vec3 intensity = min(vec3(1.0), ambient + sum); // don't remember if min is critical, but I think it might be to avoid shifting the hue when multiple lights add up to something very bright.
 vec3 finalColor = color.rgb * intensity;
 //vec3 finalColor = sum;
-gl_FragColor = v_color * vec4(finalColor, color.a);
+gl_FragColor = v_color * vec4(finalColor,color.a);
 }

@@ -74,7 +74,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
         batch.setProjectionMatrix(camera.combined);
         polygonBatch.setProjectionMatrix(camera.combined);
 
-        polygonBatch.setShader(shaderData.getShader());
+        polygonBatch.setShader(shaderData.getRenderShader());
         //render background (map)
 
         polygonBatch.begin();

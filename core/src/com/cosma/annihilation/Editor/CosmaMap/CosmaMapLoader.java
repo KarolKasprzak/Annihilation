@@ -42,7 +42,6 @@ public class CosmaMapLoader {
         json.setSerializer(Entity.class,new GameEntitySerializer(world,engine));
         map = json.fromJson(GameMap.class, mapFile);
 
-
         rayHandler.setAmbientLight(0.5f,0.5f,0.5f,0.5f);
         createMapObject();
     }

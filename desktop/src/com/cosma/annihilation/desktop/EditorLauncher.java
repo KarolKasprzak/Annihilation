@@ -2,6 +2,7 @@ package com.cosma.annihilation.desktop;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglAWTFrame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.cosma.annihilation.Annihilation;
@@ -21,6 +22,6 @@ public class EditorLauncher {
 		config.vSyncEnabled = true;
 
 		new LwjglApplication (new Annihilation(true),config);
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+//		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 	}
 }

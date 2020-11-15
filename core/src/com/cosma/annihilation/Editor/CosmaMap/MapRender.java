@@ -68,7 +68,7 @@ public class MapRender {
 
 
         //render sprite
-        batch.setShader(shaderData.getShader());
+        batch.setShader(shaderData.getRenderShader());
 
 
         if (gameMap.getSpriteMapLayer().isLayerVisible()) {

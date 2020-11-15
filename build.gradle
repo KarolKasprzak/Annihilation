@@ -1,5 +1,4 @@
 buildscript {
-    
 
     repositories {
         mavenLocal()
@@ -10,14 +9,13 @@ buildscript {
         google()
     }
     dependencies {
-        
 
     }
 }
 
 allprojects {
 
-    version = '1.0'
+    version = '0.1Alpha'
     ext {
         appName = "Annihilation"
         gdxVersion = '1.9.12'

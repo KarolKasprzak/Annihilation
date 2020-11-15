@@ -1,7 +1,6 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,11 +8,10 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.AnimatedSprite;
@@ -23,10 +21,7 @@ import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.systems.SortedIteratingSystem;
-import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.CustomSkeletonRender;
-import com.cosma.annihilation.Utils.NormalMapShaderProvider;
-import com.cosma.annihilation.Utils.RenderComparator;
+import com.cosma.annihilation.Utils.*;
 import com.esotericsoftware.spine.SkeletonRendererDebug;
 
 public class UnifiedRenderSystem extends SortedIteratingSystem {
@@ -42,39 +37,41 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
     private PolygonSpriteBatch polygonBatch;
     private Vector2 positionTmp = new Vector2();
     private CustomSkeletonRender skeletonRenderer;
-    private SkeletonRendererDebug debugRenderer;
     private NormalMapShaderProvider shaderData;
     private TextureRegion normalMapRegion;
     private FrameBuffer normalMapFBO;
     private FrameBuffer diffuseMapFBO;
-    private ExtendViewport viewport;
-    private Vector3 screenCoordinate;
+    private Matrix4 matrix;
+    private ShapeRenderer debugRenderer;
 
-    public UnifiedRenderSystem(SpriteBatch batch, OrthographicCamera camera, World world, PolygonSpriteBatch polygonBatch, RayHandler rayHandler, GameMap gameMap, ExtendViewport viewport) {
+    public UnifiedRenderSystem(SpriteBatch batch, OrthographicCamera camera, PolygonSpriteBatch polygonBatch, RayHandler rayHandler, GameMap gameMap) {
         super(Family.one(SkeletonComponent.class, TextureComponent.class).all(DrawOrderComponent.class).get(), new RenderComparator(), Constants.RENDER);
         this.camera = camera;
         this.rayHandler = rayHandler;
         this.batch = batch;
         this.polygonBatch = polygonBatch;
-        this.viewport = viewport;
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         physicsMapper = ComponentMapper.getFor(PhysicsComponent.class);
         skeletonMapper = ComponentMapper.getFor(SkeletonComponent.class);
         spriteMapper = ComponentMapper.getFor(SpriteComponent.class);
-
+        matrix = new Matrix4();
+        debugRenderer = new ShapeRenderer();
+        debugRenderer.setAutoShapeType(true);
+        debugRenderer.setColor(1,1,1,0.5f);
         skeletonRenderer = new CustomSkeletonRender();
 
         skeletonRenderer.setPremultipliedAlpha(false);
 
-        normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        normalMapFBO = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         normalMapRegion = new TextureRegion();
 
-        debugRenderer = new SkeletonRendererDebug();
+        SkeletonRendererDebug debugRenderer = new SkeletonRendererDebug();
 
         debugRenderer.setBoundingBoxes(true);
         debugRenderer.setRegionAttachments(false);
         debugRenderer.setScale(0.01f);
-        screenCoordinate = new Vector3();
+
 
         shaderData = new NormalMapShaderProvider(camera, rayHandler, gameMap);
     }
@@ -84,11 +81,14 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         GameMap gameMap = this.getEngine().getCurrentMap();
 
         batch.setProjectionMatrix(camera.combined);
+        debugRenderer.setProjectionMatrix(camera.combined);
         polygonBatch.setProjectionMatrix(camera.combined);
+
+        //normal
 
         normalMapFBO.begin();
         polygonBatch.begin();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         //render normals for background (map)
         for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
             positionTmp.set(sprite.getX(), sprite.getY());
@@ -96,45 +96,57 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
                 ((AnimatedSprite) sprite).updateAnimation(deltaTime);
             }
             if (sprite.getNormalTexture() != null) {
-                drawTextureRegion(sprite, positionTmp, true);
+                drawTextureRegion(sprite, true);
             }
         }
-
         //render normals for entities, textures & sprites
+
         firstPassUpdate(deltaTime);
+        polygonBatch.flush();
         polygonBatch.end();
         normalMapFBO.end();
+        Texture normalTexture = normalMapFBO.getColorBufferTexture();
+        //diffuse
+        diffuseMapFBO.begin();
+        polygonBatch.begin();
+        for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
+            positionTmp.set(sprite.getX(), sprite.getY());
+            if (sprite.getNormalTexture() != null) {
+                drawTextureRegion(sprite, false);
+            }
+        }
+        super.update(deltaTime);
+        polygonBatch.end();
+        diffuseMapFBO.end();
 
-        //draw normal map on full screen
-        Texture normalMap = normalMapFBO.getColorBufferTexture();
-        normalMap.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        //
+
+        Texture diffuseTexture = diffuseMapFBO.getColorBufferTexture();
+        diffuseTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        normalTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        batch.setProjectionMatrix(matrix);
+        batch.setShader(shaderData.getRenderShader());
         batch.begin();
-        screenCoordinate.set(0, Gdx.graphics.getHeight(), 0);
-        camera.unproject(screenCoordinate);
-        positionTmp.set(0, Gdx.graphics.getHeight());
-        viewport.unproject(positionTmp);
-        batch.draw(normalMap, positionTmp.x, positionTmp.y, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight(), 1, 1,
-                0, 0, 0, normalMap.getWidth(), normalMap.getHeight(), false, true);
+        shaderData.prepareData(false);
+        normalTexture.bind(1);
+        diffuseTexture.bind(0);
+
+        batch.draw(diffuseTexture,-1, 1, 2, -2);
         batch.end();
 
-//        batch.end();
-        //render diffuse for background (map)
-//        super.update(deltaTime);
-
-
-        //render first plan (map)
-
-
-        //render Light
-
-
-
         rayHandler.setCombinedMatrix(camera);
-        rayHandler.update();
-        normalMap.bind(1);
-        rayHandler.render();
-    }
+        rayHandler.updateAndRender();
 
+//        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        for(Entity entity1: getEngine().getEntitiesFor(Family.all(SpriteComponent.class).get())){
+//            SpriteComponent spriteComponent = entity1.getComponent(SpriteComponent.class);
+//            debugRenderer.rect(spriteComponent.x,spriteComponent.y,spriteComponent.rectangle.width,spriteComponent.rectangle.height);
+//        }
+//        debugRenderer.end();
+
+    }
+    //normals
     @Override
     public void firstPassProcessEntity(Entity entity, float deltaTime) {
         PhysicsComponent physicsComponent = physicsMapper.get(entity);
@@ -150,7 +162,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         //skeleton render
         if (skeletonMapper.has(entity)) {
             SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
-            if (entity.getComponent(PlayerComponent.class) == null) {
+            if (!entity.hasComponent(PlayerComponent.class)) {
                 skeletonComponent.animationState.apply(skeletonComponent.skeleton);
             }
             if (!skeletonComponent.skeletonDirection) {
@@ -161,7 +173,14 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             skeletonComponent.skeleton.setPosition(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y - (physicsComponent.height / 2));
             skeletonComponent.skeleton.updateWorldTransform();
             skeletonComponent.animationState.update(deltaTime);
-            skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, true, skeletonComponent.normalTexture);
+
+            if(skeletonComponent.skeletonDirection){
+                skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, true, skeletonComponent.normalTexture);
+            }else{
+                polygonBatch.setShader(shaderData.getFlipShader());
+                skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, true, skeletonComponent.normalTexture);
+                polygonBatch.setShader(null);
+            }
         }
         //sprite render
         if (spriteMapper.has(entity)) {
@@ -169,7 +188,6 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             if (spriteComponent.isLifeTimeLimited) {
                 spriteComponent.time += deltaTime;
             }
-
             Vector2 position = positionTmp.set(spriteComponent.x, spriteComponent.y);
             TextureComponent textureComponent = textureMapper.get(entity);
             position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
@@ -184,7 +202,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         }
 
     }
-
+    //diffuse
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         PhysicsComponent physicsComponent = physicsMapper.get(entity);
@@ -197,32 +215,22 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             drawTexture(textureComponent, position, physicsComponent.body.getAngle() * MathUtils.radiansToDegrees, false);
 
         }
-
         //skeleton render
         if (skeletonMapper.has(entity)) {
-
             SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
-            if (entity.getComponent(PlayerComponent.class) == null) {
-                skeletonComponent.animationState.apply(skeletonComponent.skeleton);
-            }
-            if (!skeletonComponent.skeletonDirection) {
-                skeletonComponent.skeleton.setFlipX(true);
-            } else {
-                skeletonComponent.skeleton.setFlipX(false);
-            }
-            skeletonComponent.skeleton.setPosition(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y - (physicsComponent.height / 2));
-            skeletonComponent.skeleton.updateWorldTransform();
-            skeletonComponent.animationState.update(deltaTime);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, false, skeletonComponent.normalTexture);
-
-//            debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
-//            debugRenderer.draw(skeletonComponent.skeleton);
         }
-
-
-        //Texture render
-
         //Runtime sprite render
+        if (spriteMapper.has(entity)) {
+            SpriteComponent spriteComponent = spriteMapper.get(entity);
+            Vector2 position = positionTmp.set(spriteComponent.x, spriteComponent.y);
+            TextureComponent textureComponent = textureMapper.get(entity);
+            position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
+            position.y = position.y - textureComponent.textureRegion.getRegionHeight() / Constants.PPM / 2;
+            if(spriteComponent.drawDiffuse){
+                drawTexture(textureComponent, position, spriteComponent.angle, false);
+            }
+        }
 
     }
 
@@ -231,7 +239,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         normalMapRegion.setRegion(textureRegion.getRegionX(), textureRegion.getRegionY(), textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
     }
 
-    private void drawTextureRegion(Sprite sprite, Vector2 position, boolean drawNormal) {
+    private void drawTextureRegion(Sprite sprite, boolean drawNormal) {
         TextureRegion region;
         if (drawNormal) {
             assignNormalRegion(sprite.getNormalTexture(), sprite.getTextureRegion());

@@ -24,6 +24,7 @@ import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
+import com.cosma.annihilation.EntityEngine.utils.ImmutableArray;
 import com.cosma.annihilation.Items.Item;
 import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
@@ -88,6 +89,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
         weaponLight = new PointLight(rayHandler, 45, new Color(1, 1f, 0.4f, 0.7f), 4f, 0, 0);
         weaponLight.setStaticLight(false);
+
         Filter filter = new Filter();
         filter.categoryBits = CollisionID.LIGHT;
         filter.maskBits = CollisionID.MASK_LIGHT;
@@ -142,7 +144,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         } else {
             direction = -1;
         }
-
 
         if (playerComponent.isWeaponHidden) {
             Annihilation.setArrowCursor();
@@ -267,7 +268,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                     weaponShoot();
                     /// TODO: 25.10.2020
                     weaponSpread -= 0;
-                    Gdx.input.setCursorPosition(Gdx.input.getX(),Gdx.input.getY() + weaponSpread);
+                    Gdx.input.setCursorPosition(Gdx.input.getX(), Gdx.input.getY() + weaponSpread);
                 } else {
                     weaponSpread = 0;
                     this.cancel();
@@ -285,11 +286,10 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 //                        .setRegion(skeletonComponent.diffuseTextureAtlas.findRegion("weapon_stg_scope"));
 
 
-
         if (weapon.getAmmoInClip() > 0) {
             vector2temp.set(Gdx.input.getX(), Gdx.input.getY());
             viewport.unproject(vector2temp);
-            spawnBulletHole(vector2temp.x,vector2temp.y);
+            spawnBulletHole(vector2temp.x, vector2temp.y);
 
 
 //             Gdx.input.setCursorPosition(Gdx.input.getX(), MathUtils.round(Gdx.input.getY()-(Gdx.graphics.getHeight()*weapon.getWeaponRecoil())));
@@ -324,8 +324,8 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         Bone target = skeletonComponent.skeleton.findBone("target");
         Bone shellEjector = skeletonComponent.skeleton.findBone("shell_ejector");
         float angle = vector2temp.set(target.getWorldX(), target.getWorldY()).sub(muzzle.getWorldX(), muzzle.getWorldY()).angle();
-        getEngine().spawnBulletEntity(muzzle.getWorldX(), muzzle.getWorldY(), angle, 25, skeletonComponent.skeletonDirection);
-        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(shellEjector.getWorldX(), shellEjector.getWorldY()));
+//        getEngine().spawnBulletEntity(muzzle.getWorldX(), muzzle.getWorldY(), angle, 25, skeletonComponent.skeletonDirection);
+//        this.getEngine().addEntity(EntityFactory.getInstance().createBulletShellEntity(shellEjector.getWorldX(), shellEjector.getWorldY()));
 //        this.getEngine().addEntity(EntityFactory.getInstance().createBulletEntity(muzzleX, muzzleY, targetX, targetY, 30, animationComponent.spriteDirection));
 
         weaponLight.setActive(true);
@@ -484,11 +484,11 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         return 0;
     }
 
-    void spawnBulletHole(float x, float y){
-        if(this.getEngine().isPointInDrawField(x,y)){
+    void spawnBulletHole(float x, float y) {
+        if (this.getEngine().isPointInDrawField(x, y)) {
             Entity entity = new Entity();
             TextureComponent textureComponent = new TextureComponent();
-            textureComponent.textureRegion = Annihilation.getTextureRegion("fx_textures","bullet_hole");
+            textureComponent.textureRegion = Annihilation.getTextureRegion("fx_textures", "bullet_hole");
             textureComponent.normalTexture = Annihilation.getAssets().get("gfx/atlas/fx_textures_n.png", Texture.class);
             entity.add(textureComponent);
 
@@ -499,8 +499,25 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             SpriteComponent spriteComponent = new SpriteComponent();
             spriteComponent.x = x;
             spriteComponent.y = y;
+            spriteComponent.createRectangle(textureComponent);
+            spriteComponent.drawDiffuse = false;
             entity.add(spriteComponent);
-            getEngine().addEntity(entity);
+
+            ImmutableArray<Entity> entities = getEngine().getEntitiesFor(Family.all(SpriteComponent.class).get());
+            if (entities.size() < 1) {
+                getEngine().addEntity(entity);
+            } else {
+                boolean overlaps = false;
+                for (Entity spriteEntity : entities) {
+                    if (spriteComponent.rectangle.overlaps(spriteEntity.getComponent(SpriteComponent.class).rectangle)) {
+                        overlaps = true;
+                        break;
+                    }
+                }
+                if (!overlaps) {
+                    getEngine().addEntity(entity);
+                }
+            }
         }
     }
 

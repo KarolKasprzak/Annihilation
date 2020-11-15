@@ -36,7 +36,7 @@ public class CustomSkeletonRender {
 
     public void draw (Batch batch, Skeleton skeleton,boolean drawNormal,Texture normal) {
         if (batch instanceof PolygonSpriteBatch) {
-            draw((PolygonSpriteBatch)batch, skeleton, drawNormal,normal);
+            draw((PolygonSpriteBatch) batch, skeleton, drawNormal,normal);
             return;
         }
 

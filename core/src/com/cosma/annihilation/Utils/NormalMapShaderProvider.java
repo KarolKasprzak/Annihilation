@@ -25,6 +25,9 @@ public class NormalMapShaderProvider {
     private RayHandler rayHandler;
     private GameMap gameMap;
     private ShaderProgram shader;
+    private ShaderProgram flipShader;
+
+
 
     public NormalMapShaderProvider(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
         this.gameMap = gameMap;
@@ -38,15 +41,59 @@ public class NormalMapShaderProvider {
         shader.setUniformi("u_texture", 0);
         shader.setUniformi("u_normals", 1);
         shader.end();
+        flipShader = createFlipShader();
+
     }
 
     public void updateMap(GameMap gameMap){
         this.gameMap = gameMap;
     }
 
-    public ShaderProgram getShader() {
+    public ShaderProgram getRenderShader() {
         return shader;
     }
+
+    public ShaderProgram getFlipShader() {return flipShader;}
+
+    private ShaderProgram createFlipShader () {
+        String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "uniform mat4 u_projTrans;\n" //
+                + "varying vec4 v_color;\n" //
+                + "varying vec2 v_texCoords;\n" //
+                + "\n" //
+                + "void main()\n" //
+                + "{\n" //
+                + "   v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" //
+                + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+                + "   v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" //
+                + "   gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" //
+                + "}\n";
+        String fragmentShader = "#ifdef GL_ES\n" //
+                + "#define LOWP lowp\n" //
+                + "precision mediump float;\n" //
+                + "#else\n" //
+                + "#define LOWP \n" //
+                + "#endif\n" //
+                + "varying LOWP vec4 v_color;\n" //
+                + "varying vec2 v_texCoords;\n" //
+                + "uniform sampler2D u_texture;\n" //
+                + "void main()\n"//
+                + "{\n" //
+                + "  vec4 color = v_color * texture2D(u_texture, v_texCoords);\n" //
+                + "  color.r = 1.0 - color.r;\n" //
+                + "  gl_FragColor = color;\n" //
+                + "}";
+
+        ShaderProgram shader = new ShaderProgram(vertexShader, fragmentShader);
+        if (!shader.isCompiled()) throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
+        return shader;
+    }
+
+
+
+
 
     public void prepareData(boolean flipX){
         Arrays.fill(lightColorArray, 0);
@@ -104,6 +151,7 @@ public class NormalMapShaderProvider {
         shader.setUniformi("yInvert", 0);
         shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();
+
         shader.setUniformf("ambientColor", color.r, color.g, color.b,gameMap.getLightsMapLayer().getShaderAmbientLightIntensity());
 
 

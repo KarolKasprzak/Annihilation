@@ -88,7 +88,8 @@ public class Engine {
         json = new Json();
         json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
         if (startStatus.isNewGame()) {
-            mapLoader.loadMap("map/asd.map");
+//            mapLoader.loadMap("map/test1.map");
+           mapLoader.loadMap("map/asd.map");
 //         mapLoader.loadMap("map/bump_test.map");
 //            mapLoader.loadMap("map/metro_test.map");
         } else {
@@ -183,71 +184,6 @@ public class Engine {
         return activeLights;
     }
 
-    /**
-     * Use before batch.draw
-     *
-     * @param normalShader normal map shader
-     * @param invertX      invert normal map X
-     * @param invertY      invert normal map Y
-     */
-    public void prepareDataForNormalShaderRender(ShaderProgram normalShader, boolean invertX, boolean invertY) {
-        Arrays.fill(lightColorArray, 0);
-        Arrays.fill(lightPositionArray, 0);
-        activeLights.clear();
-        for (Light light : rayHandler.getLightList()) {
-            activeLights.add(light);
-//            if(light.isRenderWithShader()){
-//
-//            }
-
-//                        if (gameCamera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance() +3)) {
-//
-//                        }
-        }
-        for (int i = 0; i < activeLights.size; i++) {
-            if (i < 7) {
-                Light light = activeLights.get(i);
-                lightPosition.x = light.getX();
-                lightPosition.y = light.getY();
-                lightPosition.z = 0f;
-
-                gameCamera.project(lightPosition);
-
-                lightPositionArray[i * 3] = lightPosition.x;
-                lightPositionArray[1 + (i * 3)] = lightPosition.y;
-                lightPositionArray[2 + (i * 3)] = light.getLightZPosition();
-
-                lightColorArray[i * 3] = light.getColor().r;
-                lightColorArray[1 + (i * 3)] = light.getColor().g;
-                lightColorArray[2 + (i * 3)] = light.getColor().b;
-            }
-        }
-
-        normalShader.setUniformi("arraySize", activeLights.size);
-        normalShader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
-        normalShader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
-
-        if (invertX) {
-            normalShader.setUniformi("xInvert", 1);
-        } else {
-            normalShader.setUniformi("xInvert", 0);
-        }
-        if (invertY) {
-            normalShader.setUniformi("yInvert", 1);
-        } else {
-            normalShader.setUniformi("yInvert", 0);
-        }
-
-        normalShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
-        Color color = getCurrentMap().getLightsMapLayer().getShaderAmbientLightColor();
-
-        normalShader.setUniformf("ambientColor", color.r, color.g, color.b, getCurrentMap().getLightsMapLayer().getShaderAmbientLightIntensity());
-    }
-
-
-    // todo
 
     public boolean isPointInDrawField(float x, float y) {
         for (MapMaterialObject mapMaterialObject : getCurrentMap().getMapMaterialObjects()) {
@@ -259,48 +195,48 @@ public class Engine {
     }
 
 
-    public void spawnBulletEntity(float x, float y, float angle, float speed, boolean flip) {
-        Entity entity = this.createEntity();
-        PhysicsComponent physicsComponent = this.createComponent(PhysicsComponent.class);
-        BulletComponent bulletComponent = this.createComponent(BulletComponent.class);
-        TextureComponent textureComponent = this.createComponent(TextureComponent.class);
-
-        textureComponent.texture = Annihilation.getAssets().get("gfx/textures/bullet_trace.png");
-        textureComponent.renderAfterLight = false;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
-        physicsComponent.body = world.createBody(bodyDef);
-        physicsComponent.body.setUserData(entity);
-        physicsComponent.body.setBullet(true);
-        //Physic fixture
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(0.05f, 0.01f);
-        FixtureDef fixtureDef = new FixtureDef();
-//        fixtureDef.isSensor = true;
-        fixtureDef.shape = shape;
-        fixtureDef.density = 0.2f;
-        fixtureDef.friction = 0.2f;
-        fixtureDef.restitution = 0.2f;
-        fixtureDef.filter.categoryBits = CollisionID.BULLET;
-        fixtureDef.filter.maskBits = CollisionID.MASK_BULLET;
-        physicsComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
-
-
-        float cos = MathUtils.cosDeg(angle), sin = MathUtils.sinDeg(angle);
-        float vx = cos * speed;
-        float vy = sin * speed;
-        physicsComponent.body.setLinearVelocity(vx, vy);
-        if (flip) {
-            textureComponent.flipTexture = true;
-        }
-        physicsComponent.body.setTransform(physicsComponent.body.getPosition(), MathUtils.atan2(physicsComponent.body.getLinearVelocity().y, physicsComponent.body.getLinearVelocity().x));
-
-        entity.add(textureComponent);
-        entity.add(physicsComponent);
-        entity.add(bulletComponent);
-        this.addEntity(entity);
-    }
+//    public void spawnBulletEntity(float x, float y, float angle, float speed, boolean flip) {
+//        Entity entity = this.createEntity();
+//        PhysicsComponent physicsComponent = this.createComponent(PhysicsComponent.class);
+//        BulletComponent bulletComponent = this.createComponent(BulletComponent.class);
+//        TextureComponent textureComponent = this.createComponent(TextureComponent.class);
+//
+//        textureComponent.texture = Annihilation.getAssets().get("gfx/textures/bullet_trace.png");
+//        textureComponent.renderAfterLight = false;
+//        BodyDef bodyDef = new BodyDef();
+//        bodyDef.type = BodyDef.BodyType.DynamicBody;
+//        bodyDef.position.set(x, y);
+//        physicsComponent.body = world.createBody(bodyDef);
+//        physicsComponent.body.setUserData(entity);
+//        physicsComponent.body.setBullet(true);
+//        //Physic fixture
+//        PolygonShape shape = new PolygonShape();
+//        shape.setAsBox(0.05f, 0.01f);
+//        FixtureDef fixtureDef = new FixtureDef();
+////        fixtureDef.isSensor = true;
+//        fixtureDef.shape = shape;
+//        fixtureDef.density = 0.2f;
+//        fixtureDef.friction = 0.2f;
+//        fixtureDef.restitution = 0.2f;
+//        fixtureDef.filter.categoryBits = CollisionID.BULLET;
+//        fixtureDef.filter.maskBits = CollisionID.MASK_BULLET;
+//        physicsComponent.body.createFixture(fixtureDef).setUserData(BodyID.BULLET);
+//
+//
+//        float cos = MathUtils.cosDeg(angle), sin = MathUtils.sinDeg(angle);
+//        float vx = cos * speed;
+//        float vy = sin * speed;
+//        physicsComponent.body.setLinearVelocity(vx, vy);
+//        if (flip) {
+//            textureComponent.flipTexture = true;
+//        }
+//        physicsComponent.body.setTransform(physicsComponent.body.getPosition(), MathUtils.atan2(physicsComponent.body.getLinearVelocity().y, physicsComponent.body.getLinearVelocity().x));
+//
+//        entity.add(textureComponent);
+//        entity.add(physicsComponent);
+//        entity.add(bulletComponent);
+//        this.addEntity(entity);
+//    }
 
 
     /**

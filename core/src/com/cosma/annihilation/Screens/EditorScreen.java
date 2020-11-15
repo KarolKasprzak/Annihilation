@@ -6,11 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,14 +18,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.*;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.PhysicsComponent;
-import com.cosma.annihilation.Components.TextureComponent;
 import com.cosma.annihilation.Editor.*;
 import com.cosma.annihilation.Editor.CosmaMap.*;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
-import com.cosma.annihilation.Utils.Util;
 import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
@@ -322,26 +316,6 @@ public class EditorScreen implements Screen, InputProcessor {
             }
             Gdx.gl.glDisable(GL20.GL_BLEND);
             mapRender.renderMap(delta, isDebugRenderEnabled, isMaterialLayerSelected());
-        }
-        if (gameMap != null && !gameMap.getEntityArrayList().isEmpty()) {
-            batch.begin();
-            for (Entity entity : gameMap.getEntityArrayList()) {
-                if (!Util.hasComponent(entity, TextureComponent.class)) {
-                    continue;
-                }
-                TextureComponent textureComponent = entity.getComponent(TextureComponent.class);
-                if (textureComponent.texture == null) {
-                    continue;
-                }
-                Body body = entity.getComponent(PhysicsComponent.class).body;
-                Vector2 position = body.getPosition();
-                position.x = position.x - (float) textureComponent.texture.getWidth() / Constants.PPM / 2;
-                position.y = position.y - (float) textureComponent.texture.getHeight() / Constants.PPM / 2;
-                batch.draw(new TextureRegion(textureComponent.texture), position.x, position.y, (float) textureComponent.texture.getWidth() / Constants.PPM / 2, (float) textureComponent.texture.getHeight() / Constants.PPM / 2,
-                        textureComponent.texture.getWidth() / Constants.PPM, textureComponent.texture.getHeight() / Constants.PPM,
-                        1, 1, body.getAngle() * MathUtils.radiansToDegrees);
-            }
-            batch.end();
         }
 
         if (isLightsRendered) {

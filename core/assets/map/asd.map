@@ -24,7 +24,7 @@ entityList: [
 		entityName: lab_gate2.json
 	}
 	{
-		position: "37.080788,17.006887"
+		position: "37.77871,17.038137"
 		hp: 100
 		maxHp: 100
 		entityName: box.json
@@ -123,8 +123,8 @@ lightsMapLayer: {
 					a: 1
 				}
 				lightDistance: 6.1
-				x: 38.15052
-				y: 17.949993
+				x: 38.582813
+				y: 18.241657
 				softLength: 0.20000014
 				lightZPositionForShader: 0.07
 				lightFalloffDistance: 0.79999995

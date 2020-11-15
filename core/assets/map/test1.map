@@ -1,0 +1,61 @@
+{
+width: 64
+height: 64
+tileSize: 64
+entityList: [
+	{
+		position: "5.025875,2.8388429"
+		hp: 100
+		maxHp: 100
+		entityName: player.json
+		mapName: null
+		inventoryItems: []
+	}
+]
+mapName: test1.map
+spriteMapLayer: {
+	height: 0
+	width: 0
+	sprites: [
+		{
+			position: "1.0,1.0,0.0"
+			texture: "gfx/map_textures/interior/room_interiors.atlas,lab_corridor"
+		}
+	]
+}
+objectMapLayer: {
+	objects: {
+		objects: [
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_1
+				x: -0.040667534
+				y: -0.0013438463
+				width: 16.025517
+				height: 0.98177063
+				bodyType: StaticBody
+			}
+		]
+	}
+}
+lightsMapLayer: {
+	lights: {
+		lights: [
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				name: PointLight_1
+				raysNumber: 25
+				color: {
+					r: 1
+					g: 1
+					b: 1
+					a: 1
+				}
+				lightDistance: 5
+				x: 4.46702
+				y: 3.4430096
+			}
+		]
+	}
+}
+}

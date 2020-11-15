@@ -44,11 +44,9 @@ class LightMap {
 			ShaderProgram shader = shadowShader;
 			if (RayHandler.isDiffuse) {
 				shader = diffuseShader;
-				shader.begin();
 				rayHandler.diffuseBlendFunc.apply();
 				shader.setUniformf("ambient", c.r, c.g, c.b, c.a);
 			} else {
-				shader.begin();
 				rayHandler.shadowBlendFunc.apply();
 				shader.setUniformf("ambient", c.r * c.a, c.g * c.a,
 						c.b * c.a, 1f - c.a);
