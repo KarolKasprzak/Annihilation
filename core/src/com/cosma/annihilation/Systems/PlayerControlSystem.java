@@ -30,6 +30,8 @@ public class PlayerControlSystem extends IteratingSystem {
 
     private Entity noiseTestEntity;
 
+
+
     public PlayerControlSystem(World world, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.PLAYER_CONTROL_SYSTEM);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
@@ -52,7 +54,7 @@ public class PlayerControlSystem extends IteratingSystem {
         SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
         skeletonComponent.skeletonDirection = mouseCursorPosition;
 
-
+        playerComponent.currentHorizontalSpeed = playerBody.body.getLinearVelocity().x;
 
         if (entity.getComponent(PlayerComponent.class).numFootContacts >= 1) {
             playerComponent.onGround = true;

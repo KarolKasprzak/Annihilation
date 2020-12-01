@@ -2,7 +2,6 @@ package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +16,6 @@ import com.cosma.annihilation.Box2dLight.PointLight;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
-import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
@@ -29,6 +27,7 @@ import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
+import com.cosma.annihilation.Utils.ShootEngine;
 import com.esotericsoftware.spine.Bone;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -60,13 +59,13 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     private Vector2 raycastEnd;
     private Array<Entity> noiseTestEntityList;
     private Vector2 vector2temp = new Vector2();
-    private BitmapFont font;
-    private Camera camera;
     private OrthographicCamera worldCamera;
     private Viewport viewport;
     private int meleeBlowNumber = 1;
     private RayHandler rayHandler;
     private int weaponSpread = 0;
+    private boolean isMouseButtonPressed = false;
+    private ShootEngine shootEngine;
 
     public ShootingSystem(World world, RayHandler rayHandler, Batch batch, OrthographicCamera camera, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.SHOOTING_SYSTEM);
@@ -75,6 +74,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
         this.worldCamera = camera;
         this.viewport = viewport;
         this.rayHandler = rayHandler;
+
 
         bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
@@ -109,12 +109,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             } else targetEntity = null;
             return 1;
         };
-    }
-
-    @Override
-    public void addedToEngine(Engine engine) {
-        super.addedToEngine(engine);
-        camera = this.getEngine().getSystem(UserInterfaceSystem.class).getStage().getCamera();
     }
 
     @Override
@@ -158,7 +152,13 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             lArmTarget.setPosition(vector2temp.x, vector2temp.y);
         }
 
+        if(isMouseButtonPressed){
+
+        }
+
+
         skeletonComponent.skeleton.updateWorldTransform();
+
 
 
 //        if (!playerComponent.isWeaponHidden) {
@@ -179,6 +179,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     public void receive(Signal<GameEvent> signal, GameEvent event) {
         switch (event) {
             case ACTION_BUTTON_TOUCH_DOWN:
+                isMouseButtonPressed = true;
                 if (!playerComponent.isWeaponHidden) {
                     if (playerComponent.activeWeapon.getCategory() == ItemType.MELEE) {
                         meleeAttack();
@@ -189,12 +190,14 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                 }
                 break;
             case ACTION_BUTTON_TOUCH_UP:
+                isMouseButtonPressed = false;
                 stopShooting();
                 break;
             case WEAPON_TAKE_OUT:
                 playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
                 skeletonComponent.animationState.addEmptyAnimation(2, 0.3f, 0);
                 skeletonComponent.skeleton.setToSetupPose();
+                System.out.println("work");
                 break;
             case WEAPON_RELOAD:
                 weaponReload();
@@ -203,6 +206,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
     }
 
     private void weaponReload() {
+        playerComponent.canShoot = false;
         Item weapon = playerComponent.activeWeapon;
         boolean removeItem = false;
         Item itemToRemove = null;
@@ -230,6 +234,7 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
 
     private void weaponReloadAnimationPlay() {
         skeletonComponent.setSkeletonAnimation(false, playerComponent.activeWeapon.getReloadAnimation(), 4, false);
+        playerComponent.canShoot = false;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -237,7 +242,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                 skeletonComponent.animationState.setEmptyAnimation(4, 0.2f);
             }
         }, skeletonComponent.animationState.getCurrent(4).getAnimation().getDuration());
-
     }
 
     private void startShooting() {

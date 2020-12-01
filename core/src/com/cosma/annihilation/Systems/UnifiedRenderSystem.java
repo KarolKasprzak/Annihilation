@@ -43,6 +43,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
     private FrameBuffer diffuseMapFBO;
     private Matrix4 matrix;
     private ShapeRenderer debugRenderer;
+    private SkeletonRendererDebug skeletonRendererDebug;
 
     public UnifiedRenderSystem(SpriteBatch batch, OrthographicCamera camera, PolygonSpriteBatch polygonBatch, RayHandler rayHandler, GameMap gameMap) {
         super(Family.one(SkeletonComponent.class, TextureComponent.class).all(DrawOrderComponent.class).get(), new RenderComparator(), Constants.RENDER);
@@ -66,12 +67,11 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         normalMapRegion = new TextureRegion();
 
-        SkeletonRendererDebug debugRenderer = new SkeletonRendererDebug();
+        skeletonRendererDebug = new SkeletonRendererDebug();
 
-        debugRenderer.setBoundingBoxes(true);
-        debugRenderer.setRegionAttachments(false);
-        debugRenderer.setScale(0.01f);
-
+        skeletonRendererDebug.setBoundingBoxes(true);
+        skeletonRendererDebug.setRegionAttachments(true);
+        skeletonRendererDebug.setScale(0.01f);
 
         shaderData = new NormalMapShaderProvider(camera, rayHandler, gameMap);
     }
@@ -135,8 +135,14 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         batch.draw(diffuseTexture,-1, 1, 2, -2);
         batch.end();
 
-        rayHandler.setCombinedMatrix(camera);
-        rayHandler.updateAndRender();
+        rayHandler.update();
+//        rayHandler.setCombinedMatrix(camera);
+//        rayHandler.updateAndRender();
+
+//        SkeletonComponent skeletonComponent = getEngine().getPlayerEntity().getComponent(SkeletonComponent.class);
+//        skeletonRendererDebug.getShapeRenderer().setProjectionMatrix(camera.combined);
+//        skeletonRendererDebug.draw(skeletonComponent.skeleton);
+
 
 //        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //        for(Entity entity1: getEngine().getEntitiesFor(Family.all(SpriteComponent.class).get())){
@@ -219,19 +225,19 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         if (skeletonMapper.has(entity)) {
             SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, false, skeletonComponent.normalTexture);
+
         }
         //Runtime sprite render
         if (spriteMapper.has(entity)) {
             SpriteComponent spriteComponent = spriteMapper.get(entity);
-            Vector2 position = positionTmp.set(spriteComponent.x, spriteComponent.y);
-            TextureComponent textureComponent = textureMapper.get(entity);
-            position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
-            position.y = position.y - textureComponent.textureRegion.getRegionHeight() / Constants.PPM / 2;
             if(spriteComponent.drawDiffuse){
+                Vector2 position = positionTmp.set(spriteComponent.x, spriteComponent.y);
+                TextureComponent textureComponent = textureMapper.get(entity);
+                position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
+                position.y = position.y - textureComponent.textureRegion.getRegionHeight() / Constants.PPM / 2;
                 drawTexture(textureComponent, position, spriteComponent.angle, false);
             }
         }
-
     }
 
     private void assignNormalRegion(Texture normalTexture, TextureRegion textureRegion) {

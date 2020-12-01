@@ -82,6 +82,7 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_2
+				isHighlighted: true
 				x: 34.910843
 				y: 18.706205
 				width: 15.601433
@@ -106,6 +107,15 @@ objectMapLayer: {
 				height: 0.29895782
 				bodyType: StaticBody
 			}
+			{
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
+				name: Rectangle_5
+				x: 43.12607
+				y: 15.983365
+				width: 0.79166794
+				height: 0.927083
+				bodyType: StaticBody
+			}
 		]
 	}
 }
@@ -125,7 +135,7 @@ lightsMapLayer: {
 				lightDistance: 6.1
 				x: 38.582813
 				y: 18.241657
-				softLength: 0.20000014
+				softLength: 0.100000136
 				lightZPositionForShader: 0.07
 				lightFalloffDistance: 0.79999995
 				intensityForShader: 1.1500008
@@ -158,6 +168,7 @@ lightsMapLayer: {
 				lightDistance: 7
 				x: 43.175526
 				y: 18.014582
+				softLength: 0.20000014
 				lightZPositionForShader: 0.040000007
 			}
 		]

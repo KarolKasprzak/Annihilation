@@ -20,6 +20,7 @@ import com.cosma.annihilation.EntityEngine.core.EntityListener;
 import com.cosma.annihilation.EntityEngine.core.EntitySystem;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
+import com.cosma.annihilation.Utils.FxEntityCreator;
 import com.cosma.annihilation.Utils.StartStatus;
 import com.cosma.annihilation.Systems.*;
 import com.cosma.annihilation.Utils.Constants;
@@ -58,10 +59,11 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
         engine = new Engine(world, rayHandler, startStatus, camera);
         engine.addEntityListener(this);
+        FxEntityCreator fxEntityCreator = new FxEntityCreator(world);
 
         EntityFactory.getInstance().setEngine(engine);
         EntityFactory.getInstance().setWorld(world);
-        Signal<GameEvent> signal = new Signal<GameEvent>();
+
 
         ScriptManager scriptManager = new ScriptManager(engine, world);
         scriptManager.runScript("script_test");
@@ -72,7 +74,8 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new GateSystem());
         engine.addSystem(new UserInterfaceSystem(engine));
         engine.addSystem(new ActionSystem(camera, batch));
-        engine.addSystem(new ShootingSystem(world, rayHandler, batch, camera, viewport));
+//        engine.addSystem(new ShootingSystem(world,rayHandler,batch,camera,viewport));
+        engine.addSystem(new FightSystem(world, rayHandler, batch, viewport,fxEntityCreator));
         engine.addSystem(new ParallaxRenderSystem(batch,camera));
         engine.addSystem(new UnifiedRenderSystem(batch,camera,polygonSpriteBatch, rayHandler,engine.getCurrentMap()));
         engine.addSystem(new HealthSystem(camera));
@@ -84,10 +87,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new AiSystem(world, batch, camera));
         engine.addSystem(new ParticleRenderSystem(world, batch));
         engine.addEntityListener(this);
-
-        signal.add(getEngine().getSystem(ActionSystem.class));
-        signal.add(getEngine().getSystem(ShootingSystem.class));
-        signal.add(getEngine().getSystem(UserInterfaceSystem.class));
 
         CollisionManager collisionManager = new CollisionManager(engine);
         world.setContactListener(collisionManager);

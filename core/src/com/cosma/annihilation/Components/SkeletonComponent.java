@@ -6,7 +6,6 @@ import com.cosma.annihilation.EntityEngine.core.Component;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
 
-import java.security.PublicKey;
 
 public class SkeletonComponent implements Component {
     public int drawOrder = 1;
@@ -14,7 +13,7 @@ public class SkeletonComponent implements Component {
     public Texture diffuseTexture;
     public TextureAtlas diffuseTextureAtlas;
     public Texture normalTexture;
-    public SkeletonBounds bounds;
+//    public SkeletonBounds bounds;
     public AnimationState animationState;
     public Array<String> meleeAttackAnimations = new Array<>();
     public Array<String> deadAnimations = new Array<>();
@@ -24,6 +23,7 @@ public class SkeletonComponent implements Component {
 
     public void setSkeletonAnimation(boolean force, String animation, int track, boolean loop) {
         Animation newAnimation = animationState.getData().getSkeletonData().findAnimation(animation);
+
         AnimationState.TrackEntry current = animationState.getCurrent(track);
         Animation currentAnimation = current == null ? null : current.getAnimation();
         if (force || currentAnimation != newAnimation) {
@@ -41,7 +41,6 @@ public class SkeletonComponent implements Component {
 
     public void meleeIdle(){setSkeletonAnimation(false,"melee_idle",2,true);}
 
-    public void climbIdle(){setSkeletonAnimation(false,"climb_idle",0,true);}
 
     public void climbUp(){
 //        animationState.getData().setMix("walk","climb_up",0.1f);

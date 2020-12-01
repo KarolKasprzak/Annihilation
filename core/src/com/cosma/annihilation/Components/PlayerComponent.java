@@ -9,13 +9,11 @@ import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Items.Item;
 
-import java.util.ArrayList;
-
 public class PlayerComponent implements Component {
 
     public float velocity = 1.7f;
+    public float currentHorizontalSpeed = 0;
     public int numFootContacts = 0;
-    public boolean hide = false;
     public String mapName;
     public boolean jump = false;
 
@@ -47,4 +45,8 @@ public class PlayerComponent implements Component {
     public boolean canClimbDown = false;
     public boolean isPlayerCrouch = false;
     public boolean canUseWeapon = true;
+
+    public boolean isLeftMouseButtonPressed = false;
+    public boolean prepareWeapon = false;
+    public boolean reloadWeapon = false;
 }

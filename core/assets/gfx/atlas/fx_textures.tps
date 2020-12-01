@@ -74,7 +74,7 @@
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
-        <uint>1</uint>
+        <uint>6</uint>
         <key>webpQualityLevel</key>
         <uint>101</uint>
         <key>textureSubPath</key>
@@ -142,7 +142,7 @@
         <key>outputFormat</key>
         <enum type="SettingsBase::OutputFormat">RGBA8888</enum>
         <key>alphaHandling</key>
-        <enum type="SettingsBase::AlphaHandling">ClearTransparentPixels</enum>
+        <enum type="SettingsBase::AlphaHandling">KeepTransparentPixels</enum>
         <key>contentProtection</key>
         <struct type="ContentProtection">
             <key>key</key>
@@ -181,25 +181,27 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../sprite root/fx_textures/bullet_hole.png</key>
-            <key type="filename">../../sprite root/fx_textures/bullet_hole_n.png</key>
+            <key type="filename">fx_textures/bullet_hole.png</key>
+            <key type="filename">fx_textures/bullet_hole_n.png</key>
+            <key type="filename">fx_textures/bullet_shell.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>3,3,5,5</rect>
+                <rect>2,2,3,3</rect>
                 <key>scale9Paddings</key>
-                <rect>3,3,5,5</rect>
+                <rect>2,2,3,3</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../sprite root/fx_textures/bullet_hole.png</filename>
-            <filename>../../sprite root/fx_textures/bullet_hole_n.png</filename>
+            <filename>fx_textures/bullet_hole.png</filename>
+            <filename>fx_textures/bullet_shell.png</filename>
+            <filename>fx_textures/bullet_hole_n.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
@@ -216,7 +218,7 @@
         <key>autodetectNormalMaps</key>
         <false/>
         <key>normalMapFilter</key>
-        <string></string>
+        <string>_n</string>
         <key>normalMapSuffix</key>
         <string>_n</string>
         <key>normalMapSheetFileName</key>

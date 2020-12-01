@@ -26,6 +26,7 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private int ammoInClip;
     private int maxAmmoInClip;
     private float reloadTime;
+    /**from 0 to 1 */
     private float accuracy;
     private ItemType ammoType;
     private int hpRecovery;
@@ -36,8 +37,6 @@ public class Item extends Image implements Json.Serializable, Comparable<Item>{
     private String holdAnimation;
     private String reloadAnimation;
     private String shootAnimation;
-
-
 
     @Override
     public void write(Json json) {

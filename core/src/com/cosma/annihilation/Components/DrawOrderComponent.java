@@ -6,5 +6,5 @@ import com.cosma.annihilation.EntityEngine.core.Component;
  * Player = 5;
  */
 public class DrawOrderComponent implements Component {
-    public int drawOrder;
+    public int drawOrder =4;
 }

@@ -17,7 +17,7 @@ public class InputManager implements InputProcessor {
     public InputManager(Engine engine) {
         signal = new Signal<>();
         signal.add(engine.getSystem(ActionSystem.class));
-        signal.add(engine.getSystem(ShootingSystem.class));
+//        signal.add(engine.getSystem(ShootingSystem.class));
         signal.add(engine.getSystem(UserInterfaceSystem.class));
     }
 
@@ -37,6 +37,7 @@ public class InputManager implements InputProcessor {
         }
 
         if (keycode == Input.Keys.R && playerComponent.isPlayerControlEnable && !playerComponent.isWeaponHidden && playerComponent.onGround ) {
+            playerComponent.reloadWeapon = true;
             signal.dispatch(GameEvent.WEAPON_RELOAD);
         }
         if (keycode == Input.Keys.I || keycode == Input.Keys.ESCAPE) {
@@ -58,12 +59,15 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && playerComponent.isPlayerControlEnable) {
+
+        if (button == Input.Buttons.LEFT) {
             signal.dispatch(GameEvent.ACTION_BUTTON_TOUCH_DOWN);
             signal.dispatch(GameEvent.PERFORM_ACTION);
+            playerComponent.isLeftMouseButtonPressed = true;
         }
 
-        if (button == Input.Buttons.RIGHT && playerComponent.isPlayerControlEnable) {
+        if (button == Input.Buttons.RIGHT) {
+            playerComponent.prepareWeapon = true;
             signal.dispatch(GameEvent.WEAPON_TAKE_OUT);
         }
 
@@ -72,8 +76,9 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && playerComponent.isPlayerControlEnable) {
+        if (button == Input.Buttons.LEFT) {
             signal.dispatch(GameEvent.ACTION_BUTTON_TOUCH_UP);
+            playerComponent.isLeftMouseButtonPressed = false;
         }
         return false;
     }
