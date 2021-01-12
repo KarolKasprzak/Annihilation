@@ -1,9 +1,7 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -37,9 +35,10 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
     private PolygonSpriteBatch polygonBatch;
     private Vector2 positionTmp = new Vector2();
     private CustomSkeletonRender skeletonRenderer;
-    private NormalMapShaderProvider shaderData;
+    private ShaderProvider normalMapShader;
     private TextureRegion normalMapRegion;
     private FrameBuffer normalMapFBO;
+    private FrameBuffer finalFBO;
     private FrameBuffer diffuseMapFBO;
     private Matrix4 matrix;
     private ShapeRenderer debugRenderer;
@@ -63,8 +62,10 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 
         skeletonRenderer.setPremultipliedAlpha(false);
 
-        normalMapFBO = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGB565, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+
+        finalFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, false);
         normalMapRegion = new TextureRegion();
 
         skeletonRendererDebug = new SkeletonRendererDebug();
@@ -73,7 +74,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         skeletonRendererDebug.setRegionAttachments(true);
         skeletonRendererDebug.setScale(0.01f);
 
-        shaderData = new NormalMapShaderProvider(camera, rayHandler, gameMap);
+        normalMapShader = new ShaderProvider(camera, rayHandler, gameMap);
     }
 
     @Override
@@ -85,8 +86,9 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         polygonBatch.setProjectionMatrix(camera.combined);
 
         //normal
-
         normalMapFBO.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         polygonBatch.begin();
 
         //render normals for background (map)
@@ -99,15 +101,16 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
                 drawTextureRegion(sprite, true);
             }
         }
-        //render normals for entities, textures & sprites
-
-        firstPassUpdate(deltaTime);
+        super.firstPassUpdate(deltaTime);
         polygonBatch.flush();
         polygonBatch.end();
         normalMapFBO.end();
         Texture normalTexture = normalMapFBO.getColorBufferTexture();
+
         //diffuse
         diffuseMapFBO.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         polygonBatch.begin();
         for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
             positionTmp.set(sprite.getX(), sprite.getY());
@@ -119,25 +122,34 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         polygonBatch.end();
         diffuseMapFBO.end();
 
-        //
-
+        //final draw
         Texture diffuseTexture = diffuseMapFBO.getColorBufferTexture();
         diffuseTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         normalTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         batch.setProjectionMatrix(matrix);
-        batch.setShader(shaderData.getRenderShader());
+        batch.setShader(normalMapShader.getRenderShader());
         batch.begin();
-        shaderData.prepareData(false);
+        normalMapShader.prepareData(false);
         normalTexture.bind(1);
         diffuseTexture.bind(0);
+
+
 
         batch.draw(diffuseTexture,-1, 1, 2, -2);
         batch.end();
 
-        rayHandler.update();
-//        rayHandler.setCombinedMatrix(camera);
+        batch.setShader(null);
+
+
+//        rayHandler.update();
+        rayHandler.setCombinedMatrix(camera);
 //        rayHandler.updateAndRender();
+
+        polygonBatch.begin();
+        super.anotherUpdate(deltaTime);
+        polygonBatch.end();
+
 
 //        SkeletonComponent skeletonComponent = getEngine().getPlayerEntity().getComponent(SkeletonComponent.class);
 //        skeletonRendererDebug.getShapeRenderer().setProjectionMatrix(camera.combined);
@@ -152,7 +164,22 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 //        debugRenderer.end();
 
     }
-    //normals
+
+
+    @Override
+    public void anotherProcessEntity(Entity entity, float deltaTime) {
+        if (textureMapper.has(entity) && physicsMapper.has(entity)) {
+            TextureComponent textureComponent = textureMapper.get(entity);
+            if(textureComponent.renderAfterLight){
+                PhysicsComponent physicsComponent = physicsMapper.get(entity);
+                Vector2 position = physicsComponent.body.getPosition();
+                position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
+                position.y = position.y - textureComponent.textureRegion.getRegionHeight() / Constants.PPM / 2;
+                drawTexture(textureComponent, position, physicsComponent.body.getAngle() * MathUtils.radiansToDegrees, false);
+            }
+        }
+    }
+
     @Override
     public void firstPassProcessEntity(Entity entity, float deltaTime) {
         PhysicsComponent physicsComponent = physicsMapper.get(entity);
@@ -183,11 +210,12 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             if(skeletonComponent.skeletonDirection){
                 skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, true, skeletonComponent.normalTexture);
             }else{
-                polygonBatch.setShader(shaderData.getFlipShader());
+                polygonBatch.setShader(normalMapShader.getFlipShader());
                 skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, true, skeletonComponent.normalTexture);
                 polygonBatch.setShader(null);
             }
         }
+
         //sprite render
         if (spriteMapper.has(entity)) {
             SpriteComponent spriteComponent = spriteMapper.get(entity);
@@ -206,9 +234,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
                 }
             }
         }
-
     }
-    //diffuse
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         PhysicsComponent physicsComponent = physicsMapper.get(entity);
@@ -219,13 +245,11 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
             position.x = position.x - textureComponent.textureRegion.getRegionWidth() / Constants.PPM / 2;
             position.y = position.y - textureComponent.textureRegion.getRegionHeight() / Constants.PPM / 2;
             drawTexture(textureComponent, position, physicsComponent.body.getAngle() * MathUtils.radiansToDegrees, false);
-
         }
         //skeleton render
         if (skeletonMapper.has(entity)) {
             SkeletonComponent skeletonComponent = skeletonMapper.get(entity);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton, false, skeletonComponent.normalTexture);
-
         }
         //Runtime sprite render
         if (spriteMapper.has(entity)) {
@@ -267,7 +291,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         } else {
             region = textureComponent.textureRegion;
         }
-        polygonBatch.draw(region, position.x + (textureComponent.flipTexture ? textureComponent.textureRegion.getRegionWidth() / Constants.PPM : 0), position.y, (float) textureComponent.textureRegion.getRegionWidth() / 2, (float) textureComponent.textureRegion.getRegionHeight() / 2,
+        polygonBatch.draw(region, position.x + (textureComponent.flipTexture ? textureComponent.textureRegion.getRegionWidth() / Constants.PPM : 0), position.y, (textureComponent.textureRegion.getRegionWidth()/2)/Constants.PPM,  (textureComponent.textureRegion.getRegionHeight()/2)/Constants.PPM,
                 textureComponent.textureRegion.getRegionWidth() / Constants.PPM * (textureComponent.flipTexture ? -1 : 1), textureComponent.textureRegion.getRegionHeight() / Constants.PPM,
                 1, 1, angle);
     }

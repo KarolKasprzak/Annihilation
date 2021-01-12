@@ -6,7 +6,7 @@ import com.cosma.annihilation.Components.PlayerComponent;
 import com.cosma.annihilation.EntityEngine.core.Component;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.cosma.annihilation.Systems.ParticleRenderSystem;
+import com.cosma.annihilation.Systems.FxSystem;
 import com.cosma.annihilation.Utils.Enums.BodyID;
 
 public class CollisionManager implements ContactListener {
@@ -135,8 +135,9 @@ public class CollisionManager implements ContactListener {
     private void bulletCollision(Fixture bulletFixture,Fixture collidedFixture) {
         if (bulletFixture.getUserData() == BodyID.BULLET) {
             engine.removePhysicBody(bulletFixture.getBody());
+
 //            engine.getSystem(ParticleRenderSystem.class).spawnParticleEffect();
-            engine.getSystem(ParticleRenderSystem.class).spawnParticleEffect(bulletFixture.getBody().getPosition().x,bulletFixture.getBody().getPosition().y,collidedFixture.getBody());
+            engine.getSystem(FxSystem.class).spawnParticleEffect("gun_spark.p",bulletFixture.getBody().getPosition().x,bulletFixture.getBody().getPosition().y);
             engine.removeEntity((Entity) bulletFixture.getBody().getUserData());
         }
     }

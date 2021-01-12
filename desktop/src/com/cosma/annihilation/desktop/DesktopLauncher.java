@@ -40,9 +40,10 @@ public class DesktopLauncher {
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         config.title = "Annihilation";
         config.resizable = false;
-//		config.fullscreen = true;
+		config.fullscreen = true;
         config.vSyncEnabled = true;
-        config.samples = 0;
+        config.pauseWhenBackground = true;
+        config.samples = 3;
         config.width = screenSize.width/2;
         config.height = screenSize.height/2;
 

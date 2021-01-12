@@ -11,6 +11,7 @@ public class TextureComponent implements Component {
     public TextureRegion textureRegion;
     public boolean flipTexture = false;
     public boolean direction = false;
+    public boolean renderAfterLight = false;
 
     /**Use this when create texture component in runtime */
     public void setTextureRegion(TextureRegion textureRegion){

@@ -8,7 +8,7 @@
     entityName: target_practice.json
   }
   
-  BodyComponent: {
+  PhysicsComponent: {
     bodyType: DynamicBody
     positionX: 0
     positionY: 0

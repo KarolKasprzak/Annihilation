@@ -1,29 +1,21 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Box2dLight.PointLight;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
-import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Items.ItemType;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.FxEntityCreator;
 import com.cosma.annihilation.Utils.ShootEngine;
 import com.esotericsoftware.spine.Bone;
@@ -36,28 +28,15 @@ public class FightSystem extends IteratingSystem {
     private ComponentMapper<SkeletonComponent> skeletonMapper;
 
 
-    private PointLight weaponLight;
-    private int direction = 1;
-    private float weaponReloadTimer = 0;
-    private boolean isMeleeAttackFinish = true;
-    private Signal<GameEvent> signal;
-    private Vector2 raycastEnd;
-    private Array<Entity> noiseTestEntityList;
     private Vector2 vector2temp = new Vector2();
-    private OrthographicCamera worldCamera;
     private Viewport viewport;
-    private int meleeBlowNumber = 1;
-    private RayHandler rayHandler;
-    private int weaponSpread = 0;
-    private boolean isMouseButtonPressed = false;
     private ShootEngine shootEngine;
 
-    public FightSystem(World world, RayHandler rayHandler, Batch batch, Viewport viewport, FxEntityCreator fxEntityCreator) {
+    public FightSystem(World world, RayHandler rayHandler, Viewport viewport) {
         super(Family.all(PlayerComponent.class).get(), Constants.SHOOTING_SYSTEM);
         this.viewport = viewport;
-        this.rayHandler = rayHandler;
-
-        shootEngine = new ShootEngine(world, viewport,fxEntityCreator);
+        FxEntityCreator fxEntityCreator = new FxEntityCreator(world);
+        shootEngine = new ShootEngine(world, viewport,fxEntityCreator,rayHandler);
         bodyMapper = ComponentMapper.getFor(PhysicsComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         playerDateMapper = ComponentMapper.getFor(PlayerInventoryComponent.class);
@@ -95,14 +74,9 @@ public class FightSystem extends IteratingSystem {
         vector2temp.set(root.worldToLocal(vector2temp));
         bodyTarget.setPosition(vector2temp.x, vector2temp.y);
 
-
-
-
-
         if (playerComponent.prepareWeapon && playerComponent.isPlayerControlEnable) {
             playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
             if (!playerComponent.isWeaponHidden) {
-                Annihilation.setWeaponCursor();
                 skeletonComponent.setSkeletonAnimation(false, playerComponent.activeWeapon.getHoldAnimation(), 2, true);
             } else {
                 Annihilation.setArrowCursor();
@@ -122,7 +96,6 @@ public class FightSystem extends IteratingSystem {
                 }
         }
 
-
         if (!playerComponent.isWeaponHidden && playerComponent.canShoot) {
             Annihilation.setWeaponCursor();
             skeletonComponent.setSkeletonAnimation(false, playerComponent.activeWeapon.getHoldAnimation(), 2, true);
@@ -130,8 +103,6 @@ public class FightSystem extends IteratingSystem {
             Bone lArmTarget = skeletonComponent.skeleton.findBone("l_hand_target");
             Bone flash = skeletonComponent.skeleton.findBone("flash");
             Bone grip = skeletonComponent.skeleton.findBone("grip");
-//            vector2temp.set(root.worldToLocal(vector2temp));
-//            vector2temp.y = MathUtils.clamp(vector2temp.y,skeletonComponent.skeleton.getY()+0.3f,skeletonComponent.skeleton.getY()+1.8f);
             rArmTarget.setPosition(vector2temp.x, vector2temp.y);
             vector2temp.set(grip.getWorldX(), grip.getWorldY());
             vector2temp.set(root.worldToLocal(vector2temp));
@@ -153,14 +124,6 @@ public class FightSystem extends IteratingSystem {
 //        }
     }
 
-    void playAnimation(Animation animation, float animationTime) {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                weaponLight.setActive(false);
-            }
-        }, animationTime);
-    }
 }
 
 

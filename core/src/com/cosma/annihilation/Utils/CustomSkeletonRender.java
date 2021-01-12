@@ -18,7 +18,6 @@ import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
 import com.esotericsoftware.spine.attachments.SkeletonAttachment;
 import com.esotericsoftware.spine.utils.SkeletonClipping;
-import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
 public class CustomSkeletonRender {
     static private final short[] quadTriangles = {0, 1, 2, 2, 3, 0};

@@ -12,7 +12,7 @@ import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 
 import java.util.Arrays;
 
-public class NormalMapShaderProvider {
+public class ShaderProvider {
 
     private Vector3 lightPosition = new Vector3();
     private float[] lightPositionArray = new float[21];
@@ -24,23 +24,24 @@ public class NormalMapShaderProvider {
     private OrthographicCamera camera;
     private RayHandler rayHandler;
     private GameMap gameMap;
-    private ShaderProgram shader;
+    private ShaderProgram renderShader;
     private ShaderProgram flipShader;
 
 
 
-    public NormalMapShaderProvider(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
+    public ShaderProvider(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
         this.gameMap = gameMap;
         this.camera = camera;
         this.rayHandler = rayHandler;
         ShaderProgram.pedantic = false;
-        shader = new ShaderProgram(Gdx.files.internal("shaders/normalMap/ver.glsl").readString(), Gdx.files.internal("shaders/normalMap/frag.glsl").readString());
-        if (!shader.isCompiled())
-            throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
-        shader.begin();
-        shader.setUniformi("u_texture", 0);
-        shader.setUniformi("u_normals", 1);
-        shader.end();
+        renderShader = new ShaderProgram(Gdx.files.internal("shaders/normalMap/ver.glsl").readString(), Gdx.files.internal("shaders/normalMap/frag.glsl").readString());
+        if (!renderShader.isCompiled())
+            throw new IllegalArgumentException("Error compiling shader: " + renderShader.getLog());
+        renderShader.begin();
+        renderShader.setUniformi("u_texture", 0);
+        renderShader.setUniformi("u_normals", 1);
+        renderShader.setUniformi("u_lights", 2);
+        renderShader.end();
         flipShader = createFlipShader();
 
     }
@@ -50,7 +51,7 @@ public class NormalMapShaderProvider {
     }
 
     public ShaderProgram getRenderShader() {
-        return shader;
+        return renderShader;
     }
 
     public ShaderProgram getFlipShader() {return flipShader;}
@@ -131,28 +132,28 @@ public class NormalMapShaderProvider {
             }
         }
         if(activeLights.size < 7){
-            shader.setUniformi("arraySize",activeLights.size);
+            renderShader.setUniformi("arraySize",activeLights.size);
         }else{
-            shader.setUniformi("arraySize",7);
+            renderShader.setUniformi("arraySize",7);
         }
 
-        shader.setUniform1fv("intensityArray",intensityArray,0,7);
-        shader.setUniform1fv("distanceArray",distanceArray,0,7);
+        renderShader.setUniform1fv("intensityArray",intensityArray,0,7);
+        renderShader.setUniform1fv("distanceArray",distanceArray,0,7);
 
-        shader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
-        shader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
+        renderShader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
+        renderShader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
 
         if(flipX){
-            shader.setUniformi("xInvert", 1);
+            renderShader.setUniformi("xInvert", 1);
         }else{
-            shader.setUniformi("xInvert", 0);
+            renderShader.setUniformi("xInvert", 0);
         }
 
-        shader.setUniformi("yInvert", 0);
-        shader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        renderShader.setUniformi("yInvert", 0);
+        renderShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();
 
-        shader.setUniformf("ambientColor", color.r, color.g, color.b,gameMap.getLightsMapLayer().getShaderAmbientLightIntensity());
+        renderShader.setUniformf("ambientColor", 0.2f, 0.2f,0.2f,0.2f);
 
 
 

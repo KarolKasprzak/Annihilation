@@ -74,7 +74,7 @@
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
-        <uint>6</uint>
+        <uint>1</uint>
         <key>webpQualityLevel</key>
         <uint>101</uint>
         <key>textureSubPath</key>
@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>fx_textures.atlas</filename>
+                <filename>lights.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -149,7 +149,7 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <false/>
+        <true/>
         <key>trimSpriteNames</key>
         <false/>
         <key>prependSmartFolderName</key>
@@ -181,26 +181,23 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">fx_textures/black.png</key>
-            <key type="filename">fx_textures/bullet_hole.png</key>
-            <key type="filename">fx_textures/bullet_hole_n.png</key>
-            <key type="filename">fx_textures/bullet_shell.png</key>
+            <key type="filename">../../sprite root/lights/light_test.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>2,2,3,3</rect>
+                <rect>16,16,32,32</rect>
                 <key>scale9Paddings</key>
-                <rect>2,2,3,3</rect>
+                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>fx_textures</filename>
+            <filename>../../sprite root/lights/light_test.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
@@ -213,13 +210,13 @@
         <key>commonDivisorY</key>
         <uint>1</uint>
         <key>packNormalMaps</key>
-        <true/>
-        <key>autodetectNormalMaps</key>
         <false/>
+        <key>autodetectNormalMaps</key>
+        <true/>
         <key>normalMapFilter</key>
-        <string>_n</string>
+        <string></string>
         <key>normalMapSuffix</key>
-        <string>_n</string>
+        <string></string>
         <key>normalMapSheetFileName</key>
         <filename></filename>
         <key>exporterProperties</key>

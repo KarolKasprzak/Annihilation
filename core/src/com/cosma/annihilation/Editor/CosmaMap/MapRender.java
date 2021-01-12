@@ -3,6 +3,7 @@ package com.cosma.annihilation.Editor.CosmaMap;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,6 +14,7 @@ import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.ActionComponent;
 import com.cosma.annihilation.Components.ParallaxComponent;
 import com.cosma.annihilation.Components.PhysicsComponent;
+import com.cosma.annihilation.Components.SkeletonComponent;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapConeLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapLight;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight;
@@ -20,7 +22,8 @@ import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapMaterialObjec
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.NormalMapShaderProvider;
+import com.cosma.annihilation.Utils.ShaderProvider;
+import com.esotericsoftware.spine.SkeletonRenderer;
 
 
 public class MapRender {
@@ -31,19 +34,22 @@ public class MapRender {
     private SpriteBatch batch;
     private TextureAtlas iconPack;
     private Vector2 position = new Vector2();
-    private NormalMapShaderProvider shaderData;
+    private ShaderProvider shaderData;
+    private PolygonSpriteBatch polygonSpriteBatch;
+    private SkeletonRenderer skeletonRenderer;
+    private OrthographicCamera camera;
 
     public MapRender(ShapeRenderer renderer, GameMap gameMap, SpriteBatch batch, RayHandler rayHandler, OrthographicCamera camera) {
-
+        this.camera = camera;
         this.batch = batch;
         this.gameMap = gameMap;
         this.scale = gameMap.getTileSize();
         this.renderer = renderer;
+        polygonSpriteBatch = new PolygonSpriteBatch();
+        skeletonRenderer = new SkeletonRenderer();
         iconPack = Annihilation.getAssets().get("gfx/atlas/editor_icon.atlas", TextureAtlas.class);
 
-
-
-        shaderData = new NormalMapShaderProvider(camera,rayHandler,gameMap);
+        shaderData = new ShaderProvider(camera,rayHandler,gameMap);
     }
 
     public void renderGrid() {
@@ -102,7 +108,6 @@ public class MapRender {
         batch.begin();
 
         //render entity
-
         renderer.begin();
         renderer.set(ShapeRenderer.ShapeType.Line);
         for (Entity entity : gameMap.getEntityArrayList()) {
@@ -121,6 +126,8 @@ public class MapRender {
             }
         }
         renderer.end();
+
+
 
 
         //render lights
@@ -147,6 +154,7 @@ public class MapRender {
 
         batch.end();
 
+
         renderer.begin();
         renderer.set(ShapeRenderer.ShapeType.Filled);
         if (gameMap.getObjectMapLayer().isLayerVisible() && debugRender) {
@@ -169,5 +177,22 @@ public class MapRender {
             }
         }
         renderer.end();
+        polygonSpriteBatch.setProjectionMatrix(camera.combined);
+        polygonSpriteBatch.begin();
+        for(Entity entity: gameMap.getEntityArrayList()){
+            if(entity.hasComponent(SkeletonComponent.class)){
+                SkeletonComponent skeletonComponent = entity.getComponent(SkeletonComponent.class);
+                PhysicsComponent physicsComponent = entity.getComponent(PhysicsComponent.class);
+                skeletonComponent.setSkeletonAnimation(true,"idle",0,true);
+                skeletonComponent.animationState.update(delta);
+                skeletonComponent.skeleton.updateWorldTransform();
+
+                skeletonComponent.skeleton.setPosition(physicsComponent.body.getPosition().x, physicsComponent.body.getPosition().y - (physicsComponent.height / 2));
+                skeletonComponent.animationState.apply(skeletonComponent.skeleton);
+                skeletonRenderer.draw(polygonSpriteBatch,skeletonComponent.skeleton);
+            }
+        }
+        polygonSpriteBatch.end();
+
     }
 }

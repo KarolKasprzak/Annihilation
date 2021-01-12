@@ -29,6 +29,7 @@ import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
 import com.cosma.annihilation.Utils.ShootEngine;
 import com.esotericsoftware.spine.Bone;
+import com.esotericsoftware.spine.attachments.RegionAttachment;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -197,7 +198,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
                 playerComponent.isWeaponHidden = !playerComponent.isWeaponHidden;
                 skeletonComponent.animationState.addEmptyAnimation(2, 0.3f, 0);
                 skeletonComponent.skeleton.setToSetupPose();
-                System.out.println("work");
                 break;
             case WEAPON_RELOAD:
                 weaponReload();
@@ -520,7 +520,6 @@ public class ShootingSystem extends IteratingSystem implements Listener<GameEven
             }
         }
     }
-
 
     void playAnimation(Animation animation, float animationTime) {
         Timer.schedule(new Timer.Task() {

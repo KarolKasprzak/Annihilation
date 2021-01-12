@@ -1,16 +1,13 @@
 package com.cosma.annihilation.Components;
 
+
 import com.cosma.annihilation.EntityEngine.core.Component;
-import com.badlogic.gdx.utils.Pool;
 
-public class BulletComponent implements Component, Pool.Poolable {
-
+public class BulletComponent implements Component {
+    public float targetX;
+    public float targetY;
     public int dmg = 0;
     public boolean isBulletHit = false;
-
-    @Override
-    public void reset() {
-    dmg = 0;
-    isBulletHit = false;
-    }
 }
+
+

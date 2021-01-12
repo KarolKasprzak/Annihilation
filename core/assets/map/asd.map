@@ -43,7 +43,7 @@ entityList: [
 ]
 materialList: [
 	{
-		dimensions: "39.021038,16.051262,3.198944,2.572918"
+		dimensions: "39.013744,16.073137,4.854954,2.572918"
 		material: CONCRETE
 	}
 ]
@@ -73,8 +73,8 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_1
-				x: 26.606548
-				y: 15.545685
+				x: 26.616966
+				y: 15.569122
 				width: 26.043224
 				height: 0.46510506
 				bodyType: StaticBody
@@ -92,6 +92,7 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_3
+				isHighlighted: true
 				x: 26.72955
 				y: 18.709408
 				width: 9.024998
@@ -110,8 +111,8 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_5
-				x: 43.12607
-				y: 15.983365
+				x: 41.698982
+				y: 16.03545
 				width: 0.79166794
 				height: 0.927083
 				bodyType: StaticBody

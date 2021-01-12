@@ -3,7 +3,6 @@ package com.cosma.annihilation.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.cosma.annihilation.Box2dLight.RayHandler;
+import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.Entities.EntityFactory;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
@@ -20,12 +20,10 @@ import com.cosma.annihilation.EntityEngine.core.EntityListener;
 import com.cosma.annihilation.EntityEngine.core.EntitySystem;
 import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
-import com.cosma.annihilation.Utils.FxEntityCreator;
 import com.cosma.annihilation.Utils.StartStatus;
 import com.cosma.annihilation.Systems.*;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
-import com.cosma.annihilation.Utils.LuaScript.ScriptManager;
 import com.cosma.annihilation.Utils.StateManager;
 
 public class WorldBuilder implements Disposable, EntityListener, Listener<GameEvent> {
@@ -52,21 +50,17 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         //Box2d world & light handler
         world = new World(new Vector2(Constants.WORLD_GRAVITY), true);
         RayHandler.useDiffuseLight(true);
-        RayHandler rayHandler = new RayHandler(world, Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/10);
+        RayHandler rayHandler = new RayHandler(world, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        rayHandler.render();
         rayHandler.setBlur(true);
-        rayHandler.setBlurNum(1);
+        rayHandler.setBlurNum(3);
         rayHandler.setShadows(true);
 
         engine = new Engine(world, rayHandler, startStatus, camera);
         engine.addEntityListener(this);
-        FxEntityCreator fxEntityCreator = new FxEntityCreator(world);
 
         EntityFactory.getInstance().setEngine(engine);
         EntityFactory.getInstance().setWorld(world);
-
-
-        ScriptManager scriptManager = new ScriptManager(engine, world);
-        scriptManager.runScript("script_test");
 
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -74,8 +68,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new GateSystem());
         engine.addSystem(new UserInterfaceSystem(engine));
         engine.addSystem(new ActionSystem(camera, batch));
-//        engine.addSystem(new ShootingSystem(world,rayHandler,batch,camera,viewport));
-        engine.addSystem(new FightSystem(world, rayHandler, batch, viewport,fxEntityCreator));
+        engine.addSystem(new FightSystem(world, rayHandler, viewport));
         engine.addSystem(new ParallaxRenderSystem(batch,camera));
         engine.addSystem(new UnifiedRenderSystem(batch,camera,polygonSpriteBatch, rayHandler,engine.getCurrentMap()));
         engine.addSystem(new HealthSystem(camera));
@@ -85,7 +78,8 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new DebugRenderSystem(camera, world));
         engine.addSystem(new AiSystem(world, batch, camera));
-        engine.addSystem(new ParticleRenderSystem(world, batch));
+        engine.addSystem(new FxSystem(world, batch));
+        engine.addSystem(new LifeTimeSystem());
         engine.addEntityListener(this);
 
         CollisionManager collisionManager = new CollisionManager(engine);
@@ -96,8 +90,6 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     }
 
     public void update(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         debugInput();
         engine.removeAllBodies();
         engine.update(delta);
@@ -109,7 +101,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         viewport.update(w, h, false);
 
         engine.getSystem(UserInterfaceSystem.class).resizeHUD(w, h);
-//        rayHandler.getLightMapTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
     }
 
     public OrthographicCamera getCamera() {
@@ -123,12 +115,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(1, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) camera.zoom = camera.zoom + 0.1f;
         if (Gdx.input.isKeyPressed(Input.Keys.X)) camera.zoom = camera.zoom - 0.1f;
-        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.V)) {
             StateManager.debugMode = !StateManager.debugMode;
         }
-
         camera.update();
     }
 
@@ -235,6 +224,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
 
     @Override
     public void entityRemoved(Entity entity) {
+        if(entity.hasComponent(PhysicsComponent.class)){
+            engine.removePhysicBody(entity.getComponent(PhysicsComponent.class).body);
+        }
     }
 
     @Override

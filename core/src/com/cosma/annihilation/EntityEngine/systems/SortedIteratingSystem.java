@@ -99,6 +99,14 @@ public abstract class SortedIteratingSystem extends EntitySystem implements Enti
             firstPassProcessEntity(sortedEntities.get(i), deltaTime);
         }
     }
+
+    public void anotherUpdate(float deltaTime){
+        sort();
+        for (int i = 0; i < sortedEntities.size; ++i) {
+            anotherProcessEntity(sortedEntities.get(i), deltaTime);
+        }
+    }
+
     
 
     @Override
@@ -134,5 +142,7 @@ public abstract class SortedIteratingSystem extends EntitySystem implements Enti
     protected abstract void processEntity (Entity entity, float deltaTime);
 
     public void firstPassProcessEntity(Entity entity, float deltaTime){};
+
+    public void anotherProcessEntity(Entity entity, float deltaTime){};
     
 }

@@ -19,7 +19,7 @@ import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.systems.SortedIteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.NormalMapShaderProvider;
+import com.cosma.annihilation.Utils.ShaderProvider;
 import com.cosma.annihilation.Utils.RenderComparator;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.SkeletonRendererDebug;
@@ -38,7 +38,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
     private Vector2 positionTmp = new Vector2();
     private SkeletonRenderer skeletonRenderer;
     private SkeletonRendererDebug debugRenderer;
-    private NormalMapShaderProvider shaderData;
+    private ShaderProvider shaderData;
     private FrameBuffer normalMapFBO;
     private FrameBuffer diffuseMapFBO;
 
@@ -63,7 +63,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
         debugRenderer.setRegionAttachments(true);
         debugRenderer.setScale(0.01f);
 
-        shaderData = new NormalMapShaderProvider(camera, rayHandler, gameMap);
+        shaderData = new ShaderProvider(camera, rayHandler, gameMap);
     }
 
 
