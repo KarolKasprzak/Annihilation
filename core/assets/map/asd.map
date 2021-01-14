@@ -167,8 +167,8 @@ lightsMapLayer: {
 					a: 1
 				}
 				lightDistance: 7
-				x: 43.175526
-				y: 18.014582
+				x: 42.21094
+				y: 18.252083
 				softLength: 0.20000014
 				lightZPositionForShader: 0.040000007
 			}

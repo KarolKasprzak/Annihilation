@@ -2,6 +2,7 @@ package com.cosma.annihilation.Box2dLight;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.utils.Disposable;
+import com.cosma.annihilation.Annihilation;
 
 /**
  * Light is data container for all the light parameters. When created lights
@@ -26,9 +28,6 @@ public abstract class Light implements Disposable {
 	static final Color DefaultColor = new Color(0.75f, 0.75f, 0.5f, 0.75f);
 	static final float zeroColorBits = Color.toFloatBits(0f, 0f, 0f, 0f);
 	static final int MIN_RAYS = 3;
-
-
-
 
 	protected final Color color = new Color();
 	protected final Vector2 tmpPosition = new Vector2();

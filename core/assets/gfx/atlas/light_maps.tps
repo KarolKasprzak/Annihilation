@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>lights.atlas</filename>
+                <filename>light_maps.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>

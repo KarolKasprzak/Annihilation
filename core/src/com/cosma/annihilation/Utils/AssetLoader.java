@@ -147,6 +147,7 @@ public class AssetLoader {
         manager.finishLoading();
 
         manager.getAll(TextureAtlas.class, atlasList);
+
         System.out.println("Loaded!");
     }
 

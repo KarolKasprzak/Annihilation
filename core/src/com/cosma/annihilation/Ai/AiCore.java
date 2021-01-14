@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.cosma.annihilation.Utils.Animation.AnimationStates;
 import com.cosma.annihilation.Utils.Util;
 
 /**
@@ -145,7 +144,7 @@ public abstract class AiCore {
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
         Body aiBody = entity.getComponent(PhysicsComponent.class).body;
         Vector2 aiPosition = aiBody.getPosition();
-        animationComponent.animationState = AnimationStates.WALK;
+
         if (Util.roundFloat(targetPosition.x, 1) != Util.roundFloat(aiPosition.x, 1)) {
             if (targetPosition.x < aiPosition.x) {
                 aiBody.setLinearVelocity(new Vector2(-1, 0));
@@ -161,7 +160,7 @@ public abstract class AiCore {
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
         Body aiBody = entity.getComponent(PhysicsComponent.class).body;
         Vector2 aiPosition = aiBody.getPosition();
-        animationComponent.animationState = AnimationStates.WALK;
+
         if (Util.roundFloat(positionX, 1) != Util.roundFloat(aiPosition.x, 1)) {
             if (positionX < aiPosition.x) {
                 aiBody.setLinearVelocity(new Vector2(-1, 0));
@@ -186,15 +185,8 @@ public abstract class AiCore {
             }
             isBusy = true;
             animationComponent.time = 0;
-            animationComponent.animationState = AnimationStates.NPC_SHOOT;
-            float animationTimer = animationComponent.animationMap.get(AnimationStates.NPC_SHOOT.toString()).getAnimationDuration();
 
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    isBusy = false;
-                }
-            }, animationTimer + 0.3f);
+
             targetEntity = null;
             Sound sound = Annihilation.getAssets().get("sfx/cg1.wav");
             sound.play();

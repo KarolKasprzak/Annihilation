@@ -85,11 +85,6 @@ public class GameEntitySerializer implements Json.Serializer<Entity>  {
                  continue;
              }
 
-             if (component instanceof AnimationComponent) {
-                 json.writeValue("id",((AnimationComponent) component).animationId.name());
-                 continue;
-             }
-
              if (component instanceof ContainerComponent) {
                  saveItemArray(json,((ContainerComponent) component).itemList,"itemList");
                  continue;

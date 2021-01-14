@@ -34,7 +34,7 @@ public class ShaderProvider {
         this.camera = camera;
         this.rayHandler = rayHandler;
         ShaderProgram.pedantic = false;
-        renderShader = new ShaderProgram(Gdx.files.internal("shaders/normalMap/ver.glsl").readString(), Gdx.files.internal("shaders/normalMap/frag.glsl").readString());
+        renderShader = new ShaderProgram(Gdx.files.internal("shaders/render/ver.glsl").readString(), Gdx.files.internal("shaders/render/frag.glsl").readString());
         if (!renderShader.isCompiled())
             throw new IllegalArgumentException("Error compiling shader: " + renderShader.getLog());
         renderShader.begin();

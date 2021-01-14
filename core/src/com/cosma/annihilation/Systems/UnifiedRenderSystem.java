@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Box2dLight.PointLight;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.AnimatedSprite;
@@ -38,7 +40,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
     private ShaderProvider normalMapShader;
     private TextureRegion normalMapRegion;
     private FrameBuffer normalMapFBO;
-    private FrameBuffer finalFBO;
+    private FrameBuffer lightFBO;
     private FrameBuffer diffuseMapFBO;
     private Matrix4 matrix;
     private ShapeRenderer debugRenderer;
@@ -65,7 +67,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
-        finalFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, false);
+        lightFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
         normalMapRegion = new TextureRegion();
 
         skeletonRendererDebug = new SkeletonRendererDebug();
@@ -98,14 +100,14 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
                 ((AnimatedSprite) sprite).updateAnimation(deltaTime);
             }
             if (sprite.getNormalTexture() != null) {
-                drawTextureRegion(sprite, true);
+                drawSprite(sprite, true);
             }
         }
         super.firstPassUpdate(deltaTime);
         polygonBatch.flush();
         polygonBatch.end();
         normalMapFBO.end();
-        Texture normalTexture = normalMapFBO.getColorBufferTexture();
+
 
         //diffuse
         diffuseMapFBO.begin();
@@ -115,15 +117,37 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
             positionTmp.set(sprite.getX(), sprite.getY());
             if (sprite.getNormalTexture() != null) {
-                drawTextureRegion(sprite, false);
+                drawSprite(sprite, false);
             }
         }
         super.update(deltaTime);
+
         polygonBatch.end();
         diffuseMapFBO.end();
 
+        //lights
+        lightFBO.begin();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        polygonBatch.begin();
+
+        for(Light light: rayHandler.getLightList()){
+            if(light instanceof PointLight){
+                TextureRegion region = ((PointLight) light).getLightMap();
+                polygonBatch.draw(region, light.getX()-(region.getRegionWidth()/2/Constants.PPM),light.getY()-(region.getRegionHeight()/2/Constants.PPM), (region.getRegionWidth()/2)/Constants.PPM,  (region.getRegionHeight()/2)/Constants.PPM,
+                        region.getRegionWidth() / Constants.PPM, region.getRegionHeight() / Constants.PPM,
+                        1, 1, 0);
+            }
+        }
+        polygonBatch.end();
+        lightFBO.end();
+
+
         //final draw
         Texture diffuseTexture = diffuseMapFBO.getColorBufferTexture();
+       Texture lightMap = lightFBO.getColorBufferTexture();
+        Texture normalTexture = normalMapFBO.getColorBufferTexture();
+        lightMap.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         diffuseTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         normalTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
@@ -131,23 +155,28 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         batch.setShader(normalMapShader.getRenderShader());
         batch.begin();
         normalMapShader.prepareData(false);
+
+        lightMap.bind(2);
         normalTexture.bind(1);
         diffuseTexture.bind(0);
 
 
 
+
+
         batch.draw(diffuseTexture,-1, 1, 2, -2);
         batch.end();
-
         batch.setShader(null);
 
 
+
+
 //        rayHandler.update();
-        rayHandler.setCombinedMatrix(camera);
+//        rayHandler.setCombinedMatrix(camera);
 //        rayHandler.updateAndRender();
 
         polygonBatch.begin();
-        super.anotherUpdate(deltaTime);
+        super.afterLightUpdate(deltaTime);
         polygonBatch.end();
 
 
@@ -269,7 +298,7 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         normalMapRegion.setRegion(textureRegion.getRegionX(), textureRegion.getRegionY(), textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
     }
 
-    private void drawTextureRegion(Sprite sprite, boolean drawNormal) {
+    private void drawSprite(Sprite sprite, boolean drawNormal) {
         TextureRegion region;
         if (drawNormal) {
             assignNormalRegion(sprite.getNormalTexture(), sprite.getTextureRegion());

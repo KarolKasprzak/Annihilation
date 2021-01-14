@@ -1,12 +1,12 @@
-lights.png
-size: 66, 66
+light_maps.png
+size: 194, 194
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 light_test
   rotate: false
   xy: 1, 1
-  size: 64, 64
-  orig: 64, 64
+  size: 192, 192
+  orig: 192, 192
   offset: 0, 0
   index: -1

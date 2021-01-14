@@ -1,7 +1,9 @@
 package com.cosma.annihilation.Box2dLight;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.cosma.annihilation.Annihilation;
 
 /**
  * Light shaped as a circle with given radius
@@ -11,7 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
  * @author kalle_h
  */
 public class PointLight extends PositionalLight {
-
+	private TextureRegion lightMap;
 	/**
 	 * Creates light shaped as a circle with default radius (15f), color and
 	 * position (0f, 0f)
@@ -24,8 +26,13 @@ public class PointLight extends PositionalLight {
 	 */
 	public PointLight(RayHandler rayHandler, int rays) {
 		this(rayHandler, rays, Light.DefaultColor, 15f, 0f, 0f);
+		lightMap = Annihilation.getTextureRegion("light_maps", "light_test");
 	}
-	
+
+	public TextureRegion getLightMap() {
+		return lightMap;
+	}
+
 	/**
 	 * Creates light shaped as a circle with given radius
 	 * 
@@ -46,8 +53,15 @@ public class PointLight extends PositionalLight {
 	public PointLight(RayHandler rayHandler, int rays, Color color,
 			float distance, float x, float y) {
 		super(rayHandler, rays, color, distance, x, y, 0f);
+
+		lightMap = Annihilation.getTextureRegion("light_maps", "light_test");
+
 	}
-	
+
+	public void setLightMap(TextureRegion lightMap) {
+		this.lightMap = lightMap;
+	}
+
 	@Override
 	public void update () {
 		updateBody();

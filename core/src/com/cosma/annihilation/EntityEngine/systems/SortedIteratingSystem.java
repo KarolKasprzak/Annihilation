@@ -100,7 +100,7 @@ public abstract class SortedIteratingSystem extends EntitySystem implements Enti
         }
     }
 
-    public void anotherUpdate(float deltaTime){
+    public void afterLightUpdate(float deltaTime){
         sort();
         for (int i = 0; i < sortedEntities.size; ++i) {
             anotherProcessEntity(sortedEntities.get(i), deltaTime);

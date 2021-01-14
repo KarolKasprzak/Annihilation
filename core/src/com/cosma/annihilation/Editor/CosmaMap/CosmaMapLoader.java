@@ -1,6 +1,8 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.ConeLight;
 import com.cosma.annihilation.Box2dLight.DirectionalLight;
 import com.cosma.annihilation.Box2dLight.PointLight;

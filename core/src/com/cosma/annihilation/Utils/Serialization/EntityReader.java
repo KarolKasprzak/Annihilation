@@ -12,7 +12,6 @@ import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.EntityEngine.core.Engine;
 import com.cosma.annihilation.EntityEngine.core.Entity;
-import com.cosma.annihilation.Utils.Animation.AnimationFactory;
 import com.cosma.annihilation.Utils.CollisionID;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.BodyID;
@@ -23,7 +22,7 @@ import com.esotericsoftware.spine.*;
 public class EntityReader implements Json.Serializer<Entity> {
     private World world;
     private Engine engine;
-    private AnimationFactory animationFactory;
+
 
     /**
      * use in game
@@ -31,7 +30,6 @@ public class EntityReader implements Json.Serializer<Entity> {
     EntityReader(World world, Engine engine) {
         this.world = world;
         this.engine = engine;
-        animationFactory = new AnimationFactory();
     }
 
     /**
@@ -40,7 +38,7 @@ public class EntityReader implements Json.Serializer<Entity> {
     public EntityReader(World world) {
         this.world = world;
         this.engine = null;
-        animationFactory = new AnimationFactory();
+
     }
 
 
@@ -310,12 +308,6 @@ public class EntityReader implements Json.Serializer<Entity> {
             entity.add(playerComponent);
         }
 
-        if (jsonData.has("AnimationComponent")) {
-            AnimationComponent animationComponent = new AnimationComponent();
-            animationComponent.animationId = AnimationFactory.AnimationId.valueOf(jsonData.get("AnimationComponent").getString("id"));
-            animationComponent.animationMap = animationFactory.createAnimationMap(animationComponent.animationId);
-            entity.add(animationComponent);
-        }
 
         if (jsonData.has("PlayerInventoryComponent")) {
             PlayerInventoryComponent playerInventoryComponent = new PlayerInventoryComponent();
