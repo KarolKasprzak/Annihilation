@@ -40,8 +40,8 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     public WorldBuilder(StartStatus startStatus, InputMultiplexer inputMultiplexer) {
 
         //Game camera
-        camera = new OrthographicCamera(10,6);
-        viewport = new ExtendViewport(10, 5,camera);
+        camera = new OrthographicCamera();
+        viewport = new ExtendViewport(10, 6,camera);
 
         viewport.apply(true);
 //        batch = new SpriteBatch();
@@ -70,7 +70,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         engine.addSystem(new ActionSystem(camera, batch));
         engine.addSystem(new FightSystem(world, rayHandler, viewport));
         engine.addSystem(new ParallaxRenderSystem(batch,camera));
-        engine.addSystem(new UnifiedRenderSystem(batch,camera,polygonSpriteBatch, rayHandler,engine.getCurrentMap()));
+        engine.addSystem(new UnifiedRenderSystem(batch,camera,polygonSpriteBatch, rayHandler,engine.getCurrentMap(),viewport));
         engine.addSystem(new HealthSystem(camera));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new PlayerControlSystem(world, viewport));
@@ -98,8 +98,9 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     }
 
     public void resize(int w, int h) {
-        viewport.update(w, h, false);
-
+        viewport.update(w, h, true);
+        viewport.apply();
+        engine.getSystem(UnifiedRenderSystem.class).resize();
         engine.getSystem(UserInterfaceSystem.class).resizeHUD(w, h);
 
     }
@@ -118,6 +119,8 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         if (Gdx.input.isKeyPressed(Input.Keys.V)) {
             StateManager.debugMode = !StateManager.debugMode;
         }
+
+
         camera.update();
     }
 

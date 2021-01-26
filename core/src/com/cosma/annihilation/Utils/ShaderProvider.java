@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.cosma.annihilation.Box2dLight.Light;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
@@ -26,13 +27,18 @@ public class ShaderProvider {
     private GameMap gameMap;
     private ShaderProgram renderShader;
     private ShaderProgram flipShader;
+    private int pixelPerUnit;
 
-
+    public void setPixelPerUnit(ExtendViewport viewport) {
+        this.pixelPerUnit = Gdx.graphics.getWidth()/(int)viewport.getWorldWidth();
+    }
 
     public ShaderProvider(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
         this.gameMap = gameMap;
         this.camera = camera;
         this.rayHandler = rayHandler;
+
+
         ShaderProgram.pedantic = false;
         renderShader = new ShaderProgram(Gdx.files.internal("shaders/render/ver.glsl").readString(), Gdx.files.internal("shaders/render/frag.glsl").readString());
         if (!renderShader.isCompiled())
@@ -96,12 +102,16 @@ public class ShaderProvider {
 
 
 
-    public void prepareData(boolean flipX){
+    public void prepareDataForRenderShader(){
         Arrays.fill(lightColorArray, 0);
         Arrays.fill(lightPositionArray, 0);
         Arrays.fill(intensityArray, 0);
         Arrays.fill(distanceArray, 0);
         activeLights.clear();
+
+        float radius = 4*64;
+
+
         for (Light light : rayHandler.getLightList()) {
             if(light.isRenderWithShader()){
                 activeLights.add(light);
@@ -137,17 +147,14 @@ public class ShaderProvider {
             renderShader.setUniformi("arraySize",7);
         }
 
+//        renderShader.setUniformf("radius", radius);
+
+        renderShader.setUniformi("ppu",pixelPerUnit);
         renderShader.setUniform1fv("intensityArray",intensityArray,0,7);
         renderShader.setUniform1fv("distanceArray",distanceArray,0,7);
 
         renderShader.setUniform3fv("lightPosition[0]", lightPositionArray, 0, 21);
         renderShader.setUniform3fv("lightColor[0]", lightColorArray, 0, 21);
-
-        if(flipX){
-            renderShader.setUniformi("xInvert", 1);
-        }else{
-            renderShader.setUniformi("xInvert", 0);
-        }
 
         renderShader.setUniformi("yInvert", 0);
         renderShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

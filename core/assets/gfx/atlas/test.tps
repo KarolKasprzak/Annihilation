@@ -74,7 +74,7 @@
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
-        <uint>1</uint>
+        <uint>6</uint>
         <key>webpQualityLevel</key>
         <uint>101</uint>
         <key>textureSubPath</key>
@@ -102,7 +102,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -132,7 +132,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>light_maps.atlas</filename>
+                <filename>test.atlas</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -149,7 +149,7 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <true/>
+        <false/>
         <key>trimSpriteNames</key>
         <false/>
         <key>prependSmartFolderName</key>
@@ -181,37 +181,23 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../sprite root/lights/light_test.png</key>
+            <key type="filename">../textures/target.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>16,16,32,32</rect>
+                <rect>16,27,33,55</rect>
                 <key>scale9Paddings</key>
-                <rect>16,16,32,32</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">../../sprite root/lights/light_test_cone.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>80,80,160,160</rect>
-                <key>scale9Paddings</key>
-                <rect>80,80,160,160</rect>
+                <rect>16,27,33,55</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../sprite root/lights/light_test.png</filename>
-            <filename>../../sprite root/lights/light_test_cone.png</filename>
+            <filename>../textures/target.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
@@ -226,11 +212,11 @@
         <key>packNormalMaps</key>
         <false/>
         <key>autodetectNormalMaps</key>
-        <true/>
+        <false/>
         <key>normalMapFilter</key>
-        <string></string>
+        <string>_n</string>
         <key>normalMapSuffix</key>
-        <string></string>
+        <string>_n</string>
         <key>normalMapSheetFileName</key>
         <filename></filename>
         <key>exporterProperties</key>

@@ -1,13 +1,13 @@
 room_interiors.png
-size: 569, 356
+size: 578, 356
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 lab_corridor
   rotate: false
   xy: 1, 1
-  size: 567, 192
-  orig: 567, 192
+  size: 576, 192
+  orig: 576, 192
   offset: 0, 0
   index: -1
 lab_gate

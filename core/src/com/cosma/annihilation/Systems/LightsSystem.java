@@ -1,22 +1,23 @@
 package com.cosma.annihilation.Systems;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cosma.annihilation.Components.PhysicsComponent;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
 import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.Utils.Constants;
-import com.cosma.annihilation.Utils.StateManager;
 
 
-public class PhysicsSystem extends IteratingSystem {
+public class LightsSystem extends IteratingSystem {
     private static final float MAX_STEP_TIME = 1/45f;
     private static float accumulator = 0f;
     private World world;
 
 
-    public PhysicsSystem(World world) {
+    public LightsSystem(World world, OrthographicCamera camera) {
         super(Family.all(PhysicsComponent.class).get(), Constants.PHYSIC_SYSTEM);
         this.world = world;
     }

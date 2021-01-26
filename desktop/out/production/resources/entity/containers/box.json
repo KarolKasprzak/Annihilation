@@ -15,7 +15,7 @@
         shapeX: 0
         shapeY: 0
 		shapeW: 1
-        shapeH: 2
+        shapeH: 1.9
 		shapeA: 0
         sensor: false,
         destiny: 5

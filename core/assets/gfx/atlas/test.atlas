@@ -1,12 +1,12 @@
-lights.png
-size: 34, 34
+test.png
+size: 67, 111
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-light
+target
   rotate: false
   xy: 1, 1
-  size: 32, 32
-  orig: 32, 32
+  size: 65, 109
+  orig: 65, 109
   offset: 0, 0
   index: -1

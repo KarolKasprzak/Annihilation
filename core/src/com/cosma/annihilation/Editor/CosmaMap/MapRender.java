@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.cosma.annihilation.Annihilation;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.ActionComponent;
@@ -38,13 +39,15 @@ public class MapRender {
     private PolygonSpriteBatch polygonSpriteBatch;
     private SkeletonRenderer skeletonRenderer;
     private OrthographicCamera camera;
+    private ExtendViewport viewport;
 
-    public MapRender(ShapeRenderer renderer, GameMap gameMap, SpriteBatch batch, RayHandler rayHandler, OrthographicCamera camera) {
+    public MapRender(ShapeRenderer renderer, GameMap gameMap, SpriteBatch batch, RayHandler rayHandler, OrthographicCamera camera, ExtendViewport viewport) {
         this.camera = camera;
         this.batch = batch;
         this.gameMap = gameMap;
         this.scale = gameMap.getTileSize();
         this.renderer = renderer;
+        this.viewport = viewport;
         polygonSpriteBatch = new PolygonSpriteBatch();
         skeletonRenderer = new SkeletonRenderer();
         iconPack = Annihilation.getAssets().get("gfx/atlas/editor_icon.atlas", TextureAtlas.class);
@@ -74,6 +77,7 @@ public class MapRender {
 
 
         //render sprite
+        shaderData.setPixelPerUnit(viewport);
         batch.setShader(shaderData.getRenderShader());
 
 
@@ -87,7 +91,7 @@ public class MapRender {
 
                 batch.begin();
                 if (sprite.getTextureRegion() != null) {
-                    shaderData.prepareData(false);
+                    shaderData.prepareDataForRenderShader();
                     sprite.bindNormalTexture(1);
                     sprite.getTextureRegion().getTexture().bind(0);
                     position.set(sprite.getX(), sprite.getY());

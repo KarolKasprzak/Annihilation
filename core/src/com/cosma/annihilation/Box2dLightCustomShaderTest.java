@@ -123,7 +123,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
 
             @Override protected void updateLightShaderPerLight (Light light) {
                 // light position must be normalized
-                System.out.println(light.getX());
+
                 float x = (light.getX())/viewportWidth;
 
                 float y = (light.getY())/viewport.getWorldHeight();

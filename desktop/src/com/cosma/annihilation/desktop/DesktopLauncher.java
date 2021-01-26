@@ -1,14 +1,11 @@
 package com.cosma.annihilation.desktop;
 
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import com.cosma.annihilation.Annihilation;
 
-import javax.swing.*;
 import java.awt.*;
 
 
@@ -39,11 +36,11 @@ public class DesktopLauncher {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
         config.title = "Annihilation";
-        config.resizable = false;
+//        config.resizable = false;
 		config.fullscreen = true;
         config.vSyncEnabled = true;
         config.pauseWhenBackground = true;
-        config.samples = 3;
+//        config.samples = 3;
         config.width = screenSize.width/2;
         config.height = screenSize.height/2;
 

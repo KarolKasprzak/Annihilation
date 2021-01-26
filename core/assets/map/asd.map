@@ -40,6 +40,12 @@ entityList: [
 			}
 		]
 	}
+	{
+		position: "43.206337,16.864214"
+		hp: 100
+		maxHp: 100
+		entityName: target_practice.json
+	}
 ]
 materialList: [
 	{
@@ -64,6 +70,11 @@ spriteMapLayer: {
 		{
 			position: "39.105152,18.151398,0.0"
 			texture: "gfx/map_textures/back_black_element/black_decorations.atlas,roof_wires"
+		}
+		{
+			position: "39.0,17.0,0.0"
+			texture: "gfx/map_textures/map_objects/lights.atlas,light"
+			order: 8
 		}
 	]
 }
@@ -126,20 +137,20 @@ lightsMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
 				name: PointLight_1
+				isHighlighted: true
 				raysNumber: 25
 				color: {
-					r: 0.92941177
-					g: 0.9411765
-					b: 0.7529412
+					r: 0.8
+					g: 0.21568628
+					b: 0.21568628
 					a: 1
 				}
-				lightDistance: 6.1
-				x: 38.582813
-				y: 18.241657
-				softLength: 0.100000136
-				lightZPositionForShader: 0.07
-				lightFalloffDistance: 0.79999995
-				intensityForShader: 1.1500008
+				lightDistance: 5
+				x: 37.71801
+				y: 18.021845
+				lightZPositionForShader: 0.2
+				lightFalloffDistance: 1
+				intensityForShader: 1.2499999
 			}
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
@@ -152,25 +163,23 @@ lightsMapLayer: {
 					a: 1
 				}
 				lightDistance: 5
-				x: 28.071869
-				y: 17.350517
-				softLight: false
+				x: 26.235712
+				y: 17.760908
 			}
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
 				name: PointLight_3
 				raysNumber: 25
 				color: {
-					r: 0.92941177
-					g: 0.9411765
-					b: 0.7529412
+					r: 1
+					g: 1
+					b: 1
 					a: 1
 				}
-				lightDistance: 7
-				x: 42.21094
-				y: 18.252083
-				softLength: 0.20000014
-				lightZPositionForShader: 0.040000007
+				lightDistance: 5
+				x: 39.29093
+				y: 18.18851
+				lightZPositionForShader: 0.15
 			}
 		]
 	}

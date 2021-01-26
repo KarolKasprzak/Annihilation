@@ -78,7 +78,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
         //render background (map)
 
         polygonBatch.begin();
-        shaderData.prepareData(false);
+        shaderData.prepareDataForRenderShader();
         for (Sprite sprite : gameMap.getSpriteMapLayer().getSpriteArray()) {
             positionTmp.set(sprite.getX(), sprite.getY());
             if (sprite instanceof AnimatedSprite) {
@@ -119,7 +119,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
         if (textureMapper.has(entity) && physicsMapper.has(entity)) {
             TextureComponent textureComponent = textureMapper.get(entity);
             polygonBatch.begin();
-            shaderData.prepareData(false);
+            shaderData.prepareDataForRenderShader();
             textureComponent.normalTexture.bind(1);
             textureComponent.textureRegion.getTexture().bind(0);
             Vector2 position = physicsMapper.get(entity).body.getPosition();
@@ -152,7 +152,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
             skeletonComponent.skeleton.updateWorldTransform();
             skeletonComponent.animationState.update(deltaTime);
 
-            shaderData.prepareData(!skeletonComponent.skeletonDirection);
+//            shaderData.prepareDataForRenderShader(!skeletonComponent.skeletonDirection);
             skeletonRenderer.draw(polygonBatch, skeletonComponent.skeleton);
             polygonBatch.end();
 //            debugRenderer.getShapeRenderer().setProjectionMatrix(camera.combined);
@@ -174,7 +174,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
             TextureComponent textureComponent = textureMapper.get(entity);
 
             polygonBatch.begin();
-            shaderData.prepareData(false);
+//            shaderData.prepareDataForRenderShader(false);
             textureComponent.normalTexture.bind(1);
 
             textureComponent.textureRegion.getTexture().bind(0);

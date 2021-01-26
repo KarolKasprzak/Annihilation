@@ -3,11 +3,8 @@ package com.cosma.annihilation.EntityEngine.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -25,12 +22,8 @@ import com.cosma.annihilation.EntityEngine.signals.Listener;
 import com.cosma.annihilation.EntityEngine.signals.Signal;
 import com.cosma.annihilation.EntityEngine.utils.ImmutableArray;
 import com.cosma.annihilation.Items.Item;
-import com.cosma.annihilation.Utils.CollisionID;
-import com.cosma.annihilation.Utils.Enums.BodyID;
 import com.cosma.annihilation.Utils.Serialization.GameEntitySerializer;
 import com.cosma.annihilation.Utils.StartStatus;
-
-import java.util.Arrays;
 
 
 /**
@@ -67,10 +60,9 @@ public class Engine {
     private Array<Body> bodiesToRemove;
     private OrthographicCamera gameCamera;
     private Array<Light> activeLights = new Array<>();
+    private Vector3 vector3tmp = new Vector3();
+    private Vector2 vector2tmp = new Vector2();
 
-    private Vector3 lightPosition = new Vector3();
-    private float[] lightPositionArray = new float[21];
-    private float[] lightColorArray = new float[21];
 
     StartStatus startStatus;
 
@@ -95,6 +87,26 @@ public class Engine {
         } else {
             loadGame();
         }
+    }
+
+    /**
+     *Project world to screen position;
+     */
+    public Vector2 project(float x, float y){
+        vector3tmp.set(x,y,0);
+        gameCamera.project(vector3tmp);
+        vector2tmp.set(vector3tmp.x,vector3tmp.y);
+        return vector2tmp;
+    }
+
+    /**
+     *Project screen to world position;
+     */
+    public Vector2 unproject(int x, int y){
+        vector3tmp.set(x,y,0);
+        gameCamera.unproject(vector3tmp);
+        vector2tmp.set(vector3tmp.x,vector3tmp.y);
+        return vector2tmp;
     }
 
     public void loadGame() {

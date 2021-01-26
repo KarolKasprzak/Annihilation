@@ -36,7 +36,8 @@ public class EditorScreen implements Screen, InputProcessor {
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private Stage stage;
-    private Viewport viewport, viewportUi;
+    private Viewport viewportUi;
+    private ExtendViewport viewport;
     private OrthographicCamera camera, cameraUi;
     private World world;
     private InputMultiplexer im;
@@ -196,7 +197,7 @@ public class EditorScreen implements Screen, InputProcessor {
 
     public void createNewMap(int x, int y, int scale) {
         gameMap = new GameMap(x, y, scale);
-        mapRender = new MapRender(shapeRenderer, gameMap, batch, rayHandler, camera);
+        mapRender = new MapRender(shapeRenderer, gameMap, batch, rayHandler, camera, viewport);
         loadPanels();
         setCameraOnMapCenter();
     }
@@ -217,7 +218,7 @@ public class EditorScreen implements Screen, InputProcessor {
             rightTable.clear();
         }
         loadPanels();
-        mapRender = new MapRender(shapeRenderer, gameMap, batch, rayHandler, camera);
+        mapRender = new MapRender(shapeRenderer, gameMap, batch, rayHandler, camera, viewport);
     }
 
     private void saveAs() {

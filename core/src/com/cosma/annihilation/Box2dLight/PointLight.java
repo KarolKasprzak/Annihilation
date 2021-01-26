@@ -26,7 +26,6 @@ public class PointLight extends PositionalLight {
 	 */
 	public PointLight(RayHandler rayHandler, int rays) {
 		this(rayHandler, rays, Light.DefaultColor, 15f, 0f, 0f);
-		lightMap = Annihilation.getTextureRegion("light_maps", "light_test");
 	}
 
 	public TextureRegion getLightMap() {
