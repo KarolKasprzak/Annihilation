@@ -21,7 +21,7 @@ import com.cosma.annihilation.Annihilation;
  * 
  * @author kalle_h
  */
-public abstract class Light implements Disposable {
+public abstract class LightOld implements Disposable {
 
 
 
@@ -115,8 +115,8 @@ public abstract class Light implements Disposable {
 	 * @param directionDegree
 	 *            direction in degrees (if applicable) 
 	 */
-	public Light(RayHandler rayHandler, int rays, Color color,
-			float distance, float directionDegree) {
+	public LightOld(RayHandler rayHandler, int rays, Color color,
+					float distance, float directionDegree) {
 		rayHandler.lightList.add(this);
 		this.rayHandler = rayHandler;
 		setRayNum(rays);

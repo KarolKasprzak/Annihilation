@@ -14,12 +14,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Box2dLight.LightOld;
 import com.cosma.annihilation.Box2dLight.PointLight;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.AnimatedSprite;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaLights.Light;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 import com.cosma.annihilation.Editor.CosmaMap.Sprite;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
@@ -71,10 +71,10 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         skeletonRenderer = new CustomSkeletonRender();
 
         skeletonRenderer.setPremultipliedAlpha(false);
-        normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
-        lightFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+
+
+
         normalMapRegion = new TextureRegion();
 
         skeletonRendererDebug = new SkeletonRendererDebug();
@@ -83,13 +83,20 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         skeletonRendererDebug.setRegionAttachments(true);
         skeletonRendererDebug.setScale(0.01f);
 
-        normalMapShader = new ShaderProvider(camera, rayHandler, gameMap);
+        normalMapShader = new ShaderProvider(camera, gameMap);
 
     }
 
     public void resize() {
         normalMapShader.setPixelPerUnit(viewport);
+        normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        System.out.println(viewport.getScreenWidth());
+//        normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, 640,400, false);
 
+//
+//        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, 640, 400, false);
+        lightFBO = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 //        normalMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888,w,h, false);
 //        diffuseMapFBO = new FrameBuffer(Pixmap.Format.RGBA8888, w, h, false);
     }
@@ -125,7 +132,6 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         polygonBatch.end();
         normalMapFBO.end();
 
-
         //diffuse
         diffuseMapFBO.begin();
 
@@ -150,14 +156,11 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 
 
         polygonBatch.begin();
-
-        for (Light light : rayHandler.getLightList()) {
-            if (light instanceof PointLight) {
-                TextureRegion region = ((PointLight) light).getLightMap();
+        for (Light light : gameMap.getLights().values()) {
+                TextureRegion region = light.getTexture();
                 polygonBatch.draw(region, light.getX() - (region.getRegionWidth() / 2 / Constants.PPM), light.getY() - (region.getRegionHeight() / 2 / Constants.PPM), (region.getRegionWidth() / 2) / Constants.PPM, (region.getRegionHeight() / 2) / Constants.PPM,
                         region.getRegionWidth() / Constants.PPM, region.getRegionHeight() / Constants.PPM,
                         1, 1, 0);
-            }
         }
         polygonBatch.end();
         lightFBO.end();
@@ -175,6 +178,10 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
         normalTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         batch.setProjectionMatrix(matrix);
+//
+//        System.out.println("---------------------------------1");
+//        System.out.println(batch.getProjectionMatrix());
+//        System.out.println("---------------------------------2");
         batch.setShader(normalMapShader.getRenderShader());
         batch.begin();
         normalMapShader.prepareDataForRenderShader();
@@ -196,6 +203,8 @@ public class UnifiedRenderSystem extends SortedIteratingSystem {
 //        rayHandler.update();
 //        rayHandler.setCombinedMatrix(camera);
 //        rayHandler.updateAndRender();
+
+
 
         polygonBatch.begin();
         super.afterLightUpdate(deltaTime);

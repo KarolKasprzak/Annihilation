@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.utils.Array;
 import com.cosma.annihilation.Ai.PlayerTasks.PlayerGoToPosition;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Box2dLight.LightOld;
 import com.cosma.annihilation.Components.*;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaLights.Light;
 import com.cosma.annihilation.EntityEngine.core.ComponentMapper;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 import com.cosma.annihilation.EntityEngine.core.Family;
@@ -20,8 +20,6 @@ import com.cosma.annihilation.EntityEngine.systems.IteratingSystem;
 import com.cosma.annihilation.EntityEngine.utils.ImmutableArray;
 import com.cosma.annihilation.Utils.Constants;
 import com.cosma.annihilation.Utils.Enums.GameEvent;
-import com.cosma.annihilation.Utils.Util;
-import net.dermetfan.gdx.physics.box2d.PositionController;
 
 
 public class ActionSystem extends IteratingSystem implements Listener<GameEvent> {
@@ -115,7 +113,7 @@ public class ActionSystem extends IteratingSystem implements Listener<GameEvent>
                         openNoteWindow();
                         break;
                     case SWITCH_LIGHT:
-                        Light light = getEngine().getCurrentMap().findLight(actionComponent.actionTargetName);
+                        Light light = getEngine().getCurrentMap().getLights().get(actionComponent.actionTargetName);
                         if (light.isActive()) {
                             light.setActive(false);
                         } else {

@@ -1,24 +1,27 @@
 package com.cosma.annihilation.Editor.CosmaMap;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.OrderedMap;
-import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaLights.Light;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapMaterialObject;
 import com.cosma.annihilation.EntityEngine.core.Entity;
 
 import java.util.ArrayList;
 
-public class GameMap{
+public class GameMap {
 
     private int width;
     private int height;
     private int tileSize;
     private ArrayList<Entity> entityList;
-    private ArrayList<MapMaterialObject>materialList;
-    private String mapName;
 
+    private ArrayList<MapMaterialObject> materialList;
+    private String mapName;
+    private OrderedMap<String, Light> lightMap;
     private SpriteMapLayer spriteMapLayer;
     private ObjectMapLayer objectMapLayer;
-    private LightsMapLayer lightsMapLayer;
+    private Color ambientColor;
+
 
     public GameMap(int width, int height, int tileSize) {
         this.width = width;
@@ -28,8 +31,13 @@ public class GameMap{
         entityList = new ArrayList<>();
         spriteMapLayer = new SpriteMapLayer();
         objectMapLayer = new ObjectMapLayer();
-        lightsMapLayer = new LightsMapLayer();
         materialList = new ArrayList<>();
+        ambientColor = new Color();
+        ambientColor.set(0.2f,0.2f,0.2f,0.2f);
+    }
+
+    public GameMap() {
+
     }
 
     public SpriteMapLayer getSpriteMapLayer() {
@@ -40,13 +48,16 @@ public class GameMap{
         return objectMapLayer;
     }
 
-    public LightsMapLayer getLightsMapLayer() {
-        return lightsMapLayer;
+    public OrderedMap<String, Light> getLights() {
+        return lightMap;
     }
 
-    public GameMap() {
-        materialList = new ArrayList<>();
-        lightMap = new OrderedMap<>();
+    public Color getAmbientColor() {
+        return ambientColor;
+    }
+
+    public void setAmbientColor(Color ambientColor) {
+        this.ambientColor = ambientColor;
     }
 
     public int getWidth() {
@@ -61,32 +72,27 @@ public class GameMap{
         return tileSize;
     }
 
-    public void addEntity(Entity entity){
+    public void addEntity(Entity entity) {
         entityList.add(entity);
     }
 
-    public void removeEntity(Entity entity){
+    public void removeEntity(Entity entity) {
         entityList.remove(entity);
     }
 
-    public ArrayList<Entity> getEntityArrayList(){
+    public ArrayList<Entity> getEntityArrayList() {
         return entityList;
     }
 
-    public ArrayList<MapMaterialObject> getMapMaterialObjects() {return materialList;}
-
-    public String getMapName() {return mapName;}
-
-    public void setMapName(String mapName) {this.mapName = mapName;}
-
-    transient private OrderedMap<String, Light> lightMap;
-
-    public Light findLight(String name) {
-        return lightMap.get(name);
+    public ArrayList<MapMaterialObject> getMapMaterialObjects() {
+        return materialList;
     }
 
-    public void putLight(String name,Light light) {
-        lightMap.put(name,light);
+    public String getMapName() {
+        return mapName;
     }
 
+    public void setMapName(String mapName) {
+        this.mapName = mapName;
+    }
 }

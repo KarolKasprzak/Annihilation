@@ -129,7 +129,7 @@ layers: {
 			lights: {
 				lights: [
 					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 						name: PointLight_3
 						isHighlighted: true
 						raysNumber: 25
@@ -146,7 +146,7 @@ layers: {
 						softLength: 4.9999976
 					}
 					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 						name: PointLight_4
 						raysNumber: 25
 						color: {
@@ -161,7 +161,7 @@ layers: {
 						softLight: false
 					}
 					{
-						class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+						class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 						name: PointLight_0
 						raysNumber: 25
 						color: {

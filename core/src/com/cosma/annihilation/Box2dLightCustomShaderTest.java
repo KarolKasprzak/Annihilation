@@ -64,7 +64,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
     RayHandler rayHandler;
 
 
-    ArrayList<Light> lights = new ArrayList<Light>(BALLSNUM);
+    ArrayList<LightOld> lights = new ArrayList<LightOld>(BALLSNUM);
 
     float sunDirection = -90f;
 
@@ -121,7 +121,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
         rayHandler = new RayHandler(world, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) {
             @Override protected void updateLightShader () {}
 
-            @Override protected void updateLightShaderPerLight (Light light) {
+            @Override protected void updateLightShaderPerLight (LightOld light) {
                 // light position must be normalized
 
                 float x = (light.getX())/viewportWidth;
@@ -429,7 +429,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
 
     void clearLights() {
         if (lights.size() > 0) {
-            for (Light light : lights) {
+            for (LightOld light : lights) {
                 light.remove();
             }
             lights.clear();
@@ -697,7 +697,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
                 return true;
 
             case Input.Keys.F5:
-                for (Light light : lights)
+                for (LightOld light : lights)
                     light.setColor(
                             MathUtils.random(),
                             MathUtils.random(),
@@ -706,7 +706,7 @@ public class Box2dLightCustomShaderTest extends InputAdapter implements Applicat
                 return true;
 
             case Input.Keys.F6:
-                for (Light light : lights)
+                for (LightOld light : lights)
                     light.setDistance(MathUtils.random(LIGHT_DISTANCE * 0.5f, LIGHT_DISTANCE * 2f));
                 return true;
 

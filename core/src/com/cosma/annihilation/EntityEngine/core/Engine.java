@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.cosma.annihilation.Annihilation;
-import com.cosma.annihilation.Box2dLight.Light;
+import com.cosma.annihilation.Box2dLight.LightOld;
 import com.cosma.annihilation.Box2dLight.RayHandler;
 import com.cosma.annihilation.Components.*;
 import com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.MapMaterialObject;
@@ -59,7 +59,7 @@ public class Engine {
     private RayHandler rayHandler;
     private Array<Body> bodiesToRemove;
     private OrthographicCamera gameCamera;
-    private Array<Light> activeLights = new Array<>();
+    private Array<LightOld> activeLights = new Array<>();
     private Vector3 vector3tmp = new Vector3();
     private Vector2 vector2tmp = new Vector2();
 
@@ -81,7 +81,7 @@ public class Engine {
         json.setSerializer(Entity.class, new GameEntitySerializer(world, this));
         if (startStatus.isNewGame()) {
 //            mapLoader.loadMap("map/test1.map");
-           mapLoader.loadMap("map/asd.map");
+           mapLoader.loadMap("map/light_test.map");
 //         mapLoader.loadMap("map/bump_test.map");
 //            mapLoader.loadMap("map/metro_test.map");
         } else {
@@ -192,7 +192,7 @@ public class Engine {
     }
 
 
-    public Array<Light> getActiveLights() {
+    public Array<LightOld> getActiveLights() {
         return activeLights;
     }
 

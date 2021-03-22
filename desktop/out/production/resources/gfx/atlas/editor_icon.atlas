@@ -1,7 +1,7 @@
 editor_icon.png
 size: 390, 424
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 color
   rotate: false

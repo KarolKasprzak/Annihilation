@@ -1,18 +1,32 @@
 light_maps.png
-size: 644, 322
+size: 1288, 322
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-light_test
+cone
   rotate: false
   xy: 1, 1
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-light_test_cone
+light_test
   rotate: false
   xy: 323, 1
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+light_test_cone
+  rotate: false
+  xy: 645, 1
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+test
+  rotate: false
+  xy: 967, 1
   size: 320, 320
   orig: 320, 320
   offset: 0, 0

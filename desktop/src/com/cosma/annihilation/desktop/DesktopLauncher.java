@@ -41,8 +41,9 @@ public class DesktopLauncher {
         config.vSyncEnabled = true;
         config.pauseWhenBackground = true;
 //        config.samples = 3;
-        config.width = screenSize.width/2;
-        config.height = screenSize.height/2;
+      config.width = screenSize.width;
+       config.height = screenSize.height;
+
 
         new LwjglApplication(new Annihilation(false), config);
     }

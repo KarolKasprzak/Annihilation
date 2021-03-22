@@ -13,11 +13,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 /**
  * Light which source is at infinite distance
  * 
- * <p>Extends {@link Light}
+ * <p>Extends {@link LightOld}
  * 
  * @author kalle_h
  */
-public class DirectionalLight extends Light {
+public class DirectionalLight extends LightOld {
 
 	protected final Vector2 start[];
 	protected final Vector2 end[];

@@ -19,11 +19,11 @@ import com.badlogic.gdx.utils.Pools;
  * A light whose ray starting points are evenly distributed along a chain of
  * vertices
  * 
- * <p> Extends {@link Light}
+ * <p> Extends {@link LightOld}
  * 
  * @author spruce
  */
-public class ChainLight extends Light {
+public class ChainLight extends LightOld {
 	
 	public static float defaultRayStartOffset = 0.001f;
 	public float rayStartOffset;

@@ -4,7 +4,7 @@ height: 64
 tileSize: 64
 entityList: [
 	{
-		position: "5.025875,2.8388429"
+		position: "3.604791,1.9971876"
 		hp: 100
 		maxHp: 100
 		entityName: player.json
@@ -12,7 +12,34 @@ entityList: [
 		inventoryItems: []
 	}
 ]
-mapName: test1.map
+materialList: []
+mapName: light_test.map
+lightMap: {
+	light_01: {
+		name: light_01
+		color: {
+			r: 1
+			g: 1
+			b: 0.81960785
+			a: 1
+		}
+		x: 5.545797
+		y: 2.9173343
+		lightZPosition: 0.46000004
+	}
+	light_11: {
+		name: light_11
+		color: {
+			r: 1
+			g: 1
+			b: 0.96862745
+			a: 1
+		}
+		x: 8.866629
+		y: 2.9069176
+		lightZPosition: 0.2
+	}
+}
 spriteMapLayer: {
 	height: 0
 	width: 0
@@ -29,33 +56,19 @@ objectMapLayer: {
 			{
 				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorObject.RectangleObject
 				name: Rectangle_1
-				x: -0.040667534
-				y: -0.0013438463
-				width: 16.025517
-				height: 0.98177063
+				x: 1.1454148
+				y: 0.6914586
+				width: 9.033333
+				height: 0.30833322
 				bodyType: StaticBody
 			}
 		]
 	}
 }
-lightsMapLayer: {
-	lights: {
-		lights: [
-			{
-				class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
-				name: PointLight_1
-				raysNumber: 25
-				color: {
-					r: 1
-					g: 1
-					b: 1
-					a: 1
-				}
-				lightDistance: 5
-				x: 4.46702
-				y: 3.4430096
-			}
-		]
-	}
+ambientColor: {
+	r: 0.2
+	g: 0.2
+	b: 0.2
+	a: 0.2
 }
 }

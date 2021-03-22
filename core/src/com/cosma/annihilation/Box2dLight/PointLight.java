@@ -25,7 +25,7 @@ public class PointLight extends PositionalLight {
 	 *            but will decrease performance, can't be less than MIN_RAYS
 	 */
 	public PointLight(RayHandler rayHandler, int rays) {
-		this(rayHandler, rays, Light.DefaultColor, 15f, 0f, 0f);
+		this(rayHandler, rays, LightOld.DefaultColor, 15f, 0f, 0f);
 	}
 
 	public TextureRegion getLightMap() {

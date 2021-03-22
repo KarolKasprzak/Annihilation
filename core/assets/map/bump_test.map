@@ -159,7 +159,7 @@ lightsMapLayer: {
 	lights: {
 		lights: [
 			{
-				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 				name: PointLight_3
 				raysNumber: 25
 				color: {
@@ -178,7 +178,7 @@ lightsMapLayer: {
 				intensityForShader: 1.3499997
 			}
 			{
-				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 				name: PointLight_2
 				raysNumber: 25
 				color: {
@@ -196,7 +196,7 @@ lightsMapLayer: {
 				intensityForShader: 0.99999994
 			}
 			{
-				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 				name: PointLight_4
 				raysNumber: 25
 				color: {
@@ -215,7 +215,7 @@ lightsMapLayer: {
 				intensityForShader: 2
 			}
 			{
-				class: com.cosma.annihilation.Editor.CosmaMap.CosmaEditorLights.MapPointLight
+				class: com.cosma.annihilation.Editor.CosmaMap.CosmaLights.MapPointLight
 				name: PointLight_0
 				raysNumber: 25
 				color: {

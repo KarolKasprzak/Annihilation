@@ -181,6 +181,21 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">../../sprite root/lights/cone.png</key>
+            <key type="filename">../../sprite root/lights/light_test_cone.png</key>
+            <key type="filename">../../sprite root/lights/test.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>80,80,160,160</rect>
+                <key>scale9Paddings</key>
+                <rect>80,80,160,160</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">../../sprite root/lights/light_test.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -194,24 +209,13 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">../../sprite root/lights/light_test_cone.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>80,80,160,160</rect>
-                <key>scale9Paddings</key>
-                <rect>80,80,160,160</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
         </map>
         <key>fileList</key>
         <array>
             <filename>../../sprite root/lights/light_test.png</filename>
             <filename>../../sprite root/lights/light_test_cone.png</filename>
+            <filename>../../sprite root/lights/cone.png</filename>
+            <filename>../../sprite root/lights/test.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

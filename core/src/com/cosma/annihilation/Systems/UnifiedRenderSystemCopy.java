@@ -63,7 +63,7 @@ public class UnifiedRenderSystemCopy extends SortedIteratingSystem {
         debugRenderer.setRegionAttachments(true);
         debugRenderer.setScale(0.01f);
 
-        shaderData = new ShaderProvider(camera, rayHandler, gameMap);
+        shaderData = new ShaderProvider(camera, gameMap);
     }
 
 

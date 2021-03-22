@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.cosma.annihilation.Box2dLight.Light;
-import com.cosma.annihilation.Box2dLight.RayHandler;
+import com.cosma.annihilation.Editor.CosmaMap.CosmaLights.Light;
 import com.cosma.annihilation.Editor.CosmaMap.GameMap;
 
 import java.util.Arrays;
@@ -23,21 +22,21 @@ public class ShaderProvider {
     private Array<Light> activeLights = new Array<>();
 
     private OrthographicCamera camera;
-    private RayHandler rayHandler;
     private GameMap gameMap;
     private ShaderProgram renderShader;
     private ShaderProgram flipShader;
     private int pixelPerUnit;
+    private int virtualPixelSize;
 
     public void setPixelPerUnit(ExtendViewport viewport) {
         this.pixelPerUnit = Gdx.graphics.getWidth()/(int)viewport.getWorldWidth();
+        this.virtualPixelSize = Gdx.graphics.getWidth()/((int)viewport.getWorldWidth() * 64);
+        System.out.println(virtualPixelSize);
     }
 
-    public ShaderProvider(OrthographicCamera camera, RayHandler rayHandler, GameMap gameMap) {
+    public ShaderProvider(OrthographicCamera camera, GameMap gameMap) {
         this.gameMap = gameMap;
         this.camera = camera;
-        this.rayHandler = rayHandler;
-
 
         ShaderProgram.pedantic = false;
         renderShader = new ShaderProgram(Gdx.files.internal("shaders/render/ver.glsl").readString(), Gdx.files.internal("shaders/render/frag.glsl").readString());
@@ -109,11 +108,8 @@ public class ShaderProvider {
         Arrays.fill(distanceArray, 0);
         activeLights.clear();
 
-        float radius = 4*64;
-
-
-        for (Light light : rayHandler.getLightList()) {
-            if(light.isRenderWithShader()){
+        for (Light light : gameMap.getLights().values()) {
+            if(light.isActive()){
                 activeLights.add(light);
             }
 //            if (camera.frustum.sphereInFrustum(light.getX(), light.getY(), 0, light.getDistance())) {
@@ -131,14 +127,14 @@ public class ShaderProvider {
 
                 lightPositionArray[i * 3] = lightPosition.x;
                 lightPositionArray[1 + (i * 3)] = lightPosition.y;
-                lightPositionArray[2+(i*3)] = light.getLightZPosition();
+                lightPositionArray[2+(i*3)] = light.getLightZ();
 
                 lightColorArray[i * 3] = light.getColor().r;
                 lightColorArray[1 + (i * 3)] = light.getColor().g;
                 lightColorArray[2 + (i * 3)] = light.getColor().b;
 
                 intensityArray[i] = light.getIntensityForShader();
-                distanceArray[i] = light.getLightDistanceForShader();
+                distanceArray[i] = light.getLightRadius()*pixelPerUnit;
             }
         }
         if(activeLights.size < 7){
@@ -146,8 +142,6 @@ public class ShaderProvider {
         }else{
             renderShader.setUniformi("arraySize",7);
         }
-
-//        renderShader.setUniformf("radius", radius);
 
         renderShader.setUniformi("ppu",pixelPerUnit);
         renderShader.setUniform1fv("intensityArray",intensityArray,0,7);
@@ -158,10 +152,10 @@ public class ShaderProvider {
 
         renderShader.setUniformi("yInvert", 0);
         renderShader.setUniformf("resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Color color = gameMap.getLightsMapLayer().getShaderAmbientLightColor();
 
+        Color color = gameMap.getAmbientColor();
+//        renderShader.setUniformf("ambientColor", color.r, color.g,color.b,color.a);
         renderShader.setUniformf("ambientColor", 0.2f, 0.2f,0.2f,0.2f);
-
 
 
 

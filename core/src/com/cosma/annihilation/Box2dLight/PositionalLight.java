@@ -13,11 +13,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 /**
  * Abstract base class for all positional lights
  * 
- * <p>Extends {@link Light}
+ * <p>Extends {@link LightOld}
  * 
  * @author kalle_h
  */
-public abstract class PositionalLight extends Light {
+public abstract class PositionalLight extends LightOld {
 
 	protected final Vector2 tmpEnd = new Vector2();
 	protected final Vector2 start = new Vector2();

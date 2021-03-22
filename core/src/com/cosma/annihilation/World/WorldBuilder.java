@@ -42,6 +42,7 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
         //Game camera
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(10, 6,camera);
+        viewport.setScreenSize(640,400);
 
         viewport.apply(true);
 //        batch = new SpriteBatch();
@@ -98,8 +99,10 @@ public class WorldBuilder implements Disposable, EntityListener, Listener<GameEv
     }
 
     public void resize(int w, int h) {
-        viewport.update(w, h, true);
+        viewport.update(640, 400, true);
+        viewport.setCamera(camera);
         viewport.apply();
+
         engine.getSystem(UnifiedRenderSystem.class).resize();
         engine.getSystem(UserInterfaceSystem.class).resizeHUD(w, h);
 

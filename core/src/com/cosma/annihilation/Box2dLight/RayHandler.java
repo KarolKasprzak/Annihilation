@@ -63,14 +63,14 @@ public class RayHandler implements Disposable {
 	 * 
 	 * <p>NOTE: DO NOT MODIFY THIS LIST
 	 */
-	final Array<Light> lightList = new Array<Light>(false, 16);
+	final Array<LightOld> lightList = new Array<LightOld>(false, 16);
 	
 	/**
 	 * This Array contain all the disabled lights.
 	 * 
 	 * <p>NOTE: DO NOT MODIFY THIS LIST
 	 */
-	final Array<Light> disabledLights = new Array<Light>(false, 16);
+	final Array<LightOld> disabledLights = new Array<LightOld>(false, 16);
 
 	LightMap lightMap;
 	final ShaderProgram lightShader;
@@ -119,7 +119,7 @@ public class RayHandler implements Disposable {
 				.getHeight() / 4);
 	}
 
-	public Array<Light> getLightList() {
+	public Array<LightOld> getLightList() {
 		return lightList;
 	}
 
@@ -282,7 +282,7 @@ public class RayHandler implements Disposable {
 	 * @see #render()
 	 */
 	public void update() {
-		for (Light light : lightList) {
+		for (LightOld light : lightList) {
 			light.update();
 		}
 	}
@@ -317,7 +317,7 @@ public class RayHandler implements Disposable {
 		{
 			shader.setUniformMatrix("u_projTrans", combined);
 			if (customLightShader != null) updateLightShader();
-			for (Light light : lightList) {
+			for (LightOld light : lightList) {
 				if (customLightShader != null) updateLightShaderPerLight(light);
 				light.render();
 			}
@@ -392,7 +392,7 @@ public class RayHandler implements Disposable {
 	 *
 	 * Override this if you are using custom light shader
 	 */
-	protected void updateLightShaderPerLight (Light light) {
+	protected void updateLightShaderPerLight (LightOld light) {
 
 	}
 
@@ -402,7 +402,7 @@ public class RayHandler implements Disposable {
 	 * @return true if point is inside of any light volume
 	 */
 	public boolean pointAtLight(float x, float y) {
-		for (Light light : lightList) {
+		for (LightOld light : lightList) {
 			if (light.contains(x, y)) return true;
 		}
 		return false;
@@ -414,7 +414,7 @@ public class RayHandler implements Disposable {
 	 * @return true if point is NOT inside of any light volume
 	 */
 	public boolean pointAtShadow(float x, float y) {
-		for (Light light : lightList) {
+		for (LightOld light : lightList) {
 			if (light.contains(x, y)) return false;
 		}
 		return true;
@@ -433,12 +433,12 @@ public class RayHandler implements Disposable {
 	 * Removes and disposes both all active and disabled lights
 	 */
 	public void removeAll() {
-		for (Light light : lightList) {
+		for (LightOld light : lightList) {
 			light.dispose();
 		}
 		lightList.clear();
 
-		for (Light light : disabledLights) {
+		for (LightOld light : disabledLights) {
 			light.dispose();
 		}
 		disabledLights.clear();

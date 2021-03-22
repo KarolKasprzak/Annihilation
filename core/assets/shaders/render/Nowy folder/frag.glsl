@@ -45,8 +45,8 @@ vec3 sum = vec3(0.0);
 		//Correct for aspect ratio
 		
 		vec3 deltaPos = vec3((lightPosition[i].xy - gl_FragCoord.xy) / resolution.xy , lightPosition[i].z);
-		deltaPos.x /= (distanceArray[i] / resolution.x);
-	    deltaPos.y /= (distanceArray[i] / resolution.y);
+		deltaPos.x /= distanceArray[i] / resolution.x;
+	    deltaPos.y /= distanceArray[i] / resolution.y;
 		
 		//deltaPos.x *= resolution.x / resolution.y;
 		
@@ -56,18 +56,13 @@ vec3 sum = vec3(0.0);
 		vec3 N = normalize(nColor * 2.0 - 1.0);
 	    vec3 L = normalize(deltaPos);
 		
-		
-		
 		//float attenuation = intensity - d;
 
         float lambert = max(dot(normal, L), 0.0);
-		
-		
 
 		float attenuation = smoothstep(1,0, d);
 		
-		vec3 result = (currentLightColor.rgb * lambert) * attenuation;
-		
+		vec3 result =(currentLightColor.rgb * lambert) * attenuation;
 	
 		//need upgrade
 		//float attenuation = 1.0 / (1.0 + 0 * d + 5 * d *d) ;
@@ -88,4 +83,5 @@ vec3 intensity = ambient + sum;
 vec3 finalColor = color.rgb * intensity;
 
 gl_FragColor = v_color * vec4(finalColor,color.a);
+
 }

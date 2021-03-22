@@ -443,7 +443,7 @@ public class EditorScreen implements Screen, InputProcessor {
 
         editModePanel = new EditModePanel(this);
         objectPanel = new ObjectPanel(this);
-        lightsPanel = new LightsPanel(this, rayHandler);
+        lightsPanel = new LightsPanel(this);
         materialPanel = new MaterialPanel(this);
 
         float width = objectPanel.getWidth();
